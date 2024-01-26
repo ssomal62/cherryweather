@@ -39,6 +39,7 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+// React build 설정
 def reactAppDir = "$projectDir/src/main/reactjs"
 /*
 sourceSets {
@@ -87,3 +88,4 @@ task installReact(type: Exec) {
 		commandLine "npm", "install"
 	}
 }
+
