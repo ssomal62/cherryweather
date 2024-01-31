@@ -55,6 +55,7 @@ sourceSets {
 
 processResources {
 	dependsOn "copyReactFile"
+	dependsOn "copySecret"
 	//dependsOn "appNpmInstall"
 }
 
@@ -64,7 +65,7 @@ task copyReactFile(type: Copy) {
 	from "$reactAppDir/build"
 	//into "$buildDir/resources/main/static"
 	into "$projectDir/src/main/resources/static/"
-	dependsOn "copySecret"
+
 }
 task copySecret(type: Copy) {
 	from "$secretFileDir/secret_file"
