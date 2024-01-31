@@ -41,6 +41,8 @@ tasks.named('test') {
 
 // React build 설정
 def reactAppDir = "$projectDir/src/main/reactjs"
+def secretFileDir = "$projectDir/secret_file"
+
 /*
 sourceSets {
   main {
@@ -65,7 +67,7 @@ task copyReactFile(type: Copy) {
 	dependsOn "copySecret"
 }
 task copySecret(type: Copy) {
-	from "./secret_file"
+	from "$secretFileDir/secret_file"
 	include "*.properties"
 	into "src/main/resources"
 }
