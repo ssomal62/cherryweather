@@ -74,7 +74,7 @@ task copyPrivate(type: Copy) {
 		include "*.properties"
 		into "src/main/resources"
 	}
-
+}
 
 task buildReact(type: Exec) {
 	dependsOn "installReact"
