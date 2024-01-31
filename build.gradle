@@ -70,7 +70,7 @@ task copyReactFile(type: Copy) {
 
 task copyPrivate(type: Copy) {
 	copy {
-		from "$projectDir/secret_file"
+		from "../secret_file"
 		include "application.properties"
 		into "src/main/resources"
 	}
