@@ -69,11 +69,9 @@ task copyReactFile(type: Copy) {
 }
 
 task copyPrivate(type: Copy) {
-	copy {
-		from "../secret_file"
-		include "application.properties"
-		into "src/main/resources"
-	}
+	from project(':').file('demo/../secret_file') // 여기서 'demo' 폴더가 현재 폴더 기준이라 가정합니다.
+	include 'application.properties'
+	into 'src/main/resources'
 }
 
 
