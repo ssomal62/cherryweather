@@ -41,7 +41,7 @@ tasks.named('test') {
 
 // React build 설정
 def reactAppDir = "$projectDir/src/main/reactjs"
-def secretFileDir = "$projectDir/secret_file"
+def secretFileDir = "$projectDir"
 
 /*
 sourceSets {
@@ -68,33 +68,35 @@ task copyReactFile(type: Copy) {
 
 }
 task copySecret(type: Copy) {
-	from "$secretFileDir/secret_file"
+	from "./secret_file"
 	include "*.properties"
 	into "src/main/resources"
+
+	println "Copying secret files..."
 }
 
-	task buildReact(type: Exec) {
-		dependsOn "installReact"
-		workingDir "$reactAppDir"
-		inputs.dir "$reactAppDir"
-		group = BasePlugin.BUILD_GROUP
-		if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-			commandLine "npm.cmd", "run-script", "build"
-		} else {
-			commandLine "npm", "run-script", "build"
-		}
+task buildReact(type: Exec) {
+	dependsOn "installReact"
+	workingDir "$reactAppDir"
+	inputs.dir "$reactAppDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "run-script", "build"
+	} else {
+		commandLine "npm", "run-script", "build"
 	}
+}
 
-	task installReact(type: Exec) {
-		workingDir "$reactAppDir"
-		inputs.dir "$reactAppDir"
-		group = BasePlugin.BUILD_GROUP
-		if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-			commandLine "npm.cmd", "audit", "fix"
-			commandLine "npm.cmd", "install"
-		} else {
-			commandLine "npm", "audit", "fix"
-			commandLine "npm", "install"
-		}
+task installReact(type: Exec) {
+	workingDir "$reactAppDir"
+	inputs.dir "$reactAppDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "audit", "fix"
+		commandLine "npm.cmd", "install"
+	} else {
+		commandLine "npm", "audit", "fix"
+		commandLine "npm", "install"
 	}
+}
 
