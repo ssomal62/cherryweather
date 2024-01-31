@@ -10,6 +10,7 @@ application.properties
 .application.properties
 *.properties
 *.yml
+secret_file
 
 ### STS ###
 .apt_generated
