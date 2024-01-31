@@ -62,15 +62,12 @@ task copyReactFile(type: Copy) {
 	from "$reactAppDir/build"
 	//into "$buildDir/resources/main/static"
 	into "$projectDir/src/main/resources/static/"
-	dependsOn copySecret
+	dependsOn "copySecret"
 }
-
 task copySecret(type: Copy) {
-	copy {
-		from "./secret_file"
-		include "*.properties"
-		into "src/main/resources"
-	}
+	from "./secret_file"
+	include "*.properties"
+	into "src/main/resources"
 }
 
 	task buildReact(type: Exec) {
