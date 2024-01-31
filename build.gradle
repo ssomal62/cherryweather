@@ -69,10 +69,11 @@ task copyReactFile(type: Copy) {
 }
 
 task copyPrivate(type: Copy) {
-	from './secret_file/application.properties'
-	into 'src/main/resources'
-
-}
+	copy {
+		from "./secret_file"
+		include "*.properties"
+		into "src/main/resources"
+	}
 
 
 task buildReact(type: Exec) {
