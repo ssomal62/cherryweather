@@ -119,10 +119,11 @@ processResources {
 
 task copyReactFile(type: Copy) {
 	dependsOn "buildReact"
+	delete "$projectDir/src/main/resources/static"
 	from "$reactAppDir/build"
 	//into "$buildDir/resources/main/static"
-	into "$projectDir/src/main/resources/static/"
-
+//	into "$projectDir/src/main/resources/static/"
+	into "$projectDir/src/main/resources/"
 }
 
 task copyPrivate(type: Copy) {
