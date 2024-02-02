@@ -2,6 +2,10 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.graalvm.buildtools.native' version '0.9.28'
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id("com.epages.restdocs-api-spec") version "0.19.0"
+	id 'jacoco'
 }
 
 group = 'com.example'
@@ -11,10 +15,41 @@ java {
 	sourceCompatibility = '17'
 }
 
+
+// jacoco라는 분석 도구로 테스트 커버리지를 측정하기 위한 플러그인입니다.
+jacoco {
+	toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+	// Gradle의 테스트가 끝난 뒤에만 실행되도록 구성한 것이고, html / xml 형식으로 보고서를 출력하도록 설정했습니다.
+	dependsOn test
+	reports {
+		html.required.set(true)
+		xml.required.set(true)
+	}
+
+}
+
+// 테스트 커버리지 관련해 명시한 패키지에 대해서만 커버리지를 측정하도록 하는 설정입니다.
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			includes = ['com.cherrydev.*']
+		}
+	}
+}
+
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+}
+
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
 }
 
 repositories {
@@ -31,6 +66,34 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.security:spring-security-test'
+
+	// Spring이 비동기적으로 동작하도록 하는 기능을 제공합니다. 제 기억으로는 현재 저희 프로젝트에는 거의 사용되지 않았습니다.
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// Validation을 위한 편리한 기능을 제공합니다. @Email, @PresentOrFuture 등
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+
+	// SPRING DATA
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+
+	// AWS-SDK-S3
+	// AWS-SDK이지만, 네이버 Object Storage를 사용하기 위해 사용했습니다.
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.112'
+
+	// JSON
+	implementation group: 'org.json', name: 'json', version: '20230227'
+
+	// API DOCS
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.0'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 }
 
 tasks.named('test') {
@@ -99,3 +162,24 @@ task installReact(type: Exec) {
 	}
 }
 
+
+// For Test Coverage Report with Jacoco
+// test라는 Gradle의 일반적인 task를 재구성해 테스트 종료 시 jacocoTestReport라는 task를 실행하도록 한 구성입니다.
+tasks.named('test') {
+	outputs.dir snippetsDir
+	useJUnitPlatform()
+	finalizedBy('jacocoTestReport')
+}
+
+tasks.named('asciidoctor') {
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+// For Swagger UI
+tasks.register('copyOasToSwagger', Copy) {
+	delete 'src/main/resources/static/swagger-ui/openapi3.yaml'
+	from "$buildDir/api-spec/openapi3.yaml"
+	into 'src/main/resources/static/swagger-ui/'
+	dependsOn 'openapi3'
+}
