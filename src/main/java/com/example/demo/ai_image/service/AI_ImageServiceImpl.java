@@ -5,10 +5,13 @@ import com.example.demo.ai_image.dto.AI_ImageRequestDto;
 import com.example.demo.ai_image.dto.AI_ImageResponseDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,8 +19,13 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Mono;
 
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AI_ImageServiceImpl implements AI_ImageService {
+
+    private final AI_FileService aiFileService;
     String prompt_1 = "An informative style guide showcasing preppy fashion worn by a stylish South Asian woman. She is attired in a fashionable ensemble composed of preppy tops, bottoms, shoes, and accessories. There are additional garments surrounding her which can be exchanged to match her personal style. Every piece of attire is labelled in English, offering a detailed understanding of current chic fashion trends.";
 
     @Value("${openai.api.key}")
@@ -70,6 +78,13 @@ public class AI_ImageServiceImpl implements AI_ImageService {
         }
     }
 
+
+
+//    String imageUrl = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-PZHIu8jfYhaEttFnynfgZQo8/user-62BoikHqBYo2UbDNqlIz8cnr/img-iVZrRz4TdE2R0u8Eb4pUiMTr.png";
+//    String dirName = "user_ID";  // 업로드할 디렉토리 이름
+
+    //private 메소드
+    // ================================================================================================================================================================================================================================================================================================
     // Request 로깅 필터
     private ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
