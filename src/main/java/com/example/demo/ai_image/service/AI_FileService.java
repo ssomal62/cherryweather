@@ -184,9 +184,27 @@ public class AI_FileService {
     private void deleteFileFromBucket(String url, String dirName) {
         final String[] split = url.split("/");
         final String fileName = dirName + DIRECTORY_SEPARATOR + split[split.length - 1];
+        System.out.println("fileName = " + fileName);
         DeleteObjectRequest request = new DeleteObjectRequest(BUCKET_NAME, fileName);
         log.info("Deleted Image from Object Storage : " + request);
         objectStorageClient.deleteObject(request);
+    }
+
+    /**
+     * Object Storage 파일 삭제 처리 - NCP 용
+     */
+    private void deleteFile(String bucketName, String directoryPath, String fileName) {
+        // TODO Auto-generated method stub
+        String path=directoryPath+"/"+fileName;
+        System.out.println("path="+path);
+        //해당 버킷에 파일이 존재하면 true 반환
+        boolean isfind=objectStorageClient.doesObjectExist(bucketName, path);
+        System.out.println("isfind="+isfind);
+        //존재할경우 삭제
+        if(isfind) {
+            objectStorageClient.deleteObject(bucketName, path);
+            System.out.println(path+":삭제완료!");
+        }
     }
 
     // ------ VALIDATION ------ //

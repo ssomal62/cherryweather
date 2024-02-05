@@ -86,6 +86,8 @@ public class AI_ImageServiceImpl implements AI_ImageService {
 
     @Override
     public void deleteByUrl(ImageDeleteRequestDto requestDto) {
+        System.out.println("requestDto.getUrl() = " + requestDto.getUrl());
+        System.out.println("requestDto.getUrl() = " + requestDto.getUserId());
         aiFileService.deleteSingleFile(requestDto.getUrl(),requestDto.getUserId());
     }
 
