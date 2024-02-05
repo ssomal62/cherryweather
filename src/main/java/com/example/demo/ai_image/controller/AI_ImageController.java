@@ -2,6 +2,7 @@ package com.example.demo.ai_image.controller;
 
 import com.example.demo.ai_image.dto.AI_ImageDto;
 import com.example.demo.ai_image.dto.AI_ImageRequestDto;
+import com.example.demo.ai_image.dto.ImageDeleteRequestDto;
 import com.example.demo.ai_image.dto.ImageUploadRequestDto;
 import com.example.demo.ai_image.service.AI_FileService;
 import com.example.demo.ai_image.service.AI_ImageServiceImpl;
@@ -20,7 +21,7 @@ public class AI_ImageController {
 
     private final AI_ImageServiceImpl aiImageService;
     private final AI_FileService aiFileService;
-    private final ImageUploader imageUploader;
+
     //생성
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,7 +33,17 @@ public class AI_ImageController {
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
     public void uploadImage(final @Valid @RequestBody ImageUploadRequestDto requestDto) {
-        imageUploader.uploadImageToBucket(requestDto);
+        aiImageService.uploadImage(requestDto);
+
     }
+
+    //저장된 이미지 삭제
+    @DeleteMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteImage(final @Valid @RequestBody ImageDeleteRequestDto requestDto) {
+        aiImageService.deleteByUrl(requestDto);
+
+    }
+
 
 }
