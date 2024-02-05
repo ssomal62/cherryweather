@@ -67,7 +67,11 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.security:spring-security-test'
 
-	// Spring이 비동기적으로 동작하도록 하는 기능을 제공합니다. 제 기억으로는 현재 저희 프로젝트에는 거의 사용되지 않았습니다.
+
+ 	// 파일 관련
+	implementation 'commons-fileupload:commons-fileupload:1.4'
+
+	// 비동기 및 반응형 웹 애플리케이션을 개발하기 위한 모듈
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 	// Validation을 위한 편리한 기능을 제공합니다. @Email, @PresentOrFuture 등
@@ -79,7 +83,6 @@ dependencies {
 	// SPRING DATA
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 
 
 	// AWS-SDK-S3
@@ -124,9 +127,7 @@ processResources {
 task copyReactFile(type: Copy) {
 	dependsOn "buildReact"
 	from "$reactAppDir/build"
-	//into "$buildDir/resources/main/static"
-	into "$projectDir/src/main/resources/static/"
-
+	into "$projectDir/src/main/resources/static"
 }
 
 task copyPrivate(type: Copy) {

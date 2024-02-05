@@ -1,15 +1,12 @@
 import './App.css';
-import mainImg from './image/17.jpg';
+import Router from "./router/Router";
+
 
 function App() {
   return (
-    <div className="App">
-      <img src={mainImg} style={{width:'650px'}} alt=""/>
-      <h1><b>스프링부트 + 리액트 CI/CD 성공기원 !! 카리나의 응원 얍 </b></h1>
-        <h1>짝짝 성공입니다!</h1>
-        <h3>추가해볼께요.</h3>
-        <h4>왜 변화가 안될까요 ? </h4>
-    </div>
+      <>
+          <Router />
+      </>
   );
 }
 
