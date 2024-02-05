@@ -3,6 +3,7 @@ import mainImg from "../assets/images/17.jpg";
 import Layout from "../common/Layout";
 
 const Home = () => {
+
   return (
     <Layout>
       <img src={mainImg} style={{ width: "650px" }} alt="" />

@@ -13,5 +13,7 @@ public class StaticRouteConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/static/");
         registry.addResourceHandler("/swagger-ui.html")
                 .addResourceLocations("classpath:/static/swagger-ui/");
+//        registry.addResourceHandler("/static/index.html")
+//                .addResourceLocations("classpath:/static/");
     }
 }
