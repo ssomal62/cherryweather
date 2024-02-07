@@ -20,7 +20,7 @@ public class ClubAPIController {
     private final ClubService clubService;
 
     /**
-     * 클럽 목록 조회
+     * 클럽 목록 전체 조회 (필터 없음)
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

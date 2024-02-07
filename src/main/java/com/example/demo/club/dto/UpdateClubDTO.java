@@ -7,11 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
-
 @Builder
 public record UpdateClubDTO(
-
         @NotNull(message = "[clubId]는 null일 수 없습니다.")
         @Positive(message = "[clubId]는 양수여야합니다.")
         long clubId,
@@ -35,6 +32,5 @@ public record UpdateClubDTO(
                 .updatedUserId(this.updatedUserId)
                 .representativeUserId(this.representativeUserId)
                 .build();
-
     }
 }

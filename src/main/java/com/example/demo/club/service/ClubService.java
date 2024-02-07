@@ -31,7 +31,6 @@ public class ClubService {
 
     @Transactional
     public void saveClub(CreateClubDTO requestDTO) {
-
         clubRepository.save(
                 validateDTO(requestDTO.createClubInfo())
         );
