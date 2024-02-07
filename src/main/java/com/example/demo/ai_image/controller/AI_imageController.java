@@ -1,9 +1,8 @@
 package com.example.demo.ai_image.controller;
 
 import com.example.demo.ai_image.dto.*;
-import com.example.demo.ai_image.service.AI_FileService;
-import com.example.demo.ai_image.service.AI_ImageServiceImpl;
-import com.example.demo.ai_image.service.ImageUploader;
+import com.example.demo.ai_image.service.AI_fileService;
+import com.example.demo.ai_image.service.AI_imageServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,15 +13,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/ai_image")
-public class AI_ImageController {
+public class AI_imageController {
 
-    private final AI_ImageServiceImpl aiImageService;
-    private final AI_FileService aiFileService;
+    private final AI_imageServiceImpl aiImageService;
+    private final AI_fileService aiFileService;
 
     //생성
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public Object  createImage(final @Valid @RequestBody AI_ImageRequestDto imageDto) {
+    public Object  createImage(final @Valid @RequestBody AI_imageRequestDto imageDto) {
         return aiImageService.generateImage(imageDto);
     }
 
@@ -45,7 +44,7 @@ public class AI_ImageController {
     //조회 - 아이디
     @GetMapping("/get-image")
     @ResponseStatus(HttpStatus.OK)
-    public AI_ImageResponseDto getImageByUserId(@RequestParam String userId) {
+    public AI_imageResponseDto getImageByUserId(@RequestParam String userId) {
         return aiImageService.getImageByUserId(userId);
     }
 

@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ImageUploader {
-    private final AI_FileService aiFileService;
+    private final AI_fileService aiFileService;
     private final ObjectMapper objectMapper;
     private Path tempFilePath; // 임시 파일 경로 저장 변수
 

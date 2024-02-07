@@ -23,7 +23,7 @@ import static com.example.demo.common.exception.enums.ExceptionStatus.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AI_FileService {
+public class AI_fileService {
 
     private final AmazonS3Client objectStorageClient;
 

@@ -21,9 +21,9 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AI_ImageServiceImpl implements AI_ImageService {
+public class AI_imageServiceImpl implements AI_imageService {
 
-    private final AI_FileService aiFileService;
+    private final AI_fileService aiFileService;
     private final ImageUploader imageUploader;
     String prompt_1 = "An informative style guide showcasing preppy fashion worn by a stylish South Asian woman. She is attired in a fashionable ensemble composed of preppy tops, bottoms, shoes, and accessories. There are additional garments surrounding her which can be exchanged to match her personal style. Every piece of attire is labelled in English, offering a detailed understanding of current chic fashion trends.";
     String cold_weather = "In chilly temperatures, our fashionista stays cozy yet chic. She opts for a classic cable-knit sweater in rich burgundy, paired with tailored plaid trousers. Knee-high leather boots add a touch of sophistication while keeping her warm. A woolen beret and a matching scarf complete the ensemble, creating a polished winter look.";
@@ -37,7 +37,7 @@ public class AI_ImageServiceImpl implements AI_ImageService {
 
     // OpenAI API 호출 및 응답 처리 로직 구현
     @Override
-    public Object  generateImage(AI_ImageRequestDto imageDto) {
+    public Object  generateImage(AI_imageRequestDto imageDto) {
 
         // OpenAI API 호출을 위한 WebClient 생성
         WebClient webClient = WebClient.builder()
@@ -50,7 +50,7 @@ public class AI_ImageServiceImpl implements AI_ImageService {
 
 
         // OpenAI API에 보낼 요청 데이터 생성
-        AI_ImageRequestDto openaiRequestDto = AI_ImageRequestDto.withDefaults()
+        AI_imageRequestDto openaiRequestDto = AI_imageRequestDto.withDefaults()
                 .toBuilder()
                 .prompt(hot_weather)
                 .build();
@@ -96,7 +96,7 @@ public class AI_ImageServiceImpl implements AI_ImageService {
     }
 
     @Override
-    public AI_ImageResponseDto getImageByUserId(String userId) {
+    public AI_imageResponseDto getImageByUserId(String userId) {
         return null;
     }
 
