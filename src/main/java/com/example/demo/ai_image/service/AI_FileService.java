@@ -152,7 +152,7 @@ public class AI_FileService {
      * @param dirName 삭제할 파일이 있는 디렉토리 이름
      */
     public void deleteSingleFile(String url, String dirName) {
-        checkFileExist(url);
+        checkFileExist(url,dirName);
         deleteFileFromBucket(url, dirName);
     }
 
@@ -232,8 +232,10 @@ public class AI_FileService {
     /**
      * 파일 삭제 시 파일 존재 여부 체크
      */
-    private void checkFileExist(String url) {
-        boolean isExist = objectStorageClient.doesObjectExist(BUCKET_NAME, url);
+    private void checkFileExist(String url, String dirName) {
+        final String[] split = url.split("/");
+        final String fileName = dirName + DIRECTORY_SEPARATOR + split[split.length - 1];
+        boolean isExist = objectStorageClient.doesObjectExist(BUCKET_NAME, fileName);
         if (!isExist) {
             throw new ServiceFailedException(NOT_FOUND_FILE);
         }
