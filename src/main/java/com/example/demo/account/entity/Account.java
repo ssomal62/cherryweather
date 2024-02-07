@@ -1,11 +1,19 @@
 package com.example.demo.account.entity;
 
 
+import com.example.demo.account.enums.RegisterType;
+import com.example.demo.account.enums.UserRole;
+import com.example.demo.account.enums.UserStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -17,13 +25,15 @@ public class Account {
     @Column(name = "ACCOUNT_ID")
     private Long accountId;
 
-    @Column(name = "IS_ADMIN", nullable = false)
-    private boolean isAdmin = false;
+    @Column(name = "ACCOUNT_REGISTER_TYPE", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private RegisterType registType;
 
     @Column(name = "ACCOUNT_NAME", nullable = false, length = 20)
     private String name;
 
     @Column(name = "ACCOUNT_EMAIL", nullable = false, length = 50)
+    @Email
     private String email;
 
     @Column(name = "ACCOUNT_PASSWORD", nullable = false, length = 300)
@@ -44,30 +54,40 @@ public class Account {
     @Column(name = "ACCOUNT_PROFILE_IMAGE", nullable = false, length = 100)
     private String profileImage;
 
-    @Column(name = "ACCOUNT_STATE", nullable = false, length = 20)
-    private String state;
+    @Column(name = "ACCOUNT_USER_STATUS", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+
+    @Column(name = "ACCOUNT_ROLE", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
     @Column(name = "ACCOUNT_RATING", nullable = false, length = 20)
     private String rating;
 
-    @Column(name = "CREATED_DATE", nullable = false)
-    private LocalDate createdDate;
 
-    @Column(name = "UPDATE_DATE", nullable = false)
-    private LocalDate updateDate;
+    @CreationTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @Column(name = "CREATED_DATE", nullable = false, updatable = false)
+    private LocalDateTime createdDate;
+
+    @UpdateTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @Column(name = "UPDATE_DATE")
+    private LocalDateTime updateDate;
 
     @Column(name = "DELETE_DATE")
-    private LocalDate deleteDate;
+    private LocalDateTime deleteDate;
 
 
     public Account() {
     }
 
     @Builder
-    public Account(boolean isAdmin, String name, String email, String password, String profileName,
+    public Account( RegisterType registerType, String name, String email, String password, String profileName,
                    String phoneNumber, String gender, String dateOfBirth, String profileImage,
-                   String state, String rating, LocalDate createdDate, LocalDate updateDate, LocalDate deleteDate) {
-        this.isAdmin = isAdmin;
+                   UserStatus userStatus, UserRole userRole, String rating) {
+        this.registType = registerType;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -76,11 +96,13 @@ public class Account {
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.profileImage = profileImage;
-        this.state = state;
+        this.userStatus = userStatus;
+        this.userRole = userRole;
         this.rating = rating;
-        this.createdDate = createdDate;
-        this.updateDate = updateDate;
-        this.deleteDate = deleteDate;
+    }
+
+    public void updateAccountRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
 }
