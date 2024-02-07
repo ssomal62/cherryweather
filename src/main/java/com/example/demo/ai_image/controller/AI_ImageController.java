@@ -1,9 +1,6 @@
 package com.example.demo.ai_image.controller;
 
-import com.example.demo.ai_image.dto.AI_ImageDto;
-import com.example.demo.ai_image.dto.AI_ImageRequestDto;
-import com.example.demo.ai_image.dto.ImageDeleteRequestDto;
-import com.example.demo.ai_image.dto.ImageUploadRequestDto;
+import com.example.demo.ai_image.dto.*;
 import com.example.demo.ai_image.service.AI_FileService;
 import com.example.demo.ai_image.service.AI_ImageServiceImpl;
 import com.example.demo.ai_image.service.ImageUploader;
@@ -29,7 +26,7 @@ public class AI_ImageController {
         return aiImageService.generateImage(imageDto);
     }
 
-    //생성
+    // 저장
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
     public void uploadImage(final @Valid @RequestBody ImageUploadRequestDto requestDto) {
@@ -45,5 +42,13 @@ public class AI_ImageController {
 
     }
 
+    //조회 - 아이디
+    @GetMapping("/get-image")
+    @ResponseStatus(HttpStatus.OK)
+    public AI_ImageResponseDto getImageByUserId(@RequestParam String userId) {
+        return aiImageService.getImageByUserId(userId);
+    }
+
+    //전체조회 - 아이디
 
 }

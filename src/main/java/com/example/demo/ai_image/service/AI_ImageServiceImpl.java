@@ -1,8 +1,6 @@
 package com.example.demo.ai_image.service;
 
-import com.example.demo.ai_image.dto.AI_ImageRequestDto;
-import com.example.demo.ai_image.dto.ImageDeleteRequestDto;
-import com.example.demo.ai_image.dto.ImageUploadRequestDto;
+import com.example.demo.ai_image.dto.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +92,11 @@ public class AI_ImageServiceImpl implements AI_ImageService {
     @Override
     public void uploadImage(ImageUploadRequestDto requestDto) {
         imageUploader.uploadImageToBucket(requestDto);
+    }
+
+    @Override
+    public AI_ImageResponseDto getImageByUserId(String userId) {
+        return null;
     }
 
 
