@@ -59,11 +59,11 @@ public class SignUpRequestDto {
 
     String tertiaryActivityArea;
 
-    public Account toAccountEntity() {
+    public Account toAccountEntity(final String encodedPassword) {
         return Account.builder()
                 .name(this.name)
                 .email(this.email)
-                .password(this.password) // 암호화 로직을 서비스 레이어에서 처리해야 함
+                .password(encodedPassword) // 암호화 로직을 서비스 레이어에서 처리해야 함
                 .phoneNumber(this.phoneNumber)
                 .gender(this.gender)
                 .dateOfBirth(this.birthdate)

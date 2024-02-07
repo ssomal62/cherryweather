@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 //############ 약관 동의 정보 ############
 @Getter
 @Entity
@@ -23,14 +22,10 @@ public class Agreement {
     @Column(name = "AGREEMENT_USE_TERMS", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private boolean agreementUseTerms;
 
-    @Column(name = "AGREEMENT_INFO_OFFER", nullable = false)
+    @Column(name = "AGREEMENT_INFO_OFFER", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private boolean agreementInfoOffer;
 
     @Column(name = "AGREEMENT_GET_NOTIFIED", nullable = false)
     private boolean agreementGetNotified;
-
-    private Timestamp createdAt;
-
-    private Timestamp updatedAt;
 
 }

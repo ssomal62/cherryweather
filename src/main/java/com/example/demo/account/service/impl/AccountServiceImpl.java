@@ -11,6 +11,7 @@ import com.example.demo.account.repository.InterestRepository;
 import com.example.demo.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +29,17 @@ public class AccountServiceImpl implements AccountService {
     private final InterestRepository interestRepository;
     private final AgreementRepository agreementRepository;
     private final ActivitiesAreaRepository activitiesAreaRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // ## 회원 가입 ## //
     @Transactional
+    @Override
     public void createAccount(final SignUpRequestDto signUpRequestDto) {
 
+
         // 회원 정보 저장
-        Account account = accountRepository.save(signUpRequestDto.toAccountEntity());
+        String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
+        Account account = accountRepository.save(signUpRequestDto.toAccountEntity(encodedPassword));
 
         // 회원 관심사 저장
         List<Interest> interests = signUpRequestDto.toInterestEntities(account);

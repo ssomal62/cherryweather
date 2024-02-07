@@ -3,7 +3,6 @@ package com.example.demo.account.dto;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.enums.UserRole;
 import com.example.demo.common.exception.NotFoundException;
-import com.example.demo.common.exception.enums.ExceptionStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,10 +30,7 @@ public class AccountDetails implements UserDetails {
         return account;
     }
 
-    /**
-     * {@link Account} 정보의 {@link UserRole}에 따라 권한을 부여하고, 컬렉션에 담아 반환한다.
-     * @return authorities
-     */
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         UserRole userRole = account.getUserRole();
