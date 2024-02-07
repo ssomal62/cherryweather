@@ -91,6 +91,7 @@ public class AI_ImageServiceImpl implements AI_ImageService {
 
     @Override
     public void uploadImage(ImageUploadRequestDto requestDto) {
+        System.out.println("이미지 업로드 호출");
         imageUploader.uploadImageToBucket(requestDto);
     }
 

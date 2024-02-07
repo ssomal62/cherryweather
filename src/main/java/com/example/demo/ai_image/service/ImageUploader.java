@@ -1,10 +1,8 @@
 package com.example.demo.ai_image.service;
 
 import com.example.demo.ai_image.dto.ImageUploadRequestDto;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
@@ -26,6 +24,7 @@ public class ImageUploader {
     private Path tempFilePath; // 임시 파일 경로 저장 변수
 
     public void uploadImageToBucket(ImageUploadRequestDto requestDto) {
+        System.out.println("uploadImageToBucket");
         try {
             String imageUrl = requestDto.getUrl();
 
@@ -50,6 +49,7 @@ public class ImageUploader {
     }
 
     private Path downloadImageToTempFile(String imageUrl) throws IOException {
+        System.out.println("downloadImageToTempFile");
         // Create a temporary file with a unique name
         String tempFileName = UUID.randomUUID().toString() + ".png";
         Path tempFilePath = Files.createTempFile(null, tempFileName);
@@ -67,6 +67,7 @@ public class ImageUploader {
     }
 
     private void deleteTempFile() {
+        System.out.println("deleteTempFile");
         try {
             boolean deleted = Files.deleteIfExists(tempFilePath);
             if (deleted) {
@@ -81,6 +82,7 @@ public class ImageUploader {
 
     // Implementation of a MultipartFile that wraps a File
     private static class MyFileResource implements MultipartFile {
+
         private final File file;
 
         public MyFileResource(File file) {
