@@ -1,11 +1,15 @@
 package com.example.demo.account.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -50,14 +54,18 @@ public class Account {
     @Column(name = "ACCOUNT_RATING", nullable = false, length = 20)
     private String rating;
 
-    @Column(name = "CREATED_DATE", nullable = false)
-    private LocalDate createdDate;
+    @CreationTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @Column(name = "CREATED_DATE", nullable = false, updatable = false)
+    private LocalDateTime createdDate;
 
-    @Column(name = "UPDATE_DATE", nullable = false)
-    private LocalDate updateDate;
+    @UpdateTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @Column(name = "UPDATE_DATE")
+    private LocalDateTime updateDate;
 
     @Column(name = "DELETE_DATE")
-    private LocalDate deleteDate;
+    private LocalDateTime deleteDate;
 
 
     public Account() {
@@ -66,7 +74,7 @@ public class Account {
     @Builder
     public Account(boolean isAdmin, String name, String email, String password, String profileName,
                    String phoneNumber, String gender, String dateOfBirth, String profileImage,
-                   String state, String rating, LocalDate createdDate, LocalDate updateDate, LocalDate deleteDate) {
+                   String state, String rating) {
         this.isAdmin = isAdmin;
         this.name = name;
         this.email = email;
@@ -78,9 +86,6 @@ public class Account {
         this.profileImage = profileImage;
         this.state = state;
         this.rating = rating;
-        this.createdDate = createdDate;
-        this.updateDate = updateDate;
-        this.deleteDate = deleteDate;
     }
 
 }

@@ -1,8 +1,6 @@
 package com.example.demo.ai_image.service;
 
-import com.example.demo.ai_image.dto.AI_ImageDto;
 import com.example.demo.ai_image.dto.AI_ImageRequestDto;
-import com.example.demo.ai_image.dto.AI_ImageResponseDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
