@@ -34,7 +34,7 @@
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker
-            .register("%PUBLIC_URL%/serviceWorker.js")
+            .register("/serviceWorker.js")
             .then((registration) => {
               console.log("Service Worker registered:", registration);
             })

@@ -63,7 +63,7 @@ const WebNotificationTest = () => {
   const makeNotiTest = () => {
     if (Notification.permission === "granted") {
       const options = {
-        body: "웹 알림 Test입니다",
+        body: "한국 축구 졌다, 처참하게!",
         icon: "https://developer.mozilla.org/static/img/favicon-32x32.png",
         requireInteraction: true,
       };
@@ -76,6 +76,7 @@ const WebNotificationTest = () => {
       }
     } else if (Notification.permission === "denied") {
       console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+      alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
     } else {
       // 사용자가 아직 알림 권한을 설정하지 않은 경우
       // 알림 권한 요청
@@ -84,6 +85,7 @@ const WebNotificationTest = () => {
           makeNotiTest(); // 알림 권한이 허용된 경우 다시 알림 보내기 시도
         } else {
           console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+          alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
         }
       });
     }
