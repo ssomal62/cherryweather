@@ -1,14 +1,12 @@
 package com.example.demo.club.entity;
 
 
+import com.example.demo.club.dto.UpdateClubDTO;
 import com.example.demo.club.enums.ClubCategory;
 import com.example.demo.club.enums.ClubGrade;
 import com.example.demo.club.enums.ClubStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +18,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name = "CLUB")
+@Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Club {
 
@@ -76,23 +76,12 @@ public class Club {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @Builder(toBuilder = true)
-    public Club(long clubId, String name, String code, ClubGrade grade, Integer maxGrowthMeter, Integer currentGrowthMeter, ClubCategory category, ClubStatus status, Long representativeUserId, Integer currentMembers, Integer maxMembers, String activitiesArea, Long createdUserId, Long updatedUserId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.clubId = clubId;
-        this.name = name;
-        this.code = code;
-        this.grade = grade;
-        this.maxGrowthMeter = maxGrowthMeter;
-        this.currentGrowthMeter = currentGrowthMeter;
-        this.category = category;
-        this.status = status;
-        this.representativeUserId = representativeUserId;
-        this.currentMembers = currentMembers;
-        this.maxMembers = maxMembers;
-        this.activitiesArea = activitiesArea;
-        this.createdUserId = createdUserId;
-        this.updatedUserId = updatedUserId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public void updateClub(UpdateClubDTO requestDTO) {
+        this.name = requestDTO.name();
+        this.category = requestDTO.category();
+        this.status = requestDTO.status();
+        this.activitiesArea = requestDTO.activitiesArea();
+        this.updatedUserId = requestDTO.updatedUserId();
+        this.representativeUserId = requestDTO.representativeUserId();
     }
 }
