@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.example.demo.club.enums.ClubGrade.GENTLE_BREEZE;
 import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_CLUB;
 
 @Service
@@ -32,7 +33,7 @@ public class ClubService {
     @Transactional
     public void saveClub(CreateClubDTO requestDTO) {
         clubRepository.save(
-                validateDTO(requestDTO.createClubInfo())
+                validateDTO(createClub(requestDTO))
         );
     }
 
@@ -47,9 +48,9 @@ public class ClubService {
     @Transactional
     public void updateClub(UpdateClubDTO requestDTO) {
         Club existingClub = findClubById(requestDTO.clubId());
-
+        existingClub.updateClub(requestDTO);
         clubRepository.save(
-                validateDTO(requestDTO.updateClub(existingClub))
+                validateDTO(existingClub)
         );
     }
 
@@ -60,11 +61,28 @@ public class ClubService {
         );
     }
 
-    //==============  private method  ==============//
-
-    private Club findClubById (long clubId) {
+    public Club findClubById (final long clubId) {
         return clubRepository.findById(clubId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_CLUB));
+    }
+
+    //==============  private method  ==============//
+
+    private Club createClub(CreateClubDTO requestDTO) {
+        return Club.builder()
+                .name(requestDTO.name())
+                .code(requestDTO.code())
+                .grade(GENTLE_BREEZE)
+                .category(requestDTO.category())
+                .status(requestDTO.status())
+                .activitiesArea(requestDTO.activitiesArea())
+                .createdUserId(requestDTO.createdUserId())
+                .representativeUserId(requestDTO.createdUserId())
+                .currentMembers(1)
+                .maxMembers(GENTLE_BREEZE.getMaxMembers())
+                .currentGrowthMeter(0)
+                .maxGrowthMeter(GENTLE_BREEZE.getMaxGrowthMeter())
+                .build();
     }
 
     private Club validateDTO (Club club) {

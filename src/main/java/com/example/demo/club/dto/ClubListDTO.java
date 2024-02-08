@@ -17,19 +17,22 @@ public record ClubListDTO(List<ClubSummary> summaryList) {
         return ClubListDTO.builder()
                 .summaryList(
                         clubs.stream()
-                                .map(club -> ClubSummary.builder()
-                                        .clubId(club.getClubId())
-                                        .name(club.getName())
-                                        .activitiesArea(club.getActivitiesArea())
-                                        .currentMembers(club.getCurrentMembers())
-                                        .maxMembers(club.getMaxMembers())
-                                        .status(club.getStatus())
-                                        .category(club.getCategory())
-                                        .grade(club.getGrade())
-                                        .build())
+                                .map(ClubListDTO::convertToSummary)
                                 .toList()
                 )
                 .build();
     }
 
+    private static ClubSummary convertToSummary(Club club) {
+        return ClubSummary.builder()
+                .clubId(club.getClubId())
+                .name(club.getName())
+                .activitiesArea(club.getActivitiesArea())
+                .currentMembers(club.getCurrentMembers())
+                .maxMembers(club.getMaxMembers())
+                .status(club.getStatus())
+                .category(club.getCategory())
+                .grade(club.getGrade())
+                .build();
+    }
 }

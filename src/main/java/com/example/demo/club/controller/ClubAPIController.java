@@ -24,8 +24,8 @@ public class ClubAPIController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-   //@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ClubListDTO> getAllClubs() {
+    //@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ClubListDTO> findAllClubs() {
         return ResponseEntity.ok()
                 .body(clubService.findAll());
     }
@@ -55,7 +55,7 @@ public class ClubAPIController {
      */
     @GetMapping("/{clubId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ClubDetailDTO> getClub(@PathVariable(value="clubId") long clubId) {
+    public ResponseEntity<ClubDetailDTO> findClub(@PathVariable(value="clubId") long clubId) {
         return ResponseEntity.ok().body(
                 clubService.findDetail(clubId)
         );
