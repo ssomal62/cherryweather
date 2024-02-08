@@ -1,0 +1,12 @@
+// {
+//   "env": {
+//     "browser": true,
+//     "worker": true
+//   },
+//   "globals": {
+//     "self": "readonly"
+//   },
+//   "rules": {
+//     "no-restricted-globals": ["error", "self"]
+//   }
+// }
