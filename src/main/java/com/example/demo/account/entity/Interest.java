@@ -3,6 +3,7 @@ package com.example.demo.account.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 //############ 관심사 ############
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
+@Getter
 @Table(name = "INTEREST")
 public class Interest {
 
@@ -20,7 +22,7 @@ public class Interest {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", nullable = false)
-    private Account account;
+    private Account accountId;
 
     @Column(name = "INTEREST_FIRST", length = 20, nullable = false)
     private String interestFirst;
