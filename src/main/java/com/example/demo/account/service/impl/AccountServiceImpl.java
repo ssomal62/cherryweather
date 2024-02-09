@@ -1,5 +1,7 @@
 package com.example.demo.account.service.impl;
+import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.account.dto.SignUpRequestDto;
+import com.example.demo.account.dto.UserInfoDto;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.ActivitiesArea;
 import com.example.demo.account.entity.Agreement;
@@ -9,14 +11,18 @@ import com.example.demo.account.repository.ActivitiesAreaRepository;
 import com.example.demo.account.repository.AgreementRepository;
 import com.example.demo.account.repository.InterestRepository;
 import com.example.demo.account.service.AccountService;
+import com.example.demo.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_ACCOUNT;
 
 @Service
 @Slf4j
@@ -54,10 +60,28 @@ public class AccountServiceImpl implements AccountService {
         activitiesAreaRepository.save(activitiesArea);
     }
 
+    // ## 유저 정보 ## //
     @Override
-    public Account findAccountByEmail(final String email) {
-        return accountRepository.findByEmail(email).orElse(null);
+    @Transactional(readOnly = true)
+    public ResponseEntity<UserInfoDto> getUserInfo(final AccountDetails accountDetails) {
+        Account account = accountDetails.getAccount();
+        return ResponseEntity
+                .ok()
+                .body(
+                        new UserInfoDto(account)
+                );
     }
 
+    @Override
+    public Account findAccountByEmail(final String email) {
+        return accountRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT));
+    }
+
+    @Override
+    @Transactional
+    public void deleteAccount(final AccountDetails accountDetails) {
+        accountRepository.delete(accountDetails.getAccount());
+    }
 
 }
