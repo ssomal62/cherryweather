@@ -81,7 +81,7 @@ public class SignUpRequestDto {
 
         if (this.interests != null && !this.interests.isEmpty()) {
             Interest interestEntity = Interest.builder()
-                    .account(account)
+                    .accountId(account)
                     .interestFirst(this.interests.size() > 0 ? this.interests.get(0) : null)
                     .interestSecond(this.interests.size() > 1 ? this.interests.get(1) : null)
                     .interestThird(this.interests.size() > 2 ? this.interests.get(2) : null)
