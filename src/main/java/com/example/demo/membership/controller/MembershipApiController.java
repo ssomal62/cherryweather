@@ -4,7 +4,8 @@ package com.example.demo.membership.controller;
 import com.example.demo.membership.dto.ClubSignupDTO;
 import com.example.demo.membership.dto.MembershipListDTO;
 import com.example.demo.membership.dto.UpdateMembership;
-import com.example.demo.membership.dto.UserInfo;
+import com.example.demo.membership.dto.MembershipQueryDTO;
+import com.example.demo.membership.service.MembershipQueryService;
 import com.example.demo.membership.service.MembershipService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/membership")
-public class MembershipAPIController {
+public class MembershipApiController {
 
     private final MembershipService membershipService;
+    private final MembershipQueryService membershipQueryService;
 
     /**
      * 멤버십 삭제 - 전체
@@ -25,22 +27,21 @@ public class MembershipAPIController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MembershipListDTO> findAllMembership() {
-
         return ResponseEntity.ok().body(
                 membershipService.findAllMembership()
         );
     }
 
     /**
-     * 멤버십 조회 - email
+     * 멤버십 조회
      */
-    @GetMapping("/user-info")
+    @GetMapping("/query")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MembershipListDTO> findAllMembershipByAccountId(
-            @RequestBody UserInfo userInfo
-            ) {
+            @RequestBody MembershipQueryDTO membershipQueryDTO
+    ) {
         return ResponseEntity.ok().body(
-                membershipService.findAllMembershipByAccountId(userInfo)
+                membershipQueryService.findAllByConditions(membershipQueryDTO)
         );
     }
 
@@ -63,7 +64,7 @@ public class MembershipAPIController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> updateMembership(
             @Valid @RequestBody UpdateMembership requestDTO
-            ) {
+    ) {
         membershipService.updateMembership(requestDTO);
         return ResponseEntity.ok().build();
     }

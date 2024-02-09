@@ -9,7 +9,6 @@ import com.example.demo.common.exception.NotFoundException;
 import com.example.demo.membership.dto.ClubSignupDTO;
 import com.example.demo.membership.dto.MembershipListDTO;
 import com.example.demo.membership.dto.UpdateMembership;
-import com.example.demo.membership.dto.UserInfo;
 import com.example.demo.membership.entity.Membership;
 import com.example.demo.membership.repository.MembershipRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,15 +30,6 @@ public class MembershipService {
     @Transactional
     public MembershipListDTO findAllMembership() {
         return MembershipListDTO.fromMembership(membershipRepository.findAll());
-    }
-
-    @Transactional
-    public MembershipListDTO findAllMembershipByAccountId(UserInfo userInfo) {
-        Account findAccount = accountService.findAccountByEmail(userInfo.email());
-
-        checkAccountThrowNotFoundException(findAccount);
-
-        return MembershipListDTO.fromMembership(membershipRepository.findByAccount(findAccount));
     }
 
     @Transactional
