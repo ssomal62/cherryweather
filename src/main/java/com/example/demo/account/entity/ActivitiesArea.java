@@ -3,6 +3,7 @@ package com.example.demo.account.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 //############ 모임 활동 지역 ############
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
 @Table(name = "ACTIVITIES_AREA")
 public class ActivitiesArea {
 

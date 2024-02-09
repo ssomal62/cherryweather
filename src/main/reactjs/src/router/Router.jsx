@@ -45,6 +45,7 @@ const Router = () => {
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           {isLogin && <Route path="/club" element={<Club />} />}
+
           {/* WebNotificationTest 경로 추가 */}
           <Route
             path="/web-notification-test"
