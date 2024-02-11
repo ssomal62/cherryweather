@@ -1,0 +1,17 @@
+package com.example.demo.weather.dto;
+
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class GeoLocationDto {
+    private String country;
+    private String code;
+    private String r1; // (예: 시/도)
+    private String r2; // (예: 구/군)
+    private String r3; // (예: 동/읍/면)
+    private double lat; // 위도
+    private double lon; // 경도
+    private String net; // 네트워크 제공자
+}

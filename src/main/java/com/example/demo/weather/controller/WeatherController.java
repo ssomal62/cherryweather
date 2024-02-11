@@ -3,9 +3,9 @@ package com.example.demo.weather.controller;
 import com.example.demo.weather.dto.TodayWeatherReqDto;
 import com.example.demo.weather.dto.TodayWeatherResDto;
 import com.example.demo.weather.service.TodayWeatherService;
-import jakarta.servlet.http.HttpServletRequest;
+// import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+// import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +30,8 @@ public class WeatherController {
     @GetMapping("/ftoday")
     public List<TodayWeatherResDto> getFormattedTodayWeather() {
         // 오늘 날씨 데이터 가져오기
-        List<TodayWeatherResDto> formattedWeatherData = todayWeatherService.formatWeatherData(todayWeatherService.getTodayWeather());
-        return formattedWeatherData;
+        List<TodayWeatherResDto> todayWeatherResDtos = todayWeatherService.formatWeatherData(todayWeatherService.getTodayWeather());
+        return todayWeatherResDtos;
     }
 
     // @GetMapping("/location")
