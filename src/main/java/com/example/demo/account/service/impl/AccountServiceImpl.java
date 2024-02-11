@@ -11,6 +11,7 @@ import com.example.demo.account.repository.ActivitiesAreaRepository;
 import com.example.demo.account.repository.AgreementRepository;
 import com.example.demo.account.repository.InterestRepository;
 import com.example.demo.account.service.AccountService;
+import com.example.demo.common.exception.DuplicatedException;
 import com.example.demo.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.example.demo.common.exception.enums.ExceptionStatus.CONFLICT_ACCOUNT;
 import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_ACCOUNT;
 
 @Service
@@ -41,8 +44,6 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void createAccount(final SignUpRequestDto signUpRequestDto) {
-
-
         // 회원 정보 저장
         String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
         Account account = accountRepository.save(signUpRequestDto.toAccountEntity(encodedPassword));
@@ -56,8 +57,8 @@ public class AccountServiceImpl implements AccountService {
         agreementRepository.save(agreement);
 
         // 회원 활동 지역 저장
-        ActivitiesArea activitiesArea = signUpRequestDto.toActivitiesAreaEntity(account);
-        activitiesAreaRepository.save(activitiesArea);
+        List<ActivitiesArea> activitiesAreas = signUpRequestDto.toActivitiesAreaEntities(account);
+        activitiesAreaRepository.saveAll(activitiesAreas);
     }
 
     // ## 유저 정보 ## //
@@ -65,11 +66,22 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(readOnly = true)
     public ResponseEntity<UserInfoDto> getUserInfo(final AccountDetails accountDetails) {
         Account account = accountDetails.getAccount();
-        return ResponseEntity
-                .ok()
-                .body(
-                        new UserInfoDto(account)
-                );
+        account = accountRepository.findById(account.getAccountId())
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT)); // 계정 정보 재조회
+
+
+        List<String> interests = account.getInterests().stream()
+                .map(Interest::getInterestName)
+                .collect(Collectors.toList());
+
+        List<UserInfoDto.ActivityAreaInfo> activityAreas = account.getActivitiesAreas().stream()
+                .map(area -> new UserInfoDto.ActivityAreaInfo(area.getType(), area.getLocation()))
+                .collect(Collectors.toList());
+
+        // 수정된 UserInfoDto 생성자를 사용하여 DTO 생성
+        UserInfoDto userInfoDto = new UserInfoDto(account, interests, activityAreas);
+
+        return ResponseEntity.ok().body(userInfoDto);
     }
 
     @Override
@@ -78,10 +90,23 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT));
     }
 
+    // 회원 탈퇴
     @Override
     @Transactional
     public void deleteAccount(final AccountDetails accountDetails) {
         accountRepository.delete(accountDetails.getAccount());
+    }
+
+    // 이메일 중복 체크
+    public void checkDuplicateEmail(String email) {
+        checkEmailIsDuplicated(email);
+    }
+
+    // 이메일 중복 체크
+    private void checkEmailIsDuplicated(String email) {
+        if (accountRepository.existsByEmail(email)) {
+            throw new DuplicatedException(CONFLICT_ACCOUNT);
+        }
     }
 
 }
