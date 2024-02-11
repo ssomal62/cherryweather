@@ -21,21 +21,27 @@ public class AccountController {
 
     private final AccountServiceImpl accountService;
 
-    // 회원가입
+    /**
+     * 회원가입
+     */
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(final @Valid @RequestBody SignUpRequestDto signUpRequestDto) {
         accountService.createAccount(signUpRequestDto);
     }
 
-    // 유저정보
+    /**
+     * 내 정보 조회
+     */
     @GetMapping("/user-info")
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserInfoDto> getUserInfo(@AuthenticationPrincipal AccountDetails accountDetails) {
         return accountService.getUserInfo(accountDetails);
     }
 
-    // 회원탈퇴
+    /**
+     * 회원 탈퇴
+     */
     @DeleteMapping("/drop-out")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
@@ -43,6 +49,15 @@ public class AccountController {
             final @AuthenticationPrincipal AccountDetails accountDetails
     ) {
         accountService.deleteAccount(accountDetails);
+    }
+
+    /**
+     * 이메일 중복체크 확인
+     */
+    @GetMapping("/check-email")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void checkDuplicateEmail(final @Valid @RequestParam String email) {
+        accountService.checkDuplicateEmail(email);
     }
 
 }

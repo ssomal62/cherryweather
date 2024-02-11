@@ -22,22 +22,10 @@ public class Interest {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", nullable = false)
-    private Account accountId;
+    private Account account;
 
-    @Column(name = "INTEREST_FIRST", length = 20, nullable = false)
-    private String interestFirst;
-
-    @Column(name = "INTEREST_SECOND", length = 20)
-    private String interestSecond;
-
-    @Column(name = "INTEREST_THIRD", length = 20)
-    private String interestThird;
-
-    @Column(name = "INTEREST_FOURTH", length = 20)
-    private String interestFourth;
-
-    @Column(name = "INTEREST_FIFTH", length = 20)
-    private String interestFifth;
+    @Column(name = "INTEREST_NAME", length = 50, nullable = false)
+    private String interestName;
 
 
 }

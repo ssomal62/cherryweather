@@ -11,4 +11,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     // ## 이메일로 회원 조회 ## //
     Optional<Account> findByEmail(String email);
 
+    // ## 이메일 중복 체크 ## //
+    boolean existsByEmail(String email);
+
 }

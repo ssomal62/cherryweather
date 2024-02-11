@@ -14,6 +14,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -65,6 +67,12 @@ public class Account {
     @Column(name = "ACCOUNT_RATING", nullable = false, length = 20)
     private String rating;
 
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Interest> interests; // 회원과 관심사 간의 일대다 관계 설정
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ActivitiesArea> activitiesAreas = new ArrayList<>();
+
 
     @CreationTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
@@ -86,7 +94,8 @@ public class Account {
     @Builder
     public Account( RegisterType registerType, String name, String email, String password, String profileName,
                    String phoneNumber, String gender, String dateOfBirth, String profileImage,
-                   UserStatus userStatus, UserRole userRole, String rating) {
+                   UserStatus userStatus, UserRole userRole, String rating, List<Interest> interests,
+                    List<ActivitiesArea> activitiesAreas) {
         this.registType = registerType;
         this.name = name;
         this.email = email;
@@ -99,6 +108,8 @@ public class Account {
         this.userStatus = userStatus;
         this.userRole = userRole;
         this.rating = rating;
+        this.interests = interests;
+        this.activitiesAreas = activitiesAreas;
     }
 
     public void updateAccountRole(UserRole userRole) {
