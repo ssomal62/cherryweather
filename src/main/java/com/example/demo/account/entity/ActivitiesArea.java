@@ -31,4 +31,11 @@ public class ActivitiesArea {
 
     @Column(name = "LOCATION", nullable = false)
     private String location;
+
+    // 새로운 생성자 추가
+    public ActivitiesArea(Account account, ActivityAreaType type, String location) {
+        this.account = account;
+        this.type = type;
+        this.location = location;
+    }
 }

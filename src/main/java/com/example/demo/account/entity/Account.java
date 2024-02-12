@@ -116,4 +116,20 @@ public class Account {
         this.userRole = userRole;
     }
 
+    public void updatPassword(String password) {
+        this.password = password;
+    }
+
+    public void updatProfileName(String profileName) {
+        this.profileName = profileName;
+    }
+
+    public void updatPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void updatProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
 }

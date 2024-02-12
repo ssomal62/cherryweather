@@ -27,5 +27,10 @@ public class Interest {
     @Column(name = "INTEREST_NAME", length = 50, nullable = false)
     private String interestName;
 
+    // 새로운 생성자 추가
+    public Interest(Account account, String interestName) {
+        this.account = account;
+        this.interestName = interestName;
+    }
 
 }

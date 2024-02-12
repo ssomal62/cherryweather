@@ -1,6 +1,7 @@
 package com.example.demo.account.controller;
 
 import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.account.dto.ModifyUserInfoRequestDto;
 import com.example.demo.account.dto.SignUpRequestDto;
 import com.example.demo.account.dto.UserInfoDto;
 import com.example.demo.account.service.impl.AccountServiceImpl;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -37,6 +39,19 @@ public class AccountController {
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserInfoDto> getUserInfo(@AuthenticationPrincipal AccountDetails accountDetails) {
         return accountService.getUserInfo(accountDetails);
+    }
+
+    /**
+     * 내 정보 수정
+     */
+    @PatchMapping("/my-info/modify")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
+    public ResponseEntity<UserInfoDto> modifyAccount(
+            @AuthenticationPrincipal AccountDetails accountDetails,
+            @RequestBody ModifyUserInfoRequestDto requestDto
+    ) {
+        return accountService.modifyUserInfo(accountDetails, requestDto);
     }
 
     /**
