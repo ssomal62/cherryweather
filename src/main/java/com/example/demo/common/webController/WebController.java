@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WebController {
 
-    @GetMapping(value = {"", "/login", "/club", "/event", "/test" })
+    @GetMapping(value = {"", "/login", "/club", "/event", "/test", "/oauth" })
     public String accountRoute() {
         return "forward:/index.html";
     }
