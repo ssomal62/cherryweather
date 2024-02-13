@@ -1,6 +1,11 @@
 package com.example.demo.ai_image.service;
 
-import com.example.demo.ai_image.dto.*;
+import com.example.demo.account.repository.AccountRepository;
+import com.example.demo.ai_image.dto.generate.generateRequestDto;
+import com.example.demo.ai_image.dto.delete.ImageDeleteRequestDto;
+import com.example.demo.ai_image.dto.upload.ImageUploadRequestDto;
+import com.example.demo.ai_image.dto.generate.generateResponseDto;
+import com.example.demo.ai_image.repository.AI_imageRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +29,9 @@ import reactor.core.publisher.Mono;
 public class AI_imageServiceImpl implements AI_imageService {
 
     private final AI_fileService aiFileService;
-    private final ImageUploader imageUploader;
+//    private final ImageUploader imageUploader;
+    private final AI_imageRepository aiImageRepository;
+    private final AccountRepository accountRepository;
     String prompt_1 = "An informative style guide showcasing preppy fashion worn by a stylish South Asian woman. She is attired in a fashionable ensemble composed of preppy tops, bottoms, shoes, and accessories. There are additional garments surrounding her which can be exchanged to match her personal style. Every piece of attire is labelled in English, offering a detailed understanding of current chic fashion trends.";
     String cold_weather = "In chilly temperatures, our fashionista stays cozy yet chic. She opts for a classic cable-knit sweater in rich burgundy, paired with tailored plaid trousers. Knee-high leather boots add a touch of sophistication while keeping her warm. A woolen beret and a matching scarf complete the ensemble, creating a polished winter look.";
     String cool_weather = "As the mercury rises slightly, our fashion-forward South Asian woman embraces a lighter preppy style. She layers a pastel-colored button-down shirt under a V-neck sweater, paired with slim-fit chinos. Loafer shoes in a complementary hue elevate the outfit. A delicate statement necklace and a wristwatch add subtle touches of glam to the ensemble.";
@@ -37,7 +44,7 @@ public class AI_imageServiceImpl implements AI_imageService {
 
     // OpenAI API 호출 및 응답 처리 로직 구현
     @Override
-    public Object  generateImage(AI_imageRequestDto imageDto) {
+    public Object  generateImage(generateRequestDto imageDto) {
 
         // OpenAI API 호출을 위한 WebClient 생성
         WebClient webClient = WebClient.builder()
@@ -50,8 +57,9 @@ public class AI_imageServiceImpl implements AI_imageService {
 
 
         // OpenAI API에 보낼 요청 데이터 생성
-        AI_imageRequestDto openaiRequestDto = AI_imageRequestDto.withDefaults()
+        generateRequestDto openaiRequestDto = generateRequestDto.withDefaults()
                 .toBuilder()
+//                .userID(imageDto.getUserID())
                 .prompt(hot_weather)
                 .build();
 
@@ -68,7 +76,29 @@ public class AI_imageServiceImpl implements AI_imageService {
                     .bodyToMono(JsonNode.class)  // 응답을 JsonNode로 받음
                     .block();
 
+
             System.out.println("jsonResponse = " + jsonResponse.toString());
+
+//            JsonNode dataNode = jsonResponse.get("data");
+//
+//            String revisedPrompt = null;
+//            String imageUrl = null;
+//
+//            for (JsonNode node : dataNode) {
+//                String revisedPromptValue = node.get("revised_prompt").asText();
+//                String imageUrlValue = node.get("url").asText();
+//
+//                revisedPrompt = revisedPromptValue;
+//                imageUrl = imageUrlValue;
+//            }
+//
+//            // 서비스 레이어에서 사용
+//            Account account = accountRepository.findByEmail(imageDto.getUserEmail())
+//                    .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+//
+//            AI_image aiImage = imageDto.toEntity(account,revisedPrompt,imageUrl);
+//            aiImageRepository.save(aiImage);
+
 
             // 응답 받은 json 데이터  프론트에 반환
             return jsonResponse;
@@ -91,12 +121,24 @@ public class AI_imageServiceImpl implements AI_imageService {
 
     @Override
     public void uploadImage(ImageUploadRequestDto requestDto) {
-        System.out.println("이미지 업로드 호출");
-        imageUploader.uploadImageToBucket(requestDto);
+
     }
+//
+//    @Override
+//    public void uploadImage(ImageUploadRequestDto requestDto) {
+//        System.out.println("이미지 업로드 호출");
+//        imageUploader.uploadImageToBucket(requestDto);
+//        Long userId = requestDto.getAccountId();
+//        String url = requestDto.getImageURL();
+//        String prompt = requestDto.getPrompt();
+//
+//        //업로드된 정보를 엔티티로 변환해서 저장한다.
+//
+////        aiImageRepository.save(aiImage);
+//    }
 
     @Override
-    public AI_imageResponseDto getImageByUserId(String userId) {
+    public generateResponseDto getImageByUserId(String userId) {
         return null;
     }
 

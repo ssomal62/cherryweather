@@ -1,6 +1,9 @@
 package com.example.demo.ai_image.controller;
 
-import com.example.demo.ai_image.dto.*;
+import com.example.demo.ai_image.dto.generate.generateRequestDto;
+import com.example.demo.ai_image.dto.delete.ImageDeleteRequestDto;
+import com.example.demo.ai_image.dto.upload.ImageUploadRequestDto;
+import com.example.demo.ai_image.dto.generate.generateResponseDto;
 import com.example.demo.ai_image.service.AI_fileService;
 import com.example.demo.ai_image.service.AI_imageServiceImpl;
 import jakarta.validation.Valid;
@@ -21,7 +24,7 @@ public class AI_imageController {
     //생성
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public Object  createImage(final @Valid @RequestBody AI_imageRequestDto imageDto) {
+    public Object  createImage(final @Valid @RequestBody generateRequestDto imageDto) {
         return aiImageService.generateImage(imageDto);
     }
 
@@ -44,7 +47,7 @@ public class AI_imageController {
     //조회 - 아이디
     @GetMapping("/get-image")
     @ResponseStatus(HttpStatus.OK)
-    public AI_imageResponseDto getImageByUserId(@RequestParam String userId) {
+    public generateResponseDto getImageByUserId(@RequestParam String userId) {
         return aiImageService.getImageByUserId(userId);
     }
 

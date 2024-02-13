@@ -1,4 +1,4 @@
-package com.example.demo.ai_image.dto;
+package com.example.demo.ai_image.dto.delete;
 
 import lombok.Builder;
 import lombok.Value;
