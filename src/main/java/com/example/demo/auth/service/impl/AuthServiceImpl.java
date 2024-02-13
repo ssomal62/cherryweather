@@ -121,9 +121,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-
-
-
     // ################### private methods ################### //
     protected void checkUserStatusByEmail(Account account) {
         if (account.getUserStatus().equals(DELETED)) {

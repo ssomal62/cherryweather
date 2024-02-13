@@ -8,5 +8,4 @@ public interface ActivitiesAreaRepository extends JpaRepository<ActivitiesArea, 
 
     void deleteByAccount(Account account);
 
-
 }

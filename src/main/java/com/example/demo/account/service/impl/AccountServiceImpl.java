@@ -7,11 +7,17 @@ import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.ActivitiesArea;
 import com.example.demo.account.entity.Agreement;
 import com.example.demo.account.entity.Interest;
+import com.example.demo.account.enums.ForbiddenUserName;
+import com.example.demo.account.enums.Gender;
+import com.example.demo.account.enums.RegisterType;
 import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.ActivitiesAreaRepository;
 import com.example.demo.account.repository.AgreementRepository;
 import com.example.demo.account.repository.InterestRepository;
 import com.example.demo.account.service.AccountService;
+import com.example.demo.auth.dto.oauth.OAuthAccountInfoDto;
+import com.example.demo.auth.dto.oauth.OAuthAccountInfoDto2;
+import com.example.demo.common.exception.AuthException;
 import com.example.demo.common.exception.DuplicatedException;
 import com.example.demo.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +25,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.demo.common.exception.enums.ExceptionStatus.CONFLICT_ACCOUNT;
-import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_ACCOUNT;
+import static com.example.demo.account.enums.UserRole.ROLE_CUSTOMER;
+import static com.example.demo.account.enums.UserStatus.ACTIVE;
+import static com.example.demo.common.exception.enums.ExceptionStatus.*;
+import static com.example.demo.common.utils.CodeGenerator.generateRandomCode;
 
 @Service
 @Slf4j
@@ -89,6 +97,45 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
+    public void createAccountByOAuth(final OAuthAccountInfoDto oAuthAccountInfoDto, final String provider) {
+        String email = oAuthAccountInfoDto.getEmail();
+        String name = oAuthAccountInfoDto.getName();
+        String encodedPassword = passwordEncoder.encode(generateRandomCode(10));
+
+        checkUsernameIsProhibited(name);
+        checkEmailIsDuplicated(email);
+
+        // 임의 값. 추후에 카카오한테 받아야함
+        String phoneNumber = oAuthAccountInfoDto.getPhoneNumber() != null ? oAuthAccountInfoDto.getPhoneNumber() : "000-0000-0000";
+        String birthday = "2000-01-01"; // 임의의 생일
+        Gender gender = Gender.MALE; // 임의의 성별, Gender 열거형이라고 가정
+        String profileImage = "default_image.png"; // 기본 프로필 이미지
+        String profileName = "default_profile_name"; // 기본 프로필 이름
+        String rating = "13도"; // 기본 등급
+
+
+        Account account = Account.builder()
+                .oauthId(oAuthAccountInfoDto.getId())
+                .email(email)
+                .name(name)
+                .password(encodedPassword)
+                .phoneNumber(phoneNumber)
+                .userStatus(ACTIVE)
+                .userRole(ROLE_CUSTOMER)
+                .registerType(RegisterType.valueOf(provider.toUpperCase()))
+                .rating(rating)
+                .dateOfBirth(birthday)
+                .gender(gender.name())
+                .profileImage(profileImage)
+                .profileName(profileName)
+                .build();
+
+        accountRepository.save(account);
+//      publishWelcomeEvent(account);
+    }
+
+    @Override
+    @Transactional
     public ResponseEntity<UserInfoDto> modifyUserInfo(final AccountDetails accountDetails, final ModifyUserInfoRequestDto requestDto) {
         Long accountId = accountDetails.getAccount().getAccountId();
         Account account = accountRepository.findById(accountId)
@@ -116,20 +163,20 @@ public class AccountServiceImpl implements AccountService {
 
         // 기존 관심사 정보 삭제
         if (!account.getInterests().isEmpty()) {
-            interestRepository.deleteAll(account.getInterests()); // 계정에 연결된 모든 관심사 삭제
-            account.getInterests().clear(); // 계정 내부 컬렉션에서 관심사 참조 제거
+            interestRepository.deleteAll(account.getInterests());
+            account.getInterests().clear();
         }
 
         // 새로운 관심사 정보 추가
         List<Interest> newInterests = requestDto.getInterests().stream()
                 .map(interestName -> new Interest(account, interestName))
                 .collect(Collectors.toList());
-        interestRepository.saveAll(newInterests); // 새 관심사 저장
+        interestRepository.saveAll(newInterests);
         account.getInterests().addAll(newInterests);
 
         List<ActivitiesArea> existingActivitiesAreas = new ArrayList<>(account.getActivitiesAreas()); // 기존 활동 지역 복사
-        activitiesAreaRepository.deleteAll(existingActivitiesAreas); // 기존 활동 지역 정보 삭제
-        account.getActivitiesAreas().clear(); // 계정에서 기존 활동 지역 관계 제거
+        activitiesAreaRepository.deleteAll(existingActivitiesAreas);
+        account.getActivitiesAreas().clear();
 
         // 새 활동 지역 추가
         List<ActivitiesArea> newActivityAreas = requestDto.getActivityAreas().stream()
@@ -180,5 +227,18 @@ public class AccountServiceImpl implements AccountService {
             throw new DuplicatedException(CONFLICT_ACCOUNT);
         }
     }
+
+    private void checkUsernameIsProhibited(String username) {
+        boolean isProhibited = Arrays.stream(ForbiddenUserName.values())
+                .anyMatch(forbiddenUserName -> username.contains(forbiddenUserName.getName()));
+
+        if (isProhibited) {
+            throw new AuthException(PROHIBITED_USERNAME);
+        }
+    }
+
+    public void createAccountByOAuth(OAuthAccountInfoDto2 accountInfo, String provider) {
+    }
+
 
 }

@@ -27,6 +27,9 @@ public class Account {
     @Column(name = "ACCOUNT_ID")
     private Long accountId;
 
+    @Column(name = "ACCOUNT_OAUTH_ID", length = 100)
+    private String oauthId;
+
     @Column(name = "ACCOUNT_REGISTER_TYPE", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private RegisterType registType;
@@ -50,7 +53,7 @@ public class Account {
     @Column(name = "ACCOUNT_GENDER", nullable = false, length = 20)
     private String gender;
 
-    @Column(name = "ACCOUNT_DATE_BIRTH", nullable = false, length = 20)
+    @Column(name = "ACCOUNT_DATE_BIRTH", nullable = true, length = 20)
     private String dateOfBirth;
 
     @Column(name = "ACCOUNT_PROFILE_IMAGE", nullable = false, length = 100)
@@ -95,7 +98,8 @@ public class Account {
     public Account( RegisterType registerType, String name, String email, String password, String profileName,
                    String phoneNumber, String gender, String dateOfBirth, String profileImage,
                    UserStatus userStatus, UserRole userRole, String rating, List<Interest> interests,
-                    List<ActivitiesArea> activitiesAreas) {
+                    List<ActivitiesArea> activitiesAreas, String oauthId) {
+        this.oauthId = oauthId;
         this.registType = registerType;
         this.name = name;
         this.email = email;
