@@ -1,7 +1,8 @@
 package com.example.demo.weather.service;
 
 import com.example.demo.common.geoLocation.GeoLocationClient;
-import com.example.demo.weather.dto.GeoLocationDto;
+import com.example.demo.weather.dto.GeoLocationReqDto;
+import com.example.demo.weather.dto.GeoLocationResDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +15,20 @@ public class GeoLocationService {
     private final GeoLocationClient geoLocationClient;
     private final ObjectMapper objectMapper;
 
-    public GeoLocationDto getGeoLocation(String ip) {
+    private final GeoConverter geoConverter;
+
+    public GeoLocationResDto convertLocation(String ip) {
+        GeoLocationReqDto reqDto = getGeoLocation(ip);
+        return geoConverter.toXY(reqDto);
+    }
+
+    public GeoLocationReqDto getGeoLocation(String ip) {
         try {
             String response = geoLocationClient.run(ip);
             JsonNode root = objectMapper.readTree(response);
             JsonNode locationNode = root.path("geoLocation");
 
-            return GeoLocationDto.builder()
+            return GeoLocationReqDto.builder()
                            .country(locationNode.path("country").asText())
                            .code(locationNode.path("code").asText())
                            .r1(locationNode.path("r1").asText())
