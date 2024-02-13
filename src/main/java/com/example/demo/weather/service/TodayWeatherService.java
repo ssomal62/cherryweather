@@ -1,9 +1,11 @@
 package com.example.demo.weather.service;
 
+import com.example.demo.weather.dto.GeoLocationResDto;
 import com.example.demo.weather.dto.TodayWeatherReqDto;
 import com.example.demo.weather.dto.TodayWeatherResDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,25 +16,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TodayWeatherService {
+
+    private final GeoLocationService geoLocationService;
+
+
     private final String serviceKey = "mDNPPMp0rOT/VxVXKEJeQUDK1s169twmiSBFn4c/8pMRT/yFNC12SdZrV0hhVwDq7vn8b3D1fLOa3cmfWGv5hQ==";
     private final String dataType = "JSON";
     private final String baseDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     private final String baseTime = "0600";
-    private final String nx = "60";
-    private final String ny = "127";
-    private final String url = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?serviceKey=" + serviceKey + "&pageNo=1&numOfRows=1000&dataType=" + dataType + "&base_date=" + baseDate + "&base_time=" + baseTime + "&nx=" + nx + "&ny=" + ny;
+    // private final String nx = "60";
+    // private final String ny = "127";
+    // private final String url = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?serviceKey=" + serviceKey + "&pageNo=1&numOfRows=1000&dataType=" + dataType + "&base_date=" + baseDate + "&base_time=" + baseTime + "&nx=" + nx + "&ny=" + ny;
 
     public List<TodayWeatherReqDto> getTodayWeather() {
+
+        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
+        int nx = (int) geoLocationResDto.getNx();
+        int ny = (int) geoLocationResDto.getNy();
+
+        String url = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?serviceKey=" + serviceKey + "&pageNo=1&numOfRows=1000&dataType=" + dataType + "&base_date=" + baseDate + "&base_time=" + baseTime + "&nx=" + nx + "&ny=" + ny;
+
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject(url, String.class);
+        System.out.println(url);
         return parseJsonResponse(response);
     }
 
     private List<TodayWeatherReqDto> parseJsonResponse(String response) {
         List<TodayWeatherReqDto> todayWeatherList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println(url);
         try {
             JsonNode root = objectMapper.readTree(response);
             JsonNode itemsNode = root.path("response").path("body").path("items").path("item");
@@ -53,12 +67,12 @@ public class TodayWeatherService {
         return todayWeatherList;
     }
 
-    public List<TodayWeatherResDto> formatWeatherData(List<TodayWeatherReqDto> weatherDataList) {
+    public List<TodayWeatherResDto> formatWeatherData(List<TodayWeatherReqDto> weatherDataList, double nx, double ny) {
         TodayWeatherResDto.TodayWeatherResDtoBuilder builder = TodayWeatherResDto.builder()
                                                                                    .baseDate(baseDate)
                                                                                    .baseTime(baseTime)
-                                                                                   .nx(Integer.parseInt(nx))
-                                                                                   .ny(Integer.parseInt(ny));
+                                                                                   .nx((int) nx)
+                                                                                   .ny((int) ny);
 
         for(TodayWeatherReqDto dto : weatherDataList) {
             switch(dto.getCategory()) {
