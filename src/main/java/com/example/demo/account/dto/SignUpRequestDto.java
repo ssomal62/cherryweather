@@ -4,14 +4,15 @@ import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.ActivitiesArea;
 import com.example.demo.account.entity.Agreement;
 import com.example.demo.account.entity.Interest;
+import com.example.demo.account.enums.ActivityAreaType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Value;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.demo.account.enums.RegisterType.LOCAL;
 import static com.example.demo.account.enums.UserRole.ROLE_CUSTOMER;
@@ -53,11 +54,7 @@ public class SignUpRequestDto {
 
     List<String> interests;
 
-    String primaryActivityArea;
-
-    String secondaryActivityArea;
-
-    String tertiaryActivityArea;
+    List<ActivityAreaInfo> activityAreas;
 
     public Account toAccountEntity(final String encodedPassword) {
         return Account.builder()
@@ -76,22 +73,17 @@ public class SignUpRequestDto {
                 .build();
     }
 
+
     public List<Interest> toInterestEntities(Account account) {
-        List<Interest> interestsList = new ArrayList<>();
-
-        if (this.interests != null && !this.interests.isEmpty()) {
-            Interest interestEntity = Interest.builder()
-                    .account(account)
-                    .interestFirst(this.interests.size() > 0 ? this.interests.get(0) : null)
-                    .interestSecond(this.interests.size() > 1 ? this.interests.get(1) : null)
-                    .interestThird(this.interests.size() > 2 ? this.interests.get(2) : null)
-                    .interestFourth(this.interests.size() > 3 ? this.interests.get(3) : null)
-                    .interestFifth(this.interests.size() > 4 ? this.interests.get(4) : null)
-                    .build();
-            interestsList.add(interestEntity);
+        if (this.interests == null) {
+            return List.of(); // 관심사가 없으면 빈 리스트 반환
         }
-
-        return interestsList;
+        return this.interests.stream()
+                .map(interestName -> Interest.builder()
+                        .account(account) // 관심사 엔티티와 계정 엔티티를 연결
+                        .interestName(interestName) // 관심사 이름 설정
+                        .build())
+                .collect(Collectors.toList()); // Stream을 List로 변환
     }
 
     public Agreement toAgreementEntity(Account account) {
@@ -103,13 +95,24 @@ public class SignUpRequestDto {
                 .build();
     }
 
-    public ActivitiesArea toActivitiesAreaEntity(Account account) {
-        return ActivitiesArea.builder()
-                .accountId(account)
-                .activitiesAreaFirst(this.primaryActivityArea)
-                .activitiesAreaSecond(this.secondaryActivityArea)
-                .activitiesAreaThird(this.tertiaryActivityArea)
-                .build();
+    public List<ActivitiesArea> toActivitiesAreaEntities(Account account) {
+        if (this.activityAreas == null) {
+            return List.of(); // 활동지역 정보가 없으면 빈 리스트 반환
+        }
+        return this.activityAreas.stream()
+                .map(activityAreaInfo -> ActivitiesArea.builder()
+                        .account(account) // 활동지역 엔티티와 계정 엔티티를 연결
+                        .type(activityAreaInfo.getType()) // 활동지역 유형 설정
+                        .location(activityAreaInfo.getLocation()) // 활동지역 위치 설정
+                        .build())
+                .collect(Collectors.toList()); // Stream을 List로 변환
+    }
+
+    @Value
+    @Builder
+    public static class ActivityAreaInfo {
+        ActivityAreaType type;
+        String location;
     }
 
 }

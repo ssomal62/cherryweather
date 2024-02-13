@@ -1,5 +1,7 @@
 package com.example.demo.club.domain;
 
+import com.example.demo.club.enums.ClubCategory;
+import com.example.demo.club.enums.ClubGrade;
 import com.example.demo.club.enums.ClubStatus;
 import lombok.Builder;
 
@@ -7,8 +9,11 @@ import lombok.Builder;
 public record ClubSummary(
         long clubId,
         String name,
+        String activitiesArea,
         int currentMembers,
         int maxMembers,
-        ClubStatus status
+        ClubStatus status,
+        ClubCategory category,
+        ClubGrade grade
 ) {
 }

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.auth.dto.oauth.OAuthTokenResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -7,6 +8,8 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+
+import static com.example.demo.common.constant.AuthConstant.*;
 
 @Service
 @RequiredArgsConstructor
@@ -73,45 +76,45 @@ public class RedisService {
      * @param oAuthTokenResponseDto OAuth 인증 토큰
      * @param email                 사용자 이메일
      */
-//    public void saveKakaoTokenToRedis(
-//            final OAuthTokenResponseDto oAuthTokenResponseDto,
-//            final String email
-//    ) {
-//        String accessToken = oAuthTokenResponseDto.getAccessToken();
-//        Long expiresIn = oAuthTokenResponseDto.getExpiresIn();
-//
-//        String refreshToken = oAuthTokenResponseDto.getRefreshToken();
-//        Long refreshTokenExpiresIn = oAuthTokenResponseDto.getRefreshTokenExpiresIn();
-//
-//        setDataExpire(OAUTH_KAKAO_PREFIX + email, accessToken, expiresIn);
-//        setDataExpire(OAUTH_KAKAO_REFRESH_PREFIX + email, refreshToken, refreshTokenExpiresIn);
-//    }
-//
-//    public void saveNaverTokenToRedis(
-//            final OAuthTokenResponseDto oAuthTokenResponseDto,
-//            final String email
-//    ) {
-//        String accessToken = oAuthTokenResponseDto.getAccessToken();
-//        Long expiresIn = oAuthTokenResponseDto.getExpiresIn();
-//
-//        String refreshToken = oAuthTokenResponseDto.getRefreshToken();
-//
-//        setDataExpire(OAUTH_NAVER_PREFIX + email, accessToken, expiresIn);
-//        setDataExpire(OAUTH_NAVER_REFRESH_PREFIX + email, refreshToken, REFRESH_TOKEN_EXPIRE_TIME);
-//    }
-//
-//    /**
-//     * Redis에 저장된 OAuth 인증 토큰을 삭제한다.
-//     *
-//     * @param email 사용자 이메일
-//     */
-//    public void deleteKakaoTokenFromRedis(final String email) {
-//        deleteData(OAUTH_KAKAO_PREFIX + email);
-//        deleteData(OAUTH_KAKAO_REFRESH_PREFIX + email);
-//    }
-//
-//    public void deleteNaverTokenFromRedis(final String email) {
-//        deleteData(OAUTH_NAVER_PREFIX + email);
-//        deleteData(OAUTH_NAVER_REFRESH_PREFIX + email);
-//    }
+    public void saveKakaoTokenToRedis(
+            final OAuthTokenResponseDto oAuthTokenResponseDto,
+            final String email
+    ) {
+        String accessToken = oAuthTokenResponseDto.getAccessToken();
+        Long expiresIn = oAuthTokenResponseDto.getExpiresIn();
+
+        String refreshToken = oAuthTokenResponseDto.getRefreshToken();
+        Long refreshTokenExpiresIn = oAuthTokenResponseDto.getRefreshTokenExpiresIn();
+
+        setDataExpire(OAUTH_KAKAO_PREFIX + email, accessToken, expiresIn);
+        setDataExpire(OAUTH_KAKAO_REFRESH_PREFIX + email, refreshToken, refreshTokenExpiresIn);
+    }
+
+    public void saveNaverTokenToRedis(
+            final OAuthTokenResponseDto oAuthTokenResponseDto,
+            final String email
+    ) {
+        String accessToken = oAuthTokenResponseDto.getAccessToken();
+        Long expiresIn = oAuthTokenResponseDto.getExpiresIn();
+
+        String refreshToken = oAuthTokenResponseDto.getRefreshToken();
+
+        setDataExpire(OAUTH_NAVER_PREFIX + email, accessToken, expiresIn);
+        setDataExpire(OAUTH_NAVER_REFRESH_PREFIX + email, refreshToken, REFRESH_TOKEN_EXPIRE_TIME);
+    }
+
+    /**
+     * Redis에 저장된 OAuth 인증 토큰을 삭제한다.
+     *
+     * @param email 사용자 이메일
+     */
+    public void deleteKakaoTokenFromRedis(final String email) {
+        deleteData(OAUTH_KAKAO_PREFIX + email);
+        deleteData(OAUTH_KAKAO_REFRESH_PREFIX + email);
+    }
+
+    public void deleteNaverTokenFromRedis(final String email) {
+        deleteData(OAUTH_NAVER_PREFIX + email);
+        deleteData(OAUTH_NAVER_REFRESH_PREFIX + email);
+    }
 }
