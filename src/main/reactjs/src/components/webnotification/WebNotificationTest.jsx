@@ -1,7 +1,7 @@
 // import React, {useState} from "react";
 // import WebNotificationAlternativePermission from "./WebNotificationAlternativePermission";
 
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 // const WebNotificationTest = () => {
 //   const [notificationPermission, setNotificationPermission] = useState("");
