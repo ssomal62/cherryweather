@@ -1,5 +1,6 @@
 package com.example.demo.membership.service;
 
+import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.service.AccountService;
 import com.example.demo.club.entity.Club;
@@ -33,9 +34,9 @@ public class MembershipService {
     }
 
     @Transactional
-    public void saveMembership(ClubSignupDTO requestDTO) {
+    public void saveMembership(ClubSignupDTO requestDTO, AccountDetails accountDetails) {
         Club findClub = clubService.findClubById(requestDTO.clubId());
-        Account findAccount = accountService.findAccountByEmail(requestDTO.userEmail());
+        Account findAccount = accountDetails.getAccount();
 
         checkAccountThrowNotFoundException(findAccount);
         checkDuplicateMembership(findClub, findAccount);

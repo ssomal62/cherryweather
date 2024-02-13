@@ -1,6 +1,7 @@
 package com.example.demo.membership.controller;
 
 
+import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.membership.dto.ClubSignupDTO;
 import com.example.demo.membership.dto.MembershipListDTO;
 import com.example.demo.membership.dto.UpdateMembership;
@@ -11,6 +12,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -50,10 +53,12 @@ public class MembershipApiController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> singUpMembership(
-            @Valid @RequestBody ClubSignupDTO requestDTO
-    ) {
-        membershipService.saveMembership(requestDTO);
+            final @Valid @RequestBody ClubSignupDTO requestDTO,
+            final @AuthenticationPrincipal AccountDetails accountDetails
+            ) {
+        membershipService.saveMembership(requestDTO, accountDetails);
         return ResponseEntity.ok().build();
     }
 
