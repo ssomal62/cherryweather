@@ -4,6 +4,10 @@ import com.example.demo.weather.dto.GeoLocationReqDto;
 import com.example.demo.weather.dto.GeoLocationResDto;
 import org.springframework.stereotype.Service;
 
+/*
+    GeoLoation으로 획득한 위도, 경도값을 기상청 API에 맞는 좌표값으로 변환하기 위한 클래스
+*/
+
 @Service
 public class GeoConverter {
     private static final double RE = 6371.00877; // 지구 반경(km)
@@ -54,5 +58,4 @@ public class GeoConverter {
                        .ny(ny)
                        .build();
     }
-
 }

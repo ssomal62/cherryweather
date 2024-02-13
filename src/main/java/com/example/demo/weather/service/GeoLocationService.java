@@ -62,7 +62,7 @@ public class GeoLocationService {
             String responseBody = response.getBody();
             // responseBody를 파싱하여 "query"의 값(IP 주소)를 추출합니다.
             // Jackson ObjectMapper 또는 Gson을 사용하여 JSON을 파싱할 수 있습니다.
-            JsonNode jsonNode = null;
+            JsonNode jsonNode;
             try {
                 jsonNode = objectMapper.readTree(responseBody);
             } catch(JsonProcessingException e) {

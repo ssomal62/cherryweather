@@ -3,7 +3,6 @@ package com.example.demo.weather.controller;
 import com.example.demo.weather.dto.GeoLocationReqDto;
 import com.example.demo.weather.dto.GeoLocationResDto;
 import com.example.demo.weather.service.GeoLocationService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
