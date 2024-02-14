@@ -57,7 +57,8 @@ public enum ExceptionStatus {
     NOT_FOUND_MAKER(404, "등록되지 않은 제조사 입니다."),
     NOT_FOUND_COUPON(404, "등록되지 않은 쿠폰 입니다."),
     NOT_FOUND_FILE(404, "파일이 존재하지 않습니다."),
-    NOT_FOUND_CLUB(404, "파일이 존재하지 않습니다."),
+    NOT_FOUND_CLUB(404, "클럽이 존재하지 않습니다."),
+    NOT_FOUND_MEMBERSHIP(404, "존재하지않는 멤버십 정보입니다."),
     NOT_FOUND_REDIS_KEY(404, "존재하지 않는 REDIS KEY 입니다."),
     NOT_FOUND_ORDERCODE(404, "존재하지 않는 주문 입니다."),
     NOT_FOUND_PAYMENT(404, "존재하지 않는 결제정보 입니다."),
@@ -77,6 +78,7 @@ public enum ExceptionStatus {
     ALREADY_EXIST_REVIEW(409, "이미 등록된 리뷰입니다."),
     ALREADY_EXIST_ANSWER(409, "이미 등록된 답변입니다."),
     ALREADY_EXIST_REPORT(409, "이미 등록된 신고입니다."),
+    CONFLICT_CLUB_MEMBERSHIP(409, "이미 가입한 클럽입니다."),
 
     // 413 - Payload Too Large
     TOO_MANY_FILES(413, "파일은 최대 3개만 업로드 할 수 있습니다."),
