@@ -3,6 +3,7 @@ package com.example.demo.weather.service;
 import com.example.demo.common.geoLocation.GeoLocationClient;
 import com.example.demo.weather.dto.GeoLocationReqDto;
 import com.example.demo.weather.dto.GeoLocationResDto;
+import com.example.demo.weather.exception.LookupException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,13 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.*;
+
 @Service
 @RequiredArgsConstructor
 public class GeoLocationService {
 
     private final GeoLocationClient geoLocationClient;
     private final ObjectMapper objectMapper;
-
     private final GeoConverter geoConverter;
 
     public GeoLocationResDto convertLocation() {
@@ -47,8 +49,8 @@ public class GeoLocationService {
                            .net(locationNode.path("net").asText())
                            .build();
         } catch(Exception e) {
-            String errorMessage = "Failed to retrieve geo location data: " + e.getMessage();
-            throw new RuntimeException(errorMessage);
+
+            throw new LookupException(LOCATION_INFO_LOOKUP_FAILED);
         }
     }
 
@@ -66,15 +68,11 @@ public class GeoLocationService {
             try {
                 jsonNode = objectMapper.readTree(responseBody);
             } catch(JsonProcessingException e) {
-                e.getMessage();
-                // 예외 처리 필요
-                throw new RuntimeException(e);
+                throw new LookupException(JSON_PARSING_FAILED);
             }
             return jsonNode.get("query").asText();
         } else {
-            // 예외 처리 필요
-            return null;
-
+            throw new LookupException(IP_LOOKUP_FAILED);
         }
     }
 

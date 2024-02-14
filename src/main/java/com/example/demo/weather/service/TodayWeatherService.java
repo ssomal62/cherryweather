@@ -3,9 +3,12 @@ package com.example.demo.weather.service;
 import com.example.demo.weather.dto.GeoLocationResDto;
 import com.example.demo.weather.dto.TodayWeatherReqDto;
 import com.example.demo.weather.dto.TodayWeatherResDto;
+import com.example.demo.weather.exception.LookupException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,6 +17,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.WEATHER_INFO_LOOKUP_FAILED;
+
 
 @Service
 @RequiredArgsConstructor
@@ -35,9 +41,14 @@ public class TodayWeatherService {
         String url = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?serviceKey=" + serviceKey + "&pageNo=1&numOfRows=1000&dataType=" + dataType + "&base_date=" + baseDate + "&base_time=" + baseTime + "&nx=" + nx + "&ny=" + ny;
 
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(url, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         System.out.println(url);
-        return parseJsonResponse(response);
+
+        // 예외처리
+        if(response.getStatusCode() != HttpStatus.OK || response.getBody().contains("errorCode")) {
+            throw new LookupException(WEATHER_INFO_LOOKUP_FAILED);
+        }
+        return parseJsonResponse(response.getBody());
     }
 
     public List<TodayWeatherResDto> getFormattedTodayWeather() {

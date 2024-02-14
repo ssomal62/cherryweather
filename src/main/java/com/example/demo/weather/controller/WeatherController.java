@@ -19,7 +19,6 @@ import java.util.List;
 public class WeatherController {
 
     private final TodayWeatherService todayWeatherService;
-
     private final GeoLocationService geoLocationService;
 
     @GetMapping("/today")
@@ -29,7 +28,6 @@ public class WeatherController {
 
     @GetMapping("/ftoday")
     public List<TodayWeatherResDto> getFormattedTodayWeather() {
-
         return todayWeatherService.getFormattedTodayWeather();
     }
 }
