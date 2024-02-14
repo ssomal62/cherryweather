@@ -1,7 +1,7 @@
 // import React, {useState} from "react";
 // import WebNotificationAlternativePermission from "./WebNotificationAlternativePermission";
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 // const WebNotificationTest = () => {
 //   const [notificationPermission, setNotificationPermission] = useState("");
@@ -64,7 +64,7 @@ const WebNotificationTest = () => {
     if (Notification.permission === "granted") {
       const options = {
         body: "한국 축구 졌다, 처참하게!",
-        icon: "https://developer.mozilla.org/static/img/favicon-32x32.png",
+        icon: require("../../assets/images/sun.png"),
         requireInteraction: true,
       };
 
