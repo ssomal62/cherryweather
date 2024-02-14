@@ -1,5 +1,6 @@
 //package com.example.demo.chat.entity;
 //
+//import com.example.demo.account.entity.Account;
 //import jakarta.persistence.*;
 //import lombok.AccessLevel;
 //import lombok.Getter;
@@ -16,18 +17,18 @@
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    @Column(updatable = false)
-//    private long chatId;
+//    private int chatId;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "ACCOUNT_ID", nullable = false)
+//    private Account account;
 //
-//    @Column(nullable = false, length = 20)
-//    private int chatNum;
+////    private int cunum;
+////    private String chatid;
+////    private String uphoto;
+////    private String unickname;
+////    private String cuphoto;
+////    private String cunickname;
 //
-//    @Column(nullable = false, length = 100)
-//    private String chatName;
 //
-//    @Column(nullable = false, length = 255)
-//    private String chatPhoto;
-
-
-
-
+//
 //}

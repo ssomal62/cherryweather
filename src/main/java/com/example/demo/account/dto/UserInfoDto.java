@@ -23,6 +23,7 @@ public class UserInfoDto {
         this.gender = account.getGender();
         this.dateOfBirth = account.getDateOfBirth();
         this.profileImage = account.getProfileImage();
+
     }
 
 }

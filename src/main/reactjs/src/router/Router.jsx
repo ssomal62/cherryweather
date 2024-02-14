@@ -1,14 +1,17 @@
-import React, {Suspense} from "react";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import {useRecoilValue} from "recoil";
-import {IsLoginAtom} from "../recoil/LoginAtom";
+import React, { Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { IsLoginAtom } from "../recoil/LoginAtom";
 // import { lazy } from "react";
 
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 import Club from "../pages/Club";
 import Login from "../pages/Login";
+import ChatRoomList from "../pages/ChatRoomList";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
+import ChatRoom from "../pages/ChatRoom";
+import Event from "../pages/Event";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -45,6 +48,14 @@ const Router = () => {
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           {isLogin && <Route path="/club" element={<Club />} />}
+
+          {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
+          {/* {isLogin && <Route path="/club" element={<Club />} />} */}
+          <Route path="/chatroomlist" element={<ChatRoomList />} />
+          <Route path="/chatroom/:channelId" element={<ChatRoom />} />
+
+          {/* {isLogin && <Route path="/club" element={<Club />} />} */}
+          <Route path="/event" element={<Event />} />
 
           {/* WebNotificationTest 경로 추가 */}
           <Route
