@@ -14,6 +14,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -24,6 +26,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ACCOUNT_ID")
     private Long accountId;
+
+    @Column(name = "ACCOUNT_OAUTH_ID", length = 100)
+    private String oauthId;
 
     @Column(name = "ACCOUNT_REGISTER_TYPE", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
@@ -48,7 +53,7 @@ public class Account {
     @Column(name = "ACCOUNT_GENDER", nullable = false, length = 20)
     private String gender;
 
-    @Column(name = "ACCOUNT_DATE_BIRTH", nullable = false, length = 20)
+    @Column(name = "ACCOUNT_DATE_BIRTH", nullable = true, length = 20)
     private String dateOfBirth;
 
     @Column(name = "ACCOUNT_PROFILE_IMAGE", nullable = false, length = 100)
@@ -64,6 +69,12 @@ public class Account {
 
     @Column(name = "ACCOUNT_RATING", nullable = false, length = 20)
     private String rating;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Interest> interests; // 회원과 관심사 간의 일대다 관계 설정
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ActivitiesArea> activitiesAreas = new ArrayList<>();
 
 
     @CreationTimestamp
@@ -86,7 +97,9 @@ public class Account {
     @Builder
     public Account( RegisterType registerType, String name, String email, String password, String profileName,
                    String phoneNumber, String gender, String dateOfBirth, String profileImage,
-                   UserStatus userStatus, UserRole userRole, String rating) {
+                   UserStatus userStatus, UserRole userRole, String rating, List<Interest> interests,
+                    List<ActivitiesArea> activitiesAreas, String oauthId) {
+        this.oauthId = oauthId;
         this.registType = registerType;
         this.name = name;
         this.email = email;
@@ -99,10 +112,28 @@ public class Account {
         this.userStatus = userStatus;
         this.userRole = userRole;
         this.rating = rating;
+        this.interests = interests;
+        this.activitiesAreas = activitiesAreas;
     }
 
     public void updateAccountRole(UserRole userRole) {
         this.userRole = userRole;
+    }
+
+    public void updatPassword(String password) {
+        this.password = password;
+    }
+
+    public void updatProfileName(String profileName) {
+        this.profileName = profileName;
+    }
+
+    public void updatPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void updatProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
 }

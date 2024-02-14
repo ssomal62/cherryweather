@@ -1,17 +1,18 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { IsLoginAtom } from "../recoil/LoginAtom";
+import React, {Suspense} from "react";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../recoil/LoginAtom";
 // import { lazy } from "react";
 
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
-import Club from "../pages/Club";
+import Club from "../pages/club/Club";
 import Login from "../pages/Login";
 import ChatRoomList from "../pages/ChatRoomList";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import ChatRoom from "../pages/ChatRoom";
 import Event from "../pages/Event";
+import OauthInfo from "../pages/OAuthInfo";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -45,9 +46,10 @@ const Router = () => {
           {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/oauth" element={<OauthInfo />} />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
-          {isLogin && <Route path="/club" element={<Club />} />}
+          <Route path="/club" element={<Club />} />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
