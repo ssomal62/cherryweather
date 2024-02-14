@@ -1,152 +1,79 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import mainImg from '../../assets/images/sun.png';
+import React, {useEffect} from 'react';
+import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
+import {GoBell} from "react-icons/go";
+import {Input, Navbar, NavbarContent, Popover, PopoverContent, PopoverTrigger} from "@nextui-org/react";
+import {SearchIcon} from "./SearchIcon";
+import BrandMenu from "./BrandMenu";
+import AvatarMenu from "./AvatarMenu";
 
-const Header = () => {
-    const [selectedButton, setSelectedButton] = useState(null);
+export default function Header() {
 
-    const handleButtonClick = (index) => {
-        setSelectedButton(index);
-    };
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsOpen(false); // Close PopoverContent when scrolled
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     return (
-        <>
-            <Nav>
-                <Container>
-                    <Wapper>
-                        <A><img alt='' src={mainImg} style={{width:'85px', height:'22px'}}/></A>
-                        <SearchWapper>
-                            <SearchInput placeholder='검색어 입력'>
+        <Navbar shouldHideOnScroll>
 
-                            </SearchInput>
-                        </SearchWapper>
-                        <Icon></Icon>
-                    </Wapper>
-                </Container>
-            </Nav>
-            <Menu>
-                <MenuButton
-                    isSelected={selectedButton === 0}
-                    onClick={() => handleButtonClick(0)}
-                >
-                    <BtnText>홈</BtnText>
-                </MenuButton>
-                <MenuButton
-                    isSelected={selectedButton === 1}
-                    onClick={() => handleButtonClick(1)}
-                >
-                    <BtnText>모임</BtnText>
-                </MenuButton>
-                <MenuButton
-                    isSelected={selectedButton === 2}
-                    onClick={() => handleButtonClick(2)}
-                >
-                    <BtnText>날씨</BtnText>
-                </MenuButton>
-            </Menu>
+            <NavbarContent className="sm:flex gap-4 " justify="start">
+                <BrandMenu/>
+            </NavbarContent>
 
-        </>
+            <NavbarContent as="div" className="items-center" justify="end">
+                <IoOptionsOutline style={styles.icon}/>
+
+                <Popover backdrop='opaque' placement="bottom-end" isOpen={isOpen}
+                         onOpenChange={(open) => setIsOpen(open)}>
+                    <PopoverTrigger>
+                        <div><IoSearchOutline style={styles.icon}/></div>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <Input
+                            classNames={{
+                                base        : "max-w-full sm:max-w-[10rem] h-10",
+                                mainWrapper : "h-full",
+                                input       : "text-small",
+                                inputWrapper: "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
+                            }}
+                            placeholder="검색"
+                            size="sm"
+                            startContent={<SearchIcon size={18}/>}
+                            type="search"
+                        />
+                    </PopoverContent>
+                </Popover>
+
+                <GoBell style={styles.icon}/>
+                <AvatarMenu/>
+            </NavbarContent>
+        </Navbar>
     );
 };
 
-export default Header;
-
-const BtnText = styled.div`
-  color: ${(props) => (props.isSelected ? '#ffffff' : '#A1A9AD')};
-  text-align: center;
-`;
-
-const MenuButton = styled.button`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  position: relative;
-  color: ${(props) => (props.isSelected ? '#ffffff' : '#A1A9AD')};
-  text-align: center;
-  height: 48px;
-  background-color: ${(props) => (props.isSelected ? '#F0F0F0' : 'transparent')};
-  &:hover {
-    background-color: ${(props) => (props.isSelected ? '#transparent' : '#F0F0F0')};
-  }
-`;
-
-const Menu = styled.div`
-    width: 100%;
-    padding: 0 16px;
-    background: #FFFFFF;
-    height: 48px;
-    border-bottom: 0.5px solid #E8E9EB;
-    display: flex;
-    position: sticky;
-    top: 52px;
-    z-index: 20;
-`;
-
-const SearchInput = styled.input`
-display: block;
-margin: 0 4px;
-padding: 0;
-color: #242729;
-border: none;
-background: none;
-caret-color: #FA6EE3;
-width: 100%;
-text-overflow: ellipsis;
-
-`;
-
-const Icon = styled.a`
-color: inherit;
-text-decoration: inherit;
-display: flex;
-margin: 0 0 0 auto;
--ms-flex-negative: 0;
-flex-shrink: 0;
-position: relative;
-width: 32px;
-height: 32px;
-
-`;
-
-const Nav = styled.nav`
-    z-index: 2;
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: #FFFFFF
-`;
-
-const Container = styled.div`
-max-width: 600px;
-    margin: auto;
-`;
-
-const Wapper = styled.div`
-height: 52px;
-    background: #FFFFFF;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: 0 16px;
-    box-sizing: border-box;
-`;
-
-const A = styled.a`
-color: inherit;
-    text-decoration: inherit;
-`;
-
-const SearchWapper = styled.div`
-display: flex;
--webkit-box-align: center;
--ms-flex-align: center;
-align-items: center;
-background: #F5F6F8;
-border-radius: 100px;
-height: 32px;
-padding: 0 12px 0 12px;
-width: 100%;
-margin: 0 20px 0 12px;
-`;
-
+const styles = {
+    block: {
+        backgroundColor: 'white',
+        marginRight    : 10,
+        marginTop      : 15,
+        marginBottom   : 15,
+    },
+    nav  : {
+        display       : 'flex',
+        justifyContent: 'flex-end',
+        alignItems    : 'center'
+    },
+    icon : {
+        width      : 22,
+        height     : 22,
+        color      : 'black',
+        marginRight: 3,
+    }
+};

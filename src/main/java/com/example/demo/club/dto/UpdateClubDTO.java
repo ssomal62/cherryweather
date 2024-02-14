@@ -10,6 +10,8 @@ public record UpdateClubDTO(
         @Positive(message = "[clubId]는 양수여야합니다.")
         long clubId,
         String name,
+
+        String description,
         ClubCategory category,
         ClubStatus status,
         String activitiesArea,

@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Positive;
 
 public record CreateClubDTO(
         String name,
+
+        String description,
         String code,
         ClubCategory category,
         ClubStatus status,
