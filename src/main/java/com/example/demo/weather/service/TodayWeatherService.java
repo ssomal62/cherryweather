@@ -40,6 +40,19 @@ public class TodayWeatherService {
         return parseJsonResponse(response);
     }
 
+    public List<TodayWeatherResDto> getFormattedTodayWeather() {
+        // 위치 정보
+        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
+        int nx = (int) geoLocationResDto.getNx();
+        int ny = (int) geoLocationResDto.getNy();
+        // 날씨 정보
+        List<TodayWeatherReqDto> weatherDataList = getTodayWeather();
+
+        // 날씨 데이터를 포맷
+        return formatWeatherData(weatherDataList, nx, ny);
+
+    }
+
     private List<TodayWeatherReqDto> parseJsonResponse(String response) {
         List<TodayWeatherReqDto> todayWeatherList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -48,13 +61,13 @@ public class TodayWeatherService {
             JsonNode itemsNode = root.path("response").path("body").path("items").path("item");
             for(JsonNode itemNome : itemsNode) {
                 TodayWeatherReqDto dto = TodayWeatherReqDto.builder()
-                                              .baseDate(itemNome.path("baseDate").asText())
-                                              .baseTime(itemNome.path("baseTime").asText())
-                                              .category(itemNome.path("category").asText())
-                                              .nx(itemNome.path("nx").asInt())
-                                              .ny(itemNome.path("ny").asInt())
-                                              .obsrValue(itemNome.path("obsrValue").asText())
-                                              .build();
+                                                 .baseDate(itemNome.path("baseDate").asText())
+                                                 .baseTime(itemNome.path("baseTime").asText())
+                                                 .category(itemNome.path("category").asText())
+                                                 .nx(itemNome.path("nx").asInt())
+                                                 .ny(itemNome.path("ny").asInt())
+                                                 .obsrValue(itemNome.path("obsrValue").asText())
+                                                 .build();
                 todayWeatherList.add(dto);
             }
         } catch(IOException e) {
@@ -65,10 +78,10 @@ public class TodayWeatherService {
 
     public List<TodayWeatherResDto> formatWeatherData(List<TodayWeatherReqDto> weatherDataList, double nx, double ny) {
         TodayWeatherResDto.TodayWeatherResDtoBuilder builder = TodayWeatherResDto.builder()
-                                                                                   .baseDate(baseDate)
-                                                                                   .baseTime(baseTime)
-                                                                                   .nx((int) nx)
-                                                                                   .ny((int) ny);
+                                                                       .baseDate(baseDate)
+                                                                       .baseTime(baseTime)
+                                                                       .nx((int) nx)
+                                                                       .ny((int) ny);
 
         for(TodayWeatherReqDto dto : weatherDataList) {
             switch(dto.getCategory()) {
