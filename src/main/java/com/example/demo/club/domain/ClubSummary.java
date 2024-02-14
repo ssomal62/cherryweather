@@ -9,6 +9,10 @@ import lombok.Builder;
 public record ClubSummary(
         long clubId,
         String name,
+
+        String description,
+
+        String code,
         String activitiesArea,
         int currentMembers,
         int maxMembers,
