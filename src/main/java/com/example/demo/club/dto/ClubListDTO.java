@@ -27,6 +27,8 @@ public record ClubListDTO(List<ClubSummary> summaryList) {
         return ClubSummary.builder()
                 .clubId(club.getClubId())
                 .name(club.getName())
+                .code(club.getCode())
+                .description(club.getDescription())
                 .activitiesArea(club.getActivitiesArea())
                 .currentMembers(club.getCurrentMembers())
                 .maxMembers(club.getMaxMembers())
