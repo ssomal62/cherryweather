@@ -22,12 +22,12 @@ public class WeatherController {
     private final GeoLocationService geoLocationService;
 
 
-    @GetMapping("/now-weather/info")
+    @GetMapping("/now/info")
     public List<NowWeatherReqDto> getNowWeather() {
         return nowWeatherService.getNowWeather();
     }
 
-    @GetMapping("/now-weather")
+    @GetMapping("/now")
     public List<NowWeatherResDto> getFormattedNowWeather() {
         return nowWeatherService.getFormattedNowWeather();
     }

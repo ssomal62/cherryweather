@@ -18,4 +18,7 @@ public class NowWeatherResDto {
     private String WSD;
     private int nx;
     private int ny;
+    private String r1;
+    private String r2;
+    private String r3;
 }

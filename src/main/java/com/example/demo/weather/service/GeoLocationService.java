@@ -24,8 +24,6 @@ public class GeoLocationService {
     private final GeoConverter geoConverter;
 
     public GeoLocationResDto convertLocation() {
-        String ip = getClientPubliIP();
-        System.out.println("ip : " + ip);
         GeoLocationReqDto reqDto = getGeoLocation();
         return geoConverter.toXY(reqDto);
     }

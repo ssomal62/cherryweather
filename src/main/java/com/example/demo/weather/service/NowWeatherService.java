@@ -26,24 +26,21 @@ import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.*;
 public class NowWeatherService {
 
     private final GeoLocationService geoLocationService;
+    private final WeatherServiceClient weatherServiceClient;
 
     private final String baseDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     private final String baseTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH00"));
 
     public List<NowWeatherReqDto> getNowWeather() {
 
-        String serviceKey = "mDNPPMp0rOT/VxVXKEJeQUDK1s169twmiSBFn4c/8pMRT/yFNC12SdZrV0hhVwDq7vn8b3D1fLOa3cmfWGv5hQ==";
-        String dataType = "JSON";
+        String functionName = "getUltraSrtNcst";
 
         GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
         int nx = (int) geoLocationResDto.getNx();
         int ny = (int) geoLocationResDto.getNy();
 
-        String url = "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?serviceKey=" + serviceKey + "&pageNo=1&numOfRows=1000&dataType=" + dataType + "&base_date=" + baseDate + "&base_time=" + baseTime + "&nx=" + nx + "&ny=" + ny;
-
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        System.out.println(url);
+        ResponseEntity<String> response = weatherServiceClient.getShortWeatherForecast(functionName, baseDate, baseTime, nx, ny);
 
         // 예외처리
         ObjectMapper objectMapper = new ObjectMapper();
@@ -98,11 +95,15 @@ public class NowWeatherService {
         GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
         int nx = (int) geoLocationResDto.getNx();
         int ny = (int) geoLocationResDto.getNy();
+        String r1 = geoLocationResDto.getR1();
+        String r2 = geoLocationResDto.getR2();
+        String r3 = geoLocationResDto.getR3();
+
         // 날씨 정보
         List<NowWeatherReqDto> weatherDataList = getNowWeather();
 
         // 날씨 데이터를 포맷
-        return formatWeatherData(weatherDataList, nx, ny);
+        return formatWeatherData(weatherDataList, nx, ny, r1, r2, r3);
     }
 
     private List<NowWeatherReqDto> parseJsonResponse(String response) {
@@ -128,12 +129,15 @@ public class NowWeatherService {
         return nowWeatherList;
     }
 
-    public List<NowWeatherResDto> formatWeatherData(List<NowWeatherReqDto> weatherDataList, double nx, double ny) {
+    public List<NowWeatherResDto> formatWeatherData(List<NowWeatherReqDto> weatherDataList, double nx, double ny, String r1, String r2, String r3) {
         NowWeatherResDto.NowWeatherResDtoBuilder builder = NowWeatherResDto.builder()
                                                                    .baseDate(baseDate)
                                                                    .baseTime(baseTime)
                                                                    .nx((int) nx)
-                                                                   .ny((int) ny);
+                                                                   .ny((int) ny)
+                                                                   .r1(r1)
+                                                                   .r2(r2)
+                                                                   .r3(r3);
 
         for(NowWeatherReqDto dto : weatherDataList) {
             switch(dto.getCategory()) {
