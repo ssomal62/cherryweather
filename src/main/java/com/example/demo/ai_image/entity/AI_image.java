@@ -34,6 +34,9 @@ public class AI_image {
     @Column(name = "CHECK_SAVE", nullable = false)
     private boolean checkSave;
 
+    @Column(name = "BUCKET_URL", nullable = true, length = 1000)
+    private String bucketURL;
+
     @Column(name = "CREATED_AT", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreatedDate
     private LocalDateTime createdAt;
@@ -46,5 +49,14 @@ public class AI_image {
         this.imageURL = imageURL;
         this.checkSave = checkSave;
         this.createdAt = createdAt;
+    }
+
+    // bucketUrl 필드에 대한 setter 메서드 추가
+    public void setBucketUrl(String bucketURL) {
+        this.bucketURL = bucketURL;
+    }
+
+    public String getBucketURL() {
+        return this.bucketURL;
     }
 }

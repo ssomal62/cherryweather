@@ -1,16 +1,20 @@
 package com.example.demo.ai_image.service;
 
+import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.account.entity.Account;
 import com.example.demo.ai_image.dto.generate.generateRequestDto;
 import com.example.demo.ai_image.dto.delete.ImageDeleteRequestDto;
 import com.example.demo.ai_image.dto.upload.ImageUploadRequestDto;
-import com.example.demo.ai_image.dto.generate.generateResponseDto;
+import com.example.demo.ai_image.entity.AI_image;
+
+import java.util.List;
 
 public interface AI_imageService {
-    Object  generateImage(generateRequestDto imageDto);
+    Object  generateImage(AccountDetails accountDetails,generateRequestDto imageDto);
 
-    void deleteByUrl(ImageDeleteRequestDto requestDto);
+    void deleteByURL(AccountDetails accountDetails,ImageDeleteRequestDto requestDto);
 
-    void uploadImage(ImageUploadRequestDto requestDto);
+    String uploadImage(AccountDetails accountDetails,ImageUploadRequestDto requestDto);
 
-    generateResponseDto ImageInfoByEmail(String userId);
+    List<AI_image> getImageBucketURLByAccountID(Long accountId);
 }

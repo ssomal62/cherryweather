@@ -1,17 +1,22 @@
 package com.example.demo.ai_image.service;
 
+import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.account.entity.Account;
 import com.example.demo.account.repository.AccountRepository;
+import com.example.demo.account.service.impl.AccountServiceImpl;
 import com.example.demo.ai_image.dto.generate.generateRequestDto;
 import com.example.demo.ai_image.dto.delete.ImageDeleteRequestDto;
 import com.example.demo.ai_image.dto.upload.ImageUploadRequestDto;
-import com.example.demo.ai_image.dto.generate.generateResponseDto;
+import com.example.demo.ai_image.entity.AI_image;
 import com.example.demo.ai_image.repository.AI_imageRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +24,11 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -29,9 +38,10 @@ import reactor.core.publisher.Mono;
 public class AI_imageServiceImp implements AI_imageService {
 
     private final AI_fileService aiFileService;
-//    private final ImageUploader imageUploader;
+    private final ImageUploader imageUploader;
     private final AI_imageRepository aiImageRepository;
     private final AccountRepository accountRepository;
+    private final AccountServiceImpl accountService;
     String prompt_1 = "An informative style guide showcasing preppy fashion worn by a stylish South Asian woman. She is attired in a fashionable ensemble composed of preppy tops, bottoms, shoes, and accessories. There are additional garments surrounding her which can be exchanged to match her personal style. Every piece of attire is labelled in English, offering a detailed understanding of current chic fashion trends.";
     String cold_weather = "In chilly temperatures, our fashionista stays cozy yet chic. She opts for a classic cable-knit sweater in rich burgundy, paired with tailored plaid trousers. Knee-high leather boots add a touch of sophistication while keeping her warm. A woolen beret and a matching scarf complete the ensemble, creating a polished winter look.";
     String cool_weather = "As the mercury rises slightly, our fashion-forward South Asian woman embraces a lighter preppy style. She layers a pastel-colored button-down shirt under a V-neck sweater, paired with slim-fit chinos. Loafer shoes in a complementary hue elevate the outfit. A delicate statement necklace and a wristwatch add subtle touches of glam to the ensemble.";
@@ -43,103 +53,62 @@ public class AI_imageServiceImp implements AI_imageService {
     private String openaiApiKey; // application.properties 또는 application.yml에서 설정한 OpenAI API 키
 
     // OpenAI API 호출 및 응답 처리 로직 구현
+
+
     @Override
-    public Object  generateImage(generateRequestDto imageDto) {
-
-        // OpenAI API 호출을 위한 WebClient 생성
-        WebClient webClient = WebClient.builder()
-                .baseUrl("https://api.openai.com/v1/images/generations")
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + openaiApiKey)
-                .filter(logRequest())
-                .filter(logResponse())
-                .build();
+    public Object generateImage(AccountDetails accountDetails, generateRequestDto imageDto) {
+        WebClient webClient = createWebClient();
+        generateRequestDto openaiRequestDto = createOpenAIRequestDto(imageDto);
+        String jsonRequest = convertToJson(openaiRequestDto);
 
 
-        // OpenAI API에 보낼 요청 데이터 생성
-        generateRequestDto openaiRequestDto = generateRequestDto.withDefaults()
-                .toBuilder()
-//                .userID(imageDto.getUserID())
-                .prompt(hot_weather)
-                .build();
+        System.out.println("openaiRequestDto = " + openaiRequestDto);
+        System.out.println("jsonRequest = " + jsonRequest);
 
-        // ObjectMapper를 사용하여 객체를 JSON 문자열로 변환
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            String jsonRequest = objectMapper.writeValueAsString(openaiRequestDto);
-            System.out.println("openaiRequestDto = " + jsonRequest);
-
-            // OpenAI API 호출 및 응답 처리
-            JsonNode jsonResponse = webClient.post()
-                    .body(BodyInserters.fromValue(jsonRequest))
-                    .retrieve()
-                    .bodyToMono(JsonNode.class)  // 응답을 JsonNode로 받음
-                    .block();
-
-
-            System.out.println("jsonResponse = " + jsonResponse.toString());
-
-//            JsonNode dataNode = jsonResponse.get("data");
-//
-//            String revisedPrompt = null;
-//            String imageUrl = null;
-//
-//            for (JsonNode node : dataNode) {
-//                String revisedPromptValue = node.get("revised_prompt").asText();
-//                String imageUrlValue = node.get("url").asText();
-//
-//                revisedPrompt = revisedPromptValue;
-//                imageUrl = imageUrlValue;
-//            }
-//
-//            // 서비스 레이어에서 사용
-//            Account account = accountRepository.findByEmail(imageDto.getUserEmail())
-//                    .orElseThrow(() -> new EntityNotFoundException("Account not found"));
-//
-//            AI_image aiImage = imageDto.toEntity(account,revisedPrompt,imageUrl);
-//            aiImageRepository.save(aiImage);
-
-
-            // 응답 받은 json 데이터  프론트에 반환
+            JsonNode jsonResponse = callOpenAPI(webClient, jsonRequest);
+            saveImageData(accountDetails.getAccount().getAccountId(), jsonResponse); // 이미지 데이터 저장
             return jsonResponse;
         } catch (WebClientResponseException e) {
-            // WebClientResponseException 발생 시 추가 정보 출력
             System.out.println("WebClientResponseException: " + e.getMessage());
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // 예외 발생 시 null 반환
+            return null;
         }
     }
 
     @Override
-    public void deleteByUrl(ImageDeleteRequestDto requestDto) {
-        System.out.println("requestDto.getUrl() = " + requestDto.getUrl());
-        System.out.println(" requestDto.getUserId() = " + requestDto.getUserId());
-        aiFileService.deleteSingleFile(requestDto.getUrl(),requestDto.getUserId());
+    @Transactional
+    public void deleteByURL(AccountDetails accountDetails,ImageDeleteRequestDto requestDto) {
+        System.out.println("requestDto.getUrl() = " + requestDto.getImageURL());
+        System.out.println("accountDetails.getAccount().getEmail() = " + accountDetails.getAccount().getEmail());
+        aiFileService.deleteSingleFile(requestDto.getImageURL(),accountDetails.getAccount().getEmail());
+
     }
 
     @Override
-    public void uploadImage(ImageUploadRequestDto requestDto) {
-
+    public String uploadImage(AccountDetails accountDetails,ImageUploadRequestDto requestDto) {
+        System.out.println("이미지 업로드 호출");
+        String imageURL = requestDto.getImageURL();
+        String bucketURL = imageUploader.uploadImageToBucket(accountDetails,requestDto);
+        // AI_imageRepository를 사용하여 image_url이 imageUrl과 일치하는 엔티티를 찾음
+        Optional<AI_image> aiImageOptional = aiImageRepository.findByImageURL(imageURL);
+        aiImageOptional.ifPresent(aiImage -> {
+            // 검색된 엔티티의 bucket_url 필드를 새 URL 값으로 업데이트
+            aiImage.setBucketUrl(bucketURL);
+            // 엔티티를 저장하여 업데이트 반영
+            aiImageRepository.save(aiImage);
+            System.out.println("AI_image 엔티티의 bucket_url이 업데이트되었습니다.");
+        });
+        // JSON 형식의 문자열로 bucketURL 반환
+        return "{\"bucketURL\":\"" + bucketURL + "\"}";
     }
-//
-//    @Override
-//    public void uploadImage(ImageUploadRequestDto requestDto) {
-//        System.out.println("이미지 업로드 호출");
-//        imageUploader.uploadImageToBucket(requestDto);
-//        Long userId = requestDto.getAccountId();
-//        String url = requestDto.getImageURL();
-//        String prompt = requestDto.getPrompt();
-//
-//        //업로드된 정보를 엔티티로 변환해서 저장한다.
-//
-////        aiImageRepository.save(aiImage);
-//    }
 
     @Override
-    public generateResponseDto ImageInfoByEmail(String email) {
-        return null;
+    public List<AI_image> getImageBucketURLByAccountID(Long accountid) {
+
+        return aiImageRepository.getSavedUrlByAccountId(accountid);
     }
 
 
@@ -169,5 +138,71 @@ public class AI_imageServiceImp implements AI_imageService {
 //                    .doOnNext(body -> System.out.println("Response Body: " + body))
 //                    .map(body -> clientResponse);
         });
+    }
+
+    // ================================================================================================================================================================================================================================================================================================
+    // 이미지 생성
+    private WebClient createWebClient() {
+        return WebClient.builder()
+                .baseUrl("https://api.openai.com/v1/images/generations")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + openaiApiKey)
+                .filter(logRequest())
+                .filter(logResponse())
+                .build();
+    }
+
+    private generateRequestDto createOpenAIRequestDto(generateRequestDto imageDto) {
+        return generateRequestDto.builder()
+                .model(imageDto.getModel())
+                .n(imageDto.getN())
+                .size(imageDto.getSize())
+                .prompt(prompt_1)
+                .build();
+    }
+
+    private String convertToJson(Object object) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            // 또는 로그에 예외 정보를 기록할 수 있음
+            throw new RuntimeException("Failed to convert object to JSON: " + e.getMessage(), e);
+        }
+    }
+
+    private JsonNode callOpenAPI(WebClient webClient, String jsonRequest) {
+        return webClient.post()
+                .body(BodyInserters.fromValue(jsonRequest))
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .block();
+    }
+
+    private void saveImageData(Long accountId, JsonNode jsonResponse) {
+        JsonNode dataNode = jsonResponse.get("data");
+        String revisedPrompt = null;
+        String imageUrl = null;
+
+        // 이미지 데이터 추출
+        for (JsonNode node : dataNode) {
+            revisedPrompt = node.get("revised_prompt").asText();
+            imageUrl = node.get("url").asText();
+        }
+
+        // 계정 정보 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+
+        // 이미지 정보 저장
+        AI_image aiImage = AI_image.builder()
+                .account(account)
+                .prompt(revisedPrompt)
+                .imageURL(imageUrl)
+                .checkSave(false) // 이미지 저장 여부 체크
+                .build();
+
+        aiImageRepository.save(aiImage);
     }
 }

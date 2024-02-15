@@ -10,6 +10,7 @@ import Club from "../pages/club/Club";
 import Login from "../pages/Login";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
+import ImageGenerator from "../pages/ai/ImageGenerator";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -45,8 +46,12 @@ const Router = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/oauth" element={<OauthInfo />} />
 
+
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />} />
+
+          {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
+          <Route path="/ai" element={<ImageGenerator />} />
 
           {/* WebNotificationTest 경로 추가 */}
           <Route

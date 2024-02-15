@@ -1,13 +1,18 @@
 package com.example.demo.ai_image.dto.delete;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
-@Value
-@Builder
+@Data
+@NoArgsConstructor
 public class ImageDeleteRequestDto {
 
-    private final String userId;
-    private final String url;
+    @NonNull
+    private  String imageURL;
+
+    @Builder
+    public ImageDeleteRequestDto(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
 
 }
