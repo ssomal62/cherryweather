@@ -14,6 +14,7 @@ const Layout = ({ children }) => {
                     <Container>
                         <Wapper>{children}</Wapper>
                     </Container>
+                    <br/><br/>
                     <Footer />
                 </Main>
             </Root>
@@ -37,6 +38,7 @@ const Container = styled.div`
     outline: none;
     -webkit-tap-highlight-color: transparent;
     display: block;
+    margin: 20px;
 `;
 
 const Root = styled.div`

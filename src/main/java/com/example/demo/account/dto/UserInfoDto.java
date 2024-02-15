@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @Value
 public class UserInfoDto {
 
+    Long accountId;
     String name;
     String email;
     String profileName;
@@ -24,6 +25,7 @@ public class UserInfoDto {
 
     // 생성자를 통해 모든 필드를 초기화합니다.
     public UserInfoDto(Account account, List<String> interests, List<ActivityAreaInfo> activityAreas){
+        this.accountId = account.getAccountId();
         this.name = account.getName();
         this.email = account.getEmail();
         this.profileName = account.getProfileName();
