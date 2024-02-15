@@ -6,7 +6,7 @@ import {IsLoginAtom} from "../recoil/LoginAtom";
 
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
-import Club from "../pages/Club";
+import Club from "../pages/club/Club";
 import Login from "../pages/Login";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
@@ -46,7 +46,7 @@ const Router = () => {
           <Route path="/oauth" element={<OauthInfo />} />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
-          {isLogin && <Route path="/club" element={<Club />} />}
+          <Route path="/club" element={<Club />} />
 
           {/* WebNotificationTest 경로 추가 */}
           <Route

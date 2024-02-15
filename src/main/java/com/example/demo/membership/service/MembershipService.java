@@ -1,5 +1,6 @@
 package com.example.demo.membership.service;
 
+import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.service.AccountService;
 import com.example.demo.club.entity.Club;
@@ -9,7 +10,6 @@ import com.example.demo.common.exception.NotFoundException;
 import com.example.demo.membership.dto.ClubSignupDTO;
 import com.example.demo.membership.dto.MembershipListDTO;
 import com.example.demo.membership.dto.UpdateMembership;
-import com.example.demo.membership.dto.UserInfo;
 import com.example.demo.membership.entity.Membership;
 import com.example.demo.membership.repository.MembershipRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,18 +34,9 @@ public class MembershipService {
     }
 
     @Transactional
-    public MembershipListDTO findAllMembershipByAccountId(UserInfo userInfo) {
-        Account findAccount = accountService.findAccountByEmail(userInfo.email());
-
-        checkAccountThrowNotFoundException(findAccount);
-
-        return MembershipListDTO.fromMembership(membershipRepository.findByAccount(findAccount));
-    }
-
-    @Transactional
-    public void saveMembership(ClubSignupDTO requestDTO) {
+    public void saveMembership(ClubSignupDTO requestDTO, AccountDetails accountDetails) {
         Club findClub = clubService.findClubById(requestDTO.clubId());
-        Account findAccount = accountService.findAccountByEmail(requestDTO.userEmail());
+        Account findAccount = accountDetails.getAccount();
 
         checkAccountThrowNotFoundException(findAccount);
         checkDuplicateMembership(findClub, findAccount);

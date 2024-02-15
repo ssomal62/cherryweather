@@ -34,6 +34,9 @@ public class Club {
     @Column(length = 20)
     private String code;
 
+    @Column(length = 200)
+    private String description;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private ClubGrade grade;
@@ -78,6 +81,7 @@ public class Club {
 
     public void updateClub(UpdateClubDTO requestDTO) {
         this.name = requestDTO.name();
+        this.description = requestDTO.description();
         this.category = requestDTO.category();
         this.status = requestDTO.status();
         this.activitiesArea = requestDTO.activitiesArea();
