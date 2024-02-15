@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class TodayWeatherResDto {
+public class NowWeatherResDto {
     private String baseDate;
     private String baseTime;
     private String PTY;

@@ -1,9 +1,9 @@
 package com.example.demo.weather.controller;
 
-import com.example.demo.weather.dto.TodayWeatherReqDto;
-import com.example.demo.weather.dto.TodayWeatherResDto;
+import com.example.demo.weather.dto.NowWeatherReqDto;
+import com.example.demo.weather.dto.NowWeatherResDto;
 import com.example.demo.weather.service.GeoLocationService;
-import com.example.demo.weather.service.TodayWeatherService;
+import com.example.demo.weather.service.NowWeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,16 +18,17 @@ import java.util.List;
 @RequestMapping("/api/weather")
 public class WeatherController {
 
-    private final TodayWeatherService todayWeatherService;
+    private final NowWeatherService nowWeatherService;
     private final GeoLocationService geoLocationService;
 
-    @GetMapping("/today")
-    public List<TodayWeatherReqDto> getTodayWeather() {
-        return todayWeatherService.getTodayWeather();
+
+    @GetMapping("/now-weather/info")
+    public List<NowWeatherReqDto> getNowWeather() {
+        return nowWeatherService.getNowWeather();
     }
 
-    @GetMapping("/ftoday")
-    public List<TodayWeatherResDto> getFormattedTodayWeather() {
-        return todayWeatherService.getFormattedTodayWeather();
+    @GetMapping("/now-weather")
+    public List<NowWeatherResDto> getFormattedNowWeather() {
+        return nowWeatherService.getFormattedNowWeather();
     }
 }
