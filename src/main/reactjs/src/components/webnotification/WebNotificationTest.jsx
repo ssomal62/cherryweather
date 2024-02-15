@@ -41,18 +41,18 @@ import {useEffect, useState} from "react";
 //   );
 // };
 
-const WebNotificationTest = () => {
+const WebNotificationTest = ({goBell}) => {
   const [registration, setRegistration] = useState(null);
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("/serviceWorker.js")
-        .then(function (reg) {
+        .then((reg) => {
           console.log("Service Worker 등록 성공:", reg);
           setRegistration(reg); // registration 객체 저장
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log("Service Worker 등록 실패:", error);
         });
     } else {
@@ -93,7 +93,7 @@ const WebNotificationTest = () => {
 
   return (
     <div>
-      <button onClick={makeNotiTest}>알림 테스트</button>
+      <button onClick={makeNotiTest}>{goBell}</button>
     </div>
   );
 };
