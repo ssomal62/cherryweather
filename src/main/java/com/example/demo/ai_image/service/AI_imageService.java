@@ -12,5 +12,5 @@ public interface AI_imageService {
 
     void uploadImage(ImageUploadRequestDto requestDto);
 
-    generateResponseDto getImageByUserId(String userId);
+    generateResponseDto ImageInfoByEmail(String userId);
 }

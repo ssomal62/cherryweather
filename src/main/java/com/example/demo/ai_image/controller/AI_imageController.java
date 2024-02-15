@@ -5,7 +5,7 @@ import com.example.demo.ai_image.dto.delete.ImageDeleteRequestDto;
 import com.example.demo.ai_image.dto.upload.ImageUploadRequestDto;
 import com.example.demo.ai_image.dto.generate.generateResponseDto;
 import com.example.demo.ai_image.service.AI_fileService;
-import com.example.demo.ai_image.service.AI_imageServiceImpl;
+import com.example.demo.ai_image.service.AI_imageServiceImp;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/ai_image")
 public class AI_imageController {
 
-    private final AI_imageServiceImpl aiImageService;
+    private final AI_imageServiceImp aiImageService;
     private final AI_fileService aiFileService;
 
     //생성
@@ -47,8 +47,8 @@ public class AI_imageController {
     //조회 - 아이디
     @GetMapping("/get-image")
     @ResponseStatus(HttpStatus.OK)
-    public generateResponseDto getImageByUserId(@RequestParam String userId) {
-        return aiImageService.getImageByUserId(userId);
+    public generateResponseDto getImageByEmail(@RequestParam String email) {
+        return aiImageService.ImageInfoByEmail(email);
     }
 
     //전체조회 - 아이디

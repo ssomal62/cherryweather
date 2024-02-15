@@ -25,8 +25,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class AI_imageServiceImpl implements AI_imageService {
+@Transactional(readOnly = false)
+public class AI_imageServiceImp implements AI_imageService {
 
     private final AI_fileService aiFileService;
 //    private final ImageUploader imageUploader;
@@ -138,7 +138,7 @@ public class AI_imageServiceImpl implements AI_imageService {
 //    }
 
     @Override
-    public generateResponseDto getImageByUserId(String userId) {
+    public generateResponseDto ImageInfoByEmail(String email) {
         return null;
     }
 
