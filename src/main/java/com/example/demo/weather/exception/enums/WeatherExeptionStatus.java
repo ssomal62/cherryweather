@@ -24,6 +24,7 @@ public enum WeatherExeptionStatus {
     JSON_PARSING_FAILED(500, "JSON 파싱 실패"),
     WEATHER_INFO_LOOKUP_FAILED(500, "날씨 정보 조회 실패"),
     LOCATION_INFO_LOOKUP_FAILED(500, "위치 정보 조회 실패"),
+    DATA_RETRIEVAL_FAILED(500,"IO 오류로 인해 데이터를 검색하지 못했습니다"),
     WEATHER_API_APPLICATION_ERROR(500, "어플리케이션 에러"),
     WEATHER_API_DB_ERROR(500, "데이터베이스 에러"),
     WEATHER_API_HTTP_ERROR(500, "HTTP 에러"),
