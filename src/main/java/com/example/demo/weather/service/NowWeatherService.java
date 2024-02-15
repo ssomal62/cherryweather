@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -39,18 +38,32 @@ public class NowWeatherService {
         int nx = (int) geoLocationResDto.getNx();
         int ny = (int) geoLocationResDto.getNy();
 
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = weatherServiceClient.getShortWeatherForecast(functionName, baseDate, baseTime, nx, ny);
-
-        // 예외처리
+        String tempBaseTime = baseTime;
+        ResponseEntity<String> response = null;
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode responseJson = null;
-        try {
-            responseJson = objectMapper.readTree(response.getBody());
-        } catch(JsonProcessingException e) {
-            throw new LookupException(JSON_PARSING_FAILED);
+        String resultCode = "";
+
+        // 예외처리
+        for(int i = 0; i < 2; i++) {
+            response = weatherServiceClient.getShortWeatherForecast(functionName, baseDate, tempBaseTime, nx, ny);
+            try {
+                responseJson = objectMapper.readTree(response.getBody());
+                resultCode = responseJson.path("response").path("header").path("resultCode").asText();
+                if(!resultCode.equals("03")) {  //"03"아니면 반복 중단
+                    break;
+                }
+            } catch(JsonProcessingException e) {
+                throw new LookupException(JSON_PARSING_FAILED);
+            }
+            //resultCode가 "03"이면 1시간 빼고 재 시도
+            if(resultCode.equals("03")) {
+                LocalTime newBaseTime = LocalTime.parse(tempBaseTime, DateTimeFormatter.ofPattern("HHmm")).minusHours(1);
+                tempBaseTime = newBaseTime.format(DateTimeFormatter.ofPattern("HHmm"));
+            }
+
         }
-        String resultCode = responseJson.path("response").path("header").path("resultCode").asText();
+
         // resultCode에 따른 예외 처리
         switch(resultCode) {
             case "00": // 정상 처리
@@ -123,8 +136,10 @@ public class NowWeatherService {
                                                .build();
                 nowWeatherList.add(dto);
             }
-        } catch(IOException e) {
-            e.printStackTrace();
+        }catch(JsonProcessingException e){
+            throw new LookupException(JSON_PARSING_FAILED);
+        }catch(IOException e) {
+            throw new LookupException(DATA_RETRIEVAL_FAILED);
         }
         return nowWeatherList;
     }
