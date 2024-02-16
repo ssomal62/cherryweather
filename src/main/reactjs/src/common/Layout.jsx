@@ -18,11 +18,6 @@ const Layout = ({ children }) => {
                     <Footer />
                 </Main>
             </Root>
-            {/* <Header />
-        <div className="contentContainer">
-        {children}
-        </div>
-      <Footer /> */}
         </>
     );
 };
