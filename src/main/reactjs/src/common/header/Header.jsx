@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
-import {GoBell} from "react-icons/go";
 import {
   Input,
   Navbar,
