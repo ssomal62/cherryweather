@@ -37,7 +37,7 @@ public class TodayWeatherServie {
         String functionName = "getVilageFcst";
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode responseJson = null;
-        String resultCode = "";
+        String resultCode;
 
         GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
         int nx = (int) geoLocationResDto.getNx();

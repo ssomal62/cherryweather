@@ -23,7 +23,6 @@ public class WeatherController {
 
     private final NowWeatherService nowWeatherService;
     private final TodayWeatherServie todayWeatherServie;
-    private final GeoLocationService geoLocationService;
 
 
     @GetMapping("/now/info")
