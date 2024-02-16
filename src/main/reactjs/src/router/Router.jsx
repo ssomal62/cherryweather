@@ -11,6 +11,8 @@ import Login from "../pages/Login";
 import Chat from "../pages/chat/Chat";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
+import AddClub from "../pages/club/AddClub";
+import ClubDetails from "../pages/club/ClubDetails";
 import Join from "../pages/Join";
 import LoginForm from "../components/login/LoginForm";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
@@ -65,6 +67,10 @@ const Router = () => {
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
           <Route path="/event" element={<Event />} />
 
+          <Route path="/club" element={<Club />}>
+            <Route path=":num" element={<ClubDetails />} />
+          </Route>
+          <Route path="/club-add" element={<AddClub />} />
           {/* WebNotificationTest 경로 추가 */}
           <Route
             path="/web-notification-test"
