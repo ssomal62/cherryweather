@@ -27,7 +27,7 @@ public class FileService {
 
     private final AmazonS3Client objectStorageClient;
 
-    public static final String BUCKET_NAME = "cherry-resource";
+    public static final String BUCKET_NAME = "cherry-weather";
     protected static final String[] SUPPORTED_IMAGE_FORMAT = {"jpg", "jpeg", "png"};
     public static final int FILE_LIMIT_MAX_COUNT = 3;
     public static final long FILE_LIMIT_MAX_SIZE = 3L * 1024 * 1024; // 3MB

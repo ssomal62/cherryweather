@@ -1,0 +1,31 @@
+[
+  { "name": "CULTURE_ART", "description": "문화·예술",
+    "subcategories": ["전시", "영화", "공연", "연극", "뮤지컬", "콘서트", "페스티벌", "연주회", "기타"] },
+
+  { "name": "ACTIVITY", "description": "액티비티",
+    "subcategories": ["등산", "클라이밍", "러닝", "다이어트", "산책", "요가", "헬스", "야구", "필라테스", "농구", "자전거", "다이빙", "축구", "배드민턴", "기타"] },
+
+  { "name": "FOOD_DRINK", "description": "푸드·드링크",
+    "subcategories": ["맛집", "카페", "요리", "와인", "베이킹", "커피", "위스키", "맥주", "파인다이닝", "디저트", "전통주", "기타"] },
+
+  { "name": "HOBBY", "description": "취미",
+    "subcategories": ["사진", "보드게임", "온라인게임", "방탈출", "공예", "드로잉", "악기연주", "봉사활동", "패션", "댄스", "만화", "기타"] },
+
+  { "name": "TRAVEL_COMPANION", "description": "여행·동행",
+    "subcategories": ["국내여행", "해외여행", "캠핑", "놀이공원", "드라이브", "기타"] },
+
+  { "name": "SELF_IMPROVEMENT", "description": "자기계발",
+    "subcategories": ["독서", "스터디", "커리어", "창작", "스피치", "기타"] },
+
+  { "name": "LOCAL_COMMUNITY", "description": "동네·또래",
+    "subcategories": ["동네친구", "또래친구", "기타"] },
+
+  { "name": "FINANCE", "description": "재테크",
+    "subcategories": ["N잡", "부동산", "투자/금융", "창업", "주식", "경제", "블로그", "SNS", "기타"] },
+
+  { "name": "FOREIGN_LANGUAGE", "description": "외국어",
+    "subcategories": ["영어", "일본어", "중국어", "스페인어", "러시아어", "기타"] },
+
+  { "name": "ROMANCE", "description": "연애·사랑",
+    "subcategories": ["소개팅", "와인미팅", "기타"] }
+]
