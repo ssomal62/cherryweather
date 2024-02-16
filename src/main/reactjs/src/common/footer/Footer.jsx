@@ -6,7 +6,7 @@ import {IoMdAddCircleOutline} from "react-icons/io";
 import {HiOutlineChat} from "react-icons/hi";
 import {FiUsers} from "react-icons/fi";
 import {MdOutlineAutoMode} from "react-icons/md";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Footer = () => {
 

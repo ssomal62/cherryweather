@@ -50,7 +50,7 @@ const ChatRoomList = () => {
                 await chat.connect({
                     id: accountData.email,
                     name: accountData.name,
-                    profile: accountData.email,
+                    profile: accountData.profileImage,
                     customField: 'json',
                 });
 
