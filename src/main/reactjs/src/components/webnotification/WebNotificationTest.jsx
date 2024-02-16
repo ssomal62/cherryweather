@@ -63,14 +63,14 @@ const WebNotificationTest = ({goBell}) => {
   const makeNotiTest = () => {
     if (Notification.permission === "granted") {
       const options = {
-        body: "한국 축구 졌다, 처참하게!",
+        body: "오늘의 날씨는",
         icon: require("../../assets/images/sun.png"),
         requireInteraction: true,
       };
 
       if (registration) {
         // registration 객체 확인
-        registration.showNotification("test", options);
+        registration.showNotification("cherryWeather", options);
       } else {
         console.log("Service Worker가 아직 등록되지 않았습니다.");
       }
