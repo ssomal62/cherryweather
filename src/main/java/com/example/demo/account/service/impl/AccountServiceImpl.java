@@ -240,5 +240,10 @@ public class AccountServiceImpl implements AccountService {
     public void createAccountByOAuth(OAuthAccountInfoDto2 accountInfo, String provider) {
     }
 
+    @Override
+    public Account findAccountById(Long accountId) {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT));
+    }
 
 }

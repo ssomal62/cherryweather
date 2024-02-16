@@ -23,4 +23,5 @@ public interface AccountService {
 
     void deleteAccount(final @AuthenticationPrincipal AccountDetails accountDetails);
 
+    Account findAccountById(Long accountId);
 }

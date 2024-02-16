@@ -1,13 +1,14 @@
-import React from "react";
 import styled from "styled-components";
-import {Tab, Tabs} from "@nextui-org/react";
-import {HiOutlineHome} from "react-icons/hi2";
-import {IoMdAddCircleOutline} from "react-icons/io";
-import {HiOutlineChat} from "react-icons/hi";
-import {FiUsers} from "react-icons/fi";
-import {MdOutlineAutoMode} from "react-icons/md";
+import { Tab, Tabs } from "@nextui-org/react";
+import { HiOutlineHome } from "react-icons/hi2";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import { HiOutlineChat } from "react-icons/hi";
+import { FiUsers } from "react-icons/fi";
+import { MdOutlineAutoMode } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
+
 
     return (
         <BottomNav>
@@ -16,7 +17,7 @@ const Footer = () => {
                     value="home"
                     title={
                         <div className="flex items-center flex-col ">
-                            <HiOutlineHome style={{...styles.icon}}/>
+                            <HiOutlineHome style={{ ...styles.icon }} />
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -25,7 +26,7 @@ const Footer = () => {
                     value="ai-weather"
                     title={
                         <div className="flex items-center flex-col ">
-                            <MdOutlineAutoMode style={{...styles.icon}}/>
+                            <MdOutlineAutoMode style={{ ...styles.icon }} />
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -34,7 +35,7 @@ const Footer = () => {
                     value="add"
                     title={
                         <div className="flex items-center flex-col ">
-                            <IoMdAddCircleOutline style={{...styles.icon}}/>
+                            <IoMdAddCircleOutline style={{ ...styles.icon }} />
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -43,20 +44,28 @@ const Footer = () => {
                     value="club"
                     title={
                         <div className="flex items-center flex-col ">
-                            <FiUsers style={{...styles.icon}}/>
+                            <FiUsers style={{ ...styles.icon }} />
                         </div>
                     }
                     className="h-[50px] flex justify-center"
                 ></Tab>
+
                 <Tab
                     value="chat"
+                    as={Link}
+                    to="/chat"
                     title={
                         <div className="flex items-center flex-col ">
-                            <HiOutlineChat style={{...styles.icon}}/>
+                            <HiOutlineChat style={{ ...styles.icon }} />
                         </div>
+
                     }
+
                     className="h-[50px] flex justify-center"
-                ></Tab>
+                >
+
+                </Tab>
+
             </Tabs>
         </BottomNav>
     );
@@ -66,14 +75,14 @@ export default Footer;
 
 const styles = {
     icon: {
-        width : 24,
+        width: 24,
         height: 24,
     },
 }
 
 const BottomNav = styled.div`
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   position: fixed;
   opacity: 90%;
