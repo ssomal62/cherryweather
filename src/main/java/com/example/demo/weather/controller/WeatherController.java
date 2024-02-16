@@ -2,8 +2,11 @@ package com.example.demo.weather.controller;
 
 import com.example.demo.weather.dto.NowWeatherReqDto;
 import com.example.demo.weather.dto.NowWeatherResDto;
+import com.example.demo.weather.dto.TodayWeatherReqDto;
+import com.example.demo.weather.dto.TodayWeatherResDto;
 import com.example.demo.weather.service.GeoLocationService;
 import com.example.demo.weather.service.NowWeatherService;
+import com.example.demo.weather.service.TodayWeatherServie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,7 @@ import java.util.List;
 public class WeatherController {
 
     private final NowWeatherService nowWeatherService;
+    private final TodayWeatherServie todayWeatherServie;
     private final GeoLocationService geoLocationService;
 
 
@@ -30,5 +34,15 @@ public class WeatherController {
     @GetMapping("/now")
     public List<NowWeatherResDto> getFormattedNowWeather() {
         return nowWeatherService.getFormattedNowWeather();
+    }
+
+    @GetMapping("/today/info")
+    public List<TodayWeatherReqDto> getTodayWeather() {
+        return todayWeatherServie.getTodayWeather();
+    }
+
+    @GetMapping("/today")
+    public List<TodayWeatherResDto> getFormattedTodayWeather() {
+        return todayWeatherServie.getFormattedTodayWeather();
     }
 }

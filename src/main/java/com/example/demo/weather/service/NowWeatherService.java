@@ -46,7 +46,7 @@ public class NowWeatherService {
 
         // 예외처리
         for(int i = 0; i < 2; i++) {
-            response = weatherServiceClient.getShortWeatherForecast(functionName, baseDate, tempBaseTime, nx, ny);
+            response = weatherServiceClient.getNowWeatherForecast(functionName, baseDate, tempBaseTime, nx, ny);
             try {
                 responseJson = objectMapper.readTree(response.getBody());
                 resultCode = responseJson.path("response").path("header").path("resultCode").asText();
@@ -125,21 +125,19 @@ public class NowWeatherService {
         try {
             JsonNode root = objectMapper.readTree(response);
             JsonNode itemsNode = root.path("response").path("body").path("items").path("item");
-            for(JsonNode itemNome : itemsNode) {
+            for(JsonNode item : itemsNode) {
                 NowWeatherReqDto dto = NowWeatherReqDto.builder()
-                                               .baseDate(itemNome.path("baseDate").asText())
-                                               .baseTime(itemNome.path("baseTime").asText())
-                                               .category(itemNome.path("category").asText())
-                                               .nx(itemNome.path("nx").asInt())
-                                               .ny(itemNome.path("ny").asInt())
-                                               .obsrValue(itemNome.path("obsrValue").asText())
+                                               .baseDate(item.path("baseDate").asText())
+                                               .baseTime(item.path("baseTime").asText())
+                                               .category(item.path("category").asText())
+                                               .nx(item.path("nx").asInt())
+                                               .ny(item.path("ny").asInt())
+                                               .obsrValue(item.path("obsrValue").asText())
                                                .build();
                 nowWeatherList.add(dto);
             }
         }catch(JsonProcessingException e){
             throw new LookupException(JSON_PARSING_FAILED);
-        }catch(IOException e) {
-            throw new LookupException(DATA_RETRIEVAL_FAILED);
         }
         return nowWeatherList;
     }
