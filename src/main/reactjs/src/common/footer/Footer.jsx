@@ -6,8 +6,11 @@ import {IoMdAddCircleOutline} from "react-icons/io";
 import {HiOutlineChat} from "react-icons/hi";
 import {FiUsers} from "react-icons/fi";
 import {MdOutlineAutoMode} from "react-icons/md";
+import {useNavigate} from "react-router-dom";
 
 const Footer = () => {
+
+    const navigate = useNavigate();
 
     return (
         <BottomNav>
@@ -15,7 +18,7 @@ const Footer = () => {
                 <Tab
                     value="home"
                     title={
-                        <div className="flex items-center flex-col ">
+                        <div className="flex items-center flex-col " onClick={ () => navigate('/')}>
                             <HiOutlineHome style={{...styles.icon}}/>
                         </div>
                     }
@@ -33,7 +36,7 @@ const Footer = () => {
                 <Tab
                     value="add"
                     title={
-                        <div className="flex items-center flex-col ">
+                        <div className="flex items-center flex-col " onClick={ () => navigate('/club-add') }>
                             <IoMdAddCircleOutline style={{...styles.icon}}/>
                         </div>
                     }
@@ -42,7 +45,7 @@ const Footer = () => {
                 <Tab
                     value="club"
                     title={
-                        <div className="flex items-center flex-col ">
+                        <div className="flex items-center flex-col" onClick={() => navigate('/club')}>
                             <FiUsers style={{...styles.icon}}/>
                         </div>
                     }
