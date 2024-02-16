@@ -52,7 +52,7 @@ const AvatarMenu = () => {
                     <p className="font-semibold">Signed in as</p>
                     <p className="font-semibold">zoey@example.com</p>
                 </DropdownItem>
-                <DropdownItem key="settings">My Page</DropdownItem>
+                <DropdownItem key="settings" onClick={()=> navigate("/mypage")}>My Page</DropdownItem>
                 <DropdownItem key="team_settings">Team Settings</DropdownItem>
                 <DropdownItem key="analytics">Analytics</DropdownItem>
                 <DropdownItem key="system">System</DropdownItem>

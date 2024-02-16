@@ -41,17 +41,15 @@ const LoginForm = () => {
         console.log(res);
         //토큰 쿠키에 저장
         cookies.set("accessToken", res.data.accessToken, { path: "/" });
-        console.log("쿠키등록 완료");
         //로그인 상태 리코일로 변경
         setIsLogin(true);
         console.log(isLogin);
         //메인 페이지로 이동
         navigate("/");
-        console.log("이동");
         } catch (error) {
         console.error(error);
         }
-      }
+    }
 
 
 

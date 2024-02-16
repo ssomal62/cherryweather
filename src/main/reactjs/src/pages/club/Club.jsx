@@ -5,7 +5,7 @@ import ClubList from "../../components/club/ClubList";
 const Club = () => {
     return (
         <Layout >
-            <ClubList/>
+            <ClubList />
         </Layout>
     );
 };

@@ -6,7 +6,6 @@ const RequireAuth = ({ children }) => {
   const isLogin = useRecoilValue(IsLoginAtom);
   
   if (!isLogin) {
-    
     alert('로그인이 필요합니다.');
     return <Navigate to="/login" replace />;
   }
