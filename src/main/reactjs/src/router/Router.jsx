@@ -11,7 +11,7 @@ import Login from "../pages/Login";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
-import ClubDetails from "../pages/club/ClubDetails";
+// import ClubDetails from "../pages/club/ClubDetails";
 import Join from "../pages/Join";
 import LoginForm from "../components/login/LoginForm";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
@@ -54,9 +54,9 @@ const Router = () => {
           <Route path="/join" element={<BlockIfLoggedIn><Join /></BlockIfLoggedIn>} />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
-          <Route path="/club" element={<Club />}>
+          {/* <Route path="/club" element={<Club />}>
             <Route path=":num" element={<ClubDetails />} />
-          </Route>
+          </Route> */}
           <Route path="/club-add" element={<AddClub />} />
           {/* WebNotificationTest 경로 추가 */}
           <Route

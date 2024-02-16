@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
+import React, { useEffect, useState } from "react";
+import { IoOptionsOutline, IoSearchOutline } from "react-icons/io5";
 import {
   Input,
   Navbar,
@@ -8,15 +8,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@nextui-org/react";
-import {SearchIcon} from "./SearchIcon";
+import { SearchIcon } from "./SearchIcon";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
-import {useRecoilValue} from "recoil";
-import {IsLoginAtom} from "../../recoil/LoginAtom";
-import {AiOutlineLogin} from "react-icons/ai";
-import {NavLink} from "react-router-dom";
-import WebNotificationTest from "../../components/webnotification/WebNotificationTest";
-import {GoBellWithNotificationIcon} from "./GoBellWithNotificationIcon";
+import { useRecoilValue } from "recoil";
+import { IsLoginAtom } from "../../recoil/LoginAtom";
+import { AiOutlineLogin } from "react-icons/ai";
+import { NavLink } from "react-router-dom";
+import GoBellWithNotificationIcon from "./GoBellWithNotificationIcon";
+
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -68,12 +68,8 @@ export default function Header() {
             />
           </PopoverContent>
         </Popover>
-
-        <WebNotificationTest
-          goBell={
-            <GoBellWithNotificationIcon setIsOpen={setIsOpen} isOpen={isOpen} />
-          }
-        />
+        {/* 웹 알림 테스트를 위해 해당 아이콘만 렌더링합니다. */}
+        <GoBellWithNotificationIcon />
         {isLogin ? (
           <AvatarMenu />
         ) : (
