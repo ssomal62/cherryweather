@@ -76,9 +76,4 @@ public class AccountController {
         accountService.checkDuplicateEmail(email);
     }
 
-    @GetMapping("check-id")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void findAccountId(final @Valid @RequestParam Long accountId) {
-        accountService.findAccountById(accountId);
-    }
-}
+   }

@@ -18,11 +18,8 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     private int chatId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACCOUNT_ID", nullable = false)
-    private Account account;
-    @JoinColumn(name = "clubId", nullable = false)
-    private long clubId;
+
+    
 
 
 //    private int cunum;
