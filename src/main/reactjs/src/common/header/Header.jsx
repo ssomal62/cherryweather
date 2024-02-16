@@ -1,14 +1,19 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
 import {GoBell} from "react-icons/go";
 import {Input, Navbar, NavbarContent, Popover, PopoverContent, PopoverTrigger} from "@nextui-org/react";
 import {SearchIcon} from "./SearchIcon";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
+import { useRecoilValue } from 'recoil';
+import { IsLoginAtom } from '../../recoil/LoginAtom';
+import { AiOutlineLogin } from "react-icons/ai";
+import { NavLink } from 'react-router-dom';
 
 export default function Header() {
+    const [isOpen, setIsOpen] = useState(false);
+    const isLogin = useRecoilValue(IsLoginAtom);
 
-    const [isOpen, setIsOpen] = React.useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -52,7 +57,11 @@ export default function Header() {
                 </Popover>
 
                 <GoBell style={styles.icon}/>
-                <AvatarMenu/>
+                {isLogin ? <AvatarMenu/> : 
+                <NavLink to="/login">
+                <AiOutlineLogin style={styles.icon}/>
+                </NavLink>}
+
             </NavbarContent>
         </Navbar>
     );
