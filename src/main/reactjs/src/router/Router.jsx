@@ -2,7 +2,7 @@ import React, {Suspense} from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../recoil/LoginAtom";
-import { lazy } from "react";
+// import { lazy } from "react";
 
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
@@ -12,10 +12,14 @@ import WebNotificationTest from "../components/webnotification/WebNotificationTe
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
 import ClubDetails from "../pages/club/ClubDetails";
+import Join from "../pages/Join";
+import LoginForm from "../components/login/LoginForm";
+import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
 // const Home = lazy(() => import("../pages/Home"));
+// const Club = lazy(() => import("../pages/Club"));
 
 // 레이즈 라우터를 사용하기 위해선 위와같은 임포트 방식을 사용하여야 한다
 // 일반적인 라우터와 레이즈 라우터의 차이점은
@@ -33,7 +37,6 @@ import ClubDetails from "../pages/club/ClubDetails";
 // fallback 속성에 넣어준 컴포넌트는 Suspense 컴포넌트가 사라지면
 // 같이 사라진다
 
-
 const Router = () => {
   const isLogin = useRecoilValue(IsLoginAtom);
 
@@ -44,8 +47,11 @@ const Router = () => {
         <Routes>
           {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/oauth" element={<OauthInfo />} />
+          {/* 로그인 없이 접근 가능하나 로그인이 되어있으면 접근 불가한 페이지 */}
+          <Route path="/login" element={<BlockIfLoggedIn><Login /></BlockIfLoggedIn>} />
+          <Route path="/login/local" element={<BlockIfLoggedIn><LoginForm /></BlockIfLoggedIn>} />
+          <Route path="/oauth" element={<BlockIfLoggedIn><OauthInfo /></BlockIfLoggedIn>} />
+          <Route path="/join" element={<BlockIfLoggedIn><Join /></BlockIfLoggedIn>} />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />}>
