@@ -2,6 +2,8 @@
 // import WebNotificationAlternativePermission from "./WebNotificationAlternativePermission";
 
 import {useEffect, useState} from "react";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../../recoil/LoginAtom";
 
 // const WebNotificationTest = () => {
 //   const [notificationPermission, setNotificationPermission] = useState("");
@@ -43,6 +45,7 @@ import {useEffect, useState} from "react";
 
 const WebNotificationTest = ({goBell}) => {
   const [registration, setRegistration] = useState(null);
+  const isLogin = useRecoilValue(IsLoginAtom); // 로그인 상태를 가져온다
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
@@ -61,33 +64,39 @@ const WebNotificationTest = ({goBell}) => {
   }, []);
 
   const makeNotiTest = () => {
-    if (Notification.permission === "granted") {
-      const options = {
-        body: "오늘의 날씨는",
-        icon: require("../../assets/images/sun.png"),
-        requireInteraction: true,
-      };
+    if (isLogin) {
+      // 로그인 상태에서만 알림을 보냄
+      if (Notification.permission === "granted") {
+        const options = {
+          body: "오늘의 날씨는",
+          icon: require("../../assets/images/sun.png"),
+          requireInteraction: true,
+        };
 
-      if (registration) {
-        // registration 객체 확인
-        registration.showNotification("cherryWeather", options);
-      } else {
-        console.log("Service Worker가 아직 등록되지 않았습니다.");
-      }
-    } else if (Notification.permission === "denied") {
-      console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-      alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-    } else {
-      // 사용자가 아직 알림 권한을 설정하지 않은 경우
-      // 알림 권한 요청
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          makeNotiTest(); // 알림 권한이 허용된 경우 다시 알림 보내기 시도
+        if (registration) {
+          // registration 객체 확인
+          registration.showNotification("cherryWeather", options);
         } else {
-          console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-          alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+          console.log("Service Worker가 아직 등록되지 않았습니다.");
         }
-      });
+      } else if (Notification.permission === "denied") {
+        console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+        alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+      } else {
+        // 사용자가 아직 알림 권한을 설정하지 않은 경우
+        // 알림 권한 요청
+        Notification.requestPermission().then((permission) => {
+          if (permission === "granted") {
+            makeNotiTest(); // 알림 권한이 허용된 경우 다시 알림 보내기 시도
+          } else {
+            console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+            alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+          }
+        });
+      }
+    } else {
+      // 로그인 상태가 아닌경우
+      alert("로그인이 필요합니다.");
     }
   };
 
