@@ -17,6 +17,7 @@ import {IsLoginAtom} from "../../recoil/LoginAtom";
 import {AiOutlineLogin} from "react-icons/ai";
 import {NavLink} from "react-router-dom";
 import WebNotificationTest from "../../components/webnotification/WebNotificationTest";
+import {GoBellWithNotificationIcon} from "./GoBellWithNotificationIcon";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -70,7 +71,9 @@ export default function Header() {
         </Popover>
 
         <WebNotificationTest
-          goBell={<GoBell style={{...styles.icon, marginTop: 6}} />}
+          goBell={
+            <GoBellWithNotificationIcon setIsOpen={setIsOpen} isOpen={isOpen} />
+          }
         />
         {isLogin ? (
           <AvatarMenu />
