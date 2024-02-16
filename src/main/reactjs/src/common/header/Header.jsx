@@ -12,7 +12,7 @@ export default function Header() {
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsOpen(false); // Close PopoverContent when scrolled
+            setIsOpen(false);
         };
         window.addEventListener('scroll', handleScroll);
         return () => {
@@ -60,7 +60,6 @@ export default function Header() {
 
 const styles = {
     block: {
-        backgroundColor: 'white',
         marginRight    : 10,
         marginTop      : 15,
         marginBottom   : 15,

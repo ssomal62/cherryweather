@@ -4,6 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    font-family: 'Open Sans', sans-serif;
+body * {
+    font-family: 'Noto Sans KR', sans-serif;
 }
