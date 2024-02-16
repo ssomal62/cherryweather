@@ -1,6 +1,5 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
-import {GoBell} from "react-icons/go";
 import {
   Input,
   Navbar,
@@ -12,10 +11,16 @@ import {
 import {SearchIcon} from "./SearchIcon";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../../recoil/LoginAtom";
+import {AiOutlineLogin} from "react-icons/ai";
+import {NavLink} from "react-router-dom";
 import WebNotificationTest from "../../components/webnotification/WebNotificationTest";
+import {GoBellWithNotificationIcon} from "./GoBellWithNotificationIcon";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const isLogin = useRecoilValue(IsLoginAtom);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,11 +69,18 @@ export default function Header() {
           </PopoverContent>
         </Popover>
 
-        {/* GoBell 아이콘 클릭 시 WebNotificationTest 컴포넌트 렌더링 */}
         <WebNotificationTest
-          goBell={<GoBell style={{...styles.icon, marginTop: 6}} />}
+          goBell={
+            <GoBellWithNotificationIcon setIsOpen={setIsOpen} isOpen={isOpen} />
+          }
         />
-        <AvatarMenu />
+        {isLogin ? (
+          <AvatarMenu />
+        ) : (
+          <NavLink to="/login">
+            <AiOutlineLogin style={styles.icon} />
+          </NavLink>
+        )}
       </NavbarContent>
     </Navbar>
   );

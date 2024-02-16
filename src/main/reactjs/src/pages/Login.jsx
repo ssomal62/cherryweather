@@ -2,111 +2,147 @@ import React from "react";
 import Layout from "../common/Layout";
 import { Button } from "@nextui-org/react";
 import styled from "styled-components";
-import { Input } from "@nextui-org/react";
+import weatherLogo from "../assets/images/brand/cw3.png";
+import weatherImg from "../assets/images/sun.png";
+import { useNavigate } from "react-router-dom";
+
 
 const Login = () => {
+  const navigate = useNavigate();
 
+  // 이미지 url
+  const kakaoImgUrl =
+    "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/kakao-logo_v2.png";
+  const naverImgUrl =
+    "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/naver-logo_v2.png";
+
+  // 카카오 간편 로그인
   const onKakaoLogin = () => {
-    window.location.href = "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://localhost:9002/oauth&response_type=code";
+    window.location.href =
+      "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://localhost:9002/oauth&response_type=code";
   };
 
   return (
     <Layout>
-      <Conatiner>
-        <LogoDiv>체리웨더</LogoDiv>
-        <FormDiv>
-          <div
-            key="sm"
-            className="flex w-full flex-wrap md:flex-nowrap mb-1 md:mb-0 gap-4"
-          >
-            <Input size="sm" type="email" label="Email" />
-          </div>
-          <div
-            key="sm"
-            className="flex w-full flex-wrap md:flex-nowrap mb-3 md:mb-0 gap-4"
-          >
-            <Input size="sm" type="password" label="password" />
-          </div>
-          <JoinButton
-            style={{ backgroundColor: "rgb(255, 212, 0)", border: "none" }}
-          >
-            <JoinText>로그인</JoinText>
-          </JoinButton>
-        </FormDiv>
-        <OauthDiv>
-          <OauthTitle>SNS 간편 로그인</OauthTitle>
-          <IconWapper>
-            <IconBtn style={{ backgroundColor: "rgb(30, 200, 0)" }}>
-              <IconImg
-                alt=""
-                src="https://d2v80xjmx68n4w.cloudfront.net/assets/icon/naver-logo_v2.png"
-              />
-            </IconBtn>
-                <IconBtn onClick={onKakaoLogin} style={{ backgroundColor: "rgb(249, 224, 0)" }} >
-                  <img
-                    src="https://d2v80xjmx68n4w.cloudfront.net/assets/icon/kakao-logo_v2.png"
-                    alt="Kakao login"
-                  />
-                </IconBtn>
-            <IconBtn
-              style={{
-                backgroundColor: "rgb(255, 255, 255)",
-                border: "1px solid rgb(228, 229, 237)",
-              }}
-            >
-              <IconImg
-                alt=""
-                src="https://d2v80xjmx68n4w.cloudfront.net/assets/icon/google-logo_v2.png"
-              />
-            </IconBtn>
-          </IconWapper>
-        </OauthDiv>
-        <JoinDiv>
-          <JoinButton>
-            <JoinText>회원가입</JoinText>
-          </JoinButton>
-        </JoinDiv>
-      </Conatiner>
+      <IconWapper>
+        <LogoImg
+          alt=""
+          src={weatherImg}
+          style={{ width: "150px", height: "150px" }}
+        />
+      </IconWapper>
+      <LogoWapper>
+        <LogoImg alt="logo" src={weatherLogo} />
+      </LogoWapper>
+      <LoginContainer>
+        <LoginBtn onClick={onKakaoLogin} style={{ backgroundColor: "#FEE500" }}>
+          <IconImg alt="kakao" src={kakaoImgUrl} />
+          <LoginBtnText>카카오로 로그인하기</LoginBtnText>
+        </LoginBtn>
+        <LoginBtn style={{ backgroundColor: "rgb(30, 200, 0)" }}>
+          <IconImg alt="naver" src={naverImgUrl} />
+          <LoginBtnText>네이버로 로그인하기</LoginBtnText>
+        </LoginBtn>
+        <LoginBtn onClick={()=>navigate("/login/local")} style={{border : '1px solid rgba(0, 0, 0, 0.2)'}}>
+          <IconImg alt="naver" src={weatherImg} />
+          <LoginBtnText>이메일로 로그인하기</LoginBtnText>
+        </LoginBtn>
+        <JoinWapper>
+            <JoinText onClick={()=>navigate("/join")}>회원가입</JoinText>
+          <Hr />
+            <JoinText>문의하기</JoinText>
+        </JoinWapper>
+      </LoginContainer>
     </Layout>
   );
 };
 
 export default Login;
 
-const JoinText = styled.span`
-  font-family: "Metro Sans", sans-serif;
-  box-sizing: border-box;
+export const Hr = styled.hr`
+  width: 1px;
+  height: 13px;
+  margin: 0 14px;
+  background: #d2d5d6;
+  border: none;
 `;
 
-const JoinButton = styled(Button)`
-  outline: none;
-  box-sizing: border-box;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: background-color 0.3s ease 0s, border-color 0.3s ease 0s;
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-  display: inline-flex;
-  -webkit-box-align: center;
+export const JoinText = styled.span`
+  font-weight: 400;
+  color: #4f5558;
+  text-decoration: inherit;
+  font-size: 13px;
+  line-height: 16px;
+`;
+
+export const JoinWapper = styled.div`
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  padding-bottom: 32px;
+  margin-top: 10px;
+`;
+
+export const LogoWapper = styled.div`
+  display: flex;
+  flex: 1 1 auto;
   align-items: center;
   -webkit-box-pack: center;
+  -webkit-box-align: center;
   justify-content: center;
-  cursor: pointer;
-  position: relative;
-  user-select: none;
-  white-space: nowrap;
-  width: 100%;
-  max-width: 100%;
-  height: 42px;
-  font-size: 16px;
-  padding: 0px 20px;
-  line-height: 16px;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid rgb(200, 202, 210);
-  color: rgb(33, 34, 36);
+  margin-bottom: 30px;
 `;
 
-const IconImg = styled.img`
+export const LoginBtnText = styled.span`
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+`;
+
+export const LoginContainer = styled.div`
+  flex: 0 1 auto;
+  flex-direction: column;
+  flex-direction: column;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  display: flex;
+`;
+
+export const LogoImg = styled.img`
+  width: auto;
+  height: 40px;
+`;
+
+export const IconWapper = styled.div`
+  display: flex;
+  flex: 1 1 auto;
+  padding: 10px;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  justify-content: center;
+`;
+
+export const LoginBtn = styled(Button)`
+  width: 100%;
+  max-width: 400px;
+  margin: 0 32px;
+  padding: 12px 16px;
+  display: -ms-flexbox;
+  display: flex;
+  border-radius: 24px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+`;
+
+export const IconImg = styled.img`
   overflow-clip-margin: content-box;
   overflow: clip;
   height: 24px;
@@ -114,67 +150,4 @@ const IconImg = styled.img`
   width: 24px;
   box-sizing: border-box;
   border-style: none;
-`;
-
-const IconBtn = styled.button`
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  -webkit-box-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  align-items: center;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-`;
-
-const IconWapper = styled.div`
-  display: flex;
-  -webkit-box-pack: justify;
-  justify-content: space-between;
-  margin-top: 8px;
-`;
-
-const OauthTitle = styled.h5`
-  margin: 0;
-  color: #212224;
-  font-size: 0.875rem;
-  font-weight: 700;
-  line-height: 21px;
-  letter-spacing: 0;
-`;
-
-const JoinDiv = styled.div`
-  box-sizing: border-box;
-`;
-
-const OauthDiv = styled.div`
-margin: 20px 0px 16px;
-border: 1px solid rgb(228, 229, 237);
-padding: 16px;
-border-radius: 8px;
-`;
-
-const FormDiv = styled.div`
-  display: flex;
-  gap: 8px;
-  flex-direction: column;
-  flex: 1 1 0%;
-`;
-
-const LogoDiv = styled.div`
-  display: flex;
-  -webkit-box-pack: center;
-  justify-content: center;
-  margin-bottom: 24px;
-`;
-
-const Conatiner = styled.div`
-  padding: 15px 18px;
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  background-color: rgb(255, 255, 255);
 `;

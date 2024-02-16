@@ -7,7 +7,6 @@ import {
     DropdownMenu,
     DropdownTrigger,
     Image,
-    NavbarContent,
     NavbarItem
 } from "@nextui-org/react";
 import cw from "../../assets/images/brand/cw3.png";
