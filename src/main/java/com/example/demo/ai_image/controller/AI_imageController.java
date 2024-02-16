@@ -61,5 +61,5 @@ public class AI_imageController {
     public List<AI_image> getImageByEmail(final @AuthenticationPrincipal AccountDetails accountDetails) {
         return aiImageService.getImageBucketURLByAccountID(accountDetails.getAccount().getAccountId());
     }
-    
+
 }
