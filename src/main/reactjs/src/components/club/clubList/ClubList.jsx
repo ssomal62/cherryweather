@@ -1,8 +1,7 @@
 import React, {useEffect} from "react";
 import CardListItem from "./ClubListItem";
 import {useRecoilValue} from "recoil";
-import {useFetchClubs} from "../../recoil/hooks/UseFetchClubs";
-import {clubListState} from "../../recoil/hooks/UseFetchClubs";
+import {clubListState, useFetchClubs} from "../../../recoil/hooks/UseFetchClubs";
 import styled from "styled-components"
 
 

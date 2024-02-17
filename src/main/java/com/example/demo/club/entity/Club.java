@@ -37,6 +37,9 @@ public class Club {
     @Column(length = 200)
     private String description;
 
+    @Column
+    private String joinApprovalStatus;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private ClubGrade grade;
@@ -50,6 +53,9 @@ public class Club {
     @Enumerated(EnumType.STRING)
     @Column(length = 50)
     private ClubCategory category;
+
+    @Column(length = 50)
+    private String subCategory;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
@@ -83,7 +89,9 @@ public class Club {
         this.name = requestDTO.name();
         this.description = requestDTO.description();
         this.category = requestDTO.category();
+        this.subCategory = requestDTO.subCategory();
         this.status = requestDTO.status();
+        this.joinApprovalStatus = requestDTO.joinApprovalStatus();
         this.activitiesArea = requestDTO.activitiesArea();
         this.updatedUserId = requestDTO.updatedUserId();
         this.representativeUserId = requestDTO.representativeUserId();

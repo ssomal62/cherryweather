@@ -1,19 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button, Card, CardBody, CardFooter, Chip, Image} from "@nextui-org/react";
 import {TiLocation} from "react-icons/ti";
 import {IoChatbubbleEllipses} from "react-icons/io5";
 import {BsFillPeopleFill} from "react-icons/bs";
 import {HeartIcon} from "./HeartIcon";
-import {useLikeClub} from "../../recoil/hooks/UseLikedState";
+import {useLikeClub} from "../../../recoil/hooks/UseLikedState";
 
 const CardListItem = ({club}) => {
 
-    const [liked, setLiked] = React.useState(false);
+    const loadImg = (code) => {
+        return  `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code}.jpg?type=f&w=600&h=600&ttype=jpg`
+    }
+
+    const [liked, setLiked] = useState(false);
     const { toggleLikeClub } = useLikeClub(); // Hook 사용
 
     const handleLikeClick = () => {
         setLiked(!liked);
-        toggleLikeClub(club.clubId); // 클럽 ID 전달
+        toggleLikeClub(club.clubId).then(r => r); // 클럽 ID 전달
     };
 
     return (
@@ -28,7 +32,7 @@ const CardListItem = ({club}) => {
                     removeWrapper
                     alt="Woman listing to music"
                     className="z-0 w-full object-cover h-[200px] object-middle"
-                    src={require(`../../assets/images/club/culture/${club.code}.jpg`)}
+                    src={loadImg(club.code)}
                     width={600}
                 />
             </div>
