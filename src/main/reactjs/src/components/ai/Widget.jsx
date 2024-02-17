@@ -28,25 +28,14 @@ export default function Widget() {
                         <li></li>
                     </ul>
                 </div>
-                <a
-                    className="dribbble"
-                    href="https://dribbble.com/shots/7197834-Menu-Interaction-Concept"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    <img
-                        src="https://dribbble.com/assets/logo-small-2x-9fe74d2ad7b25fba0f50168523c15fda4c35534f9ea0b1011179275383035439.png"
-                        alt=""
-                    />
-                </a>
             </div>
         </>
     );
 }
-
-const styles = {
-    title:{
-        fontSize:20,
-        fontWeight:900,
-    }
-}
+//
+// const styles = {
+//     title:{
+//         fontSize:20,
+//         fontWeight:900,
+//     }
+// }

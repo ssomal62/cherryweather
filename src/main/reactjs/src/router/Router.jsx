@@ -55,7 +55,7 @@ const Router = () => {
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />}/>
-             {/*<Route path=":num" element={<ClubDetails />} />*/}
+          {/*<Route path=":num" element={<ClubDetails />} />*/}
 
           <Route path="/club-add" element={<AddClub />} />
           <Route path="/ai" element={<AI_main />} />

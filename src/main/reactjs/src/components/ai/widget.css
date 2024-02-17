@@ -1,18 +1,22 @@
 .widget {
-  margin-top: 4em;
-  margin-left: 3.5em;
-  width: 450px;
-  height: 500px;
+  position: relative;
+  margin-top: 15%;
+  margin-left: 0.5em;
+  max-width: 600px;
+  width: 95%;
+  height: 70vh;
   display: flex;
   justify-content: flex-end;
   border-radius: 10px;
   background-color: #d7d7d7;
 }
 .widget.active .menu {
-  width: 510px;
+  max-width: 600px !important;
+  width: 100%;
+  transform: translate(0px, -50%);
 }
 .widget.active .menu .toggle {
-  right: 450px;
+  right: 86%;
 }
 .widget.active .menu .toggle i {
   width: 8px;
@@ -82,18 +86,18 @@
 .widget .menu .list {
   flex-direction: row;
   margin: 0;
-  right: 8px;
+  right: 7px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   visibility: hidden;
   position: absolute;
+  width: 87%;
 }
 .widget .menu .list li {
   width: 40px;
   height: 40px;
-  margin-left: 4em;
-  margin-right: 3.5em;
+  margin: auto;
   list-style: none;
   border-radius: 100px;
   background-color: #73776C;
