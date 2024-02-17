@@ -4,39 +4,41 @@ import {TiLocation} from "react-icons/ti";
 import {IoChatbubbleEllipses} from "react-icons/io5";
 import {BsFillPeopleFill} from "react-icons/bs";
 import {HeartIcon} from "./HeartIcon";
-import {useLikeClub} from "../../../recoil/hooks/UseLikedState";
+// import {useNavigate} from "react-router-dom";
 
-const CardListItem = ({club}) => {
+const GeneratedImage = ({image}) => {
 
-    const [liked, setLiked] = React.useState(false);
-    const { toggleLikeClub } = useLikeClub(); // Hook 사용
-
-    const handleLikeClick = () => {
-        setLiked(!liked);
-        // toggleLikeClub(club.clubId); // 클럽 ID 전달
+    // const navigate = useNavigate(); // useNavigate hook 사용
+    const handleClick = () => {
+        const newWindow = window.open(image, '_blank');
+        if (newWindow) {
+            newWindow.opener = null; // 새 창의 opener를 null로 설정하여 보안 상의 이슈를 방지합니다.
+        }
     };
-
     return (
         <Card
             isFooterBlurred
             radius="lg"
             className="border-none"
+            onClick={handleClick} // 클릭 이벤트 처리
         >
-            <div className="relative w-full h-[200px]">
+            <div className="relative w-full h-[600px]" onClick={handleClick}>
                 <div className="absolute z-10 w-full h-full from-slate-800 bg-gradient-to-b to-transparent " ></div>
                 <Image
                     removeWrapper
+                    isZoomed
                     alt="Woman listing to music"
-                    className="z-0 w-full object-cover h-[200px] object-middle"
-                    src={require(`../../assets/images/club/culture/${club.code}.jpg`)}
+                    className="z-0 w-full object-cover h-[600px] object-middle"
+                    src={image}
                     width={600}
+
                 />
             </div>
-            <CardBody className="absolute z-20 top-1 flex-col items-start">
-                <div className="flex justify-between w-full">
-                    <div className="flex items-start">
+            <CardBody className="absolute z-20 top-1 flex-col items-start" onClick={handleClick}>
+                <div className="flex justify-between w-full" onClick={handleClick}>
+                    <div className="flex items-start" onClick={handleClick}>
                         <Chip color="primary" variant="solid" size='sm'
-                        >{club.category}</Chip>&nbsp;&nbsp;
+                        >오늘의 추천 옷차림</Chip>&nbsp;&nbsp;
                     </div>
                     <div className="flex items-end">
                         <Button
@@ -44,37 +46,38 @@ const CardListItem = ({club}) => {
                             className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2"
                             radius="full"
                             variant="light"
-                            onPress={() => setLiked((v) => !v)}
+                            // onPress={() => setLiked((v) => !v)}
                         >
                             <HeartIcon
                                 style={{color: 'white'}}
-                                className={liked ? "[&>path]:stroke-transparent" : ""}
-                                fill={liked ? "currentColor" : "none"}
+                                // className={liked ? "[&>path]:stroke-transparent" : ""}
+                                // fill={liked ? "currentColor" : "none"}
                             />
                         </Button>
                     </div>
                 </div>
-                <p className="text-tiny text-white/60 uppercase" >{club.description}</p>
+                <p className="text-tiny text-white/60 uppercase" >Cherry's Pick!</p>
                 <div style={{fontWeight:600}} className="text-white text-opacity-90 font-medium text-2xl drop-shadow shadow-black">
-                    {club.name}
+                     프레피 스타일
                 </div>
             </CardBody>
 
             <CardFooter
-                className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"
+                style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} >
 
                 <TiLocation style={{...styles.icon}}/>
-                <p className="text-tiny text-white">{club.activitiesArea}</p>
+                <p className="text-tiny text-black">오늘의 온도</p>
 
                 <BsFillPeopleFill style={{...styles.icon}}/>
-                <p className="text-tiny text-white">{club.currentMembers} / {club.maxMembers}</p>
+                <p className="text-tiny text-black">최고 기온 13도 / 최저 기온 6도</p>
 
                 <IoChatbubbleEllipses style={{...styles.icon}}/>
-                <p className="text-tiny text-white">30분전</p>
+                <p className="text-tiny text-black">맑음</p>
 
                 <Button className="text-tiny text-success font-semibold" variant="light" color="success" radius="lg"
                         size="sm">
-                    가입하기
+                    저장하기
                 </Button>
             </CardFooter>
         </Card>
@@ -87,4 +90,4 @@ const styles = {
     },
 };
 
-export default CardListItem;
+export default GeneratedImage;

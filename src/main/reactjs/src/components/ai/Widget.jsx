@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
 import { useState } from 'react';
 import './widget.css';
+import {useNavigate} from "react-router-dom";
 
 export default function Widget() {
     const [isActive, setIsActive] = useState(false);
-
+    const navigate = useNavigate();
     const handleToggleClick = () => {
         setIsActive(!isActive);
     };
@@ -23,19 +24,19 @@ export default function Widget() {
                         <i></i>
                     </div>
                     <ul className="list">
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li onClick={ () => navigate('/image')}>1</li>
+                        <li onClick={ () => navigate('/')}>2</li>
+                        <li onClick={ () => navigate('/')}>3</li>
                     </ul>
                 </div>
             </div>
         </>
     );
 }
-//
-// const styles = {
-//     title:{
-//         fontSize:20,
-//         fontWeight:900,
-//     }
-// }
+
+const styles = {
+    title:{
+        fontSize:20,
+        fontWeight:900,
+    }
+}

@@ -15,6 +15,8 @@ import Join from "../pages/Join";
 import LoginForm from "../components/login/LoginForm";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
 import AI_main from "../pages/ai/AI_main";
+import GPT from "../pages/ai/ChatGPT";
+import AI_image from "../pages/ai/ImageGenerator";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -59,6 +61,8 @@ const Router = () => {
 
           <Route path="/club-add" element={<AddClub />} />
           <Route path="/ai" element={<AI_main />} />
+          <Route path="/gpt" element={<GPT />} />
+          <Route path="/image" element={<AI_image />} />
 
 
 

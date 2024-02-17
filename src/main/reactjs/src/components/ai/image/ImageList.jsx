@@ -1,36 +1,48 @@
-import React, {useEffect} from "react";
-import CardListItem from "./ImageList";
+import React, {useEffect, useState} from "react";
 import {useRecoilValue} from "recoil";
-import {useFetchClubs} from "../../../recoil/hooks/UseFetchClubs";
-import {clubListState} from "../../../recoil/hooks/UseFetchClubs";
 import styled from "styled-components"
-
+import {imageURLState, useFetchImage} from "../../../recoil/hooks/UseFetchImage";
+import GeneratedImage from "./GeneratedImage";
+import {Spinner} from "@nextui-org/react";
 
 const ImageList = () => {
 
-    const fetchClubs = useFetchClubs();
-    const clubs = useRecoilValue(clubListState);
+    const fetchURL = useFetchImage();
+    const image = useRecoilValue(imageURLState);
+    const [isLoading, setIsLoading] = useState(false); // isLoading 상태 추가
 
     useEffect(() => {
-        fetchClubs();
-    }, [fetchClubs]);
+        const fetchData = async () => {
+            setIsLoading(true); // 데이터 가져오는 동안 로딩 상태 활성화
+            await fetchURL();
+            setIsLoading(false); // 데이터 가져온 후 로딩 상태 비활성화
+        };
+
+        fetchData();
+    }, [fetchURL]);
 
     return (
-        <div>
-            {clubs.map((club) => (
-                <CardListItemWrapper key={club.clubId}>
-                    <CardListItem
-                        club={club}
-                    />
+        <CenteredContainer>
+            {isLoading ? (
+                <Spinner size="lg" label="이미지 생성중" color="primary" labelColor="primary" />
+            ) : (
+                <CardListItemWrapper>
+                    <GeneratedImage image={image} />
                 </CardListItemWrapper>
-            ))}
-        </div>
-    )
-        ;
-}
+            )}
+        </CenteredContainer>
+    );
+};
 
 export default ImageList;
 
+const CenteredContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 84vh; /* 화면의 높이를 기준으로 세로 중앙 정렬 */
+`;
+
 const CardListItemWrapper = styled.div`
-  margin-bottom: 25px;
+    margin-bottom: 25px;
 `;
