@@ -47,6 +47,10 @@ public class GPTServiceImpl implements GPTService {
                 .role("assistant")
                 .content("정보를 알려주셔서 감사해요.")
                 .build());
+        fixedMessages.add(Message.builder()
+                .role("user")
+                .content("오늘의 옷차림을 추천해줄래 ? 다양한 여성이 입는 스타일로 알려주면 좋겠어~")
+                .build());
     }
 
     @Override
@@ -60,11 +64,13 @@ public class GPTServiceImpl implements GPTService {
         request.setTop_p(1);
         request.setFrequency_penalty(0);
         request.setPresence_penalty(0);
-        request.setMessages(request.getMessages());
+//        request.setMessages(request.getMessages());
 
         System.out.println("request = " + request);
         GPTResponse gptResponse = gptRestTemplate.postForObject(apiUrl, request, GPTResponse.class);
         assert gptResponse != null;
         return gptResponse.getChoices().get(0).getMessage().getContent();
     }
+
+
 }

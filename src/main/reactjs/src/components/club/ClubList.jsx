@@ -8,8 +8,8 @@ import styled from "styled-components"
 
 const ClubList = () => {
 
-    const fetchClubs = useFetchClubs();
-    const clubs = useRecoilValue(clubListState);
+    const fetchClubs = useFetchClubs(); // 함수를 담는것, 아래의 변수에 값을 넣기 위해 선행되는 행위,
+    const clubs = useRecoilValue(clubListState); // 실제로 값이 저장되어 있는 변수,
 
     useEffect(() => {
         fetchClubs();

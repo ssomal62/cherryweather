@@ -8,7 +8,7 @@ export const clubListState = atom({
 });
 
 export const useFetchClubs = () => {
-    const setClubList = useSetRecoilState(clubListState);
+    const setClubList = useSetRecoilState(clubListState); // 값을 불러오기 위한 문법
 
     return useCallback(async () => {
         try {
