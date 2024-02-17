@@ -4,7 +4,7 @@ import {TiLocation} from "react-icons/ti";
 import {IoChatbubbleEllipses} from "react-icons/io5";
 import {BsFillPeopleFill} from "react-icons/bs";
 import {HeartIcon} from "./HeartIcon";
-import {useLikeClub} from "../../recoil/hooks/UseLikedState";
+import {useLikeClub} from "../../../recoil/hooks/UseLikedState";
 
 const CardListItem = ({club}) => {
 

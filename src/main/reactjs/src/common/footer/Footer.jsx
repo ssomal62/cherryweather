@@ -27,7 +27,7 @@ const Footer = () => {
                 <Tab
                     value="ai-weather"
                     title={
-                        <div className="flex items-center flex-col ">
+                        <div className="flex items-center flex-col " onClick={ () => navigate('/ai')}>
                             <MdOutlineAutoMode style={{...styles.icon}}/>
                         </div>
                     }
@@ -52,7 +52,7 @@ const Footer = () => {
                     className="h-[50px] flex justify-center"
                 ></Tab>
                 <Tab
-                    value="chat"
+                    value="chatHeader"
                     title={
                         <div className="flex items-center flex-col ">
                             <HiOutlineChat style={{...styles.icon}}/>

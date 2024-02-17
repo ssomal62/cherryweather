@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '../../common/Layout';
-import ImageList from "../../components/ai/ImageList";
+import ImageList from "../../components/ai/image/ImageList";
 
 const ImageGenerator = () => {
     return (
