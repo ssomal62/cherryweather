@@ -1,10 +1,9 @@
 package com.example.demo.ai_image.service;
 
-import com.example.demo.ai_image.dto.ImageUploadRequestDto;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.ai_image.dto.upload.ImageUploadRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
@@ -21,13 +20,14 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ImageUploader {
-    private final AI_FileService aiFileService;
-    private final ObjectMapper objectMapper;
+    private final AI_fileService aiFileService;
+//    private final ObjectMapper objectMapper;
     private Path tempFilePath; // 임시 파일 경로 저장 변수
 
-    public void uploadImageToBucket(ImageUploadRequestDto requestDto) {
+    public String uploadImageToBucket(AccountDetails accountDetails,ImageUploadRequestDto requestDto) {
+        System.out.println("uploadImageToBucket");
         try {
-            String imageUrl = requestDto.getUrl();
+            String imageUrl = requestDto.getImageURL();
 
             // Download the image to a temporary file
             tempFilePath = downloadImageToTempFile(imageUrl);
@@ -35,21 +35,23 @@ public class ImageUploader {
             // Create a MultipartFile from the temporary file
             MultipartFile multipartFile = new MyFileResource(tempFilePath.toFile());
 
-            aiFileService.uploadSingleFile(multipartFile, requestDto.getDirName());
+           String uploadFileUrl = aiFileService.uploadSingleFile(multipartFile, accountDetails.getAccount().getEmail());
             System.out.println("Image uploaded successfully.");
+            return uploadFileUrl;
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to upload image.");
+            return null;
         } finally {
             // tempFile이 null이 아닌 경우에만 삭제
             if (tempFilePath != null) {
-
                 deleteTempFile();
             }
         }
     }
 
     private Path downloadImageToTempFile(String imageUrl) throws IOException {
+        System.out.println("downloadImageToTempFile");
         // Create a temporary file with a unique name
         String tempFileName = UUID.randomUUID().toString() + ".png";
         Path tempFilePath = Files.createTempFile(null, tempFileName);
@@ -67,6 +69,7 @@ public class ImageUploader {
     }
 
     private void deleteTempFile() {
+        System.out.println("deleteTempFile");
         try {
             boolean deleted = Files.deleteIfExists(tempFilePath);
             if (deleted) {
@@ -81,6 +84,7 @@ public class ImageUploader {
 
     // Implementation of a MultipartFile that wraps a File
     private static class MyFileResource implements MultipartFile {
+
         private final File file;
 
         public MyFileResource(File file) {

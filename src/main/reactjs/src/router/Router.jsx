@@ -7,15 +7,19 @@ import {IsLoginAtom} from "../recoil/LoginAtom";
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 import Club from "../pages/club/Club";
+import Login from "../pages/Login";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
 // import ClubDetails from "../pages/club/ClubDetails";
+import Join from "../pages/Join";
+import LoginForm from "../components/login/LoginForm";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
 import SignIn from "../pages/auth/SignIn";
 import LocalSignIn from "../components/auth/LocalSignIn";
 import SignUp from "../pages/user/SignUp";
 import MyPage from "../pages/user/MyPage";
+import AI_main from "../pages/ai/AI_main";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -57,9 +61,16 @@ const Router = () => {
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />} />
           {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}
+          <Route path="/club" element={<Club />}/>
+             {/*<Route path=":num" element={<ClubDetails />} />*/}
+
           <Route path="/club-add" element={<AddClub />} />
+          <Route path="/ai" element={<AI_main />} />
+
+
+
           {/* WebNotificationTest 경로 추가 */}
-          
+
           <Route
             path="/web-notification-test"
             element={<WebNotificationTest />}
