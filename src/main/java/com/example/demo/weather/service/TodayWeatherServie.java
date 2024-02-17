@@ -1,9 +1,6 @@
 package com.example.demo.weather.service;
 
-import com.example.demo.weather.dto.DailyWeatherDto;
-import com.example.demo.weather.dto.GeoLocationResDto;
-import com.example.demo.weather.dto.TodayWeatherReqDto;
-import com.example.demo.weather.dto.TodayWeatherResDto;
+import com.example.demo.weather.dto.*;
 import com.example.demo.weather.exception.LookupException;
 import com.example.demo.weather.exception.enums.WeatherExeptionStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,6 +24,7 @@ public class TodayWeatherServie {
 
     private final GeoLocationService geoLocationService;
     private final WeatherServiceClient weatherServiceClient;
+    private final DaylightService daylightService;
 
     private final String baseDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     private final String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -203,10 +201,15 @@ public class TodayWeatherServie {
         String minTemp = null;
         String maxTemp = null;
 
+        DaylightDto daylightDto = daylightService.getDaylightInfo(geoLocationService.getGeoLocation());
+
         for(TodayWeatherResDto todayWeather : todayWeatherList) {
             // 최저 기온, 최고 기온 찾기
-            if(todayWeather.getTMN() != null) minTemp = todayWeather.getTMN();
-            if(todayWeather.getTMX() != null) maxTemp = todayWeather.getTMX();
+            if(todayWeather.getTMX() != null && maxTemp == null) maxTemp = todayWeather.getTMX();
+            if(todayWeather.getTMN() != null && minTemp == null) minTemp = todayWeather.getTMN();
+        }
+
+        for(TodayWeatherResDto todayWeather : todayWeatherList) {
 
             // 현재 시각에 해당하는 날씨 정보 설정
             if(isCurrentForecast(todayWeather)) {
@@ -222,6 +225,11 @@ public class TodayWeatherServie {
                 break; // 현재 시각에 해당하는 날씨 정보만 설정하고 반복문
             }
         }
+
+        builder.sunrise(daylightDto.getSunrise())
+                .sunset(daylightDto.getSunset())
+                .moonrise(daylightDto.getMoonrise())
+                .moonset(daylightDto.getMoonset());
 
         return builder.minTemp(minTemp)
                        .maxTemp(maxTemp)

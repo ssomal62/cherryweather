@@ -17,4 +17,8 @@ public class DailyWeatherDto {
     private String rainProbability;
     private String rainfall;
     private String humidity;
+    private String sunrise;
+    private String sunset;
+    private String moonrise;
+    private String moonset;
 }
