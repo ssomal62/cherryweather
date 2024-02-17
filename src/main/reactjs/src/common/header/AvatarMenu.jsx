@@ -3,14 +3,17 @@ import {Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from "@ne
 import p1 from "../../assets/images/club/person/5.jpg";
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { IsLoginAtom } from '../../recoil/LoginAtom';
 import { instance } from '../../recoil/module/instance';
+import { userInfoState } from '../../recoil/hooks/UseFetchUserInfo';
 
 const AvatarMenu = () => {
     const cookies = new Cookies();
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useRecoilState(IsLoginAtom);
+    const userInfo = useRecoilValue(userInfoState)
+    const { profileName, email } = userInfo;
 
     // 로그아웃 함수
     const submitLogout = async () => {
@@ -49,17 +52,17 @@ const AvatarMenu = () => {
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="profile" className="h-14 gap-2">
-                    <p className="font-semibold">Signed in as</p>
-                    <p className="font-semibold">zoey@example.com</p>
+                    <p className="font-semibold">{profileName}</p>
+                    <p className="font-semibold">{email}</p>
                 </DropdownItem>
-                <DropdownItem key="settings" onClick={()=> navigate("/mypage")}>My Page</DropdownItem>
-                <DropdownItem key="team_settings">Team Settings</DropdownItem>
-                <DropdownItem key="analytics">Analytics</DropdownItem>
+                <DropdownItem key="mypage" onClick={()=> navigate("/mypage")}>마이 페이지</DropdownItem>
+                <DropdownItem key="club">내모임</DropdownItem>
+                {/* <DropdownItem key="analytics">Analytics</DropdownItem>
                 <DropdownItem key="system">System</DropdownItem>
-                <DropdownItem key="configurations">Configurations</DropdownItem>
-                <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+                <DropdownItem key="configurations">Configurations</DropdownItem> */}
+                <DropdownItem key="settings">설정</DropdownItem>
                 <DropdownItem key="logout" color="danger" onClick={submitLogout}>
-                    Log Out
+                    로그아웃
                 </DropdownItem>
             </DropdownMenu>
         </Dropdown>

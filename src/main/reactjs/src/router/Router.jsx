@@ -7,15 +7,15 @@ import {IsLoginAtom} from "../recoil/LoginAtom";
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 import Club from "../pages/club/Club";
-import Login from "../pages/Login";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
-import ClubDetails from "../pages/club/ClubDetails";
-import Join from "../pages/Join";
-import LoginForm from "../components/login/LoginForm";
+// import ClubDetails from "../pages/club/ClubDetails";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
-import MyPage from "../pages/MyPage";
+import SignIn from "../pages/auth/SignIn";
+import LocalSignIn from "../components/auth/LocalSignIn";
+import SignUp from "../pages/user/SignUp";
+import MyPage from "../pages/user/MyPage";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -49,17 +49,17 @@ const Router = () => {
           {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
           <Route path="/" element={<Home />} />
           {/* 로그인 없이 접근 가능하나 로그인이 되어있으면 접근 불가한 페이지 */}
-          <Route path="/login" element={<BlockIfLoggedIn><Login /></BlockIfLoggedIn>} />
-          <Route path="/login/local" element={<LoginForm />} />
+          <Route path="/login" element={<BlockIfLoggedIn><SignIn /></BlockIfLoggedIn>} />
+          <Route path="/login/local" element={<LocalSignIn />} />
           <Route path="/oauth" element={<BlockIfLoggedIn><OauthInfo /></BlockIfLoggedIn>} />
-          <Route path="/join" element={<BlockIfLoggedIn><Join /></BlockIfLoggedIn>} />
-          <Route path="/mypage" element={<MyPage />} />
+          {/* <Route path="/join" element={<BlockIfLoggedIn><SignUp /></BlockIfLoggedIn>} /> */}
+          <Route path="/mypage" element={<MyPage /> } />
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
-          <Route path="/club" element={<Club />}>
-            <Route path=":num" element={<ClubDetails />} />
-          </Route>
+          <Route path="/club" element={<Club />} />
+          {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}
           <Route path="/club-add" element={<AddClub />} />
           {/* WebNotificationTest 경로 추가 */}
+          
           <Route
             path="/web-notification-test"
             element={<WebNotificationTest />}

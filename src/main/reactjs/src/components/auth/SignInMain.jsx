@@ -1,29 +1,27 @@
 import React from "react";
-import Layout from "../common/Layout";
 import { Button } from "@nextui-org/react";
 import styled from "styled-components";
-import weatherLogo from "../assets/images/brand/cw3.png";
-import weatherImg from "../assets/images/sun.png";
+import weatherLogo from "../../assets/images/brand/cw3.png";
+import weatherImg from "../../assets/images/sun.png";
 import { useNavigate } from "react-router-dom";
 
+const SignInMain = () => {
+    const navigate = useNavigate();
 
-const Login = () => {
-  const navigate = useNavigate();
-
-  // 이미지 url
-  const kakaoImgUrl =
-    "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/kakao-logo_v2.png";
-  const naverImgUrl =
-    "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/naver-logo_v2.png";
-
-  // 카카오 간편 로그인
-  const onKakaoLogin = () => {
-    window.location.href =
-      "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://localhost:9002/oauth&response_type=code";
-  };
+    // 이미지 url
+    const kakaoImgUrl =
+      "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/kakao-logo_v2.png";
+    const naverImgUrl =
+      "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/naver-logo_v2.png";
+  
+    // 카카오 간편 로그인
+    const onKakaoLogin = () => {
+      window.location.href =
+        "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://localhost:9002/oauth&response_type=code";
+    };
 
   return (
-    <Layout>
+    <>
       <IconWapper>
         <LogoImg
           alt=""
@@ -43,21 +41,24 @@ const Login = () => {
           <IconImg alt="naver" src={naverImgUrl} />
           <LoginBtnText>네이버로 로그인하기</LoginBtnText>
         </LoginBtn>
-        <LoginBtn onClick={()=>navigate("/login/local")} style={{border : '1px solid rgba(0, 0, 0, 0.2)'}}>
+        <LoginBtn
+          onClick={() => navigate("/login/local")}
+          style={{ border: "1px solid rgba(0, 0, 0, 0.2)" }}
+        >
           <IconImg alt="naver" src={weatherImg} />
           <LoginBtnText>이메일로 로그인하기</LoginBtnText>
         </LoginBtn>
         <JoinWapper>
-            <JoinText onClick={()=>navigate("/join")}>회원가입</JoinText>
+          <JoinText>회원가입</JoinText>
           <Hr />
-            <JoinText>문의하기</JoinText>
+          <JoinText>문의하기</JoinText>
         </JoinWapper>
       </LoginContainer>
-    </Layout>
+    </>
   );
 };
 
-export default Login;
+export default SignInMain;
 
 export const Hr = styled.hr`
   width: 1px;

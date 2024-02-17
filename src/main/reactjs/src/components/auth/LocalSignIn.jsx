@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 import Layout from "../../common/Layout";
-import { IconWapper, LoginBtnText, LoginContainer, LogoImg, LogoWapper } from "../../pages/Login";
-import weatherImg from "../../assets/images/sun.png";
-import styled from "styled-components";
-import {Input} from "@nextui-org/react";
-import { instance } from "../../recoil/module/instance";
+import { IconWapper, LoginBtnText, LoginContainer, LogoImg, LogoWapper } from "./SignInMain";
 import { Cookies } from "react-cookie";
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { IsLoginAtom } from "../../recoil/LoginAtom";
+import {Input} from "@nextui-org/react";
+import styled from "styled-components";
+import weatherImg from "../../assets/images/sun.png";
+import { instance } from "../../recoil/module/instance";
 
 
-const LoginForm = () => {
+const LocalSignIn = () => {
     const cookies = new Cookies();
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useRecoilState(IsLoginAtom);
-    
 
-    // 로그인 form 데이터
-    const [loginData, setLoginData] = useState({
+      // 로그인 form 데이터
+      const [loginData, setLoginData] = useState({
         email: "",
         password: "",
     });
@@ -47,6 +46,7 @@ const LoginForm = () => {
         //메인 페이지로 이동
         navigate("/");
         } catch (error) {
+        alert(error.response.data.message);
         console.error(error);
         }
     }
@@ -55,30 +55,30 @@ const LoginForm = () => {
 
     
     console.log(loginData.email, loginData.password);
-  return (
-    <Layout>
-      <IconWapper>
-        <LogoImg
-          alt=""
-          src={weatherImg}
-          style={{ width: "100px", height: "100px" }}
-        />
-      </IconWapper>
-      <LogoWapper>
-        <Title>이메일로 로그인하기</Title>
-      </LogoWapper>
-      <LoginContainer>
-      <LoginInput type="email" label="이메일" name="email" onChange={onChange}/>
-      <LoginInput type="Password" label="비밀번호" name="password" onChange={onChange}/>
-      <SunlightButton style={{ marginTop : "20px", width: "90%"}}>
-        <LoginBtnText onClick={()=>submitLogin()}>로그인</LoginBtnText>
-      </SunlightButton>
-      </LoginContainer>
-    </Layout>
-  );
+    return (
+        <Layout>
+        <IconWapper>
+          <LogoImg
+            alt=""
+            src={weatherImg}
+            style={{ width: "100px", height: "100px" }}
+          />
+        </IconWapper>
+        <LogoWapper>
+          <Title>이메일로 로그인하기</Title>
+        </LogoWapper>
+        <LoginContainer>
+        <LoginInput type="email" label="이메일" name="email" onChange={onChange}/>
+        <LoginInput type="Password" label="비밀번호" name="password" onChange={onChange}/>
+        <SunlightButton style={{ marginTop : "20px", width: "90%"}}>
+          <LoginBtnText onClick={()=>submitLogin()}>로그인</LoginBtnText>
+        </SunlightButton>
+        </LoginContainer>
+      </Layout>
+    );
 };
 
-export default LoginForm;
+export default LocalSignIn;
 
 const SunlightButton = styled.button`
   background-color: #FFD700;
