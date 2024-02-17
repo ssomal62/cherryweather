@@ -1,15 +1,26 @@
-import React from "react";
-import {Badge} from "@nextui-org/react";
-import {GoBell} from "react-icons/go";
+// GoBellDropNotificationIcon.js
 
-// 알림 아이콘과 함께 뱃지를 포함한 GoBell 아이콘을 렌더링하는 함수형 컴포넌트
-export const GoBellWithNotificationIcon = ({setIsOpen, isOpen}) => {
+import React, { useState } from 'react';
+import { GoBell } from 'react-icons/go';
+import { Badge } from '@nextui-org/react';
+import DropDownNotification from './DropDownNotification'; // 새로 추가한 DropDown 컴포넌트를 import합니다.
+
+const GoBellDropNotificationIcon = ({ onClick }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
+
   return (
-    <Badge content="9+" overlap="circle" color="danger">
-      <div style={{marginTop: 8}}>
-        <GoBell onClick={() => setIsOpen(!isOpen)} />{" "}
-        {/* GoBell 아이콘을 클릭하면 setIsOpen을 호출하여 팝오버 열기/닫기 */}
+    <div onClick={onClick}>
+      <div> {/* Badge와 DropDown 컴포넌트를 하나의 div로 감싸기 */}
+        <Badge content="99+" color="danger" placement="bottom-right">
+          <GoBell onClick={toggleDropdown} style={{ fontSize: '1.5em', cursor: 'pointer' }} />
+        </Badge>
+        {isOpen && (
+          <DropDownNotification />
+        )}
       </div>
-    </Badge>
+    </div>
   );
 };
+export default GoBellDropNotificationIcon;
