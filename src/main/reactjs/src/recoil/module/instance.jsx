@@ -12,10 +12,10 @@ instance.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
     // 401 에러와 특정 메시지 확인
-    if (error.response.status === 401) {
+    if (error.response.status === 403) {
       try {
         // `/re-issue` 엔드포인트로 통신하여 새 토큰 발급 받기
-        const { data } = await instance.post('/api/re-issue', {
+        const { data } = await instance.post('/auth/re-issue', {
           accessToken : cookies.get('accessToken'),
         }, { withCredentials: true });
         

@@ -53,18 +53,18 @@ height: 24px;
 
 `;
 
-const IconWapper = styled.div`
+export const IconWapper = styled.div`
 text-align: right;
 flex: 1;
 `;
 
-const Title = styled.div`
+export const Title = styled.div`
 font-weight: 700;
 font-size: 17px;
 line-height: 20px;
 `;
 
-const TitleWapper = styled.div`
+export const TitleWapper = styled.div`
 text-overflow: ellipsis;
 white-space: nowrap;
 overflow: hidden;
@@ -74,7 +74,7 @@ flex: 2;
 
 
 
-const Nav = styled.div`
+export const Nav = styled.div`
 height: 52px;
 background: #FFFFFF;
 display: -ms-flexbox;

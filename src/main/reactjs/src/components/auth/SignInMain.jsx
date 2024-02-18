@@ -17,7 +17,7 @@ const SignInMain = () => {
     // 카카오 간편 로그인
     const onKakaoLogin = () => {
       window.location.href =
-        "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://localhost:9002/oauth&response_type=code";
+        "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://cherryweather.site/oauth&response_type=code";
     };
 
   return (
@@ -49,7 +49,7 @@ const SignInMain = () => {
           <LoginBtnText>이메일로 로그인하기</LoginBtnText>
         </LoginBtn>
         <JoinWapper>
-          <JoinText>회원가입</JoinText>
+          <JoinText onClick={()=>navigate("/join")}>회원가입</JoinText>
           <Hr />
           <JoinText>문의하기</JoinText>
         </JoinWapper>

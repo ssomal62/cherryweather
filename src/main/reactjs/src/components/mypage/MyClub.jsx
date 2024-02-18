@@ -4,7 +4,6 @@ import club1 from "../../assets/images/club/culture/1.jpg";
 import club2 from "../../assets/images/club/culture/2.jpg";
 import club3 from "../../assets/images/club/culture/3.jpg";
 import club4 from "../../assets/images/club/culture/4.jpg";
-import club5 from "../../assets/images/club/culture/5.jpg";
 
 const MyClub = () => {
 
@@ -77,7 +76,7 @@ const ClubWapperBtn = styled.button`
   border: none;
   cursor: pointer;
   text-decoration: none;
-    margin-right: 8px; /* 버튼 사이의 간격 조절 */
+    margin-right: 8px;
 
 `;
 
@@ -85,7 +84,7 @@ const ClubWapper = styled.div`
     display: flex;
     flex-wrap: wrap;
     -webkit-box-pack: justify;
-    justify-content: flex-start; /* 여기를 수정해서 버튼이 바로 옆에 붙게 만듭니다. */
+    justify-content: flex-start; 
     margin-top: 8px;
 `;
 
