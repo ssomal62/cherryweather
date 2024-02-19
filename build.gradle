@@ -129,6 +129,9 @@ processResources {
 	//dependsOn "appNpmInstall"
 }
 
+task cleanStatic(type: Delete) {
+	delete "$projectDir/src/main/resources/static/static"
+}
 
 task copyReactFile(type: Copy) {
 	dependsOn "buildReact"
@@ -146,6 +149,7 @@ task copyPrivate(type: Copy) {
 
 task buildReact(type: Exec) {
 	dependsOn "installReact"
+	dependsOn "cleanStatic" // static 디렉토리 삭제 작업에 의존합니다.
 	workingDir "$reactAppDir"
 	inputs.dir "$reactAppDir"
 	group = BasePlugin.BUILD_GROUP
