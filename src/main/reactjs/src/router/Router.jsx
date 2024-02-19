@@ -16,6 +16,14 @@ import AddClub from "../pages/club/AddClub";
 import Join from "../pages/Join";
 import LoginForm from "../components/login/LoginForm";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
+// import SignIn from "../pages/auth/SignIn";
+// import LocalSignIn from "../components/auth/LocalSignIn";
+// import SignUp from "../pages/user/SignUp";
+// import MyPage from "../pages/user/MyPage";
+// import AI_main from "../pages/ai/AI_main";
+import GPT from "../pages/ai/ChatGPT";
+// import AI_image from "../pages/ai/ImageGenerator";
+
 import ChatRoom from "../components/chat/ChatRoom";
 import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
@@ -100,6 +108,10 @@ const Router = () => {
             {/* <Route path=":num" element={<ClubDetails />} /> */}
           </Route>
           <Route path="/club-add" element={<AddClub />} />
+          {/* <Route path="/ai" element={<AI_main />} /> */}
+          <Route path="/gpt" element={<GPT />} />
+          {/* <Route path="/image" element={<AI_image />} /> */}
+
           {/* WebNotificationTest 경로 추가 */}
           <Route
             path="/web-notification-test"

@@ -6,7 +6,7 @@ import {IoMdAddCircleOutline} from "react-icons/io";
 import {HiOutlineChat} from "react-icons/hi";
 import {FiUsers} from "react-icons/fi";
 import {MdOutlineAutoMode} from "react-icons/md";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const Footer = () => {
 
@@ -27,7 +27,7 @@ const Footer = () => {
                 <Tab
                     value="ai-weather"
                     title={
-                        <div className="flex items-center flex-col ">
+                        <div className="flex items-center flex-col " onClick={ () => navigate('/ai')}>
                             <MdOutlineAutoMode style={{...styles.icon}}/>
                         </div>
                     }
