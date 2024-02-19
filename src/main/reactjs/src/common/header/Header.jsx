@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
-import {GoBell} from "react-icons/go";
+// import {GoBell} from "react-icons/go";
 import {
   Input,
   Navbar,
@@ -18,10 +18,17 @@ import {AiOutlineLogin} from "react-icons/ai";
 import {NavLink} from "react-router-dom";
 import WebNotificationTest from "../../components/webnotification/WebNotificationTest";
 import {GoBellWithNotificationIcon} from "./GoBellWithNotificationIcon";
+import { useFetchUserInfo } from "../../recoil/hooks/UseFetchUserInfo";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const isLogin = useRecoilValue(IsLoginAtom);
+
+  const fetchUserInfo = useFetchUserInfo();
+
+  useEffect(() => {
+      fetchUserInfo();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

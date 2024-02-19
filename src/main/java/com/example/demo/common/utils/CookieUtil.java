@@ -14,7 +14,7 @@ public class CookieUtil {
 
         return ResponseCookie.from(cookieName, cookieValue)
                 .httpOnly(true)
-                .secure(true)
+//                .secure(true) https를 사용하지 않는 경우 주석처리
                 .path("/")
 //                .domain(ALLOWED_ORIGINS)
                 .maxAge(REFRESH_TOKEN_EXPIRE_TIME)
