@@ -3,6 +3,7 @@ import Layout from "../common/Layout";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import TodayWeather from "../components/weather/TodayWeather";
 
+
 const Home = () => {
     return (
         <Layout>

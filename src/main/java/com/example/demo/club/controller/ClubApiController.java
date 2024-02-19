@@ -6,11 +6,13 @@ import com.example.demo.club.dto.ClubListDTO;
 import com.example.demo.club.dto.CreateClubDTO;
 import com.example.demo.club.dto.UpdateClubDTO;
 import com.example.demo.club.service.ClubService;
+import com.example.demo.common.service.FileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class ClubApiController {
 
     private final ClubService clubService;
+    private final FileService fileService;
 
     /**
      * 클럽 목록 전체 조회 (필터 없음)
@@ -37,6 +40,17 @@ public class ClubApiController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> createClub(@Valid @RequestBody CreateClubDTO requestDTO) {
         clubService.saveClub(requestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 클럽 이미지 파일 저장
+     */
+    @PostMapping("/upload")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Void> createClubProfile(
+            @RequestParam(value = "file") MultipartFile file) {
+        fileService.uploadSingleFile(file,"club-profile");
         return ResponseEntity.ok().build();
     }
 

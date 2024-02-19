@@ -26,5 +26,4 @@ public class AccountDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT));
         return new AccountDetails(account);
     }
-
 }
