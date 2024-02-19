@@ -9,8 +9,3 @@ export const IsLoginAtom = atom({
     key: "isLogin",
     default: cookies.get("accessToken") ? true : false,
 });
-
-export const RefreshTokenAtom = atom({
-    key: "refreshToken",
-    default:"",
-});
