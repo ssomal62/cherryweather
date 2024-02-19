@@ -99,6 +99,7 @@ public class AI_imageServiceImp implements AI_imageService {
             aiImage.setBucketUrl(bucketURL);
             // 엔티티를 저장하여 업데이트 반영
             aiImageRepository.save(aiImage);
+            aiImageRepository.updateCheckSaveByImageURL(requestDto.getImageURL());
             System.out.println("AI_image 엔티티의 bucket_url이 업데이트되었습니다.");
         });
         // JSON 형식의 문자열로 bucketURL 반환
