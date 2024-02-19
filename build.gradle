@@ -1,3 +1,4 @@
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
@@ -189,4 +190,5 @@ tasks.register('copyOasToSwagger', Copy) {
 	into 'src/main/resources/static/swagger-ui/'
 	dependsOn 'openapi3'
 }
+
 
