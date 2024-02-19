@@ -1,14 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
-import {GoBell} from "react-icons/go";
-import {
-    Input,
-    Navbar,
-    NavbarContent,
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@nextui-org/react";
+import {Input, Navbar, NavbarContent, Popover, PopoverContent, PopoverTrigger,} from "@nextui-org/react";
 import {SearchIcon} from "./SearchIcon";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
@@ -18,20 +10,27 @@ import {AiOutlineLogin} from "react-icons/ai";
 import {NavLink} from "react-router-dom";
 import WebNotificationTest from "../../components/webnotification/WebNotificationTest";
 import {GoBellWithNotificationIcon} from "./GoBellWithNotificationIcon";
+import {useFetchUserInfo} from "../../recoil/hooks/UseFetchUserInfo";
 
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
     const isLogin = useRecoilValue(IsLoginAtom);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsOpen(false); // Close PopoverContent when scrolled
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
+  const fetchUserInfo = useFetchUserInfo();
+
+  useEffect(() => {
+      fetchUserInfo();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsOpen(false); // Close PopoverContent when scrolled
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
     return (
         <Navbar shouldHideOnScroll>

@@ -38,7 +38,7 @@ const Container = styled.div`
   margin: ${({ margin }) => margin};
 `;
 
-const Root = styled.div`
+export const Root = styled.div`
   max-width: 600px;
   width: 100%;
   height: 100%;
