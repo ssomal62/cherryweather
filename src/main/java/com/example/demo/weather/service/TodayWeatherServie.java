@@ -29,6 +29,7 @@ public class TodayWeatherServie {
     private final String baseDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     private final String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
+    /* 오늘 단기 예보 조회*/
     public List<TodayWeatherReqDto> getTodayWeather() {
 
         String functionName = "getVilageFcst";
@@ -87,6 +88,7 @@ public class TodayWeatherServie {
         }
     }
 
+    /* GeoLocation을 사용해서 위치값 받아오기*/
     public List<TodayWeatherResDto> getFormattedTodayWeather() {
         GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
         int nx = (int) geoLocationResDto.getNx();
@@ -100,7 +102,7 @@ public class TodayWeatherServie {
         return formatWeatherData(weatherDataList, nx, ny, r1, r2, r3);
     }
 
-
+    /* JSON 데이터로 파싱 */
     private List<TodayWeatherReqDto> parseJsonResponse(String response) {
         List<TodayWeatherReqDto> todayWeatherList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -131,6 +133,7 @@ public class TodayWeatherServie {
         return todayWeatherList;
     }
 
+    /* 모든 값을 받아와서 ResDto 생성 */
     public List<TodayWeatherResDto> formatWeatherData(List<TodayWeatherReqDto> weatherDataList, int nx, int ny, String r1, String r2, String r3) {
         Map<String, TodayWeatherResDto.TodayWeatherResDtoBuilder> builders = new HashMap<>();
 
@@ -196,6 +199,7 @@ public class TodayWeatherServie {
                        .collect(Collectors.toList());
     }
 
+    /* 현재 날씨 요약 정보 */
     public DailyWeatherDto getDailyWeather(List<TodayWeatherResDto> todayWeatherList) {
         DailyWeatherDto.DailyWeatherDtoBuilder builder = DailyWeatherDto.builder();
         String minTemp = null;
@@ -257,4 +261,9 @@ public class TodayWeatherServie {
                 return "날씨 정보 조회 실패";
         }
     }
+    //
+    // /* 오늘 시간별 날씨 */
+    // public List<OneDayWeatherDto> getOneDayWeather(){
+    //
+    // }
 }
