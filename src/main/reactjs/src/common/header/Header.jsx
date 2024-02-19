@@ -88,7 +88,12 @@ export default function Header() {
         <BrandMenu />
       </NavbarContent>
 
-      <NavbarContent as="div" className="items-center" justify="end">
+      <NavbarContent
+        as="div"
+        className="items-center"
+        justify="end"
+        style={{position: "relative"}}
+      >
         <IoOptionsOutline style={styles.icon} />
 
         <Popover

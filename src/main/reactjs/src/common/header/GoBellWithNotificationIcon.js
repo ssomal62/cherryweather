@@ -20,24 +20,28 @@ const GoBellDropNotificationIcon = ({onClick}) => {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   return (
-    <div
-      style={{position: "relative", cursor: "pointer", alignItems: "center"}}
-    >
+    <>
       <div
-        style={{position: "relative", display: "inline-block", marginTop: 25}}
+        style={{position: "relative", display: "flex", alignItems: "center"}}
       >
-        <GoBell style={{fontSize: "1.4em"}} onClick={handleBellClick} />
+        <GoBell
+          style={{
+            fontSize: "1.4em",
+            position: "relative",
+          }}
+          onClick={handleBellClick}
+        />
         {isLogin && (
           <Badge
             content="99+"
             color="danger"
-            placement="top-right" // 배지를 위로 올리기 위해 placement를 top-right로 변경합니다.
-            style={{position: "absolute", top: "-45px", right: "-18px"}} // 위치를 조정합니다.
+            style={{position: "absolute", top: "-20px", right: "0px"}} // 위치를 조정합니다.
           />
         )}
+
+        {isLogin && isOpen && <DropDownNotification />}
       </div>
-      {isLogin && isOpen && <DropDownNotification />}
-    </div>
+    </>
   );
 };
 
