@@ -6,7 +6,7 @@ import GeneratedImage from "./GeneratedImage";
 import {Spinner} from "@nextui-org/react";
 
 const ImagePreview = () => {
-
+    const [isActive, setIsActive] = useState(false);
     const fetchURL = useFetchImage();
     const image = useRecoilValue(imageURLState);
     const [isLoading, setIsLoading] = useState(false); // isLoading 상태 추가
@@ -23,8 +23,9 @@ const ImagePreview = () => {
 
     return (
         <CenteredContainer>
+
             {isLoading ? (
-                <Spinner size="lg" label="이미지 생성중" color="primary" labelColor="primary" />
+                <Spinner size="lg" label="이미지 생성중" color="danger" labelColor="danger" />
             ) : (
                 <CardListItemWrapper>
                     <GeneratedImage image={image} />

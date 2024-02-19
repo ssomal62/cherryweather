@@ -25,7 +25,7 @@ export default function Widget() {
                     </div>
                     <ul className="list">
                         <li onClick={ () => navigate('/image')}>1</li>
-                        <li onClick={ () => navigate('/')}>2</li>
+                        <li onClick={ () => navigate('/imageList')}>2</li>
                         <li onClick={ () => navigate('/')}>3</li>
                     </ul>
                 </div>
