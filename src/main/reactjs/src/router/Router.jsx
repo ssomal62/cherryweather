@@ -15,6 +15,9 @@ import ClubDetails from "../pages/club/ClubDetails";
 import Join from "../pages/Join";
 import LoginForm from "../components/login/LoginForm";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
+import ClubConfigurations from "../pages/club/ClubConfigurations";
+import ClubMembers from "../pages/club/ClubMembers";
+import ClubJoin from "../pages/club/ClubJoin";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -44,6 +47,7 @@ const Router = () => {
     <BrowserRouter>
       <Suspense fallback={<div>로딩중..잠만기달...</div>}>
         {/* Suspense는 레이즈 라우터 사용시 컴포넌트가 로드되는 동안 표시하는 화면을 출력할 수 있다*/}
+
         <Routes>
           {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
           <Route path="/" element={<Home />} />
@@ -54,10 +58,17 @@ const Router = () => {
           <Route path="/join" element={<BlockIfLoggedIn><Join /></BlockIfLoggedIn>} />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
-          <Route path="/club" element={<Club />}>
-            <Route path=":num" element={<ClubDetails />} />
-          </Route>
+
+
+          <Route path="/clubs" element={<Club />} />
+          <Route path="/club-details/:clubId" element={<ClubDetails />} />
           <Route path="/club-add" element={<AddClub />} />
+          <Route path="/club-configurations" element={<ClubConfigurations />} />
+          <Route path="/club-members" element={<ClubMembers />} />
+          <Route path="/club-members" element={<ClubMembers />} />
+          <Route path="/club-join" element={<ClubJoin />} />
+
+
           {/* WebNotificationTest 경로 추가 */}
           <Route
             path="/web-notification-test"

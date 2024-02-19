@@ -19,7 +19,7 @@ const Footer = () => {
                     value="home"
                     title={
                         <div className="flex items-center flex-col " onClick={ () => navigate('/')}>
-                            <HiOutlineHome style={{...styles.icon}}/>
+                            <HiOutlineHome style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -28,7 +28,7 @@ const Footer = () => {
                     value="ai-weather"
                     title={
                         <div className="flex items-center flex-col ">
-                            <MdOutlineAutoMode style={{...styles.icon}}/>
+                            <MdOutlineAutoMode style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -37,7 +37,7 @@ const Footer = () => {
                     value="add"
                     title={
                         <div className="flex items-center flex-col " onClick={ () => navigate('/club-add') }>
-                            <IoMdAddCircleOutline style={{...styles.icon}}/>
+                            <IoMdAddCircleOutline style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -45,8 +45,8 @@ const Footer = () => {
                 <Tab
                     value="club"
                     title={
-                        <div className="flex items-center flex-col" onClick={() => navigate('/club')}>
-                            <FiUsers style={{...styles.icon}}/>
+                        <div className="flex items-center flex-col" onClick={() => navigate('/clubs')}>
+                            <FiUsers style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -55,7 +55,7 @@ const Footer = () => {
                     value="chat"
                     title={
                         <div className="flex items-center flex-col ">
-                            <HiOutlineChat style={{...styles.icon}}/>
+                            <HiOutlineChat style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
