@@ -7,26 +7,21 @@ import { IsLoginAtom } from "../recoil/LoginAtom";
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 import Club from "../pages/club/Club";
-import Login from "../pages/Login";
-import Chat from "../pages/chat/Chat";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
 // import ClubDetails from "../pages/club/ClubDetails";
-import Join from "../pages/Join";
-import LoginForm from "../components/login/LoginForm";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
-// import SignIn from "../pages/auth/SignIn";
-// import LocalSignIn from "../components/auth/LocalSignIn";
-// import SignUp from "../pages/user/SignUp";
-// import MyPage from "../pages/user/MyPage";
-// import AI_main from "../pages/ai/AI_main";
-import GPT from "../pages/ai/ChatGPT";
-// import AI_image from "../pages/ai/ImageGenerator";
+import SignIn from "../pages/auth/SignIn";
+import LocalSignIn from "../components/auth/LocalSignIn";
+import SignUp from "../pages/user/SignUp";
+import MyPage from "../pages/user/MyPage";
+import AI_main from "../pages/ai/AI_main";
 
-import ChatRoom from "../components/chat/ChatRoom";
+import Chat from "../pages/chat/Chat";
 import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
+import ChatRoom from "../components/chat/ChatRoom";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -64,18 +59,11 @@ const Router = () => {
             path="/login"
             element={
               <BlockIfLoggedIn>
-                <Login />
+                <SignIn />
               </BlockIfLoggedIn>
             }
           />
-          <Route
-            path="/login/local"
-            element={
-              <BlockIfLoggedIn>
-                <LoginForm />
-              </BlockIfLoggedIn>
-            }
-          />
+          <Route path="/login/local" element={<LocalSignIn />} />
           <Route
             path="/oauth"
             element={
@@ -88,13 +76,18 @@ const Router = () => {
             path="/join"
             element={
               <BlockIfLoggedIn>
-                <Join />
+                <SignUp />
               </BlockIfLoggedIn>
             }
           />
-
+          <Route path="/mypage" element={<MyPage />} />
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />} />
+          {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}
+          {/*<Route path=":num" element={<ClubDetails />} />*/}
+
+          <Route path="/club-add" element={<AddClub />} />
+          <Route path="/ai" element={<AI_main />} />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
@@ -104,15 +97,8 @@ const Router = () => {
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
           <Route path="/event" element={<Event />} />
 
-          <Route path="/club" element={<Club />}>
-            {/* <Route path=":num" element={<ClubDetails />} /> */}
-          </Route>
-          <Route path="/club-add" element={<AddClub />} />
-          {/* <Route path="/ai" element={<AI_main />} /> */}
-          <Route path="/gpt" element={<GPT />} />
-          {/* <Route path="/image" element={<AI_image />} /> */}
-
           {/* WebNotificationTest 경로 추가 */}
+
           <Route
             path="/web-notification-test"
             element={<WebNotificationTest />}
