@@ -38,7 +38,7 @@ public class MembershipApiController {
     /**
      * 멤버십 조회
      */
-    @GetMapping("/query")
+    @PostMapping("/query")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MembershipListDTO> findAllMembershipByAccountId(
             @RequestBody MembershipQueryDTO membershipQueryDTO

@@ -37,6 +37,9 @@ public class Club {
     @Column(length = 200)
     private String description;
 
+    @Column(length = 3000)
+    private String notice;
+
     @Column
     private String joinApprovalStatus;
 
