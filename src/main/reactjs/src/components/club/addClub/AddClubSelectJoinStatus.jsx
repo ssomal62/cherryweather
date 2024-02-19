@@ -28,7 +28,7 @@ const AddClubSelectJoinStatus = ({onNext, joinApprovalStatus, setJoinApprovalSta
                 <br/><br/>
 
                 <Button
-                    startContent={<PiSignInBold style={{...styles.icon}}/>}
+                    startContent={<PiSignInBold style={styles.icon}/>}
                     fullWidth
                     color={selectedButton === 'join' ? 'danger' : 'default'}
                     variant='solid'
@@ -45,7 +45,7 @@ const AddClubSelectJoinStatus = ({onNext, joinApprovalStatus, setJoinApprovalSta
                 <br/><br/>
 
                 <Button
-                    startContent={<MdAccessTime style={{...styles.icon}}/>}
+                    startContent={<MdAccessTime style={styles.icon}/>}
                     fullWidth
                     color={selectedButton === 'approval' ? 'danger' : 'default'}
                     variant='solid'
@@ -59,14 +59,12 @@ const AddClubSelectJoinStatus = ({onNext, joinApprovalStatus, setJoinApprovalSta
                 </span>
                 </Button>
 
-
                 <br/>
                 <br/>
                 <br/>
                 <NextButton isNextDisabled={isNextDisabled} onNext={onNext}/>
             </>
-        )
-            ;
+        );
     }
 ;
 

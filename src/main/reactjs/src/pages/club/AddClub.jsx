@@ -39,9 +39,9 @@ const AddClub = () => {
             name              : name,
             description       : description,
             code              : code,
+            status            : "PUBLIC",
             category          : category,
             subCategory       : subCategory,
-            status            : "PUBLIC",
             activitiesArea    : activitiesArea,
             joinApprovalStatus: joinApprovalStatus,
         };

@@ -32,11 +32,11 @@ const AddClubInputActivitiesArea = ({onSave, activitiesArea, setActivitiesArea})
             <br/><br/>
 
             <Input type='text' value={selectedArea} onClick={onOpen}
-                   startContent={<HiLocationMarker style={{...styles.icon}}/>}
+                   startContent={<HiLocationMarker style={styles.icon}/>}
                    placeholder="예시 : 강남구 신사동"
             />
             <br/>
-            <div style={{...styles.description}}>
+            <div style={styles.description}>
             <LuAlertCircle style={{marginLeft:5, marginRight:5, float:'left'}}/>
             <span className="text-tiny">주소를 선택하면 지역이 등록됩니다.</span>
             </div>
