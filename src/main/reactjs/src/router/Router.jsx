@@ -48,10 +48,38 @@ const Router = () => {
           {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
           <Route path="/" element={<Home />} />
           {/* 로그인 없이 접근 가능하나 로그인이 되어있으면 접근 불가한 페이지 */}
-          <Route path="/login" element={<BlockIfLoggedIn><Login /></BlockIfLoggedIn>} />
-          <Route path="/login/local" element={<BlockIfLoggedIn><LoginForm /></BlockIfLoggedIn>} />
-          <Route path="/oauth" element={<BlockIfLoggedIn><OauthInfo /></BlockIfLoggedIn>} />
-          <Route path="/join" element={<BlockIfLoggedIn><Join /></BlockIfLoggedIn>} />
+          <Route
+            path="/login"
+            element={
+              <BlockIfLoggedIn>
+                <Login />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route
+            path="/login/local"
+            element={
+              <BlockIfLoggedIn>
+                <LoginForm />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route
+            path="/oauth"
+            element={
+              <BlockIfLoggedIn>
+                <OauthInfo />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route
+            path="/join"
+            element={
+              <BlockIfLoggedIn>
+                <Join />
+              </BlockIfLoggedIn>
+            }
+          />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           {/* <Route path="/club" element={<Club />}>

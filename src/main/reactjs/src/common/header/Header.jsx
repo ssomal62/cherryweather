@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { IoOptionsOutline, IoSearchOutline } from "react-icons/io5";
+import React, {useEffect, useState} from "react";
+import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
 import {
   Input,
   Navbar,
@@ -8,19 +8,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@nextui-org/react";
-import { SearchIcon } from "./SearchIcon";
+import {SearchIcon} from "./SearchIcon";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
-import { useRecoilValue } from "recoil";
-import { IsLoginAtom } from "../../recoil/LoginAtom";
-import { AiOutlineLogin } from "react-icons/ai";
-import { NavLink } from "react-router-dom";
-import GoBellWithNotificationIcon from "./GoBellWithNotificationIcon";
-
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../../recoil/LoginAtom";
+import {AiOutlineLogin} from "react-icons/ai";
+import {NavLink} from "react-router-dom";
+import GoBellDropNotificationIcon from "./GoBellWithNotificationIcon";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const isLogin = useRecoilValue(IsLoginAtom);
+  const [registration, setRegistration] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +31,56 @@ export default function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    // Service Worker 등록
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/serviceWorker.js")
+        .then((reg) => {
+          console.log("Service Worker 등록 성공:", reg);
+          setRegistration(reg);
+        })
+        .catch((error) => {
+          console.log("Service Worker 등록 실패:", error);
+        });
+    } else {
+      console.log("Service Worker를 지원하지 않습니다.");
+    }
+  }, []);
+
+  const makeNotiTest = () => {
+    // 함수 내용은 기존 WebNotificationTest 컴포넌트의 makeNotiTest 함수를 참고하여 이동시켜주세요.
+    if (isLogin) {
+      if (Notification.permission === "granted") {
+        const options = {
+          body: "오늘의 날씨는",
+          icon: require("../../assets/images/sun.png"),
+          requireInteraction: true,
+        };
+
+        if (registration) {
+          registration.showNotification("cherryWeather", options);
+        } else {
+          console.log("Service Worker가 아직 등록되지 않았습니다.");
+        }
+      } else if (Notification.permission === "denied") {
+        console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+        alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+      } else {
+        Notification.requestPermission().then((permission) => {
+          if (permission === "granted") {
+            makeNotiTest();
+          } else {
+            console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+            alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+          }
+        });
+      }
+    } else {
+      alert("로그인이 필요합니다.");
+    }
+  };
 
   return (
     <Navbar shouldHideOnScroll>
@@ -68,8 +118,7 @@ export default function Header() {
             />
           </PopoverContent>
         </Popover>
-        {/* 웹 알림 테스트를 위해 해당 아이콘만 렌더링합니다. */}
-        <GoBellWithNotificationIcon />
+        <GoBellDropNotificationIcon onClick={makeNotiTest} />
         {isLogin ? (
           <AvatarMenu />
         ) : (

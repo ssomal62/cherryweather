@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { IsLoginAtom } from "../../recoil/LoginAtom";
-import GoBellWithNotificationIcon from '../../common/header/GoBellWithNotificationIcon';
+import React, {useEffect, useState} from "react";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../../recoil/LoginAtom";
+import GoBellDropNotificationIcon from "../../common/header/GoBellWithNotificationIcon";
 
 const WebNotificationTest = () => {
   const [registration, setRegistration] = useState(null);
@@ -24,7 +24,7 @@ const WebNotificationTest = () => {
   }, []);
 
   const makeNotiTest = () => {
-    if (isLogin || true) { // 항상 보이도록 수정
+    if (isLogin) {
       if (Notification.permission === "granted") {
         const options = {
           body: "오늘의 날씨는",
@@ -57,11 +57,8 @@ const WebNotificationTest = () => {
 
   return (
     <div>
-      {isLogin && (
-        <GoBellWithNotificationIcon onClick={makeNotiTest} />
-      )}
+      <GoBellDropNotificationIcon onClick={makeNotiTest} />
     </div>
   );
 };
-
 export default WebNotificationTest;

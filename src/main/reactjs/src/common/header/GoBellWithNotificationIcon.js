@@ -1,26 +1,44 @@
-// GoBellDropNotificationIcon.js
+import React, {useState} from "react";
+import {GoBell} from "react-icons/go";
+import {Badge} from "@nextui-org/react";
+import DropDownNotification from "./DropDownNotification";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../../recoil/LoginAtom";
 
-import React, { useState } from 'react';
-import { GoBell } from 'react-icons/go';
-import { Badge } from '@nextui-org/react';
-import DropDownNotification from './DropDownNotification'; // 새로 추가한 DropDown 컴포넌트를 import합니다.
-
-const GoBellDropNotificationIcon = ({ onClick }) => {
+const GoBellDropNotificationIcon = ({onClick}) => {
   const [isOpen, setIsOpen] = useState(false);
+  const isLogin = useRecoilValue(IsLoginAtom);
+
+  const handleBellClick = () => {
+    if (isLogin) {
+      toggleDropdown();
+    }
+    // 로그인 상태와 상관없이 알림 테스트 함수를 호출합니다.
+    onClick();
+  };
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   return (
-    <div onClick={onClick}>
-      <div> {/* Badge와 DropDown 컴포넌트를 하나의 div로 감싸기 */}
-        <Badge content="99+" color="danger" placement="bottom-right">
-          <GoBell onClick={toggleDropdown} style={{ fontSize: '1.5em', cursor: 'pointer' }} />
-        </Badge>
-        {isOpen && (
-          <DropDownNotification />
+    <div
+      style={{position: "relative", cursor: "pointer", alignItems: "center"}}
+    >
+      <div
+        style={{position: "relative", display: "inline-block", marginTop: 25}}
+      >
+        <GoBell style={{fontSize: "1.4em"}} onClick={handleBellClick} />
+        {isLogin && (
+          <Badge
+            content="99+"
+            color="danger"
+            placement="top-right" // 배지를 위로 올리기 위해 placement를 top-right로 변경합니다.
+            style={{position: "absolute", top: "-45px", right: "-18px"}} // 위치를 조정합니다.
+          />
         )}
       </div>
+      {isLogin && isOpen && <DropDownNotification />}
     </div>
   );
 };
+
 export default GoBellDropNotificationIcon;
