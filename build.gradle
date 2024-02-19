@@ -108,6 +108,7 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+
 // React build 설정
 def reactAppDir = "$projectDir/src/main/reactjs"
 def secretFileDir = "$projectDir"
@@ -189,3 +190,4 @@ tasks.register('copyOasToSwagger', Copy) {
 	into 'src/main/resources/static/swagger-ui/'
 	dependsOn 'openapi3'
 }
+

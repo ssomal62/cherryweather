@@ -18,6 +18,7 @@ import LoginForm from "../components/login/LoginForm";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
 import ChatRoom from "../components/chat/ChatRoom";
 import Event from "../pages/event/Event";
+import Adminchat from "../components/chat/Adminchat";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -51,10 +52,38 @@ const Router = () => {
           {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
           <Route path="/" element={<Home />} />
           {/* 로그인 없이 접근 가능하나 로그인이 되어있으면 접근 불가한 페이지 */}
-          <Route path="/login" element={<BlockIfLoggedIn><Login /></BlockIfLoggedIn>} />
-          <Route path="/login/local" element={<BlockIfLoggedIn><LoginForm /></BlockIfLoggedIn>} />
-          <Route path="/oauth" element={<BlockIfLoggedIn><OauthInfo /></BlockIfLoggedIn>} />
-          <Route path="/join" element={<BlockIfLoggedIn><Join /></BlockIfLoggedIn>} />
+          <Route
+            path="/login"
+            element={
+              <BlockIfLoggedIn>
+                <Login />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route
+            path="/login/local"
+            element={
+              <BlockIfLoggedIn>
+                <LoginForm />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route
+            path="/oauth"
+            element={
+              <BlockIfLoggedIn>
+                <OauthInfo />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route
+            path="/join"
+            element={
+              <BlockIfLoggedIn>
+                <Join />
+              </BlockIfLoggedIn>
+            }
+          />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />} />
@@ -62,8 +91,8 @@ const Router = () => {
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
           <Route path="/chat" element={<Chat />} />
-          <Route path="/chat/room/:channelId" element={<ChatRoom />} />
-
+          <Route path="/chat/room/:chatRoom/" element={<ChatRoom />} />
+          <Route path="/chat/admin" element={<Adminchat />} />
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
           <Route path="/event" element={<Event />} />
 
