@@ -1,10 +1,6 @@
 package com.example.demo.weather.controller;
 
-import com.example.demo.weather.dto.NowWeatherReqDto;
-import com.example.demo.weather.dto.NowWeatherResDto;
-import com.example.demo.weather.dto.TodayWeatherReqDto;
-import com.example.demo.weather.dto.TodayWeatherResDto;
-import com.example.demo.weather.service.GeoLocationService;
+import com.example.demo.weather.dto.*;
 import com.example.demo.weather.service.NowWeatherService;
 import com.example.demo.weather.service.TodayWeatherServie;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +39,10 @@ public class WeatherController {
     @GetMapping("/today")
     public List<TodayWeatherResDto> getFormattedTodayWeather() {
         return todayWeatherServie.getFormattedTodayWeather();
+    }
+
+    @GetMapping("/daily")
+    public DailyWeatherDto getDailyWeather() {
+        return todayWeatherServie.getDailyWeather(todayWeatherServie.getFormattedTodayWeather());
     }
 }
