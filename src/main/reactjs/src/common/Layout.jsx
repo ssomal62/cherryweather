@@ -39,7 +39,7 @@ const Container = styled.div`
   margin: 20px;
 `;
 
-const Root = styled.div`
+export const Root = styled.div`
   max-width: 600px;
   width: 100%;
   height: 100%;

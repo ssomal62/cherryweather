@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import Layout from '../common/Layout';
-import axios from "axios";
 import { Cookies } from "react-cookie";
 import { useRecoilState } from "recoil";
 import { IsLoginAtom } from "../recoil/LoginAtom";
+import { instance } from '../recoil/module/instance';
 
 const OauthInfo = () => {
 
@@ -25,7 +25,7 @@ const OauthInfo = () => {
     
       const sendTokenToServer = async (code) => {
         try {
-          const response = await axios.post("http://localhost:9002/api/oauth/kakao/sign-in", {
+          const response = await instance.post("/oauth/kakao/sign-in", {
             authCode: code, // 카카오 로그인 성공 후 받은 인증 코드
             provider: "KAKAO",
           });
