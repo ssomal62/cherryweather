@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
 import { useState } from 'react';
 import './widget.css';
+import {useNavigate} from "react-router-dom";
 
 export default function Widget() {
     const [isActive, setIsActive] = useState(false);
-
+    const navigate = useNavigate();
     const handleToggleClick = () => {
         setIsActive(!isActive);
     };
@@ -23,22 +24,11 @@ export default function Widget() {
                         <i></i>
                     </div>
                     <ul className="list">
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li onClick={ () => navigate('/image')}>1</li>
+                        <li onClick={ () => navigate('/')}>2</li>
+                        <li onClick={ () => navigate('/')}>3</li>
                     </ul>
                 </div>
-                <a
-                    className="dribbble"
-                    href="https://dribbble.com/shots/7197834-Menu-Interaction-Concept"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    <img
-                        src="https://dribbble.com/assets/logo-small-2x-9fe74d2ad7b25fba0f50168523c15fda4c35534f9ea0b1011179275383035439.png"
-                        alt=""
-                    />
-                </a>
             </div>
         </>
     );

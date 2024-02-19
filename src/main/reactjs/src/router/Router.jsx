@@ -7,6 +7,7 @@ import {IsLoginAtom} from "../recoil/LoginAtom";
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 import Club from "../pages/club/Club";
+// import Login from "../pages/Login";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
@@ -17,6 +18,9 @@ import LocalSignIn from "../components/auth/LocalSignIn";
 import SignUp from "../pages/user/SignUp";
 import MyPage from "../pages/user/MyPage";
 import AI_main from "../pages/ai/AI_main";
+import GPT from "../pages/ai/ChatGPT";
+import AI_image from "../pages/ai/ImageGenerator";
+
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -62,11 +66,12 @@ const Router = () => {
 
           <Route path="/club-add" element={<AddClub />} />
           <Route path="/ai" element={<AI_main />} />
+          <Route path="/gpt" element={<GPT />} />
+          <Route path="/image" element={<AI_image />} />
 
 
 
           {/* WebNotificationTest 경로 추가 */}
-
           <Route
             path="/web-notification-test"
             element={<WebNotificationTest />}

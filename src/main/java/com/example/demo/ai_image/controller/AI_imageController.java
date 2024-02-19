@@ -42,6 +42,7 @@ public class AI_imageController {
     @PostMapping("/save")
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
+    @Transactional
     public String uploadImage(final @AuthenticationPrincipal AccountDetails accountDetails, @Valid @RequestBody ImageUploadRequestDto requestDto) {
        return aiImageService.uploadImage(accountDetails,requestDto);
     }

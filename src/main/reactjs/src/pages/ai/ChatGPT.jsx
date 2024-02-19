@@ -5,7 +5,7 @@ import ChatHeader from "../../components/ai/GPT/ChatHeader";
 const ChatGpt = () => {
     return (
         <Layout>
-            <ChatHeader/>
+
         </Layout>
     );
 };
