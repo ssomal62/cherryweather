@@ -1,10 +1,8 @@
-// import axios from 'axios';
-import {atom, useSetRecoilState} from 'recoil';
+import {atom, useRecoilState, useSetRecoilState} from 'recoil';
 import {useCallback} from "react";
-// import {instance} from "../module/instance";
-import axios from "axios";
 import {instance} from "../module/instance";
 import {Cookies} from "react-cookie";
+import {HeartFill} from "./UseSaveState";
 
 export const imageURLState = atom({
     key: 'imageURLState',
@@ -14,8 +12,12 @@ export const imageURLState = atom({
 export const useFetchImage = () => {
     const setImageURL = useSetRecoilState(imageURLState); // 값을 불러오기 위한 문법
     const cookie = new Cookies();
+    const [heart, setHeart] = useRecoilState(HeartFill); // HeartFill 상태 사용
     return useCallback(async () => {
         try {
+            setHeart(false);
+            setImageURL([]); // 이미지 URL 상태 초기화
+
             const token = cookie.get('accessToken'); // 로컬 스토리지에서 JWT 토큰을 가져옵니다
             console.log("token:"+token);
             const config = {headers: { Authorization: `Bearer ${token}`}}

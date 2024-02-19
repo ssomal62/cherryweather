@@ -1,11 +1,11 @@
 import React from 'react';
 import Layout from '../../common/Layout';
-import ImageList from "../../components/ai/image/ImageList";
+import ImagePreview from "../../components/ai/image/ImagePreview";
 
 const ImageGenerator = () => {
     return (
         <Layout >
-            <ImageList/>
+            <ImagePreview/>
         </Layout>
     );
 };

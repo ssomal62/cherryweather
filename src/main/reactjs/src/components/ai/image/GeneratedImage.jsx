@@ -4,17 +4,25 @@ import {TiLocation} from "react-icons/ti";
 import {IoChatbubbleEllipses} from "react-icons/io5";
 import {BsFillPeopleFill} from "react-icons/bs";
 import {HeartIcon} from "./HeartIcon";
-// import {useNavigate} from "react-router-dom";
+import {HeartFill, useSaveImageState, UseSaveState} from "../../../recoil/hooks/UseSaveState";
+import {useRecoilValue} from "recoil";
 
 const GeneratedImage = ({image}) => {
 
-    // const navigate = useNavigate(); // useNavigate hook 사용
+    const { toggleSaveImage } = useSaveImageState(); // useSaveImageState 훅을 호출하여 toggleSaveImage 함수를 가져옵니다.
     const handleClick = () => {
         const newWindow = window.open(image, '_blank');
         if (newWindow) {
             newWindow.opener = null; // 새 창의 opener를 null로 설정하여 보안 상의 이슈를 방지합니다.
         }
     };
+    const handleSaveClick = async () => {
+        await toggleSaveImage(image);
+    };
+
+    // 수정: saveImageStatus 대신 isSaved 값 직접 사용
+    const isSaved = useRecoilValue(HeartFill);
+    console.log("isSaved="+isSaved);
     return (
         <Card
             isFooterBlurred
@@ -50,8 +58,8 @@ const GeneratedImage = ({image}) => {
                         >
                             <HeartIcon
                                 style={{color: 'white'}}
-                                // className={liked ? "[&>path]:stroke-transparent" : ""}
-                                // fill={liked ? "currentColor" : "none"}
+                                className={isSaved ? "[&>path]:stroke-transparent" : ""}
+                                fill={isSaved ? "red" : "none"}
                             />
                         </Button>
                     </div>
@@ -75,9 +83,16 @@ const GeneratedImage = ({image}) => {
                 <IoChatbubbleEllipses style={{...styles.icon}}/>
                 <p className="text-tiny text-black">맑음</p>
 
-                <Button className="text-tiny text-success font-semibold" variant="light" color="success" radius="lg"
-                        size="sm">
-                    저장하기
+                <Button
+                    className="text-tiny text-success font-semibold"
+                    variant="light"
+                    color="success"
+                    radius="lg"
+                    size="sm"
+                    onClick={handleSaveClick}
+                    disabled={isSaved} // isSaved 값이 true일 때만 disabled
+                >
+                    {isSaved ? "저장 완료" : "저장하기"} {/* isSaved에 따라 텍스트 변경 */}
                 </Button>
             </CardFooter>
         </Card>
