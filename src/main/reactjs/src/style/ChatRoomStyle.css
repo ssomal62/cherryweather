@@ -1,0 +1,166 @@
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  /* 뷰포트 높이를 기준으로 전체 높이 설정 */
+}
+
+.user {
+  border-bottom: 1px solid #716d6d;
+  padding: 10px;
+  width: 95%;
+}
+
+.user_data {
+  background-color: #f8f9fa !important;
+  border-top: 5px solid #716d6d;
+  max-height: calc(100vh);
+}
+
+.user_chat_data {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  /* 채팅 영역이 가능한 모든 공간을 차지하도록 설정 */
+  overflow: hidden;
+  /* 자식 요소가 넘칠 경우 숨김 */
+}
+
+.channel_list {
+  flex-grow: 0;
+  /* 채널 목록 영역이 내용 크기만큼만 공간을 차지하도록 설정 */
+}
+
+.chat_section {
+  padding-top: 15px;
+  flex-grow: 1;
+  /* 채팅 메시지 영역이 가능한 모든 공간을 차지하도록 설정 */
+  overflow-y: auto;
+  /* 세로 방향으로만 스크롤 가능하도록 설정 */
+  padding-bottom: 120px;
+  /* 메시지 입력 영역과 겹치지 않도록 하단에 여백 추가 */
+}
+
+.profile_name {
+  background-color: #f8f9fa !important;
+  width: 100%;
+  padding: 10px;
+  border-bottom: 5px solid #716d6d;
+}
+
+.incoming_msg_img {
+  display: inline-block;
+  width: 6%;
+}
+
+.received_msg {
+  display: inline-block;
+  padding: 0 0 0 10px;
+  vertical-align: top;
+  width: 92%;
+}
+
+.received_withd_msg p {
+  background: #ebebeb none repeat scroll 0 0;
+  border-radius: 6px;
+  color: #646464;
+  font-size: 14px;
+  margin: 0;
+  padding: 5px 10px 5px 12px;
+  width: 100%;
+}
+
+.time_date {
+  color: #747474;
+  display: block;
+  font-size: 10px;
+  margin: 8px 0 0;
+}
+
+.received_withd_msg {
+  width: 57%;
+}
+
+.mesgs {
+  float: left;
+  padding: 30px 15px 0 25px;
+  width: 60%;
+}
+
+.sent_msg p {
+  background: #050f8f none repeat scroll 0 0;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 0;
+  color: #fff;
+  padding: 5px 10px 5px 12px;
+  width: 100%;
+}
+
+.outgoing_msg {
+  overflow: hidden;
+  margin: 26px 0 26px;
+}
+
+.sent_msg {
+  float: right;
+  width: 60%;
+}
+
+.input_msg_write input {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: medium none;
+  color: #4c4c4c;
+  font-size: 15px;
+  min-height: 48px;
+  width: 100%;
+  padding: 10px;
+}
+
+.write_msg {
+  flex-grow: 1;
+  /* 입력 필드가 가능한 모든 공간을 차지하도록 설정 */
+  margin: 10px;
+  /* 주변 요소와의 여백 설정 */
+}
+
+.type_msg {
+  border-top: 1px solid #c4c4c4;
+  position: fixed;
+  bottom: 0;
+  width: calc(100% - 30px);
+  /* 컨테이너의 패딩을 고려하여 너비 조정 */
+  background-color: white;
+  /* 입력 영역 배경색 설정 */
+}
+
+.msg_send_btn {
+  cursor: pointer;
+  font-size: 17px;
+  height: 33px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  /* 부모 요소인 .input_msg_write 기준으로 세로 중앙에 위치시키기 위해 top 값을 50%로 설정 */
+  transform: translateY(-50%);
+  width: 33px;
+}
+
+.sent-message {
+  float: right;
+  /* 아바타를 오른쪽으로 이동 */
+  margin-left: 10px;
+  /* 아바타와 메시지 사이의 간격 조정 */
+}
+
+.received-message {
+  margin-right: 10px;
+  vertical-align: top;
+}
+
+.chat-nav {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

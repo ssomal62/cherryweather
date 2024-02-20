@@ -18,6 +18,7 @@ const SignInMain = () => {
     const onKakaoLogin = () => {
       window.location.href =
         "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://cherryweather.site/oauth&response_type=code";
+        // "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://localhost:3000/oauth&response_type=code";
     };
 
   return (

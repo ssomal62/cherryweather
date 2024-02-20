@@ -17,6 +17,7 @@ public final class AuthConstant {
     public static final String KAKAO_USER_LOGOUT_URL = "https://kapi.kakao.com/v1/user/logout";
 
     public static final String KAKAO_REDIRECT_URI = "http://cherryweather.site/oauth";
+//    public static final String KAKAO_REDIRECT_URI = "http://localhost:3000/oauth"; //  로컬 테스트용
     public static final String OAUTH_KAKAO_PREFIX = "OAUTH::KAKAO::";
     public static final String OAUTH_KAKAO_REFRESH_PREFIX = "OAUTH::KAKAO::REFRESH::";
     public static final String GRANT_TYPE_AUTHORIZATION = "authorization_code";

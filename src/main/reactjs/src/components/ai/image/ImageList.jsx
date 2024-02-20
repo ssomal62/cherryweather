@@ -1,47 +1,35 @@
 import React, {useEffect, useState} from "react";
 import {useRecoilValue} from "recoil";
 import styled from "styled-components"
-import {imageURLState, useFetchImage} from "../../../recoil/hooks/UseFetchImage";
-import GeneratedImage from "./GeneratedImage";
-import {Spinner} from "@nextui-org/react";
+import {buketURLState, useFetchImageList} from "../../../recoil/hooks/UseFetchImageList";
+import ImageListItem from "./ImageListItem";
+import {deleteState} from "../../../recoil/hooks/UseDeleteImage";
 
-const ImagePreview = () => {
+const ImageList = () => {
 
-    const fetchURL = useFetchImage();
-    const image = useRecoilValue(imageURLState);
-    const [isLoading, setIsLoading] = useState(false); // isLoading 상태 추가
+    const fetchList = useFetchImageList();
+    const imageList = useRecoilValue(buketURLState);
+    const isDeleted = useRecoilValue(deleteState);
 
     useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true); // 데이터 가져오는 동안 로딩 상태 활성화
-            await fetchURL();
-            setIsLoading(false); // 데이터 가져온 후 로딩 상태 비활성화
-        };
-
-        fetchData();
-    }, [fetchURL]);
+        fetchList();
+        if (isDeleted) {
+            fetchList();
+        }
+    }, [fetchList, isDeleted]);
 
     return (
-        <CenteredContainer>
-            {isLoading ? (
-                <Spinner size="lg" label="이미지 생성중" color="primary" labelColor="primary" />
-            ) : (
-                <CardListItemWrapper>
-                    <GeneratedImage image={image} />
+        <div>
+        {imageList.map((list)=>(
+                <CardListItemWrapper key={list.aiImageId}>
+                    <ImageListItem list={list} />
                 </CardListItemWrapper>
-            )}
-        </CenteredContainer>
+        ))}
+        </div>
     );
 };
 
-export default ImagePreview;
-
-const CenteredContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 84vh; /* 화면의 높이를 기준으로 세로 중앙 정렬 */
-`;
+export default ImageList;
 
 const CardListItemWrapper = styled.div`
     margin-bottom: 25px;
