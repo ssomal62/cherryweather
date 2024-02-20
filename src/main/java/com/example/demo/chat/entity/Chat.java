@@ -2,6 +2,7 @@ package com.example.demo.chat.entity;
 
 import com.example.demo.account.entity.Account;
 import com.example.demo.club.entity.Club;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,14 +23,17 @@ public class Chat {
     // 계정 id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID")
+    @JsonBackReference // 순환 참조 방지
     private Account accountid;
-    // 상대방 계정 id
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "raccountid")
+    @JsonBackReference // 순환 참조 방지
     private Account raccountid;
-    // 클럽 id
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clubId")
+    @JsonBackReference // 순환 참조 방지
     private Club clubid;
     // 채팅방
     @Column

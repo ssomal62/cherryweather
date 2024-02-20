@@ -88,7 +88,7 @@ function Adminchat(props) {
           await nc.subscribe(newChatId);
           // 채팅방으로 이동
           await nc.disconnect();
-          navi(`/chating/room/${newChatId}`);
+          navi(`/chat/room/${newChatId}`);
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);

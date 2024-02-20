@@ -4,7 +4,6 @@ import com.example.demo.chat.entity.Chat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -26,5 +25,6 @@ public interface ChatRepository extends JpaRepository<Chat, Integer> {
     @Modifying
     @Query(value = "INSERT INTO chat (account_id, chat_room) VALUES (?1, ?2)", nativeQuery = true)
     void insertChatRoom(int accountid, String chatroom);
+
 
 }

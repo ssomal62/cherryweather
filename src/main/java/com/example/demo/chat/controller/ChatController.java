@@ -41,4 +41,6 @@ public class ChatController {
     public List<Chat> getChatListByAccountId(@RequestParam int accountid) {
         return chatService.getChatListByAccountId(accountid);
     }
+
+
 }

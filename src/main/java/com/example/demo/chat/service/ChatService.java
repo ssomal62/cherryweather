@@ -26,7 +26,7 @@ public ChatService(ChatRepository chatRepository) {
         chatRepository.createChatRoom(accountid, chatRoom, raccountid);
     }
 
-    @Transactional
+
     public List<Chat> getChatListByAccountId(int accountid) {
         return chatRepository.getChatListByAccountId(accountid);
     }
@@ -36,6 +36,7 @@ public ChatService(ChatRepository chatRepository) {
     public void insertChatRoom(int accountid, String chatroom) {
         chatRepository.insertChatRoom(accountid, chatroom);
     }
+
 
 
 }

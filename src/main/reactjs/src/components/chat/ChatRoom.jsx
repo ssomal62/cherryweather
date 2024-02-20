@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 
 import "../../style/ChatRoomStyle.css";
 import * as ncloudchat from "ncloudchat";
-import { useParams } from "react-router-dom";
-import { User } from "@nextui-org/react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Navbar, NavbarMenuToggle, User } from "@nextui-org/react";
 import { IoIosArrowBack } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { TbCherryFilled } from "react-icons/tb";
@@ -21,6 +21,7 @@ const ChatRoom = () => {
   const [userInput, setUserInput] = useState("");
   const messagesEndRef = useRef(null);
   const cookies = new Cookies();
+  const navi = useNavigate();
 
   useEffect(() => {
     const initializeChat = async () => {
@@ -166,6 +167,7 @@ const ChatRoom = () => {
                   <span>
                     <IoIosArrowBack
                       style={{ fontSize: "30px", cursor: "pointer" }}
+                      onClick={() => navi("/chat")}
                     />
                   </span>
                   <span>

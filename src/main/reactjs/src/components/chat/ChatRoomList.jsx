@@ -16,10 +16,6 @@ const ChatRoomList = () => {
   const [lastMessages, setLastMessages] = useState({});
   const [selectedChannel, setSelectedChannel] = useState("");
 
-  const handleAdminChat = () => {
-    navi("/chat/admin");
-  };
-
   const accountCheck = async () => {
     try {
       const accessToken = cookies.get("accessToken");
@@ -30,7 +26,7 @@ const ChatRoomList = () => {
       };
       const res = await instance.get("/account/user-info", config);
       setAccountData(res.data);
-      console.log("accountData : ", res.data);
+      console.log("accountData : ", accountData);
 
       const chat = new ncloudchat.Chat();
       chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");
@@ -39,7 +35,7 @@ const ChatRoomList = () => {
       await chat.connect({
         id: res.data.email,
         name: res.data.name,
-        profile: res.data.profileImage,
+        profile: res.data.email,
         customField: "json",
       });
 
@@ -67,61 +63,6 @@ const ChatRoomList = () => {
     accountCheck();
   }, []);
 
-  // useEffect(() => {
-  //   const initializeChat = async () => {
-  //     try {
-  //       const accessToken = cookies.get("accessToken");
-  //       const config = {
-  //         headers: {
-  //           Authorization: `Bearer ${accessToken}`,
-  //         },
-  //       };
-
-  //       const res = await instance.get("/account/user-info", config);
-  //       setAccountData(res.data);
-  //       console.log("res.data : ", res.data);
-
-  //       // const config2 = {
-  //       //     headers: {
-  //       //         //제이슨타입
-  //       //         'Content-Type': 'application/json',
-  //       //         //바디 폼데이터
-  //       //     },
-  //       // }
-
-  //       // const formData = {
-  //       //     "clubId": 19,
-  //       // }
-
-  //       // const res2 = await instance.post('/membership/query', {});
-  //       // setClubId(res2.data);
-  //       // console.log('res2 : ', res2);
-
-  //       const chat = new ncloudchat.Chat();
-  //       chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");
-  //       await chat.connect({
-  //         id: accountData.email,
-  //         name: accountData.name,
-  //         profile: accountData.profileImage,
-  //         customField: "json",
-  //       });
-
-  //       const filter = { state: true };
-  //       const sort = { created_at: -1 };
-  //       const option = { offset: 0, per_page: 100 };
-  //       const response = await chat.getChannels(filter, sort, option);
-  //       const channelsData = response.edges ? response.edges : [];
-  //       const fetchedChannels = channelsData.map((edge) => edge.node);
-  //       setChannels(fetchedChannels);
-  //       setNcloud(chat);
-  //     } catch (error) {
-  //       console.error("Error initializing chat:", error);
-  //     }
-  //   };
-
-  //   initializeChat();
-  // }, []);
-
   useEffect(() => {
     const disconnectChat = async () => {
       if (ncloud) {
@@ -139,7 +80,7 @@ const ChatRoomList = () => {
 
   const getLastMessage = async (chat, channel) => {
     try {
-      const filter = { channel_id: channel.chatid };
+      const filter = { channel_id: channel.chatRoom };
       const sort = { created_at: -1 };
       const option = { offset: 0, per_page: 1 };
       const channelMessages = await chat.getMessages(filter, sort, option);
@@ -196,6 +137,61 @@ const ChatRoomList = () => {
   //     }
   //   }
   // };
+
+  // useEffect(() => {
+  //   const initializeChat = async () => {
+  //     try {
+  //       const accessToken = cookies.get("accessToken");
+  //       const config = {
+  //         headers: {
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       };
+
+  //       const res = await instance.get("/account/user-info", config);
+  //       setAccountData(res.data);
+  //       console.log("res.data : ", res.data);
+
+  //       // const config2 = {
+  //       //     headers: {
+  //       //         //제이슨타입
+  //       //         'Content-Type': 'application/json',
+  //       //         //바디 폼데이터
+  //       //     },
+  //       // }
+
+  //       // const formData = {
+  //       //     "clubId": 19,
+  //       // }
+
+  //       // const res2 = await instance.post('/membership/query', {});
+  //       // setClubId(res2.data);
+  //       // console.log('res2 : ', res2);
+
+  //       const chat = new ncloudchat.Chat();
+  //       chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");
+  //       await chat.connect({
+  //         id: accountData.email,
+  //         name: accountData.name,
+  //         profile: accountData.profileImage,
+  //         customField: "json",
+  //       });
+
+  //       const filter = { state: true };
+  //       const sort = { created_at: -1 };
+  //       const option = { offset: 0, per_page: 100 };
+  //       const response = await chat.getChannels(filter, sort, option);
+  //       const channelsData = response.edges ? response.edges : [];
+  //       const fetchedChannels = channelsData.map((edge) => edge.node);
+  //       setChannels(fetchedChannels);
+  //       setNcloud(chat);
+  //     } catch (error) {
+  //       console.error("Error initializing chat:", error);
+  //     }
+  //   };
+
+  //   initializeChat();
+  // }, []);
   return (
     <div>
       <div>
@@ -205,7 +201,7 @@ const ChatRoomList = () => {
       </div>
       <h2>채팅방 목록</h2>
       {channels.map((channel) => (
-        <Link key={channel.id} to={`/chat/room/${channel.id}`}>
+        <Link key={channel.chatId} to={`/chat/room/${channel.chatRoom}`}>
           <div className="channel-list">
             <Badge className="list-photo">
               <Avatar
