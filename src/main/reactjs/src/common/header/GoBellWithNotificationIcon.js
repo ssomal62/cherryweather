@@ -35,7 +35,7 @@ const GoBellDropNotificationIcon = ({onClick}) => {
           <Badge
             content="99+"
             color="danger"
-            style={{position: "absolute", top: "-20px", right: "0px"}} // 위치를 조정합니다.
+            style={{position: "absolute", top: "-15px", right: "3px"}} // 위치를 조정합니다.
           />
         )}
 
