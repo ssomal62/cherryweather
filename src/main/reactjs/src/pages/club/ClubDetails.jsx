@@ -4,7 +4,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import SoftCurveTop from "../../components/club/clubDetail/SoftCurveTop";
 import {IoIosArrowForward} from "react-icons/io";
 
-import {Card, CardBody, CardFooter, CardHeader, Chip, Divider, Image, Progress} from "@nextui-org/react";
+import {Card, CardBody, CardFooter, CardHeader, Chip, Divider, Image} from "@nextui-org/react";
 import styled from "styled-components";
 import ClubDetailsHeader from "../../components/club/clubDetail/ClubDetailsHeader";
 import {TiLocation} from "react-icons/ti";
@@ -17,25 +17,39 @@ import {clubDetailState, useClubDetailState} from "../../recoil/hooks/UseClubDet
 import {useRecoilValue} from "recoil";
 import ClubJoinButton from "../../components/club/clubDetail/ClubJoinButton";
 import FeedCards from "../../components/club/clubDetail/FeedCards";
+import {useMembersState} from "../../recoil/hooks/UseMembersState";
+import {isMemberState, useCheckMember} from "../../recoil/hooks/CheckIsMember";
 
 const ClubDetails = () => {
 
-    const {clubId} = useParams();
-
+    const { clubId } = useParams();
     const navigate = useNavigate();
+    const [showButton, setShowButton] = useState(false);
 
     useClubDetailState(clubId);
-    const club = useRecoilValue(clubDetailState);
+    useMembersState(clubId);
+    useCheckMember(clubId);
 
-    const clubProfile = (code) => {
-        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code}.jpg?type=f&w=600&h=600&ttype=jpg`
-    }
+    const club = useRecoilValue(clubDetailState);
+    const isMember = useRecoilValue(isMemberState);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
     const [offsetY, setOffsetY] = useState(0);
+
+    const clubProfile = (code) => {
+        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code}.jpg?type=f&w=600&h=600&ttype=jpg`
+    }
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowButton(true);
+        }, 400);
+        return () => clearTimeout(timer);
+    }, []);
+
 
     useEffect(() => {
         let lastScrollY = 0;
@@ -58,7 +72,7 @@ const ClubDetails = () => {
     }, []);
 
     return (
-        <Layout useHeader={false} useFooter={false} containerMargin="0">
+        <Layout useHeader={false} useFooter={false} containerMargin="0" containerPadding="0">
             <ClubDetailsHeader/>
             <ClubDetail>
                 <div style={styles.aspectRatio}>
@@ -156,13 +170,6 @@ const ClubDetails = () => {
                                     className="text-md text-tiny item-end">
                                     모두 보기</Chip>
                             </div>
-                            {/*<Progress*/}
-                            {/*    size="sm"*/}
-                            {/*    radius="md"*/}
-                            {/*    isStriped*/}
-                            {/*    value={club.currentGrowthMeter}*/}
-                            {/*    maxValue={club.maxGrowthMeter}*/}
-                            {/*/>*/}
                             <FeedCards/>
                         </ClubFeed>
                     </Content>
@@ -182,8 +189,10 @@ const ClubDetails = () => {
                     </div>
                 </div>
             </ClubDetail>
-            <br/><br/><br/><br/><br/> <br/><br/><br/><br/><br/>
-        <ClubJoinButton/>
+            <br/><br/><br/>
+
+            {showButton &&  <div><ClubJoinButton isMember={isMember} /></div>}
+
         </Layout>
     );
 };

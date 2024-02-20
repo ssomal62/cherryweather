@@ -4,7 +4,7 @@ import {IoArrowBack} from "react-icons/io5";
 import {GoHome} from "react-icons/go";
 import {FiSettings} from "react-icons/fi";
 import {useNavigate} from "react-router-dom";
-import { WiNightAltRain } from "react-icons/wi";
+import {WiNightAltRain} from "react-icons/wi";
 import {useRecoilValue} from "recoil";
 import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
 
@@ -14,6 +14,10 @@ export default function ClubDetailsHeader() {
     const navigate = useNavigate();
 
     const club = useRecoilValue(clubDetailState);
+
+    const handleNavigate = () => {
+        navigate('/clubs');
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -72,7 +76,7 @@ export default function ClubDetailsHeader() {
             <NavbarContent justify="start">
                 <NavbarItem
                     style={styles.iconBox}
-                    onClick={() => navigate('/clubs')}
+                    onClick={handleNavigate}
                 >
                     <IoArrowBack style={styles.icon}/>
                 </NavbarItem>

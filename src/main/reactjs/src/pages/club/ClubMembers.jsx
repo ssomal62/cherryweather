@@ -21,7 +21,7 @@ const ClubMembers = () => {
     const members = useRecoilValue(membersState);
 
     return (
-        <Layout useHeader={false} useFooter={false} containerMargin="5">
+        <Layout useHeader={false} useFooter={false} containerMargin="5" containerPadding="0">
             <AnimationRightInWrapper>
                 <ClubMembersHeader/>
                 <Divider/>

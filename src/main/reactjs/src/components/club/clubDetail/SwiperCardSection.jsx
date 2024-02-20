@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
 import './SwiperCardSection.css';
-import games from './items.json'
+import items from './items.json'
 import {Button} from "@nextui-org/react";
 import {LuCalendarCheck} from "react-icons/lu";
 import {GoPeople} from "react-icons/go";
@@ -26,18 +26,17 @@ const SwiperCardSection = () => {
                 onSwiper={(swiper) => console.log(swiper)}
             >
 
-                {games.map((game, index) => (
+                {items.map((item, index) => (
                     <SwiperSlide key={index} className={`item ${activeIndex === index ? 'active' : ''}`}
-                                 style={{backgroundImage: `url(${game.imageUrl})`}}
+                                 style={{backgroundImage: `url(${item.imageUrl})`}}
                                  onClick={() => handleSlideClick(index)}>
 
-                        <div className="absolute z-10 item-desc" style={styles.title}>{game.title}</div>
+                        <div className="absolute z-10 item-desc" style={styles.title}>{item.title}</div>
                         <div className="absolute z-10 item-desc" style={styles.content}>
 
-                            <div className="flex items-center gap-2"><LuCalendarCheck/>  {game.date}</div>
-                            <div className="flex items-center gap-2"><GoPeople/> {game.personnel}</div>
+                            <div className="flex items-center gap-2"><LuCalendarCheck/>  {item.date}</div>
+                            <div className="flex items-center gap-2"><GoPeople/> {item.personnel}</div>
                         </div>
-
                         <Button size='md' radius='lg' color='success' variant='bordered'
                                 className="absolute flex z-20">참여하기</Button>
                     </SwiperSlide>

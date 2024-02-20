@@ -6,13 +6,19 @@ import {AnimatePresence} from "framer-motion";
 
 // 화면에 항상 위치하는 컴포넌트는 레이아웃으로 만들어 사용한다
 // children 은 레이아웃으로 감싸진 컴포넌트를 의미하고 아래와 같은 문법으로 레이아웃을 구성한다
-const Layout = ({children, useHeader = true, useFooter = true, containerMargin = "20px"}) => {
+const Layout = ({
+                    children,
+                    useHeader = true,
+                    useFooter = true,
+                    containerPadding = "13% 0 0 0",
+                    containerMargin = "20px"
+                }) => {
     return (
         <>
             <Root>
                 <Main>
                     {useHeader && <Header/>}
-                    <Container margin={containerMargin}>
+                    <Container margin={containerMargin} padding={containerPadding}>
                         <AnimatePresence>
                             <Wrapper>{children}</Wrapper>
                         </AnimatePresence>
@@ -35,7 +41,8 @@ const Container = styled.div`
   outline: none;
   -webkit-tap-highlight-color: transparent;
   display: block;
-  margin: ${({ margin }) => margin};
+  margin: ${({margin}) => margin};
+  padding: ${({padding}) => padding};
 `;
 
 export const Root = styled.div`

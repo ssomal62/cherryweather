@@ -7,13 +7,16 @@ import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
 import {useRecoilValue} from "recoil";
+import {useMyMembership} from "../../recoil/hooks/UseMyMembership";
 
 const ClubJoin = () => {
 
     const club = useRecoilValue(clubDetailState);
+    useMyMembership();
     const navigate = useNavigate();
+
     return (
-        <Layout useFooter={false} useHeader={false}>
+        <Layout useFooter={false} useHeader={false} containerPadding="0">
             <AnimationRightInWrapper>
                 <section style={styles.top}>
                     <GoCheckCircleFill style={styles.icon}/>
@@ -43,7 +46,7 @@ const ClubJoin = () => {
                     </ButtonSection>
                     <ButtonSection>
                         <Button fullWidth size='lg' variant='flat' color='default'
-                                onPress={() => navigate('/club-members')}
+                                //onPress={() => navigate(`/chat/room/${charRoom}`)}
                         >
                             멤버 목록 확인하기
                         </Button>

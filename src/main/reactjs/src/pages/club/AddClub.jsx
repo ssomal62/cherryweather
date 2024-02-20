@@ -11,6 +11,7 @@ import AddClubSettingDetails from "../../components/club/addClub/AddClubSettingD
 import AddClubSelectJoinStatus from "../../components/club/addClub/AddClubSelectJoinStatus";
 import AddClubInputActivitiesArea from "../../components/club/addClub/AddClubInputActivitiesArea";
 import axios from "axios";
+import {Cookies} from "react-cookie";
 
 const AddClub = () => {
 
@@ -46,12 +47,19 @@ const AddClub = () => {
             joinApprovalStatus: joinApprovalStatus,
         };
 
+        const cookie = new Cookies();
+
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
 
             try {
-                const res = await axios.post('http://localhost:9002/api/clubs', requestData);
+                const res = await axios.post('http://localhost:9002/api/clubs', requestData, {
+                    headers: {
+                        Authorization: `Bearer ${cookie.get('accessToken')}`
+                    }
+                });
+
                 const resFile = await axios.post('http://localhost:9002/api/clubs/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -119,7 +127,7 @@ const AddClub = () => {
     };
 
     return (
-        <Layout useHeader={false} useFooter={false}>
+        <Layout useHeader={false} useFooter={false} containerPadding="0">
             <div onClick={prevStep}>
                 <IoArrowBack style={{width: 30, height: 30, color: 'black'}}/>
             </div>

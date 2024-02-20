@@ -20,7 +20,7 @@ import {SearchIcon} from "./SearchIcon";
 import {ChevronDownIcon} from "./ChevronDownIcon";
 import {columns, statusOptions} from "./data";
 import {capitalize} from "./utils";
-import defaultUserImg from '../../../assets/images/club/person/4.jpg'
+import defaultAvatar from '../../../assets/icon/Avatar'
 
 const statusColorMap = {
     active: "success",
@@ -87,7 +87,7 @@ export default function MembersTable({users}) {
             case "screenName":
                 return (
                     <User
-                        avatarProps={{radius: "lg", src: user.avatar || defaultUserImg}}
+                        avatarProps={{radius: "lg", src: user.avatar || defaultAvatar}}
                         description={user.role}
                         name={cellValue}
                     >

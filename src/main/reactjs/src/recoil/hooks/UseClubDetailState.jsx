@@ -1,6 +1,6 @@
-import {useCallback, useEffect} from 'react';
+import {useEffect} from 'react';
 import {atom, useSetRecoilState} from "recoil";
-import axios from "axios";
+import {instance} from "../module/instance";
 
 export const clubDetailState = atom({
     key    : 'clubDetailState',
@@ -20,19 +20,18 @@ export const clubDetailState = atom({
 })
 
 export const useClubDetailState = (clubId) => {
-
     const setClub = useSetRecoilState(clubDetailState);
 
     useEffect(() => {
-
-        console.log("클럽디테일 호출 확인");
+        console.log("⚠️[Club Detail] 호출을 시도합니다.");
         if (clubId) {
             const fetchClubDetail = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:9002/api/clubs/${clubId}`);
+                    const response = await instance.get(`clubs/${clubId}`);
+                    console.log("✅[Club Detail] Success", response)
                     setClub(response.data.clubDetail);
                 } catch (error) {
-                    console.error('클럽 상세 내용을 불러오는데 실패했습니다.', error);
+                    console.error('⛔[Club Detail] Failed', error);
                 }
             };
 

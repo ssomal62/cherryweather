@@ -4,7 +4,7 @@ import {TbPhoto} from "react-icons/tb";
 import {FaHashtag} from "react-icons/fa6";
 import {v4 as uuidv4} from 'uuid';
 import NextButton from "./NextButton";
-import defaultImage from '../../../assets/images/club/profile/defalut.jpg'
+import defaultImage from '../../../assets/images/defalut/club_profile.jpg'
 
 const AddClubSettingDetails = ({onNext, description, file, setCode, setDescription, onFileSelect}) => {
 

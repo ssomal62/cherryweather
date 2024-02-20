@@ -6,14 +6,37 @@ import {useRecoilValue} from "recoil";
 import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
 import {useLikeClub} from "../../../recoil/hooks/UseLikedState";
 import {HeartIcon} from "../../../assets/icon/HeartIcon";
+import {Cookies} from "react-cookie";
+import axios from "axios";
 
-const ClubJoinButton = () => {
+const ClubJoinButton = ({isMember}) => {
 
     const navigate = useNavigate();
-
     const [liked, setLiked] = useState(false);
-    const club = useRecoilValue(clubDetailState);
+    const club = useRecoilValue(clubDetailState)
+
     const {toggleLikeClub} = useLikeClub();
+
+    const onSave = async () => {
+
+        const requestData = {
+            clubId: club.clubId,
+        };
+
+        const cookie = new Cookies();
+        try {
+            const res = await axios.post('http://localhost:9002/api/membership', requestData, {
+                headers: {
+                    Authorization: `Bearer ${cookie.get('accessToken')}`
+                }
+            });
+
+            navigate('/club-join');
+            console.log('Success:', res);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     const handleLikeClick = () => {
         setLiked(!liked);
@@ -38,18 +61,25 @@ const ClubJoinButton = () => {
                 </Button>
             </ButtonContainer>
 
-            <Button
-                fullWidth
-                color='danger'
-                variant='solid'
-                size='lg'
-                radius='lg'
-                style={{marginRight:'2%', height:'70%'}}
-                onPress={()=> navigate('/club-join')}
-            >
-                <span style={styles.font}> 가입하기 </span>
-                <small className="text-default-500">가입한 경우 채팅입장으로 변경</small>
-            </Button>
+            {isMember ? (
+                <Button fullWidth color="success" variant="solid" size="lg" radius="lg"
+                        style={{marginRight: "2%", height: "70%"}}
+                        //onPress={} 채팅 페이지로 이동
+                >
+                    <span style={styles.font}>
+                      채팅하기
+                    </span>
+                </Button>
+            ) : (
+                <Button fullWidth color="danger" variant="solid" size="lg" radius="lg"
+                        style={{marginRight: "2%", height: "70%"}}
+                        onPress={onSave}
+                >
+                    <span style={styles.font}>
+                      가입하기
+                    </span>
+                </Button>
+            )}
 
         </Footer>
     );
@@ -58,22 +88,22 @@ const ClubJoinButton = () => {
 export default ClubJoinButton;
 
 const styles = {
-    icon     : {
+    icon: {
         width : 30,
         height: 30,
         color : '#F31260',
     },
-    font     : {
+    font: {
         fontSize  : 18,
         fontWeight: 600,
     },
 }
 const ButtonContainer = styled.div`
-  flex: 0 1 20%; // Flex basis set to 20%, allowing this item to grow or shrink
+  flex: 0 1 20%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin : 0 2% 0 2%;
+  margin: 0 2% 0 2%;
 `;
 
 const Footer = styled.div`
