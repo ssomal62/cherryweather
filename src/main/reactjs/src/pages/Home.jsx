@@ -5,7 +5,7 @@ import TodayWeather from "../components/weather/TodayWeather";
 const Home = () => {
   return (
     <Layout>
-      <TodayWeather />
+       <TodayWeather/>
       <img
         alt=""
         src={require("../assets/images/brand/cw_test_img3.png")}
