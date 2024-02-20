@@ -1,6 +1,7 @@
 package com.example.demo.weather.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -9,8 +10,8 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class WeatherServiceClient {
 
-    // @Value("${weather.kma.serviceKey}")
-    private final String serviceKey = "mDNPPMp0rOT/VxVXKEJeQUDK1s169twmiSBFn4c/8pMRT/yFNC12SdZrV0hhVwDq7vn8b3D1fLOa3cmfWGv5hQ==";
+    @Value("${weather.kma.serviceKey}")
+    private String serviceKey;
     private final String dataType = "JSON";
 
     private final RestTemplate restTemplate;
