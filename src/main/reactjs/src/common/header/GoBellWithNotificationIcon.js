@@ -1,13 +1,27 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {GoBell} from "react-icons/go";
 import {Badge} from "@nextui-org/react";
 import DropDownNotification from "./DropDownNotification";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../../recoil/LoginAtom";
+import {
+  useFetchUserInfo,
+  userInfoState,
+} from "../../recoil/hooks/UseFetchUserInfo";
 
 const GoBellDropNotificationIcon = ({onClick}) => {
   const [isOpen, setIsOpen] = useState(false);
   const isLogin = useRecoilValue(IsLoginAtom);
+
+  // userInfo 로그인, 회원정보 등을 불러오기 위한 recoil 사용 예제
+  const userInfo = useRecoilValue(userInfoState);
+  const userInfoFetch = useFetchUserInfo();
+
+  useEffect(() => {
+    userInfoFetch();
+  }, []);
+  // 콘솔로 확인하였을 때, 내 이름이 찍히는 것을 확인했음.
+  console.log(userInfo.name);
 
   const handleBellClick = () => {
     if (isLogin) {

@@ -1,13 +1,12 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { IsLoginAtom } from "../recoil/LoginAtom";
+import React, {Suspense} from "react";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../recoil/LoginAtom";
 // import { lazy } from "react";
 
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 import Club from "../pages/club/Club";
-import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
 // import ClubDetails from "../pages/club/ClubDetails";
@@ -96,13 +95,6 @@ const Router = () => {
           <Route path="/chat/admin" element={<Adminchat />} />
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
           <Route path="/event" element={<Event />} />
-
-          {/* WebNotificationTest 경로 추가 */}
-
-          <Route
-            path="/web-notification-test"
-            element={<WebNotificationTest />}
-          />
         </Routes>
       </Suspense>
     </BrowserRouter>
