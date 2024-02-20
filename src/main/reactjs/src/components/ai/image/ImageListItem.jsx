@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Card, CardBody, CardFooter, Chip, Image} from "@nextui-org/react";
+import {Button, Card, CardHeader, CardBody, CardFooter, Chip, Image} from "@nextui-org/react";
 import {TiLocation} from "react-icons/ti";
 import {IoChatbubbleEllipses} from "react-icons/io5";
 import {BsFillPeopleFill} from "react-icons/bs";
@@ -31,89 +31,37 @@ const ImageListItem = ({list}) => {
     const isSaved = useRecoilValue(HeartFill);
     console.log("isSaved="+isSaved);
     return (
-
-        <Card
-            isFooterBlurred
-            radius="lg"
-            className="border-none"
-            onClick={handleClick} // 클릭 이벤트 처리
-        >
-
-            <div className="relative w-full h-[200px]" onClick={handleClick}>
-                <div className="absolute z-10 w-full h-full from-slate-800 bg-gradient-to-b to-transparent " ></div>
-
+        // <div className="max-w-[600px] gap-2 grid grid-cols-12 grid-rows-2 px-8">
+        <>
+            <Card isFooterBlurred className="w-full h-[350px] col-span-12 sm:col-span-5">
+                <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                    <p className="text-tiny text-black/65 uppercase font-bold">Cherry's match</p>
+                    {/*<h4 className="text-black font-medium text-2xl">{list.createdAt}</h4>*/}
+                </CardHeader>
                 <Image
                     removeWrapper
-                    isZoomed
-                    alt="Woman listing to music"
-                    className="z-0 w-full object-cover h-[200px] object-middle"
-                    src={list}
-                    width={600}
-
+                    alt="Card example background"
+                    className="z-0 w-450 h-450 scale-95 -translate-y-6 object-cover"
+                    // src={list.bucketURL}
+                    src={list.bucketURL}
                 />
-            </div>
-            {isLoading && ( // isLoading이 true일 때만 스피너 표시
-                <>
-                    <br/>
-                    <Spinner size="lg" label="저장중" color="danger" labelColor="danger" className="z-100" />
-                    <br/>
-                    <br/>
-                </>
-            )}
-            <CardBody className="absolute z-20 top-1 flex-col items-start" onClick={handleClick}>
-                <div className="flex justify-between w-full" onClick={handleClick}>
-                    <div className="flex items-start" onClick={handleClick}>
-                        <Chip color="primary" variant="solid" size='sm'
-                        >오늘의 추천 옷차림</Chip>&nbsp;&nbsp;
+                <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                    <div>
+                        <p className="text-black text-tiny">{list.createdAt}</p>
+                        <p className="text-tiny text-black/65 uppercase font-bold">Cherry's match</p>
+                        {/*<p className="text-black text-tiny">날씨 정보</p>*/}
                     </div>
-                    <div className="flex items-end">
-                        <Button
-                            isIconOnly
-                            className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2"
-                            radius="full"
-                            variant="light"
-                            // onPress={() => setLiked((v) => !v)}
-                        >
-                            <HeartIcon
-                                style={{color: 'white'}}
-                                className={isSaved ? "[&>path]:stroke-transparent" : ""}
-                                fill={isSaved ? "red" : "none"}
-                            />
-                        </Button>
-                    </div>
-                </div>
-                <p className="text-tiny text-white/60 uppercase" >Cherry's Pick!</p>
-                <div style={{fontWeight:600}} className="text-white text-opacity-90 font-medium text-2xl drop-shadow shadow-black">
-                     프레피 스타일
-                </div>
-            </CardBody>
+                    <Button className="text-tiny" color="danger" radius="full" size="sm">
+                        {isLoading ? "저장 중..." : (isSaved ? "삭제 완료" : "삭제")}
+                    </Button>
+                </CardFooter>
+            </Card>
+        </>
 
-            <CardFooter
-                className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"
-                style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} >
 
-                <TiLocation style={{...styles.icon}}/>
-                <p className="text-tiny text-black">오늘의 온도</p>
 
-                <BsFillPeopleFill style={{...styles.icon}}/>
-                <p className="text-tiny text-black">최고 기온 13도 / 최저 기온 6도</p>
 
-                <IoChatbubbleEllipses style={{...styles.icon}}/>
-                <p className="text-tiny text-black">맑음</p>
-
-                <Button
-                    className="text-tiny text-success font-semibold"
-                    variant="light"
-                    color="success"
-                    radius="lg"
-                    size="sm"
-                    onClick={handleSaveClick}
-                    disabled={isLoading || isSaved} // 로딩 중이거나 이미 저장된 경우 버튼 비활성화
-                >
-                    {isLoading ? "저장 중..." : (isSaved ? "삭제 완료" : "삭제")}
-                </Button>
-            </CardFooter>
-        </Card>
+      // </div>
     );
 };
 
