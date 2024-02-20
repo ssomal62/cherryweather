@@ -1,8 +1,6 @@
 package com.example.demo.weather.service;
 
-import com.example.demo.weather.dto.GeoLocationResDto;
-import com.example.demo.weather.dto.TodayWeatherReqDto;
-import com.example.demo.weather.dto.TodayWeatherResDto;
+import com.example.demo.weather.dto.*;
 import com.example.demo.weather.exception.LookupException;
 import com.example.demo.weather.exception.enums.WeatherExeptionStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.*;
@@ -28,10 +24,12 @@ public class TodayWeatherServie {
 
     private final GeoLocationService geoLocationService;
     private final WeatherServiceClient weatherServiceClient;
+    private final DaylightService daylightService;
 
     private final String baseDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     private final String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
+    /* 오늘 단기 예보 조회*/
     public List<TodayWeatherReqDto> getTodayWeather() {
 
         String functionName = "getVilageFcst";
@@ -90,6 +88,7 @@ public class TodayWeatherServie {
         }
     }
 
+    /* GeoLocation을 사용해서 위치값 받아오기*/
     public List<TodayWeatherResDto> getFormattedTodayWeather() {
         GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
         int nx = (int) geoLocationResDto.getNx();
@@ -103,7 +102,7 @@ public class TodayWeatherServie {
         return formatWeatherData(weatherDataList, nx, ny, r1, r2, r3);
     }
 
-
+    /* JSON 데이터로 파싱 */
     private List<TodayWeatherReqDto> parseJsonResponse(String response) {
         List<TodayWeatherReqDto> todayWeatherList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -134,6 +133,7 @@ public class TodayWeatherServie {
         return todayWeatherList;
     }
 
+    /* 모든 값을 받아와서 ResDto 생성 */
     public List<TodayWeatherResDto> formatWeatherData(List<TodayWeatherReqDto> weatherDataList, int nx, int ny, String r1, String r2, String r3) {
         Map<String, TodayWeatherResDto.TodayWeatherResDtoBuilder> builders = new HashMap<>();
 
@@ -198,4 +198,72 @@ public class TodayWeatherServie {
                        .map(e -> e.getValue().build())
                        .collect(Collectors.toList());
     }
+
+    /* 현재 날씨 요약 정보 */
+    public DailyWeatherDto getDailyWeather(List<TodayWeatherResDto> todayWeatherList) {
+        DailyWeatherDto.DailyWeatherDtoBuilder builder = DailyWeatherDto.builder();
+        String minTemp = null;
+        String maxTemp = null;
+
+        DaylightDto daylightDto = daylightService.getDaylightInfo(geoLocationService.getGeoLocation());
+
+        for(TodayWeatherResDto todayWeather : todayWeatherList) {
+            // 최저 기온, 최고 기온 찾기
+            if(todayWeather.getTMX() != null && maxTemp == null) maxTemp = todayWeather.getTMX();
+            if(todayWeather.getTMN() != null && minTemp == null) minTemp = todayWeather.getTMN();
+        }
+
+        for(TodayWeatherResDto todayWeather : todayWeatherList) {
+
+            // 현재 시각에 해당하는 날씨 정보 설정
+            if(isCurrentForecast(todayWeather)) {
+                builder.city(todayWeather.getR1())
+                        .area(todayWeather.getR2())
+                        .weather(getWeatherCondition(todayWeather.getPTY(), todayWeather.getSKY()))
+                        .currentTemp(todayWeather.getTMP())
+                        .windDirection(todayWeather.getVEC())
+                        .windSpeed(todayWeather.getWSD())
+                        .rainProbability(todayWeather.getPOP())
+                        .rainfall(todayWeather.getPCP())
+                        .humidity(todayWeather.getREH());
+                break; // 현재 시각에 해당하는 날씨 정보만 설정하고 반복문
+            }
+        }
+
+        builder.sunrise(daylightDto.getSunrise())
+                .sunset(daylightDto.getSunset())
+                .moonrise(daylightDto.getMoonrise())
+                .moonset(daylightDto.getMoonset());
+
+        return builder.minTemp(minTemp)
+                       .maxTemp(maxTemp)
+                       .build();
+    }
+
+    public boolean isCurrentForecast(TodayWeatherResDto todayWeather) {
+        String currentHour = LocalTime.now().format(DateTimeFormatter.ofPattern("HH00"));
+        return Objects.equals(todayWeather.getFcstTime(), currentHour);
+    }
+
+    public String getWeatherCondition(String pty, String sky) {
+        switch(pty) {
+            case "0":
+                return "1".equals(sky) ? "맑음" : "흐림";
+            case "1":
+                return "비";
+            case "2":
+                return "비/눈";
+            case "3":
+                return "눈";
+            case "4":
+                return "소나기";
+            default:
+                return "날씨 정보 조회 실패";
+        }
+    }
+    //
+    // /* 오늘 시간별 날씨 */
+    // public List<OneDayWeatherDto> getOneDayWeather(){
+    //
+    // }
 }
