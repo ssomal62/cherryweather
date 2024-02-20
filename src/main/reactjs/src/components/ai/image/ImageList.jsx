@@ -35,7 +35,7 @@ const ImageList = () => {
 };
 
 export default ImageList;
-//
+
 // const CenteredContainer = styled.div`
 //     display: flex;
 //     align-items: center;
