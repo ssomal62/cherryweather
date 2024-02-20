@@ -26,7 +26,8 @@ export const useFetchImageList  = () => {
             console.log("token:"+token);
             const config = {headers: { Authorization: `Bearer ${token}`}}
 
-            const response = await axios.get('http://localhost:9002/api/ai_image/get-image',config);
+            const response = await instance.get('ai_image/get-image',config);
+            // const response = await axios.get('http://localhost:9002/api/ai_image/get-image',config);
             // const response = await axios.get('http://192.168.0.20:9002/api/ai_image/get-image',config);
             const bucketURL =response.data.map(item => ({
                 bucketURL: item.bucketURL,

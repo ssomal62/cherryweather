@@ -27,7 +27,13 @@ export const useDeleteImage  = () => {
             //     data:{bucketURL}
             //     });
 
-            const response = await axios.delete('http://localhost:9002/api/ai_image/delete',
+            // const response = await axios.delete('http://localhost:9002/api/ai_image/delete',
+            //     {
+            //         ...config,
+            //         data:{ imageURL:bucketURL}
+            //     });
+
+            const response = await instance.delete('ai_image/delete',
                 {
                     ...config,
                     data:{ imageURL:bucketURL}
