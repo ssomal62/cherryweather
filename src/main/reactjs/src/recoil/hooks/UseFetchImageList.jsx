@@ -11,6 +11,7 @@ export const buketURLState = atom({
 });
 
 
+
 export const useFetchImageList  = () => {
     const setBucketURL = useSetRecoilState(buketURLState); // 값을 불러오기 위한 문법
 
@@ -25,8 +26,8 @@ export const useFetchImageList  = () => {
             console.log("token:"+token);
             const config = {headers: { Authorization: `Bearer ${token}`}}
 
-            // const response = await axios.get('http://localhost:9002/api/ai_image/get-image',config);
-            const response = await axios.get('http://192.168.0.20:9002/api/ai_image/get-image',config);
+            const response = await axios.get('http://localhost:9002/api/ai_image/get-image',config);
+            // const response = await axios.get('http://192.168.0.20:9002/api/ai_image/get-image',config);
             const bucketURL =response.data.map(item => ({
                 bucketURL: item.bucketURL,
                 aiImageId: item.aiImageId,
