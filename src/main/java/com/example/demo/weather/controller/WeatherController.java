@@ -45,4 +45,9 @@ public class WeatherController {
     public DailyWeatherDto getDailyWeather() {
         return todayWeatherServie.getDailyWeather(todayWeatherServie.getFormattedTodayWeather());
     }
+
+    @GetMapping("/24hour")
+    public List<OneDayWeatherDto> get24HourWeather() {
+        return todayWeatherServie.getOneDayWeather();
+    }
 }
