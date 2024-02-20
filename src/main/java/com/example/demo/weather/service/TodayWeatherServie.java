@@ -246,6 +246,7 @@ public class TodayWeatherServie {
         return Objects.equals(todayWeather.getFcstTime(), currentHour);
     }
 
+    /* PTY, SKY 값을 기준으로 날씨 지정 */
     public String getWeatherCondition(String pty, String sky) {
         switch(pty) {
             case "0":
