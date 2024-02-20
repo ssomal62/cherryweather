@@ -1,8 +1,9 @@
 {
   "files": {
-    "main.css": "/static/css/main.733cf7c4.css",
-    "main.js": "/static/js/main.818b065a.js",
+    "main.css": "/static/css/main.3465e985.css",
+    "main.js": "/static/js/main.224a8fc4.js",
     "static/js/787.f22b8f29.chunk.js": "/static/js/787.f22b8f29.chunk.js",
+    "static/media/snow.gif": "/static/media/snow.eb6bf4239820b662627e.gif",
     "static/media/cw_test_img3.png": "/static/media/cw_test_img3.1cdd95ce4df25f0a5bcc.png",
     "static/media/6.jpg": "/static/media/6.5e0461ae2b72511d3ed0.jpg",
     "static/media/1.jpg": "/static/media/1.e23710cff52beca382d4.jpg",
@@ -10,15 +11,24 @@
     "static/media/7.jpg": "/static/media/7.e0ab531cae6cf8ae9758.jpg",
     "static/media/2.jpg": "/static/media/2.5d733adcc7b75abcb58f.jpg",
     "static/media/4.jpg": "/static/media/4.f20b4e490a17f97e7e19.jpg",
+    "static/media/snow_day.jpg": "/static/media/snow_day.fb4b8834cdd5607628bf.jpg",
+    "static/media/snow_night.jpg": "/static/media/snow_night.601970bf13d0db8f6923.jpg",
+    "static/media/rainy_night.jpg": "/static/media/rainy_night.08eba10bdcf93baf695e.jpg",
     "static/media/5.jpg": "/static/media/5.1444b869eb19bb070bf8.jpg",
+    "static/media/rainy_day.jpg": "/static/media/rainy_day.cf003b56b6952ec878fe.jpg",
+    "static/media/clear_night.jpg": "/static/media/clear_night.15f52ed802c13339cec2.jpg",
+    "static/media/cloudy_night.jpg": "/static/media/cloudy_night.87b0a895f04a8a1a272b.jpg",
+    "static/media/clear_day.jpg": "/static/media/clear_day.fc9f6f25e34e3f168d3e.jpg",
+    "static/media/cloudy_day.jpg": "/static/media/cloudy_day.f2e57720c1372ec953a1.jpg",
     "static/media/sun.png": "/static/media/sun.ace062d11a876cae6c31.png",
+    "static/media/umbrellar.png": "/static/media/umbrellar.f2369a08439e3d24b35e.png",
     "index.html": "/index.html",
-    "main.733cf7c4.css.map": "/static/css/main.733cf7c4.css.map",
-    "main.818b065a.js.map": "/static/js/main.818b065a.js.map",
+    "main.3465e985.css.map": "/static/css/main.3465e985.css.map",
+    "main.224a8fc4.js.map": "/static/js/main.224a8fc4.js.map",
     "787.f22b8f29.chunk.js.map": "/static/js/787.f22b8f29.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.733cf7c4.css",
-    "static/js/main.818b065a.js"
+    "static/css/main.3465e985.css",
+    "static/js/main.224a8fc4.js"
   ]
 }
