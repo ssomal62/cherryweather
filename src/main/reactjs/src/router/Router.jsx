@@ -7,6 +7,7 @@ import { IsLoginAtom } from "../recoil/LoginAtom";
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 import Club from "../pages/club/Club";
+// import Login from "../pages/Login";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
@@ -17,6 +18,9 @@ import LocalSignIn from "../components/auth/LocalSignIn";
 import SignUp from "../pages/user/SignUp";
 import MyPage from "../pages/user/MyPage";
 import AI_main from "../pages/ai/AI_main";
+import GPT from "../pages/ai/ChatGPT";
+import AI_image from "../pages/ai/ImageGenerator";
+import AI_imageList from "../pages/ai/SavedImage";
 
 import Chat from "../pages/chat/Chat";
 import Event from "../pages/event/Event";
@@ -88,6 +92,9 @@ const Router = () => {
 
           <Route path="/club-add" element={<AddClub />} />
           <Route path="/ai" element={<AI_main />} />
+          <Route path="/gpt" element={<GPT />} />
+          <Route path="/image" element={<AI_image />} />
+          <Route path="/imageList" element={<AI_imageList />} />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
