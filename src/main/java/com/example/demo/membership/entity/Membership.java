@@ -61,8 +61,6 @@ public class Membership {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    //TODO : 클럽별로 사진 별도 등록하게할지?
-
     public void updateMembership(UpdateMembership requestDTO) {
         this.screenName = requestDTO.screenName();
         this.status = requestDTO.status();
