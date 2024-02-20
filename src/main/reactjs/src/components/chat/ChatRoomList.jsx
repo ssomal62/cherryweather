@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Badge, Avatar, Button } from "@nextui-org/react";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
-import ChatUserInfo from "./ChatUserInfo";
 
 const ChatRoomList = () => {
   const [ncloud, setNcloud] = useState("");
