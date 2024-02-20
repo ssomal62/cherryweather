@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import * as ncloudchat from "ncloudchat";
 import { Link, useNavigate } from "react-router-dom";
-import { Badge, Avatar } from "@nextui-org/react";
+import { Badge, Avatar, Button } from "@nextui-org/react";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
+import ChatUserInfo from "./ChatUserInfo";
 
 const ChatRoomList = () => {
   const [ncloud, setNcloud] = useState("");
   const [channels, setChannels] = useState([]);
+  const [channelName, setChannelName] = useState([]);
   const [accountData, setAccountData] = useState("");
   const [clubId, setClubId] = useState({});
   const cookies = new Cookies();
@@ -39,12 +41,21 @@ const ChatRoomList = () => {
         customField: "json",
       });
 
+      const filter = { state: true };
+      const sort = { created_at: -1 };
+      const option = { offset: 0, per_page: 100 };
+      const response = await chat.getChannels(filter, sort, option);
+      const channelsData = response.edges ? response.edges : {};
+      const fetchedChannels = channelsData.map((edge) => edge.node);
+      setChannelName(fetchedChannels);
+      console.log("channelName : ", channelName);
+
       const channelRes = await instance.get(
         "/chat/getchatlist?accountid=" + res.data.accountId
       );
       console.log("channelRes : ", channelRes);
       const channelIds = channelRes.data;
-
+      console.log("channelIds : ", channelIds);
       const messages = {};
 
       for (const channel of channelIds) {
@@ -192,25 +203,36 @@ const ChatRoomList = () => {
 
   //   initializeChat();
   // }, []);
+
   return (
     <div>
       <div>
-        <button type="button" onClick={handleCreateChannel}>
+        <Button
+          onClick={handleCreateChannel}
+          style={{
+            position: "absolute",
+            right: "10px",
+            top: "70px",
+            backgroundColor: "#F31260",
+            color: "white",
+          }}
+        >
           관리자와의 채팅
-        </button>
+        </Button>
       </div>
-      <h2>채팅방 목록</h2>
+      {/* <h2 style={{ fontSize: 20, fontWeight: 400 }}>참여한 채팅</h2> */}
       {channels.map((channel) => (
         <Link key={channel.chatId} to={`/chat/room/${channel.chatRoom}`}>
-          <div className="channel-list">
+          <div className="channel-list" style={{ marginTop: "60px" }}>
             <Badge className="list-photo">
               <Avatar
                 radius="md"
                 size="lg"
                 src="https://i.pravatar.cc/300?u=a042581f4e29026709d"
               />
+
               <div style={{ marginLeft: "10px", marginTop: "15px" }}>
-                <span>{channel.name}</span>
+                <span>{channelName[0].name}</span>
               </div>
             </Badge>
           </div>

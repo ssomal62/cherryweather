@@ -10,6 +10,7 @@ import { TbCherryFilled } from "react-icons/tb";
 import Layout from "../../common/Layout";
 import { Cookies } from "react-cookie";
 import { instance } from "../../recoil/module/instance";
+import ChatUserInfo from "./ChatUserInfo";
 
 const ChatRoom = () => {
   const [ncloud, setNcloud] = useState("");
@@ -71,11 +72,10 @@ const ChatRoom = () => {
       // 채널 메세지 가져오기
       const fetchedMessages = await fetchChannelMessages(chat, chatRoom);
       setMessages(fetchedMessages);
-      console.log("messages : " + messages);
+      console.log(messages[0]);
       // await chat.subscribe(channelId);
       // await chat.addUsers(channelId, [res2.data.uemail, res3.data.uemail]);
       // const existingChannelId = channelId;
-      console.log("accountData.email:", accountData.email);
     };
     initializeChat();
   }, []);
@@ -156,6 +156,16 @@ const ChatRoom = () => {
     };
   }, [ncloud]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAvatarClick = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = isModalOpen ? "hidden" : "auto";
+  }, [isModalOpen]);
+
   return (
     <Layout>
       <div className="container-fluid">
@@ -197,13 +207,14 @@ const ChatRoom = () => {
                       {/* data.email */}
                       {message.sender.id !== accountData.email ? (
                         <User
+                          onClick={handleAvatarClick}
                           className={
                             message.sender.id === accountData.email
                               ? "sent-message"
                               : "received-message"
                           }
                           avatarProps={{
-                            src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                            src: "message.sender.profile",
                           }}
                           style={{ fontSize: "8px", color: "gray" }}
                         />
@@ -228,6 +239,9 @@ const ChatRoom = () => {
                       </div>
                     </div>
                   ))}
+                {isModalOpen && (
+                  <ChatUserInfo messages={messages} accountData={accountData} />
+                )}
                 <div ref={messagesEndRef} />
               </div>
               {/* 메시지 입력 및 전송 UI */}

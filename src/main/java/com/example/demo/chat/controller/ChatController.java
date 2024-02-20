@@ -22,21 +22,26 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    // 채팅방 생성
-    @PostMapping("/createchatroom")
-    public void createChatRoom(@RequestParam int accountid, @RequestParam String chatRoom, @RequestParam int raccountid) {
-        chatService.createChatRoom(accountid, chatRoom, raccountid);
-    }
+   
+
    @GetMapping("/getchatinfo")
     public String getChatIdByAccountId(@RequestParam int accountid) {
         return chatService.getChatIdByAccountId(accountid);
     }
-
+    // 채팅방 생성
     @PostMapping("/insertchatroom")
     public void insertChatRoom(@RequestParam int accountid, @RequestParam String chatRoom) {
         chatService.insertChatRoom(accountid, chatRoom);
     }
 
+    @PostMapping("/insertclubchatroom")
+    public void insertClubChatRoom(@RequestParam int accountid, @RequestParam String chatRoom, @RequestParam int clubid) {
+        chatService.insertClubChatRoom(accountid, chatRoom, clubid);
+    }
+    @PostMapping("/insertpersonalchatroom")
+    public void insertPesonalChatRoom(@RequestParam int accountid, @RequestParam int chatRoom, @RequestParam int raccountid) {
+        chatService.insertPesonalChatRoom(accountid, chatRoom, raccountid);
+    }
     @GetMapping("/getchatlist")
     public List<Chat> getChatListByAccountId(@RequestParam int accountid) {
         return chatService.getChatListByAccountId(accountid);

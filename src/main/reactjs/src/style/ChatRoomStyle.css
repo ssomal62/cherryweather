@@ -5,7 +5,6 @@
   /* 뷰포트 높이를 기준으로 전체 높이 설정 */
 }
 
-
 .user {
   border-bottom: 1px solid #716d6d;
   padding: 10px;
@@ -16,7 +15,6 @@
   background-color: #f8f9fa !important;
   border-top: 5px solid #716d6d;
   max-height: calc(100vh);
-
 }
 
 .user_chat_data {
@@ -49,7 +47,6 @@
   padding: 10px;
   border-bottom: 5px solid #716d6d;
 }
-
 
 .incoming_msg_img {
   display: inline-block;
@@ -109,8 +106,6 @@
   float: right;
   width: 60%;
 }
-
-
 
 .input_msg_write input {
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;

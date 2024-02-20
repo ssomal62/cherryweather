@@ -21,10 +21,7 @@ public ChatService(ChatRepository chatRepository) {
         return chatRepository.getChatIdByAccountId(accountid);
     }
 
-    @Transactional
-    public void createChatRoom(int accountid, String chatRoom, int raccountid) {
-        chatRepository.createChatRoom(accountid, chatRoom, raccountid);
-    }
+
 
 
     public List<Chat> getChatListByAccountId(int accountid) {
@@ -37,6 +34,12 @@ public ChatService(ChatRepository chatRepository) {
         chatRepository.insertChatRoom(accountid, chatroom);
     }
 
+    @Transactional
+    public void insertClubChatRoom(int accountid, String chatRoom, int clubid) {
+    }
 
-
+    @Transactional
+    public void insertPesonalChatRoom(int accountid, int chatRoom, int raccountid) {
+        chatRepository.insertPesonalChatRoom(accountid, chatRoom, raccountid);
+    }
 }

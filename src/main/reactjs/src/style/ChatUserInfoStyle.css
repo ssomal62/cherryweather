@@ -1,0 +1,16 @@
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  top: 50%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* 투명도 추가 */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  position: fixed;
+  transform: translate(-50%, -50%);
+}
