@@ -6,6 +6,7 @@ import com.example.demo.account.dto.SignUpRequestDto;
 import com.example.demo.account.dto.UserInfoDto;
 import com.example.demo.account.service.impl.AccountServiceImpl;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -75,4 +76,4 @@ public class AccountController {
         accountService.checkDuplicateEmail(email);
     }
 
-}
+   }
