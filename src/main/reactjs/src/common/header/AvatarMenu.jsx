@@ -1,12 +1,12 @@
 import React from 'react';
 import {Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from "@nextui-org/react";
-import p1 from "../../assets/images/club/person/5.jpg";
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { IsLoginAtom } from '../../recoil/LoginAtom';
 import { instance } from '../../recoil/module/instance';
 import { userInfoState } from '../../recoil/hooks/UseFetchUserInfo';
+import avatar from '../../assets/icon/Avatar'
 
 const AvatarMenu = () => {
     const cookies = new Cookies();
@@ -34,7 +34,7 @@ const AvatarMenu = () => {
         navigate("/");
         } catch (error) {
         console.error(error);
-        }  
+        }
     }
 
     return (
@@ -47,8 +47,9 @@ const AvatarMenu = () => {
                     color="secondary"
                     name="Jason Hughes"
                     size="sm"
-                    src={p1}
+                    src={avatar}
                 />
+
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="profile" className="h-14 gap-2">
