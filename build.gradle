@@ -73,7 +73,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 
- 	// 파일 관련
+	// 파일 관련
 	implementation 'commons-fileupload:commons-fileupload:1.4'
 
 	// 비동기 및 반응형 웹 애플리케이션을 개발하기 위한 모듈
