@@ -10,8 +10,8 @@ export const UseFetchWeather = (endpoint) => {
     const fetchData = useCallback(async () => {
         setLoading(true);
         try {
-            // const url = `${process.env.REACT_APP_API}${endpoint}`;   // 서버
-            const url = `http://localhost:9002/api${endpoint}`;     // 로컬
+            const url = `${process.env.REACT_APP_API}${endpoint}`;   // 서버
+            // const url = `http://localhost:9002/api${endpoint}`;     // 로컬
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`HTTP error! status : ${response.status}`);
