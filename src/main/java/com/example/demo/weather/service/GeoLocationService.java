@@ -45,6 +45,7 @@ public class GeoLocationService {
                            .lat(locationNode.path("lat").asDouble())
                            .lon(locationNode.path("long").asDouble())
                            .net(locationNode.path("net").asText())
+                           .ip(ip)
                            .build();
         } catch(Exception e) {
 

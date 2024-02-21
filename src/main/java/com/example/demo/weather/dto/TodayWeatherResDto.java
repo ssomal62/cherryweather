@@ -28,4 +28,5 @@ public class TodayWeatherResDto {
     private String r1;
     private String r2;
     private String r3;
+    private String ip;
 }

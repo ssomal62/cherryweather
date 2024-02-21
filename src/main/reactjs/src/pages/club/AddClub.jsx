@@ -10,10 +10,10 @@ import AnimationRightInWrapper from "../../utils/animations/AnimationRightInWrap
 import AddClubSettingDetails from "../../components/club/addClub/AddClubSettingDetails";
 import AddClubSelectJoinStatus from "../../components/club/addClub/AddClubSelectJoinStatus";
 import AddClubInputActivitiesArea from "../../components/club/addClub/AddClubInputActivitiesArea";
-import axios from "axios";
 import {Cookies} from "react-cookie";
 import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
 import {useRecoilValue} from "recoil";
+import {instance} from "../../recoil/module/instance";
 
 const AddClub = () => {
 
@@ -64,13 +64,13 @@ const AddClub = () => {
             formData.append('file', file);
 
             try {
-                const res = await axios.post('http://localhost:9002/api/clubs', requestData, {
+                const res = await instance.post('/clubs', requestData, {
                     headers: {
                         Authorization: `Bearer ${cookie.get('accessToken')}`
                     }
                 });
 
-                const resFile = await axios.post('http://localhost:9002/api/clubs/upload', formData, {
+                const resFile = await instance.post('/clubs/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -107,13 +107,13 @@ const AddClub = () => {
         if (file) {
             formData.append('file', file);
             try {
-                const res = await axios.put('http://localhost:9002/api/clubs', requestData, {
+                const res = await instance.put('/clubs', requestData, {
                     headers: {
                         Authorization: `Bearer ${cookie.get('accessToken')}`
                     }
                 });
 
-                const resFile = await axios.post('http://localhost:9002/api/clubs/upload', formData, {
+                const resFile = await instance.post('/clubs/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },

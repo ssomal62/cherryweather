@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class OneDayWeatherDto {
+public class HourlyWeatherDto {
     private String fcstDate;
     private String fcstTime;
     private String weather;
