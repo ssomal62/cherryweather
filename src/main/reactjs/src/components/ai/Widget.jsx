@@ -2,6 +2,11 @@ import React, {useEffect} from 'react';
 import { useState } from 'react';
 import './widget.css';
 import {useNavigate} from "react-router-dom";
+import {HiOutlineChat} from "react-icons/hi";
+import { FcMms } from "react-icons/fc";
+import { FcGallery } from "react-icons/fc";
+import { FcSms } from "react-icons/fc";
+import { FcEditImage } from "react-icons/fc";
 
 export default function Widget() {
     const [isActive, setIsActive] = useState(false);
@@ -24,9 +29,10 @@ export default function Widget() {
                         <i></i>
                     </div>
                     <ul className="list">
-                        <li onClick={ () => navigate('/image')}>1</li>
-                        <li onClick={ () => navigate('/')}>2</li>
-                        <li onClick={ () => navigate('/')}>3</li>
+                        <li onClick={() => navigate('/image')}><FcMms style={{...styles.icon}}/></li>
+                        <li onClick={() => navigate('/image')}><FcEditImage style={{...styles.icon}}/></li>
+                        <li onClick={() => navigate('/imageList')}><FcGallery style={{...styles.icon}}/></li>
+                        <li onClick={() => navigate('/')}><FcSms style={{...styles.icon}}/></li>
                     </ul>
                 </div>
             </div>
@@ -34,9 +40,17 @@ export default function Widget() {
     );
 }
 
+
 const styles = {
-    title:{
-        fontSize:20,
-        fontWeight:900,
+    title: {
+        fontSize: 20,
+        fontWeight: 900,
+    },
+    icon: {
+        width: 24,
+        height: 24,
+        marginTop: 8,
+        marginLeft: 8,
+
     }
 }

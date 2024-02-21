@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button, Card, CardBody, CardFooter, Chip, Image} from "@nextui-org/react";
 import {TiLocation} from "react-icons/ti";
 import {IoChatbubbleEllipses} from "react-icons/io5";
@@ -6,10 +6,15 @@ import {BsFillPeopleFill} from "react-icons/bs";
 import {HeartIcon} from "./HeartIcon";
 import {HeartFill, useSaveImageState, UseSaveState} from "../../../recoil/hooks/UseSaveState";
 import {useRecoilValue} from "recoil";
+import {Spinner} from "@nextui-org/react";
+
+
 
 const GeneratedImage = ({image}) => {
 
     const { toggleSaveImage } = useSaveImageState(); // useSaveImageState 훅을 호출하여 toggleSaveImage 함수를 가져옵니다.
+    const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+
     const handleClick = () => {
         const newWindow = window.open(image, '_blank');
         if (newWindow) {
@@ -17,21 +22,26 @@ const GeneratedImage = ({image}) => {
         }
     };
     const handleSaveClick = async () => {
+        setIsLoading(true); // 저장하기 버튼 클릭 시 로딩 상태 활성화
         await toggleSaveImage(image);
+        setIsLoading(false); // 저장 완료 후 로딩 상태 비활성화
     };
 
     // 수정: saveImageStatus 대신 isSaved 값 직접 사용
     const isSaved = useRecoilValue(HeartFill);
     console.log("isSaved="+isSaved);
     return (
+
         <Card
             isFooterBlurred
             radius="lg"
             className="border-none"
             onClick={handleClick} // 클릭 이벤트 처리
         >
+
             <div className="relative w-full h-[600px]" onClick={handleClick}>
                 <div className="absolute z-10 w-full h-full from-slate-800 bg-gradient-to-b to-transparent " ></div>
+
                 <Image
                     removeWrapper
                     isZoomed
@@ -42,6 +52,14 @@ const GeneratedImage = ({image}) => {
 
                 />
             </div>
+            {isLoading && ( // isLoading이 true일 때만 스피너 표시
+                <>
+                    <br/>
+                    <Spinner size="lg" label="저장중" color="danger" labelColor="danger" className="z-100" />
+                    <br/>
+                    <br/>
+                </>
+            )}
             <CardBody className="absolute z-20 top-1 flex-col items-start" onClick={handleClick}>
                 <div className="flex justify-between w-full" onClick={handleClick}>
                     <div className="flex items-start" onClick={handleClick}>
@@ -90,9 +108,9 @@ const GeneratedImage = ({image}) => {
                     radius="lg"
                     size="sm"
                     onClick={handleSaveClick}
-                    disabled={isSaved} // isSaved 값이 true일 때만 disabled
+                    disabled={isLoading || isSaved} // 로딩 중이거나 이미 저장된 경우 버튼 비활성화
                 >
-                    {isSaved ? "저장 완료" : "저장하기"} {/* isSaved에 따라 텍스트 변경 */}
+                    {isLoading ? "저장 중..." : (isSaved ? "저장 완료" : "저장하기")}
                 </Button>
             </CardFooter>
         </Card>

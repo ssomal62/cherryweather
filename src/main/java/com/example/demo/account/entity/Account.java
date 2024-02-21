@@ -116,6 +116,8 @@ public class Account {
         this.activitiesAreas = activitiesAreas;
     }
 
+
+
     public void updateAccountRole(UserRole userRole) {
         this.userRole = userRole;
     }

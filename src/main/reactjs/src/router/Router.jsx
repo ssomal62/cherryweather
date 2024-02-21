@@ -1,7 +1,7 @@
-import React, {Suspense} from "react";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import {useRecoilValue} from "recoil";
-import {IsLoginAtom} from "../recoil/LoginAtom";
+import React, { Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { IsLoginAtom } from "../recoil/LoginAtom";
 // import { lazy } from "react";
 
 // 일반적인 임포트 방법
@@ -21,7 +21,12 @@ import AI_main from "../pages/ai/AI_main";
 import GPT from "../pages/ai/ChatGPT";
 import AI_image from "../pages/ai/ImageGenerator";
 import WeatherDetail from "../pages/weather/WeatherDetail";
+import AI_imageList from "../pages/ai/SavedImage";
 
+import Chat from "../pages/chat/Chat";
+import Event from "../pages/event/Event";
+import Adminchat from "../components/chat/Adminchat";
+import ChatRoom from "../components/chat/ChatRoom";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -55,25 +60,54 @@ const Router = () => {
           {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
           <Route path="/" element={<Home />} />
           {/* 로그인 없이 접근 가능하나 로그인이 되어있으면 접근 불가한 페이지 */}
-          <Route path="/login" element={<BlockIfLoggedIn><SignIn /></BlockIfLoggedIn>} />
+          <Route
+            path="/login"
+            element={
+              <BlockIfLoggedIn>
+                <SignIn />
+              </BlockIfLoggedIn>
+            }
+          />
           <Route path="/login/local" element={<LocalSignIn />} />
-          <Route path="/oauth" element={<BlockIfLoggedIn><OauthInfo /></BlockIfLoggedIn>} />
-          <Route path="/join" element={<BlockIfLoggedIn><SignUp /></BlockIfLoggedIn>} />
-          <Route path="/mypage" element={<MyPage /> } />
+          <Route
+            path="/oauth"
+            element={
+              <BlockIfLoggedIn>
+                <OauthInfo />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route
+            path="/join"
+            element={
+              <BlockIfLoggedIn>
+                <SignUp />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route path="/mypage" element={<MyPage />} />
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />} />
           {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}
-             {/*<Route path=":num" element={<ClubDetails />} />*/}
+          {/*<Route path=":num" element={<ClubDetails />} />*/}
 
           <Route path="/club-add" element={<AddClub />} />
           <Route path="/ai" element={<AI_main />} />
           <Route path="/gpt" element={<GPT />} />
           <Route path="/image" element={<AI_image />} />
+          <Route path="/imageList" element={<AI_imageList />} />
           <Route path="/weatherDetail" element={<WeatherDetail />} />
 
-
+          {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
+          {/* {isLogin && <Route path="/club" element={<Club />} />} */}
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/room/:chatRoom/" element={<ChatRoom />} />
+          <Route path="/chat/admin" element={<Adminchat />} />
+          {/* {isLogin && <Route path="/club" element={<Club />} />} */}
+          <Route path="/event" element={<Event />} />
 
           {/* WebNotificationTest 경로 추가 */}
+
           <Route
             path="/web-notification-test"
             element={<WebNotificationTest />}
