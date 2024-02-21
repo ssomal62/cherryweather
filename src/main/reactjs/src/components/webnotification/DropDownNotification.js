@@ -1,23 +1,23 @@
 // DropDownNotification.js
 
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import {useRecoilValue} from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   useFetchUserInfo,
   userInfoState,
 } from "../../recoil/hooks/UseFetchUserInfo";
-import {clubListState, useFetchClubs} from "../../recoil/hooks/UseFetchClubs";
-import {useNavigate} from "react-router-dom";
+import { clubListState, useFetchClubs } from "../../recoil/hooks/UseFetchClubs";
+import { useNavigate } from "react-router-dom";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
-  const clubs = useRecoilValue(clubListState); // clubs Recoil 상태 사용하기
+  const [clubs, setClubs] = useRecoilState(clubListState); // clubs Recoil 상태 사용하기
   const fetchClubs = useFetchClubs(); // 클럽 정보 가져오기
   const userInfoFetch = useFetchUserInfo();
   const navigate = useNavigate(); // useNavigate 훅 사용하기
@@ -29,30 +29,45 @@ const DropDownNotification = () => {
     userInfoFetch();
   }, []);
 
-  // userInfo 상태가 업데이트될 때마다 클럽 정보를 가져옴
+  // 클럽 데이터를 가져오는 부분을 수정합니다.
   useEffect(() => {
-    if (userInfo.name) {
-      fetchClubs(); // userInfo.name이 변경될 때마다 fetchClubs 호출
+    async function loadClubs() {
+      try {
+        const clubsData = await fetchClubs(); // 클럽 데이터를 가져옴
+        if (clubsData) {
+          setClubs(clubsData); // Recoil 상태를 업데이트
+        } else {
+          console.error('클럽 데이터를 가져오지 못했습니다.');
+        }
+      } catch (error) {
+        console.error('클럽 데이터를 가져오는 중 에러가 발생했습니다.', error);
+      }
     }
-  }, [fetchClubs, userInfo.name]);
+
+    if (userInfo.name && userInfo.clubId) {
+      loadClubs(); // 유저 정보가 있고, clubId도 있을 때 클럽 정보 가져오기
+    }
+  }, [fetchClubs, userInfo.name, userInfo.clubId]); // 의존성 배열에 userInfo.clubId 추가
 
   // 클럽 정보를 비교하여 필터링
-  const userClubs = clubs.filter(
+  const userClubs = clubs ? clubs.filter(
     (club) => userInfo.clubId && userInfo.clubId.includes(club.clubId)
-  );
+  ) : [];
   console.log(userInfo.clubId);
 
   console.log(clubs);
 
-  // 필터링된 클럽으로 DropdownItem 생성
-  const clubDropdownItems = userClubs.map((club) => (
+  // DropdownItem 생성 부분을 수정합니다.
+  const clubDropdownItems = userClubs.length > 0 ? userClubs.map((club) => (
     <DropdownItem
       key={club.clubId}
       textValue={`${club.name}모임이 생성되었습니다.`}
     >
       {club.name}모임이 생성되었습니다.
     </DropdownItem>
-  ));
+  )) : <DropdownItem>가입한 모임이 없습니다.</DropdownItem>; // 클럽이 없을 경우를 대비한 대체 텍스트
+
+  console.log(clubDropdownItems);
 
   const handleClickOutside = (event) => {
     if (
