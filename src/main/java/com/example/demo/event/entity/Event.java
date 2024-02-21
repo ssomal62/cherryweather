@@ -24,7 +24,6 @@ public class Event {
     @Column(updatable = false)
     private long eventId;
 
-    @Column(nullable = false)
     @JoinColumn(name = "clubId")
     @ManyToOne
     private Club clubId;
