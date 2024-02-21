@@ -56,6 +56,7 @@ public class GeoConverter {
                        .r3(reqDto.getR3())
                        .nx(nx)
                        .ny(ny)
+                       .ip(reqDto.getIp())
                        .build();
     }
 }

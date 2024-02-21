@@ -14,4 +14,5 @@ public class TodayWeatherReqDto {
     private String fcstValue;
     private int nx;
     private int ny;
+    private String ip;
 }

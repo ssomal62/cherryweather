@@ -3,6 +3,7 @@ import CardListItem from "./ClubListItem";
 import {useRecoilValue} from "recoil";
 import {clubListState, useFetchClubs} from "../../../recoil/hooks/UseFetchClubs";
 import styled from "styled-components"
+import ClubListTabs from "./ClubListTabs";
 
 
 const ClubList = () => {
@@ -16,6 +17,7 @@ const ClubList = () => {
 
     return (
         <div>
+            <ClubListTabs/>
             {clubs.map((club) => (
                 <CardListItemWrapper key={club.clubId}>
                     <CardListItem
@@ -23,6 +25,7 @@ const ClubList = () => {
                     />
                 </CardListItemWrapper>
             ))}
+            <br/><br/><br/>
         </div>
     )
         ;

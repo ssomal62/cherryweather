@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from '../../assets/images/brand/cw3.png'
 
 import {
     Button,
@@ -9,7 +10,6 @@ import {
     Image,
     NavbarItem
 } from "@nextui-org/react";
-import cw from "../../assets/images/brand/cw3.png";
 import {ChevronDown} from "./Icons";
 import {WiDaySunny} from "react-icons/wi";
 
@@ -38,7 +38,7 @@ const BrandMenu = () => {
                         <Image
                             width={180}
                             alt="logo"
-                            src={cw}
+                            src={logo}
                         />
                     </Button>
                 </DropdownTrigger>

@@ -28,12 +28,12 @@ const AddClubSelectJoinStatus = ({onNext, joinApprovalStatus, setJoinApprovalSta
                 <br/><br/>
 
                 <Button
-                    startContent={<PiSignInBold style={{...styles.icon}}/>}
+                    startContent={<PiSignInBold style={styles.icon}/>}
                     fullWidth
-                    color={selectedButton === 'join' ? 'danger' : 'default'}
+                    color={selectedButton === 'JOIN' ? 'danger' : 'default'}
                     variant='solid'
                     style={{height: 100}}
-                    onClick={() => handleButtonClick('join')}
+                    onClick={() => handleButtonClick('JOIN')}
                 >
 
                     < span style={{fontSize: 20, fontWeight: 600, alignContent: 'start'}}>
@@ -45,12 +45,12 @@ const AddClubSelectJoinStatus = ({onNext, joinApprovalStatus, setJoinApprovalSta
                 <br/><br/>
 
                 <Button
-                    startContent={<MdAccessTime style={{...styles.icon}}/>}
+                    startContent={<MdAccessTime style={styles.icon}/>}
                     fullWidth
-                    color={selectedButton === 'approval' ? 'danger' : 'default'}
+                    color={selectedButton === 'APPROVAL' ? 'danger' : 'default'}
                     variant='solid'
                     style={{height: 100}}
-                    onClick={() => handleButtonClick('approval')}
+                    onClick={() => handleButtonClick('APPROVAL')}
                 >
 
                 < span style={{fontSize: 20, fontWeight: 600, alignContent: 'start'}}>
@@ -59,14 +59,12 @@ const AddClubSelectJoinStatus = ({onNext, joinApprovalStatus, setJoinApprovalSta
                 </span>
                 </Button>
 
-
                 <br/>
                 <br/>
                 <br/>
                 <NextButton isNextDisabled={isNextDisabled} onNext={onNext}/>
             </>
-        )
-            ;
+        );
     }
 ;
 
