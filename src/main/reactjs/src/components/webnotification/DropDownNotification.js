@@ -1,6 +1,6 @@
 // DropDownNotification.js
 
-import React, {useEffect} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
   Dropdown,
   DropdownTrigger,
@@ -21,6 +21,9 @@ const DropDownNotification = () => {
   const fetchClubs = useFetchClubs(); // 클럽 정보 가져오기
   const userInfoFetch = useFetchUserInfo();
   const navigate = useNavigate(); // useNavigate 훅 사용하기
+
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     userInfoFetch();
@@ -51,8 +54,25 @@ const DropDownNotification = () => {
     </DropdownItem>
   ));
 
+  const handleClickOutside = (event) => {
+    if (
+      isOpen &&
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []); // isOpen을 의존성 배열에서 제거하여 한 번만 실행되도록 함
+
   return (
-    <Dropdown isOpen>
+    <Dropdown isOpen onClick={() => setIsOpen(!isOpen)} ref={dropdownRef}>
       <DropdownTrigger>
         <span></span>
       </DropdownTrigger>

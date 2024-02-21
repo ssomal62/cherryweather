@@ -1,28 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
-import {Navbar, NavbarContent,} from "@nextui-org/react";
-import React, {useEffect, useState} from "react";
-import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
-import {
-  Input,
-  Navbar,
-  NavbarContent,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@nextui-org/react";
-import {SearchIcon} from "./SearchIcon";
+import {Navbar, NavbarContent} from "@nextui-org/react";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../../recoil/LoginAtom";
 import {AiOutlineLogin} from "react-icons/ai";
 import {NavLink, useNavigate} from "react-router-dom";
-import GoBellDropNotificationIcon from "./GoBellWithNotificationIcon";
-import {useRecoilValue} from "recoil";
-import {IsLoginAtom} from "../../recoil/LoginAtom";
-import {AiOutlineLogin} from "react-icons/ai";
-import {NavLink} from "react-router-dom";
 import GoBellDropNotificationIcon from "../../components/webnotification/GoBellDropNotificationIcon";
 
 export default function Header() {

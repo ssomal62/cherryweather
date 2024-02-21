@@ -1,14 +1,12 @@
 import React, {Suspense} from "react";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../recoil/LoginAtom";
 // import { lazy } from "react";
-
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 import Club from "../pages/club/Club";
 // import Login from "../pages/Login";
-import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
 import ClubDetails from "../pages/club/ClubDetails";
