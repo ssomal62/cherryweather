@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { IoOptionsOutline, IoSearchOutline } from "react-icons/io5";
+import React, {useEffect, useState} from "react";
+import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
 import {
   Input,
   Navbar,
@@ -8,14 +8,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@nextui-org/react";
-import { SearchIcon } from "./SearchIcon";
+import {SearchIcon} from "./SearchIcon";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
-import { useRecoilValue } from "recoil";
-import { IsLoginAtom } from "../../recoil/LoginAtom";
-import { AiOutlineLogin } from "react-icons/ai";
-import { NavLink } from "react-router-dom";
-import GoBellDropNotificationIcon from "./GoBellWithNotificationIcon";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../../recoil/LoginAtom";
+import {AiOutlineLogin} from "react-icons/ai";
+import {NavLink} from "react-router-dom";
+import GoBellDropNotificationIcon from "../../components/weather/GoBellWithNotificationIcon";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -92,7 +92,7 @@ export default function Header() {
         as="div"
         className="items-center"
         justify="end"
-        style={{ position: "relative" }}
+        style={{position: "relative"}}
       >
         <IoOptionsOutline style={styles.icon} />
 
