@@ -15,7 +15,7 @@ import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../../recoil/LoginAtom";
 import {AiOutlineLogin} from "react-icons/ai";
 import {NavLink} from "react-router-dom";
-import GoBellDropNotificationIcon from "../../components/weather/GoBellWithNotificationIcon";
+import GoBellDropNotificationIcon from "../../components/webnotification/GoBellDropNotificationIcon";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
