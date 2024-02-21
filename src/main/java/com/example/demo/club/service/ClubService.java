@@ -1,16 +1,20 @@
 package com.example.demo.club.service;
 
 
+import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.club.dto.ClubDetailDTO;
 import com.example.demo.club.dto.ClubListDTO;
 import com.example.demo.club.dto.CreateClubDTO;
 import com.example.demo.club.dto.UpdateClubDTO;
 import com.example.demo.club.entity.Club;
+import com.example.demo.club.event.ClubCreationEvent;
 import com.example.demo.club.exception.BadRequestException;
 import com.example.demo.club.repository.ClubRepository;
 import com.example.demo.club.utils.ClubValidator;
 import com.example.demo.common.exception.NotFoundException;
+import com.example.demo.membership.dto.ClubSignupDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +28,7 @@ import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_
 public class ClubService {
 
     private final ClubRepository clubRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public ClubListDTO findAll() {
@@ -31,10 +36,21 @@ public class ClubService {
     }
 
     @Transactional
-    public void saveClub(CreateClubDTO requestDTO) {
-        clubRepository.save(
-                validateDTO(createClub(requestDTO))
+    public void saveClub(CreateClubDTO requestDTO, AccountDetails accountDetails) {
+        Club saveClub = clubRepository.save(
+                validateDTO(createClub(requestDTO, accountDetails))
         );
+
+        ClubCreationEvent event =
+                new ClubCreationEvent(
+                        this,
+                        accountDetails,
+                        ClubSignupDTO.builder()
+                                .clubId(saveClub.getClubId())
+                                .build()
+                );
+
+        eventPublisher.publishEvent(event);
     }
 
     @Transactional
@@ -46,9 +62,9 @@ public class ClubService {
     }
 
     @Transactional
-    public void updateClub(UpdateClubDTO requestDTO) {
+    public void updateClub(UpdateClubDTO requestDTO, AccountDetails accountDetails) {
         Club existingClub = findClubById(requestDTO.clubId());
-        existingClub.updateClub(requestDTO);
+        existingClub.updateClub(requestDTO, accountDetails);
         clubRepository.save(
                 validateDTO(existingClub)
         );
@@ -68,7 +84,7 @@ public class ClubService {
 
     //==============  private method  ==============//
 
-    private Club createClub(CreateClubDTO requestDTO) {
+    private Club createClub(CreateClubDTO requestDTO, AccountDetails accountDetails) {
         return Club.builder()
                 .name(requestDTO.name())
                 .description(requestDTO.description())
@@ -79,8 +95,8 @@ public class ClubService {
                 .joinApprovalStatus(requestDTO.joinApprovalStatus().toUpperCase())
                 .status(requestDTO.status())
                 .activitiesArea(requestDTO.activitiesArea())
-//                .createdUserId(accountDetails.getAccount().getAccountId())
-//                .representativeUserId(accountDetails.getAccount().getAccountId())
+                .createdUserId(accountDetails.getAccount().getAccountId())
+                .representativeUserId(accountDetails.getAccount().getAccountId())
                 .currentMembers(1)
                 .maxMembers(GENTLE_BREEZE.getMaxMembers())
                 .currentGrowthMeter(0)

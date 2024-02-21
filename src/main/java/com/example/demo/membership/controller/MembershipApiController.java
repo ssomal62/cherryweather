@@ -36,11 +36,38 @@ public class MembershipApiController {
     }
 
     /**
+     * 개인 멤버십 조회
+     */
+    @GetMapping("/accounts")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MembershipListDTO> findAllMembershipsByAccount(
+            final @AuthenticationPrincipal AccountDetails accountDetails
+    ) {
+        return ResponseEntity.ok().body(
+                membershipService.findAllByAccount(accountDetails)
+        );
+    }
+
+    /**
+     * 멤버십 등록 여부
+     */
+    @GetMapping("/{clubId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Boolean> checkMember(
+            final @PathVariable(value = "clubId") long clubId,
+            final @AuthenticationPrincipal AccountDetails accountDetails
+    ) {
+        return ResponseEntity.ok().body(
+                membershipService.checkMember(clubId, accountDetails)
+        );
+    }
+
+    /**
      * 멤버십 조회
      */
-    @GetMapping("/query")
+    @PostMapping("/query")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<MembershipListDTO> findAllMembershipByAccountId(
+    public ResponseEntity<MembershipListDTO> findAllMembershipsByQueries(
             @RequestBody MembershipQueryDTO membershipQueryDTO
     ) {
         return ResponseEntity.ok().body(

@@ -1,6 +1,7 @@
 package com.example.demo.club.controller;
 
 
+import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.club.dto.ClubDetailDTO;
 import com.example.demo.club.dto.ClubListDTO;
 import com.example.demo.club.dto.CreateClubDTO;
@@ -11,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,8 +40,11 @@ public class ClubApiController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> createClub(@Valid @RequestBody CreateClubDTO requestDTO) {
-        clubService.saveClub(requestDTO);
+    public ResponseEntity<Void> createClub(
+            final @Valid @RequestBody CreateClubDTO requestDTO,
+            final @AuthenticationPrincipal AccountDetails accountDetails
+            ) {
+        clubService.saveClub(requestDTO, accountDetails);
         return ResponseEntity.ok().build();
     }
 
@@ -59,8 +64,11 @@ public class ClubApiController {
      */
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> updateClub(@Valid @RequestBody UpdateClubDTO requestDTO) {
-        clubService.updateClub(requestDTO);
+    public ResponseEntity<Void> updateClub(
+           final @Valid @RequestBody UpdateClubDTO requestDTO,
+           final @AuthenticationPrincipal AccountDetails accountDetails
+    ) {
+        clubService.updateClub(requestDTO, accountDetails);
         return ResponseEntity.ok().build();
     }
 
