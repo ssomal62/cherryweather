@@ -15,12 +15,6 @@ public record UpdateClubDTO(
         ClubCategory category,
         String subCategory,
         ClubStatus status,
-        String activitiesArea,
-        @NotNull(message = "[updatedUserId]는 null일 수 없습니다.")
-        @Positive(message = "[updatedUserId]는 양수여야합니다.")
-        long updatedUserId,
-        @NotNull(message = "[representativeUserId]는 null일 수 없습니다.")
-        @Positive(message = "[representativeUserId]는 양수여야합니다.")
-        Long representativeUserId
+        String activitiesArea
 ) {
 }

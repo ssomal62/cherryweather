@@ -11,8 +11,11 @@ import Club from "../pages/club/Club";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
-// import ClubDetails from "../pages/club/ClubDetails";
+import ClubDetails from "../pages/club/ClubDetails";
 import BlockIfLoggedIn from "../components/access/BlockIfLoggedIn";
+import ClubConfigurations from "../pages/club/ClubConfigurations";
+import ClubMembers from "../pages/club/ClubMembers";
+import ClubJoin from "../pages/club/ClubJoin";
 import SignIn from "../pages/auth/SignIn";
 import LocalSignIn from "../components/auth/LocalSignIn";
 import SignUp from "../pages/user/SignUp";
@@ -20,9 +23,16 @@ import MyPage from "../pages/user/MyPage";
 import AI_main from "../pages/ai/AI_main";
 import GPT from "../pages/ai/ChatGPT";
 import AI_image from "../pages/ai/ImageGenerator";
+import WeatherDetail from "../pages/weather/WeatherDetail";
+import AI_imageList from "../pages/ai/SavedImage";
 import MySetting from "../components/mypage/MySetting";
 import ModifyProfile from "../components/mypage/ModifyProfile";
 
+import Chat from "../pages/chat/Chat";
+import Event from "../pages/event/Event";
+import Adminchat from "../components/chat/Adminchat";
+import ChatRoom from "../components/chat/ChatRoom";
+import ClubSearch from "../pages/club/ClubSearch";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -46,6 +56,7 @@ import ModifyProfile from "../components/mypage/ModifyProfile";
 // 같이 사라진다
 
 const Router = () => {
+    const isLogin = useRecoilValue(IsLoginAtom);
 
   return (
     <BrowserRouter>
@@ -67,22 +78,40 @@ const Router = () => {
           {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}
              {/*<Route path=":num" element={<ClubDetails />} />*/}
 
-          <Route path="/club-add" element={<AddClub />} />
-          <Route path="/ai" element={<AI_main />} />
-          <Route path="/gpt" element={<GPT />} />
-          <Route path="/image" element={<AI_image />} />
+                    <Route path="/clubs" element={<Club/>}/>
+                    <Route path="/club-details/:clubId" element={<ClubDetails/>}/>
+                    <Route path="/club-add" element={<AddClub/>}>
+                        <Route path=":clubId" element={<AddClub/>}/>
+                    </Route>
+                    <Route path="/club-configurations" element={<ClubConfigurations/>}/>
+                    <Route path="/club-members" element={<ClubMembers/>}/>
+                    <Route path="/club-join" element={<ClubJoin/>}/>
+                    <Route path="/club-search" element={<ClubSearch/>}/>
 
+                    <Route path="/ai" element={<AI_main/>}/>
+                    <Route path="/gpt" element={<GPT/>}/>
+                    <Route path="/image" element={<AI_image/>}/>
+                    <Route path="/imageList" element={<AI_imageList/>}/>
+                    <Route path="/weatherDetail" element={<WeatherDetail/>}/>
 
+                    {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
+                    {/* {isLogin && <Route path="/club" element={<Club />} />} */}
+                    <Route path="/chat" element={<Chat/>}/>
+                    <Route path="/chat/room/:chatRoom/" element={<ChatRoom/>}/>
+                    <Route path="/chat/admin" element={<Adminchat/>}/>
+                    {/* {isLogin && <Route path="/club" element={<Club />} />} */}
+                    <Route path="/event" element={<Event/>}/>
 
-          {/* WebNotificationTest 경로 추가 */}
-          <Route
-            path="/web-notification-test"
-            element={<WebNotificationTest />}
-          />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
-  );
+                    {/* WebNotificationTest 경로 추가 */}
+
+                    <Route
+                        path="/web-notification-test"
+                        element={<WebNotificationTest/>}
+                    />
+                </Routes>
+            </Suspense>
+        </BrowserRouter>
+    );
 };
 
 export default Router;

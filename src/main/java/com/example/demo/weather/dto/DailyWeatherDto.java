@@ -21,4 +21,5 @@ public class DailyWeatherDto {
     private String sunset;
     private String moonrise;
     private String moonset;
+    private String ip;
 }

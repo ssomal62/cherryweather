@@ -16,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.example.demo.common.exception.enums.ExceptionStatus.*;
+import static com.example.demo.membership.enums.ClubRole.HOST;
 import static com.example.demo.membership.enums.ClubRole.MEMBER;
 import static com.example.demo.membership.enums.RegisteredStatus.ACTIVE;
 
@@ -34,15 +37,14 @@ public class MembershipService {
     }
 
     @Transactional
+    public MembershipListDTO findAllByAccount(AccountDetails accountDetails) {
+        List<Membership> findMembership = membershipRepository.findByAccount(accountDetails.getAccount());
+        return MembershipListDTO.fromMembership(findMembership);
+    }
+
+    @Transactional
     public void saveMembership(ClubSignupDTO requestDTO, AccountDetails accountDetails) {
-        Club findClub = clubService.findClubById(requestDTO.clubId());
-        Account findAccount = accountDetails.getAccount();
-
-        checkAccountThrowNotFoundException(findAccount);
-        checkDuplicateMembership(findClub, findAccount);
-
-        Membership membership = createMembership(requestDTO.screenName(), findClub, findAccount);
-
+        Membership membership = createMembership(requestDTO, accountDetails);
         membershipRepository.save(membership);
     }
 
@@ -69,15 +71,27 @@ public class MembershipService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBERSHIP));
     }
 
+    public Boolean checkMember(long clubId, AccountDetails accountDetails) {
+        Club findClub = clubService.findClubById(clubId);
+        Account findAaccount = accountDetails.getAccount();
+
+        return membershipRepository.existsByClubAndAccount(findClub, findAaccount);
+    }
+
     //==============  private method  ==============//
 
-    public Membership createMembership(String screenName, Club club, Account account) {
+    private Membership createMembership(ClubSignupDTO requestDTO, AccountDetails accountDetails) {
+        Club findClub = clubService.findClubById(requestDTO.clubId());
+        Account findAccount = accountDetails.getAccount();
+
+        checkAccountThrowNotFoundException(findAccount);
+        checkDuplicateMembership(findClub, findAccount);
+
         return Membership.builder()
-                .account(account)
-                .club(club)
-                .screenName(screenName)
+                .account(findAccount)
+                .club(findClub)
                 .status(ACTIVE)
-                .role(MEMBER)
+                .role(isFirstMember(findClub) ? HOST : MEMBER)
                 .build();
     }
 
@@ -92,5 +106,10 @@ public class MembershipService {
         if (exists) {
             throw new DuplicatedException(CONFLICT_CLUB_MEMBERSHIP);
         }
+    }
+
+    private boolean isFirstMember(Club findClub) {
+        long memberCount = membershipRepository.countByClub(findClub);
+        return memberCount == 0;
     }
 }

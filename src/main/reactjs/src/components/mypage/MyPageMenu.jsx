@@ -23,7 +23,7 @@ const MyPageMenu = () => {
           </Wapper>
         </MenuWapper>
       </MenuBtn>
-      <MenuBtn>
+      <MenuBtn onClick={()=>navigate("/imageList")}>
         <MenuWapper>
           <Wapper>
             <TbJacket style={{ ...styles.icon }} />

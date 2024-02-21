@@ -4,9 +4,10 @@ import DaumPostcode from "react-daum-postcode";
 import {HiLocationMarker} from "react-icons/hi";
 import {LuAlertCircle} from "react-icons/lu";
 import FinishButton from "./FinishButton";
+import UpdateButton from "./UpdateButton";
 
 
-const AddClubInputActivitiesArea = ({onSave, activitiesArea, setActivitiesArea}) => {
+const AddClubInputActivitiesArea = ({onSave, activitiesArea, onUpdate, setActivitiesArea, isClubId}) => {
 
     const [isNextDisabled, setIsNextDisabled] = useState(true);
     const [selectedArea, setSelectedArea] = useState(activitiesArea);
@@ -32,11 +33,11 @@ const AddClubInputActivitiesArea = ({onSave, activitiesArea, setActivitiesArea})
             <br/><br/>
 
             <Input type='text' value={selectedArea} onClick={onOpen}
-                   startContent={<HiLocationMarker style={{...styles.icon}}/>}
+                   startContent={<HiLocationMarker style={styles.icon}/>}
                    placeholder="예시 : 강남구 신사동"
             />
             <br/>
-            <div style={{...styles.description}}>
+            <div style={styles.description}>
             <LuAlertCircle style={{marginLeft:5, marginRight:5, float:'left'}}/>
             <span className="text-tiny">주소를 선택하면 지역이 등록됩니다.</span>
             </div>
@@ -63,7 +64,11 @@ const AddClubInputActivitiesArea = ({onSave, activitiesArea, setActivitiesArea})
                 </ModalContent>
             </Modal>
 
-            <FinishButton isNextDisabled={isNextDisabled} onSave={onSave} />
+            {isClubId ? (
+                <UpdateButton isNextDisabled={isNextDisabled} onUpdate={onUpdate} text="Update" />
+            ) : (
+                <FinishButton isNextDisabled={isNextDisabled} onSave={onSave} text="Save" />
+            )}
         </>
     );
 };
