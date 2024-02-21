@@ -27,7 +27,7 @@ export const useSaveImageState = () => {
                 const token = cookie.get('accessToken'); // 로컬 스토리지에서 JWT 토큰을 가져옵니다
                 console.log("token:"+token);
                 const config = {headers: { Authorization: `Bearer ${token}`}}
-                const response = await instance.post('ai_image/save', {
+                const response = await instance.post('/ai_image/save', {
                     imageURL:image_url
                 }, config);
                 if (response.bucketURL !== null) {

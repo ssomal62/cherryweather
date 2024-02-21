@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -113,7 +114,7 @@ public class TodayWeatherServie {
             JsonNode itemsNode = root.path("response").path("body").path("items").path("item");
             for(JsonNode item : itemsNode) {
                 String fcstDate = item.path("fcstDate").asText();
-                if(fcstDate.equals(currentDate)) {
+                if(!fcstDate.equals(baseDate)) {
                     TodayWeatherReqDto dto = TodayWeatherReqDto.builder()
                                                      .baseDate(item.path("baseDate").asText())
                                                      .baseTime(item.path("baseTime").asText())
@@ -245,6 +246,7 @@ public class TodayWeatherServie {
         return Objects.equals(todayWeather.getFcstTime(), currentHour);
     }
 
+    /* PTY, SKY 값을 기준으로 날씨 지정 */
     public String getWeatherCondition(String pty, String sky) {
         switch(pty) {
             case "0":
@@ -261,9 +263,55 @@ public class TodayWeatherServie {
                 return "날씨 정보 조회 실패";
         }
     }
-    //
-    // /* 오늘 시간별 날씨 */
-    // public List<OneDayWeatherDto> getOneDayWeather(){
-    //
-    // }
+
+    /* 오늘 시간별 날씨 */
+    public List<OneDayWeatherDto> getOneDayWeather() {
+        List<TodayWeatherReqDto> rawForcastData = getTodayWeather();
+        Map<String, OneDayWeatherDto.OneDayWeatherDtoBuilder> dtoMap = new HashMap<>();
+
+        // 현재 시간 및 날짜
+        LocalDateTime currentDateTime = LocalDateTime.now().minusHours(1);
+        LocalDateTime endDateTime = currentDateTime.plusHours(25);  // 다음 24시간 계산
+
+        // 카테고리 값을 저장하기 위한 임시 구조
+        Map<String, Map<String, String>> categoryValues = new HashMap<>();
+
+
+        for(TodayWeatherReqDto data : rawForcastData) {
+            LocalDateTime forecastDateTime = LocalDateTime.of(
+                    LocalDate.parse(data.getFcstDate(), DateTimeFormatter.ofPattern("yyyyMMdd")),
+                    LocalTime.parse(data.getFcstTime(), DateTimeFormatter.ofPattern("HH00"))
+            );
+
+            // 현재 시간부터 24시간 이내의 데이터만 처리
+            if(!forecastDateTime.isBefore(currentDateTime) && forecastDateTime.isBefore(endDateTime)) {
+                String key = data.getFcstDate() + "-" + data.getFcstTime();
+                OneDayWeatherDto.OneDayWeatherDtoBuilder dtoBuilder = dtoMap.computeIfAbsent(key, k -> OneDayWeatherDto.builder()
+                                                                                                               .fcstDate(data.getFcstDate())
+                                                                                                               .fcstTime(data.getFcstTime()));
+                categoryValues.computeIfAbsent(key, k -> new HashMap<>()).put(data.getCategory(), data.getFcstValue());
+
+                // 데이터 처리 후 weather 값을 설정
+                dtoMap.forEach((k, builder) -> {
+                    Map<String, String> values = categoryValues.get(k);
+                    String pty = values.getOrDefault("PTY", "0");
+                    String sky = values.getOrDefault("SKY", "1");
+                    String tmp = values.getOrDefault("TMP", "");
+
+                    builder.tmp(tmp)
+                            .pty(pty)
+                            .sky(sky)
+                            .weather(getWeatherCondition(pty, sky));
+                });
+
+            }
+        }
+
+        return dtoMap.values().stream()
+                       .map(OneDayWeatherDto.OneDayWeatherDtoBuilder::build)
+                       .sorted(Comparator.comparing(OneDayWeatherDto::getFcstDate)
+                                       .thenComparing(OneDayWeatherDto::getFcstTime))
+                       .collect(Collectors.toList());
+
+    }
 }

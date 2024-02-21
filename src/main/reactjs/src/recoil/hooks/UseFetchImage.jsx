@@ -22,7 +22,8 @@ export const useFetchImage = () => {
             console.log("token:"+token);
             const config = {headers: { Authorization: `Bearer ${token}`}}
 
-            const response = await instance.post('ai_image/create',
+            // const response = await instance.post('ai_image/create',
+            const response = await instance.post('/ai_image/create',
                 {
                     model: "dall-e-3",
                     prompt: "",
