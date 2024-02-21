@@ -130,7 +130,6 @@ sourceSets {
 processResources {
 	dependsOn "copyReactFile"
 	dependsOn "copyPrivate"
-	//dependsOn "appNpmInstall"
 }
 
 task cleanStatic(type: Delete) {
@@ -165,6 +164,7 @@ task buildReact(type: Exec) {
 }
 
 task installReact(type: Exec) {
+	dependsOn"installCrossEnv"
 	workingDir "$reactAppDir"
 	inputs.dir "$reactAppDir"
 	group = BasePlugin.BUILD_GROUP
@@ -177,6 +177,16 @@ task installReact(type: Exec) {
 	}
 }
 
+task installCrossEnv(type: Exec) {
+	workingDir "$reactAppDir"
+	inputs.dir "$reactAppDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "install", "-g", "cross-env"
+	} else {
+		commandLine "npm", "install", "-g", "cross-env"
+	}
+}
 
 // For Test Coverage Report with Jacoco
 // test라는 Gradle의 일반적인 task를 재구성해 테스트 종료 시 jacocoTestReport라는 task를 실행하도록 한 구성입니다.
