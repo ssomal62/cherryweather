@@ -30,10 +30,10 @@ const AddClubSelectJoinStatus = ({onNext, joinApprovalStatus, setJoinApprovalSta
                 <Button
                     startContent={<PiSignInBold style={styles.icon}/>}
                     fullWidth
-                    color={selectedButton === 'join' ? 'danger' : 'default'}
+                    color={selectedButton === 'JOIN' ? 'danger' : 'default'}
                     variant='solid'
                     style={{height: 100}}
-                    onClick={() => handleButtonClick('join')}
+                    onClick={() => handleButtonClick('JOIN')}
                 >
 
                     < span style={{fontSize: 20, fontWeight: 600, alignContent: 'start'}}>
@@ -47,10 +47,10 @@ const AddClubSelectJoinStatus = ({onNext, joinApprovalStatus, setJoinApprovalSta
                 <Button
                     startContent={<MdAccessTime style={styles.icon}/>}
                     fullWidth
-                    color={selectedButton === 'approval' ? 'danger' : 'default'}
+                    color={selectedButton === 'APPROVAL' ? 'danger' : 'default'}
                     variant='solid'
                     style={{height: 100}}
-                    onClick={() => handleButtonClick('approval')}
+                    onClick={() => handleButtonClick('APPROVAL')}
                 >
 
                 < span style={{fontSize: 20, fontWeight: 600, alignContent: 'start'}}>

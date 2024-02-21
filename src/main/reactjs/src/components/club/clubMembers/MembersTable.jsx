@@ -29,7 +29,8 @@ const statusColorMap = {
     Inactive : "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["screenName", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["userName", "status", "actions"];
+
 
 export default function MembersTable({users}) {
     const [filterValue, setFilterValue] = React.useState("");
@@ -54,7 +55,7 @@ export default function MembersTable({users}) {
 
         if (hasSearchFilter) {
             filteredUsers = filteredUsers.filter((user) =>
-                user.screenName.toLowerCase().includes(filterValue.toLowerCase()),
+                user.userName.toLowerCase().includes(filterValue.toLowerCase()),
             );
         }
         if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
@@ -84,10 +85,12 @@ export default function MembersTable({users}) {
         const cellValue = user[columnKey];
 
         switch (columnKey) {
-            case "screenName":
+            case "userName":
                 return (
                     <User
-                        avatarProps={{radius: "lg", src: user.avatar || defaultAvatar}}
+                        avatarProps={{radius: "lg",
+                            src: `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${user.userProfile}.jpg?type=f&w=600&h=600&ttype=jpg`
+                                || defaultAvatar}}
                         description={user.role}
                         name={cellValue}
                     >

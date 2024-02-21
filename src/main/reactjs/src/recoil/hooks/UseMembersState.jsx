@@ -3,10 +3,10 @@ import {useEffect} from "react";
 import {instance} from "../module/instance";
 
 export const membersState = atom({
-    key    : 'membersState',
-    default: [],
+    key             : 'membersState',
+    default         : [],
     effects_UNSTABLE: [
-        ({ setSelf, onSet }) => {
+        ({setSelf, onSet}) => {
             const savedValue = localStorage.getItem('membersState');
             if (savedValue != null) {
                 setSelf(JSON.parse(savedValue));
@@ -29,12 +29,13 @@ export const useMembersState = (clubId) => {
             const fetchMembers = async () => {
 
                 const requestData = {
-                    "clubId"              : clubId,
+                    "clubId": clubId,
                 };
 
                 try {
-                    const response = await instance.post('membership/query', requestData);
-                    console.log('✅[Club Member List] Success:', response);
+                    const response =
+                        await instance.post('/membership/query', requestData);
+                    console.log('✅[Club Member List] Success', response);
                     setMembers(response.data.summaryList)
 
                 } catch (error) {
@@ -45,6 +46,6 @@ export const useMembersState = (clubId) => {
             fetchMembers();
         }
 
-    },[clubId,setMembers]);
+    }, [clubId, setMembers]);
 
 }

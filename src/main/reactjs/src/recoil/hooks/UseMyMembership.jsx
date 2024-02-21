@@ -35,13 +35,14 @@ export const useMyMembership = () => {
             const fetchMyMembership = async () => {
 
                 try {
-                    const response = await instance.get('membership/accounts', {
+                    const response =
+                        await instance.get('/membership/accounts', {
                         headers: {
                             Authorization: `Bearer ${cookie.get('accessToken')}`
                         }
                     });
 
-                    console.log('✅[MyMembership List] Success:', response);
+                    console.log('✅[MyMembership List] Success', response);
                     setMyMembership(response.data.summaryList)
 
                 } catch (error) {

@@ -8,7 +8,7 @@ const Home = () => {
             <TodayWeather/>
             <img
                 alt=""
-                src={require("../assets/images/brand/cw_test_img3.png")}
+                src={require("../assets/images/defalut/sample_main.png")}
                 style={{borderRadius: 30}}
             />
         </Layout>

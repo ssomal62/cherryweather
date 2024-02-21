@@ -1,6 +1,6 @@
 import React from 'react';
-import {Avatar, AvatarGroup, AvatarIcon} from "@nextui-org/react";
-import {membersState, useMembersState} from "../../../recoil/hooks/UseMembersState";
+import {Avatar, AvatarGroup} from "@nextui-org/react";
+import {membersState} from "../../../recoil/hooks/UseMembersState";
 
 import {useRecoilValue} from "recoil";
 const AvatarArea = () => {
@@ -11,7 +11,8 @@ const AvatarArea = () => {
             {members.map((member, index) => (
                 <Avatar  key={member.userId}
                          showFallback
-                         aria-label={member.screenName}
+                         aria-label={member.userName}
+                         src = {`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${member.userProfile}.jpg?type=f&w=600&h=600&ttype=jpg`}
                          size='lg' radius="lg"/>
             ))}
         </AvatarGroup>

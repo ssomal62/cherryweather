@@ -13,8 +13,9 @@ export const useFetchClubs = () => {
     return useCallback(async () => {
         console.log("⚠️[Club List] 조회를 시도합니다.")
         try {
-            const response = await instance.get('clubs');
-            console.log('✅[Club List] Success:', response);
+            const response =
+                await instance.get('/clubs');
+            console.log('✅[Club List] Success', response);
             setClubList(response.data.summaryList);
         } catch (error) {
             console.error('⛔[Club List] Failed', error);

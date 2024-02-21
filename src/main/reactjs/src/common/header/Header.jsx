@@ -1,46 +1,18 @@
 import React, {useEffect, useState} from "react";
 import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
 import {Navbar, NavbarContent,} from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
-import { IoOptionsOutline, IoSearchOutline } from "react-icons/io5";
-import {
-  Input,
-  Navbar,
-  NavbarContent,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@nextui-org/react";
-import { SearchIcon } from "./SearchIcon";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../../recoil/LoginAtom";
 import {AiOutlineLogin} from "react-icons/ai";
-import {NavLink} from "react-router-dom";
-import WebNotificationTest from "../../components/webnotification/WebNotificationTest";
-import {GoBellWithNotificationIcon} from "./GoBellWithNotificationIcon";
-import {useFetchUserInfo} from "../../recoil/hooks/UseFetchUserInfo";
-import { useRecoilValue } from "recoil";
-import { IsLoginAtom } from "../../recoil/LoginAtom";
-import { AiOutlineLogin } from "react-icons/ai";
-import { NavLink } from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import GoBellDropNotificationIcon from "./GoBellWithNotificationIcon";
 
 export default function Header() {
-    const [isOpen, setIsOpen] = useState(false);
     const isLogin = useRecoilValue(IsLoginAtom);
     const [registration, setRegistration] = useState(null);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsOpen(false);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Service Worker 등록
@@ -105,7 +77,9 @@ export default function Header() {
                 style={{ position: "relative" }}
             >
                 <IoOptionsOutline style={styles.icon}/>
-                <IoSearchOutline style={styles.icon}/>
+                <IoSearchOutline style={styles.icon}
+                                 onClick={()=>navigate('/club-search')}
+                />
 
                 <GoBellDropNotificationIcon onClick={makeNotiTest} />
                 {isLogin ? (
@@ -137,6 +111,7 @@ const styles = {
         height     : 22,
         color      : "black",
         marginRight: 3,
+        cursor:'pointer',
     },
     navBar: {
         backgroundColor: 'rgba(255,255,255,0)',

@@ -27,7 +27,8 @@ export const useClubDetailState = (clubId) => {
         if (clubId) {
             const fetchClubDetail = async () => {
                 try {
-                    const response = await instance.get(`clubs/${clubId}`);
+                    const response =
+                        await instance.get(`/clubs/${clubId}`);
                     console.log("✅[Club Detail] Success", response)
                     setClub(response.data.clubDetail);
                 } catch (error) {

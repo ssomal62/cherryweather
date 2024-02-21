@@ -26,9 +26,10 @@ const ClubDetails = () => {
     const navigate = useNavigate();
     const [showButton, setShowButton] = useState(false);
 
+    useCheckMember(clubId);
     useClubDetailState(clubId);
     useMembersState(clubId);
-    useCheckMember(clubId);
+
 
     const club = useRecoilValue(clubDetailState);
     const isMember = useRecoilValue(isMemberState);
@@ -46,7 +47,7 @@ const ClubDetails = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowButton(true);
-        }, 400);
+        }, 300);
         return () => clearTimeout(timer);
     }, []);
 
@@ -189,7 +190,6 @@ const ClubDetails = () => {
                     </div>
                 </div>
             </ClubDetail>
-            <br/><br/><br/>
 
             {showButton &&  <div><ClubJoinButton isMember={isMember} /></div>}
 

@@ -1,5 +1,5 @@
 const columns = [
-    {name: "멤버", uid: "screenName", sortable: true},
+    {name: "멤버", uid: "userName", sortable: true},
     {name: "상태", uid: "status", sortable: true},
     {name: "", uid: "actions"},
 ];
