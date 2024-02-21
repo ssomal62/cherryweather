@@ -1,89 +1,84 @@
 import React from "react";
 import styled from "styled-components";
-import { Tab, Tabs } from "@nextui-org/react";
-import { HiOutlineHome } from "react-icons/hi2";
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { HiOutlineChat } from "react-icons/hi";
-import { FiUsers } from "react-icons/fi";
-import { MdOutlineAutoMode } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import {Tab, Tabs} from "@nextui-org/react";
+import {HiOutlineHome} from "react-icons/hi2";
+import {IoMdAddCircleOutline} from "react-icons/io";
+import {HiOutlineChat} from "react-icons/hi";
+import {FiUsers} from "react-icons/fi";
+import {MdOutlineAutoMode} from "react-icons/md";
+import {useNavigate} from "react-router-dom";
 
 const Footer = () => {
   const navigate = useNavigate();
 
-  return (
-    <BottomNav>
-      <Tabs
-        aria-label="Options"
-        color="danger"
-        variant="solid"
-        radius="full"
-        align="center"
-      >
-        <Tab
-          value="home"
-          title={
-            <div
-              className="flex items-center flex-col "
-              onClick={() => navigate("/")}
+    return (
+        <BottomNav>
+            <Tabs
+                aria-label="Options"
+                color="danger"
+                variant="solid"
+                radius="full"
+                align="center"
             >
-              <HiOutlineHome style={{ ...styles.icon }} />
-            </div>
-          }
-          className="h-[50px] flex justify-center"
-        ></Tab>
-        <Tab
-          value="ai-weather"
-          title={
-            <div
-              className="flex items-center flex-col "
-              onClick={() => navigate("/ai")}
-            >
-              <MdOutlineAutoMode style={{ ...styles.icon }} />
-            </div>
-          }
-          className="h-[50px] flex justify-center"
-        ></Tab>
-        <Tab
-          value="add"
-          title={
-            <div
-              className="flex items-center flex-col "
-              onClick={() => navigate("/club-add")}
-            >
-              <IoMdAddCircleOutline style={{ ...styles.icon }} />
-            </div>
-          }
-          className="h-[50px] flex justify-center"
-        ></Tab>
-        <Tab
-          value="club"
-          title={
-            <div
-              className="flex items-center flex-col"
-              onClick={() => navigate("/club")}
-            >
-              <FiUsers style={{ ...styles.icon }} />
-            </div>
-          }
-          className="h-[50px] flex justify-center"
-        ></Tab>
-
-        <Tab
-          value="chat"
-          title={
-            <div
-              className="flex items-center flex-col "
-              onClick={() => navigate("/chat")}
-            >
-              <HiOutlineChat style={{ ...styles.icon }} />
-            </div>
-          }
-          className="h-[50px] flex justify-center"
-        ></Tab>
-      </Tabs>
-    </BottomNav>
-  );
+                <Tab
+                    value="home"
+                    title={
+                        <div className="flex items-center flex-col "
+                             onClick={ () => navigate('/')}
+                        >
+                            <HiOutlineHome style={styles.icon}/>
+                        </div>
+                    }
+                    className="h-[50px] flex justify-center"
+                ></Tab>
+                <Tab
+                    value="ai-weather"
+                    title={
+                        <div className="flex items-center flex-col "
+                             onClick={ () => navigate('/ai')}
+                        >
+                            <MdOutlineAutoMode style={styles.icon}/>
+                        </div>
+                    }
+                    className="h-[50px] flex justify-center"
+                ></Tab>
+                <Tab
+                    value="add"
+                    title={
+                        <div className="flex items-center flex-col "
+                             onClick={ () => navigate('/club-add')}
+                        >
+                            <IoMdAddCircleOutline style={styles.icon}/>
+                        </div>
+                    }
+                    className="h-[50px] flex justify-center"
+                ></Tab>
+                <Tab
+                    value="club"
+                    title={
+                        <div className="flex items-center flex-col"
+                             onClick={() => navigate('/clubs')}
+                        >
+                            <FiUsers style={styles.icon}/>
+                        </div>
+                    }
+                    className="h-[50px] flex justify-center"
+                ></Tab>
+                <Tab
+                    value="chat"
+                    title={
+                        <div
+                            className="flex items-center flex-col "
+                            onClick={() => navigate("/chat")}
+                        >
+                            <HiOutlineChat style={styles.icon}/>
+                        </div>
+                    }
+                    className="h-[50px] flex justify-center"
+                ></Tab>
+            </Tabs>
+        </BottomNav>
+    );
 };
 
 export default Footer;
