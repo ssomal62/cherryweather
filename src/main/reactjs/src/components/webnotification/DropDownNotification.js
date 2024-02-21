@@ -14,6 +14,7 @@ import {
 } from "../../recoil/hooks/UseFetchUserInfo";
 import { clubListState, useFetchClubs } from "../../recoil/hooks/UseFetchClubs";
 import { useNavigate } from "react-router-dom";
+import { UseFetchWeather } from "../../recoil/hooks/UseFetchWeather";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
@@ -21,6 +22,7 @@ const DropDownNotification = () => {
   const fetchClubs = useFetchClubs(); // 클럽 정보 가져오기
   const userInfoFetch = useFetchUserInfo();
   const navigate = useNavigate(); // useNavigate 훅 사용하기
+  const { data: weatherData } = UseFetchWeather('/weather/daily'); // 날씨 데이터 가져오기
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -95,7 +97,7 @@ const DropDownNotification = () => {
         <DropdownItem key="login" onClick={() => navigate("/mypage")}>
           {userInfo.name}님이 로그인 되었습니다.
         </DropdownItem>
-        <DropdownItem key="weather">오늘의 날씨: 맑음, 20°C</DropdownItem>
+        <DropdownItem key="weather">오늘의 날씨: {weatherData.weather}, {weatherData.currentTemp}°C</DropdownItem>
         {clubDropdownItems} {/* clubDropdownItems 배열을 그대로 사용 */}
         {/* {clubs
           .filter((club) => userClubNames.includes(club.name))
