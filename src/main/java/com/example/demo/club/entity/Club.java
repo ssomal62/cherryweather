@@ -1,6 +1,7 @@
 package com.example.demo.club.entity;
 
 
+import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.club.dto.UpdateClubDTO;
 import com.example.demo.club.enums.ClubCategory;
 import com.example.demo.club.enums.ClubGrade;
@@ -88,7 +89,7 @@ public class Club {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public void updateClub(UpdateClubDTO requestDTO) {
+    public void updateClub(UpdateClubDTO requestDTO, AccountDetails accountDetails) {
         this.name = requestDTO.name();
         this.description = requestDTO.description();
         this.category = requestDTO.category();
@@ -96,7 +97,6 @@ public class Club {
         this.status = requestDTO.status();
         this.joinApprovalStatus = requestDTO.joinApprovalStatus();
         this.activitiesArea = requestDTO.activitiesArea();
-        this.updatedUserId = requestDTO.updatedUserId();
-        this.representativeUserId = requestDTO.representativeUserId();
+        this.updatedUserId = accountDetails.getAccount().getAccountId();
     }
 }

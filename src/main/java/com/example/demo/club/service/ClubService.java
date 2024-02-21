@@ -62,9 +62,9 @@ public class ClubService {
     }
 
     @Transactional
-    public void updateClub(UpdateClubDTO requestDTO) {
+    public void updateClub(UpdateClubDTO requestDTO, AccountDetails accountDetails) {
         Club existingClub = findClubById(requestDTO.clubId());
-        existingClub.updateClub(requestDTO);
+        existingClub.updateClub(requestDTO, accountDetails);
         clubRepository.save(
                 validateDTO(existingClub)
         );

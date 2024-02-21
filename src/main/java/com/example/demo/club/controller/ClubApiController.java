@@ -44,7 +44,6 @@ public class ClubApiController {
             final @Valid @RequestBody CreateClubDTO requestDTO,
             final @AuthenticationPrincipal AccountDetails accountDetails
             ) {
-        System.out.println("어카운트 테스트:" + accountDetails.getAccount().getEmail());
         clubService.saveClub(requestDTO, accountDetails);
         return ResponseEntity.ok().build();
     }
@@ -65,8 +64,11 @@ public class ClubApiController {
      */
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> updateClub(@Valid @RequestBody UpdateClubDTO requestDTO) {
-        clubService.updateClub(requestDTO);
+    public ResponseEntity<Void> updateClub(
+           final @Valid @RequestBody UpdateClubDTO requestDTO,
+           final @AuthenticationPrincipal AccountDetails accountDetails
+    ) {
+        clubService.updateClub(requestDTO, accountDetails);
         return ResponseEntity.ok().build();
     }
 
