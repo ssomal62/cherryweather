@@ -77,13 +77,13 @@ public class GeoLocationClient {
         SortedMap<String, SortedSet<String>> parameters = convertTypeToSortedMap(requestParameters);
 
         String timestamp = generateTimestamp();
-        System.out.println("timestamp: " + timestamp);
+        // System.out.println("timestamp: " + timestamp);
 
         String baseString = requestUrl + "?" + getRequestQueryString(parameters);
-        System.out.println("baseString : " + baseString);
+        // System.out.println("baseString : " + baseString);
 
         String signature = makeSignature(requestMethod, baseString, timestamp, accessKey, secretKey);
-        System.out.println("signature : " + signature);
+        // System.out.println("signature : " + signature);
 
         final String requestFullUrl = hostName + baseString;
         final HttpGet request = new HttpGet(requestFullUrl);
@@ -95,7 +95,7 @@ public class GeoLocationClient {
         response = httpClient.execute(request);
 
         final String msg = getResponse(response);
-        System.out.println("msg : " + msg);
+        // System.out.println("msg : " + msg);
         // System.out.println("response : " + response);
 
             return msg;

@@ -23,6 +23,7 @@ import MyPage from "../pages/user/MyPage";
 import AI_main from "../pages/ai/AI_main";
 import GPT from "../pages/ai/ChatGPT";
 import AI_image from "../pages/ai/ImageGenerator";
+import WeatherDetail from "../pages/weather/WeatherDetail";
 import AI_imageList from "../pages/ai/SavedImage";
 
 import Chat from "../pages/chat/Chat";
@@ -101,11 +102,11 @@ const Router = () => {
                     <Route path="/club-join" element={<ClubJoin/>}/>
                     <Route path="/club-search" element={<ClubSearch/>}/>
 
-
                     <Route path="/ai" element={<AI_main/>}/>
                     <Route path="/gpt" element={<GPT/>}/>
                     <Route path="/image" element={<AI_image/>}/>
                     <Route path="/imageList" element={<AI_imageList/>}/>
+                    <Route path="/weatherDetail" element={<WeatherDetail/>}/>
 
                     {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
                     {/* {isLogin && <Route path="/club" element={<Club />} />} */}
