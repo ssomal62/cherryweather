@@ -21,7 +21,7 @@ public class Chat {
     @Column(updatable = false)
     private int chatId;
     // 계정 id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ACCOUNT_ID")
     @JsonBackReference // 순환 참조 방지
     private Account accountid;

@@ -36,6 +36,7 @@ public ChatService(ChatRepository chatRepository) {
 
     @Transactional
     public void insertClubChatRoom(int accountid, String chatRoom, int clubid) {
+        chatRepository.insertClubChatRoom(accountid, chatRoom, clubid);
     }
 
     @Transactional

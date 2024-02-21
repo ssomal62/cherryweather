@@ -22,6 +22,7 @@ import Chat from "../pages/chat/Chat";
 import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
+import AddEvent from "../components/event/AddEvent";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -90,12 +91,12 @@ const Router = () => {
           <Route path="/ai" element={<AI_main />} />
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
-          {/* {isLogin && <Route path="/club" element={<Club />} />} */}
           <Route path="/chat" element={<Chat />} />
           <Route path="/chat/room/:chatRoom/" element={<ChatRoom />} />
           <Route path="/chat/admin" element={<Adminchat />} />
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
           <Route path="/event" element={<Event />} />
+          <Route path="/event-add" element={<AddEvent />} />
 
           {/* WebNotificationTest 경로 추가 */}
 
