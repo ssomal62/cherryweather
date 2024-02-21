@@ -11,4 +11,5 @@ public class GeoLocationResDto {
     private String r3; // (예: 동/읍/면)
     private double nx; // 기상청 API x좌표
     private double ny; // 기상청 API y좌표
+    private String ip;
 }

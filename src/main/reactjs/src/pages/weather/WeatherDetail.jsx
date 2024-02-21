@@ -1,10 +1,11 @@
 import React from 'react';
 import Layout from "../../common/Layout";
+import HourlyWeather from "../../components/weather/HourlyWeather";
 
 const WeatherDetail = () => {
     return (
         <Layout>
-            123
+            <HourlyWeather/>
         </Layout>
     );
 };

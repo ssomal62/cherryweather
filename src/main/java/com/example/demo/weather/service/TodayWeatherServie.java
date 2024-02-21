@@ -41,6 +41,7 @@ public class TodayWeatherServie {
         GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
         int nx = (int) geoLocationResDto.getNx();
         int ny = (int) geoLocationResDto.getNy();
+        String ip = geoLocationResDto.getIp();
 
         ResponseEntity<String> response = weatherServiceClient.getTodayWeatherForecast(functionName, baseDate, nx, ny);
         try {
@@ -53,7 +54,7 @@ public class TodayWeatherServie {
         // resultCode에 따른 예외 처리
         switch(resultCode) {
             case "00": // 정상 처리
-                return parseJsonResponse(response.getBody());
+                return parseJsonResponse(response.getBody(), ip);
             case "01":
                 throw new LookupException(WEATHER_API_APPLICATION_ERROR);
             case "02":
@@ -97,14 +98,15 @@ public class TodayWeatherServie {
         String r1 = geoLocationResDto.getR1();
         String r2 = geoLocationResDto.getR2();
         String r3 = geoLocationResDto.getR3();
+        String ip = geoLocationResDto.getIp();
 
         List<TodayWeatherReqDto> weatherDataList = getTodayWeather();
 
-        return formatWeatherData(weatherDataList, nx, ny, r1, r2, r3);
+        return formatWeatherData(weatherDataList, nx, ny, r1, r2, r3, ip);
     }
 
     /* JSON 데이터로 파싱 */
-    private List<TodayWeatherReqDto> parseJsonResponse(String response) {
+    private List<TodayWeatherReqDto> parseJsonResponse(String response, String ip) {
         List<TodayWeatherReqDto> todayWeatherList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -124,6 +126,7 @@ public class TodayWeatherServie {
                                                      .fcstValue(item.path("fcstValue").asText())
                                                      .nx(item.path("nx").asInt())
                                                      .ny(item.path("ny").asInt())
+                                                     .ip(ip)
                                                      .build();
                     todayWeatherList.add(dto);
                 }
@@ -135,7 +138,7 @@ public class TodayWeatherServie {
     }
 
     /* 모든 값을 받아와서 ResDto 생성 */
-    public List<TodayWeatherResDto> formatWeatherData(List<TodayWeatherReqDto> weatherDataList, int nx, int ny, String r1, String r2, String r3) {
+    public List<TodayWeatherResDto> formatWeatherData(List<TodayWeatherReqDto> weatherDataList, int nx, int ny, String r1, String r2, String r3, String ip) {
         Map<String, TodayWeatherResDto.TodayWeatherResDtoBuilder> builders = new HashMap<>();
 
         for(TodayWeatherReqDto data : weatherDataList) {
@@ -147,7 +150,8 @@ public class TodayWeatherServie {
                                                             .ny(ny)
                                                             .r1(r1)
                                                             .r2(r2)
-                                                            .r3(r3));
+                                                            .r3(r3)
+                                                            .ip(ip));
 
             TodayWeatherResDto.TodayWeatherResDtoBuilder builder = builders.get(dateTime);
             switch(data.getCategory()) {
@@ -226,7 +230,8 @@ public class TodayWeatherServie {
                         .windSpeed(todayWeather.getWSD())
                         .rainProbability(todayWeather.getPOP())
                         .rainfall(todayWeather.getPCP())
-                        .humidity(todayWeather.getREH());
+                        .humidity(todayWeather.getREH())
+                        .ip(todayWeather.getIp());
                 break; // 현재 시각에 해당하는 날씨 정보만 설정하고 반복문
             }
         }
@@ -265,9 +270,9 @@ public class TodayWeatherServie {
     }
 
     /* 오늘 시간별 날씨 */
-    public List<OneDayWeatherDto> getOneDayWeather() {
+    public List<HourlyWeatherDto> getHourlyWeather() {
         List<TodayWeatherReqDto> rawForcastData = getTodayWeather();
-        Map<String, OneDayWeatherDto.OneDayWeatherDtoBuilder> dtoMap = new HashMap<>();
+        Map<String, HourlyWeatherDto.HourlyWeatherDtoBuilder> dtoMap = new HashMap<>();
 
         // 현재 시간 및 날짜
         LocalDateTime currentDateTime = LocalDateTime.now().minusHours(1);
@@ -286,7 +291,7 @@ public class TodayWeatherServie {
             // 현재 시간부터 24시간 이내의 데이터만 처리
             if(!forecastDateTime.isBefore(currentDateTime) && forecastDateTime.isBefore(endDateTime)) {
                 String key = data.getFcstDate() + "-" + data.getFcstTime();
-                OneDayWeatherDto.OneDayWeatherDtoBuilder dtoBuilder = dtoMap.computeIfAbsent(key, k -> OneDayWeatherDto.builder()
+                HourlyWeatherDto.HourlyWeatherDtoBuilder dtoBuilder = dtoMap.computeIfAbsent(key, k -> HourlyWeatherDto.builder()
                                                                                                                .fcstDate(data.getFcstDate())
                                                                                                                .fcstTime(data.getFcstTime()));
                 categoryValues.computeIfAbsent(key, k -> new HashMap<>()).put(data.getCategory(), data.getFcstValue());
@@ -308,10 +313,9 @@ public class TodayWeatherServie {
         }
 
         return dtoMap.values().stream()
-                       .map(OneDayWeatherDto.OneDayWeatherDtoBuilder::build)
-                       .sorted(Comparator.comparing(OneDayWeatherDto::getFcstDate)
-                                       .thenComparing(OneDayWeatherDto::getFcstTime))
+                       .map(HourlyWeatherDto.HourlyWeatherDtoBuilder::build)
+                       .sorted(Comparator.comparing(HourlyWeatherDto::getFcstDate)
+                                       .thenComparing(HourlyWeatherDto::getFcstTime))
                        .collect(Collectors.toList());
-
     }
 }

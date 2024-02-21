@@ -17,4 +17,5 @@ public class GeoLocationReqDto {
     @JsonProperty("long")
     private double lon; // 경도
     private String net; // 네트워크 제공자
+    private String ip;
 }

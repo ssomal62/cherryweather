@@ -83,13 +83,14 @@ const TodayWeather = () => {
                 <Card className = "py-4 weatherInfo" style = {cardStyle}>
                     <CardBody className = "overflow-visible py-2 relative" style = {{height: '210px'}}>
                         <div className = "font-sans text-6xl font-bold text-white/90 text-shadow-small absolute" style = {{textShadow: '0 0 4px black'}}>
-                            {data.currentTemp}℃
+                            {data.currentTemp}℃<br/>
                         </div>
                         <div className = "font-sans text-medium text-white/90 text-shadow-small absolute bottom-14 left-4" style = {{textShadow: '0 0 4px black'}}>
                             L : {data.minTemp}℃ / H : {data.maxTemp}℃
                         </div>
                         <div className = "font-sans text-xl text-white/90 text-shadow-small absolute bottom-7 left-4" style = {{textShadow: '0 0 4px black'}}>
                             <span className = "text-2xl">{data.area}</span>, <span className = "text-medium">{data.city}</span>
+                            <span className = "font-sans text-xs text-white"> / {data.ip}</span>
                         </div>
                         <div className = "font-sans text-xl text-white/90 text-shadow-small absolute bottom-7 right-3" style = {{textShadow: '0 0 4px black'}}>
                             {data.weather}
