@@ -27,7 +27,7 @@ const ChatRoomList = () => {
       };
       const res = await instance.get("/account/user-info", config);
       setAccountData(res.data);
-      console.log("accountData : ", accountData);
+      console.log("accountData : ", res.data);
 
       const chat = new ncloudchat.Chat();
       chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");

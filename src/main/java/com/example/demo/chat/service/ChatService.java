@@ -40,7 +40,8 @@ public ChatService(ChatRepository chatRepository) {
     }
 
     @Transactional
-    public void insertPesonalChatRoom(int accountid, int chatRoom, int raccountid) {
-        chatRepository.insertPesonalChatRoom(accountid, chatRoom, raccountid);
+    public void insertPersonalChatRoom(int accountid, int chatRoom, int raccountid) {
+        chatRepository.insertPersonalChatRoom(accountid, chatRoom, raccountid);
     }
+
 }

@@ -39,8 +39,8 @@ public class ChatController {
         chatService.insertClubChatRoom(accountid, chatRoom, clubid);
     }
     @PostMapping("/insertpersonalchatroom")
-    public void insertPesonalChatRoom(@RequestParam int accountid, @RequestParam int chatRoom, @RequestParam int raccountid) {
-        chatService.insertPesonalChatRoom(accountid, chatRoom, raccountid);
+    public void insertPersonalChatRoom(@RequestParam int accountid, @RequestParam int chatRoom, @RequestParam int raccountid) {
+        chatService.insertPersonalChatRoom(accountid, chatRoom, raccountid);
     }
     @GetMapping("/getchatlist")
     public List<Chat> getChatListByAccountId(@RequestParam int accountid) {

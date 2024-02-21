@@ -104,7 +104,7 @@ const AddEvent = () => {
                 marginLeft: "55px",
               }}
             >
-              대표 이미지를 등록해주세요
+              정모 대표 이미지를 등록해주세요
             </Span>
           </label>
         )}
@@ -142,7 +142,7 @@ const AddEvent = () => {
       >
         <div onClick={openInterestAreaModal}>
           <Input
-            style={{ width: "300px", fontSize: 20, fontWeight: 600 }}
+            style={{ width: "340px", fontSize: 20, fontWeight: 600 }}
             type="text"
             value={eventLocation}
             startContent={<TiStarOutline style={{ ...styles.icon }} />}

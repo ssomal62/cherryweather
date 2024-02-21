@@ -30,6 +30,6 @@ public interface ChatRepository extends JpaRepository<Chat, Integer> {
 
     @Modifying
     @Query(value = "INSERT INTO chat (account_id, chat_room, raccountid) VALUES (?1, ?2, ?3)", nativeQuery = true)
-    void insertPesonalChatRoom(int accountid, int chatRoom, int raccountid);
+    void insertPersonalChatRoom(int accountid, int chatRoom, int raccountid);
 
 }
