@@ -28,7 +28,6 @@ public class TodayWeatherServie {
     private final DaylightService daylightService;
 
     private final String baseDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-    private final String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
     /* 오늘 단기 예보 조회*/
     public List<TodayWeatherReqDto> getTodayWeather() {
@@ -52,42 +51,26 @@ public class TodayWeatherServie {
         }
 
         // resultCode에 따른 예외 처리
-        switch(resultCode) {
-            case "00": // 정상 처리
-                return parseJsonResponse(response.getBody(), ip);
-            case "01":
-                throw new LookupException(WEATHER_API_APPLICATION_ERROR);
-            case "02":
-                throw new LookupException(WEATHER_API_DB_ERROR);
-            case "03":
-                throw new LookupException(WEATHER_API_NODATA_ERROR);
-            case "04":
-                throw new LookupException(WEATHER_API_HTTP_ERROR);
-            case "05":
-                throw new LookupException(WEATHER_API_SERVICE_TIME_OUT);
-            case "10":
-                throw new LookupException(WEATHER_API_INVALID_REQUEST_PARAMETER_ERROR);
-            case "11":
-                throw new LookupException(WEATHER_API_NO_MANDATORY_REQUEST_PARAMETERS_ERROR);
-            case "12":
-                throw new LookupException(WEATHER_API_NO_OPENAPI_SERVICE_ERROR);
-            case "20":
-                throw new LookupException(WEATHER_API_SERVICE_ACCESS_DENIED_ERROR);
-            case "21":
-                throw new LookupException(WEATHER_API_TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR);
-            case "22":
-                throw new LookupException(WEATHER_API_LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR);
-            case "30":
-                throw new LookupException(WEATHER_API_SERVICE_KEY_IS_NOT_REGISTERED_ERROR);
-            case "31":
-                throw new LookupException(WEATHER_API_DEADLINE_HAS_EXPIRED_ERROR);
-            case "32":
-                throw new LookupException(WEATHER_API_UNREGISTERED_IP_ERROR);
-            case "33":
-                throw new LookupException(WEATHER_API_UNSIGNED_CALL_ERROR);
-            default:
-                throw new LookupException(WEATHER_API_UNKNOWN_ERROR);
-        }
+        return switch(resultCode) {
+            case "00" -> // 정상 처리
+                    parseJsonResponse(response.getBody(), ip);
+            case "01" -> throw new LookupException(WEATHER_API_APPLICATION_ERROR);
+            case "02" -> throw new LookupException(WEATHER_API_DB_ERROR);
+            case "03" -> throw new LookupException(WEATHER_API_NODATA_ERROR);
+            case "04" -> throw new LookupException(WEATHER_API_HTTP_ERROR);
+            case "05" -> throw new LookupException(WEATHER_API_SERVICE_TIME_OUT);
+            case "10" -> throw new LookupException(WEATHER_API_INVALID_REQUEST_PARAMETER_ERROR);
+            case "11" -> throw new LookupException(WEATHER_API_NO_MANDATORY_REQUEST_PARAMETERS_ERROR);
+            case "12" -> throw new LookupException(WEATHER_API_NO_OPENAPI_SERVICE_ERROR);
+            case "20" -> throw new LookupException(WEATHER_API_SERVICE_ACCESS_DENIED_ERROR);
+            case "21" -> throw new LookupException(WEATHER_API_TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR);
+            case "22" -> throw new LookupException(WEATHER_API_LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR);
+            case "30" -> throw new LookupException(WEATHER_API_SERVICE_KEY_IS_NOT_REGISTERED_ERROR);
+            case "31" -> throw new LookupException(WEATHER_API_DEADLINE_HAS_EXPIRED_ERROR);
+            case "32" -> throw new LookupException(WEATHER_API_UNREGISTERED_IP_ERROR);
+            case "33" -> throw new LookupException(WEATHER_API_UNSIGNED_CALL_ERROR);
+            default -> throw new LookupException(WEATHER_API_UNKNOWN_ERROR);
+        };
     }
 
     /* GeoLocation을 사용해서 위치값 받아오기*/
@@ -253,20 +236,14 @@ public class TodayWeatherServie {
 
     /* PTY, SKY 값을 기준으로 날씨 지정 */
     public String getWeatherCondition(String pty, String sky) {
-        switch(pty) {
-            case "0":
-                return "1".equals(sky) ? "맑음" : "흐림";
-            case "1":
-                return "비";
-            case "2":
-                return "비/눈";
-            case "3":
-                return "눈";
-            case "4":
-                return "소나기";
-            default:
-                return "날씨 정보 조회 실패";
-        }
+        return switch(pty) {
+            case "0" -> "1".equals(sky) ? "맑음" : "흐림";
+            case "1" -> "비";
+            case "2" -> "비/눈";
+            case "3" -> "눈";
+            case "4" -> "소나기";
+            default -> "날씨 정보 조회 실패";
+        };
     }
 
     /* 오늘 시간별 날씨 */
@@ -291,9 +268,6 @@ public class TodayWeatherServie {
             // 현재 시간부터 24시간 이내의 데이터만 처리
             if(!forecastDateTime.isBefore(currentDateTime) && forecastDateTime.isBefore(endDateTime)) {
                 String key = data.getFcstDate() + "-" + data.getFcstTime();
-                HourlyWeatherDto.HourlyWeatherDtoBuilder dtoBuilder = dtoMap.computeIfAbsent(key, k -> HourlyWeatherDto.builder()
-                                                                                                               .fcstDate(data.getFcstDate())
-                                                                                                               .fcstTime(data.getFcstTime()));
                 categoryValues.computeIfAbsent(key, k -> new HashMap<>()).put(data.getCategory(), data.getFcstValue());
 
                 // 데이터 처리 후 weather 값을 설정
