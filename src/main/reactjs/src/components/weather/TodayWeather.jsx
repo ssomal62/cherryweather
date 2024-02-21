@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {Card, CardBody, CardFooter, Spinner} from "@nextui-org/react";
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
+import WeatherDetail from "../../pages/weather/WeatherDetail";
+import {useNavigate} from "react-router-dom";
 
 //시간 포맷 함수
 const formatTime = (time) => {
@@ -12,6 +14,12 @@ const formatTime = (time) => {
 }
 const TodayWeather = () => {
     const {fetchData, data, loading, error} = UseFetchWeather('/weather/daily');
+    const navigate = useNavigate();
+
+    // 이동 함수
+    const handleCardClick = () => {
+        navigate('/weatherDetail');
+    }
 
     useEffect(() => {
         const loadData = async () => {
@@ -80,9 +88,9 @@ const TodayWeather = () => {
         const sunset = formatTime(data.sunset);
         return (
             <div>
-                <Card className = "py-4 weatherInfo" style = {cardStyle}>
+                <Card className = "py-4 weatherInfo" style = {cardStyle} onClick={handleCardClick}>
                     <CardBody className = "overflow-visible py-2 relative" style = {{height: '210px'}}>
-                        <div className = "font-sans text-6xl font-bold text-white/90 text-shadow-small absolute" style = {{textShadow: '0 0 4px black'}}>
+                        <div className = "font-sans text-6xl font-bold text-white/90 text-shadow-small absolute" style = {{textShadow: '0 0 4px black'}} onClick={handleCardClick}>
                             {data.currentTemp}℃<br/>
                         </div>
                         <div className = "font-sans text-medium text-white/90 text-shadow-small absolute bottom-14 left-4" style = {{textShadow: '0 0 4px black'}}>

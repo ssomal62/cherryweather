@@ -28,6 +28,7 @@ public class TodayWeatherServie {
     private final DaylightService daylightService;
 
     private final String baseDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    private final String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
     /* 오늘 단기 예보 조회*/
     public List<TodayWeatherReqDto> getTodayWeather() {
@@ -269,6 +270,11 @@ public class TodayWeatherServie {
             if(!forecastDateTime.isBefore(currentDateTime) && forecastDateTime.isBefore(endDateTime)) {
                 String key = data.getFcstDate() + "-" + data.getFcstTime();
                 categoryValues.computeIfAbsent(key, k -> new HashMap<>()).put(data.getCategory(), data.getFcstValue());
+
+                //빌더가 없으면 생성
+                dtoMap.computeIfAbsent(key, k -> HourlyWeatherDto.builder()
+                                                        .fcstDate(data.getFcstDate())
+                                                        .fcstTime(data.getFcstTime()));
 
                 // 데이터 처리 후 weather 값을 설정
                 dtoMap.forEach((k, builder) -> {
