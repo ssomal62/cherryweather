@@ -1,4 +1,5 @@
 
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
@@ -8,6 +9,9 @@ plugins {
 	id("com.epages.restdocs-api-spec") version "0.19.0"
 	id 'jacoco'
 }
+
+
+
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
@@ -69,7 +73,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 
- 	// 파일 관련
+	// 파일 관련
 	implementation 'commons-fileupload:commons-fileupload:1.4'
 
 	// 비동기 및 반응형 웹 애플리케이션을 개발하기 위한 모듈
@@ -123,21 +127,21 @@ sourceSets {
 }
 */
 
-//processResources {
-//	dependsOn "copyReactFile"
-//	dependsOn "copyPrivate"
-//	//dependsOn "appNpmInstall"
-//}
+processResources {
+	dependsOn "copyReactFile"
+	dependsOn "copyPrivate"
+	//dependsOn "appNpmInstall"
+}
 
 task cleanStatic(type: Delete) {
 	delete "$projectDir/src/main/resources/static/static"
 }
 
-//task copyReactFile(type: Copy) {
-//	dependsOn "buildReact"
-//	from "$reactAppDir/build"
-//	into "$projectDir/src/main/resources/static"
-//}
+task copyReactFile(type: Copy) {
+	dependsOn "buildReact"
+	from "$reactAppDir/build"
+	into "$projectDir/src/main/resources/static"
+}
 
 task copyPrivate(type: Copy) {
 	copy {
@@ -147,31 +151,31 @@ task copyPrivate(type: Copy) {
 	}
 }
 
-//task buildReact(type: Exec) {
-//	dependsOn "installReact"
-//	dependsOn "cleanStatic" // static 디렉토리 삭제 작업에 의존합니다.
-//	workingDir "$reactAppDir"
-//	inputs.dir "$reactAppDir"
-//	group = BasePlugin.BUILD_GROUP
-//	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-//		commandLine "npm.cmd", "run-script", "build"
-//	} else {
-//		commandLine "npm", "run-script", "build"
-//	}
-//}
+task buildReact(type: Exec) {
+	dependsOn "installReact"
+	dependsOn "cleanStatic" // static 디렉토리 삭제 작업에 의존합니다.
+	workingDir "$reactAppDir"
+	inputs.dir "$reactAppDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "run-script", "build"
+	} else {
+		commandLine "npm", "run-script", "build"
+	}
+}
 
-//task installReact(type: Exec) {
-//	workingDir "$reactAppDir"
-//	inputs.dir "$reactAppDir"
-//	group = BasePlugin.BUILD_GROUP
-//	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-//		commandLine "npm.cmd", "audit", "fix"
-//		commandLine "npm.cmd", "install"
-//	} else {
-//		commandLine "npm", "audit", "fix"
-//		commandLine "npm", "install"
-//	}
-//}
+task installReact(type: Exec) {
+	workingDir "$reactAppDir"
+	inputs.dir "$reactAppDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "audit", "fix"
+		commandLine "npm.cmd", "install"
+	} else {
+		commandLine "npm", "audit", "fix"
+		commandLine "npm", "install"
+	}
+}
 
 
 // For Test Coverage Report with Jacoco
