@@ -18,7 +18,7 @@ public interface AI_imageRepository extends JpaRepository<AI_image, Long> {
 
     void deleteAllBybucketURL(String bucketURL);
 
-    @Query("SELECT ai FROM AI_image ai WHERE ai.account.accountId = :accountId")
+    @Query("SELECT ai FROM AI_image ai WHERE ai.account.accountId = :accountId AND ai.checkSave = true")
     List<AI_image> getSavedUrlByAccountId(Long accountId);
 
     @Modifying
