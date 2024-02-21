@@ -8,7 +8,7 @@ const FinishButton = ({isNextDisabled, onSave}) => {
             <Button
                 isDisabled={isNextDisabled}
                 variant='ghost'
-                startContent={<IoIosAddCircleOutline style={{...styles.icon}}/>}
+                startContent={<IoIosAddCircleOutline style={styles.icon}/>}
                 size='lg'
                 color='danger'
                 fullWidth

@@ -8,7 +8,8 @@ import lombok.Builder;
 public record MembershipSummary(
         long clubId,
         long userId,
-        String screenName,
+        String userName,
+        String userProfile,
         ClubRole role,
         RegisteredStatus status
 ) {

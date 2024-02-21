@@ -46,25 +46,25 @@ const AddClubSelectCategory = ({onNext, category, subCategory, setCategory, setS
     const renderIcon = (category) => {
         switch (category) {
             case 'CULTURE_ART':
-                return <RiMovie2Line style={{...styles.icon}} />
+                return <RiMovie2Line style={styles.icon} />
             case 'ACTIVITY' :
-                return <MdOutlineSportsFootball style={{...styles.icon}} />
+                return <MdOutlineSportsFootball style={styles.icon} />
             case 'FOOD_DRINK' :
-                return <PiWineDuotone style={{...styles.icon}} />
+                return <PiWineDuotone style={styles.icon} />
             case 'HOBBY' :
-                return <GrGamepad style={{...styles.icon}} />
+                return <GrGamepad style={styles.icon} />
             case 'TRAVEL_COMPANION' :
-                return <PiMountainsDuotone style={{...styles.icon}} />
+                return <PiMountainsDuotone style={styles.icon} />
             case 'SELF_IMPROVEMENT' :
-                return <MdOutlineSelfImprovement style={{...styles.icon}} />
+                return <MdOutlineSelfImprovement style={styles.icon} />
             case 'LOCAL_COMMUNITY' :
-                return <TbFriends style={{...styles.icon}} />
+                return <TbFriends style={styles.icon} />
             case 'FINANCE' :
-                return <FaMoneyBillTrendUp style={{...styles.icon}} />
+                return <FaMoneyBillTrendUp style={styles.icon} />
             case 'FOREIGN_LANGUAGE' :
-                return <LuLanguages style={{...styles.icon}} />
+                return <LuLanguages style={styles.icon} />
             case 'ROMANCE' :
-                return <PiHandHeartDuotone style={{...styles.icon}} />
+                return <PiHandHeartDuotone style={styles.icon} />
         }
     }
 
@@ -90,7 +90,7 @@ const AddClubSelectCategory = ({onNext, category, subCategory, setCategory, setS
                     title={category.description}
                     startContent={renderIcon(category.name)}
                 >
-                    <div style={{...styles.category}}>
+                    <div style={styles.category}>
                         {category.subcategories.map((subcategory, subIdx) => (
                             <Button
                                 key={subIdx}

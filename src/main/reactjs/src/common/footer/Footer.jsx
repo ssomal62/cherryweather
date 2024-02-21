@@ -9,17 +9,24 @@ import {MdOutlineAutoMode} from "react-icons/md";
 import {useNavigate} from "react-router-dom";
 
 const Footer = () => {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
     return (
         <BottomNav>
-            <Tabs aria-label="Options" color="danger" variant="solid" radius="full" align="center">
+            <Tabs
+                aria-label="Options"
+                color="danger"
+                variant="solid"
+                radius="full"
+                align="center"
+            >
                 <Tab
                     value="home"
                     title={
-                        <div className="flex items-center flex-col " onClick={ () => navigate('/')}>
-                            <HiOutlineHome style={{...styles.icon}}/>
+                        <div className="flex items-center flex-col "
+                             onClick={ () => navigate('/')}
+                        >
+                            <HiOutlineHome style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -27,8 +34,10 @@ const Footer = () => {
                 <Tab
                     value="ai-weather"
                     title={
-                        <div className="flex items-center flex-col " onClick={ () => navigate('/ai')}>
-                            <MdOutlineAutoMode style={{...styles.icon}}/>
+                        <div className="flex items-center flex-col "
+                             onClick={ () => navigate('/ai')}
+                        >
+                            <MdOutlineAutoMode style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -36,8 +45,10 @@ const Footer = () => {
                 <Tab
                     value="add"
                     title={
-                        <div className="flex items-center flex-col " onClick={ () => navigate('/club-add') }>
-                            <IoMdAddCircleOutline style={{...styles.icon}}/>
+                        <div className="flex items-center flex-col "
+                             onClick={ () => navigate('/club-add')}
+                        >
+                            <IoMdAddCircleOutline style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -45,17 +56,22 @@ const Footer = () => {
                 <Tab
                     value="club"
                     title={
-                        <div className="flex items-center flex-col" onClick={() => navigate('/club')}>
-                            <FiUsers style={{...styles.icon}}/>
+                        <div className="flex items-center flex-col"
+                             onClick={() => navigate('/clubs')}
+                        >
+                            <FiUsers style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
                 ></Tab>
                 <Tab
-                    value="chatHeader"
+                    value="chat"
                     title={
-                        <div className="flex items-center flex-col ">
-                            <HiOutlineChat style={{...styles.icon}}/>
+                        <div
+                            className="flex items-center flex-col "
+                            onClick={() => navigate("/chat")}
+                        >
+                            <HiOutlineChat style={styles.icon}/>
                         </div>
                     }
                     className="h-[50px] flex justify-center"
@@ -68,15 +84,15 @@ const Footer = () => {
 export default Footer;
 
 const styles = {
-    icon: {
-        width : 24,
-        height: 24,
-    },
-}
+  icon: {
+    width: 24,
+    height: 24,
+  },
+};
 
 const BottomNav = styled.div`
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   position: fixed;
   opacity: 90%;

@@ -1,0 +1,16 @@
+.channel-list {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* 채팅 영역이 가능한 모든 공간을 차지하도록 설정 */
+    overflow-y: hidden;
+    /* 자식 요소가 넘칠 경우 숨김 */
+    margin-bottom: 10px;
+}
+
+.list-photo {
+    flex-grow: 0;
+    /* 채널 목록 영역이 내용 크기만큼만 공간을 차지하도록 설정 */
+    overflow: hidden;
+
+}

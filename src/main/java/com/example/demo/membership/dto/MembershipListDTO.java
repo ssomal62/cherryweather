@@ -24,7 +24,8 @@ public record MembershipListDTO(
         return MembershipSummary.builder()
                 .clubId(membership.getClub().getClubId())
                 .userId(membership.getAccount().getAccountId())
-                .screenName(membership.getScreenName())
+                .userName(membership.getAccount().getProfileName())
+                .userProfile(membership.getAccount().getProfileImage())
                 .role(membership.getRole())
                 .status(membership.getStatus())
                 .build();
