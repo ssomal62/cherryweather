@@ -33,7 +33,7 @@ export const useDeleteImage  = () => {
             //         data:{ imageURL:bucketURL}
             //     });
 
-            const response = await instance.delete('ai_image/delete',
+            const response = await instance.delete('/ai_image/delete',
                 {
                     ...config,
                     data:{ imageURL:bucketURL}
