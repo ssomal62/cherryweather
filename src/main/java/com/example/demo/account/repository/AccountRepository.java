@@ -25,6 +25,4 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("SELECT a.registType FROM Account a WHERE a.email = :email")
     Optional<RegisterType> findRegisterTypeByEmail(String email);
 
-
-
 }

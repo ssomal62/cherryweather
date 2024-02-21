@@ -20,6 +20,8 @@ import MyPage from "../pages/user/MyPage";
 import AI_main from "../pages/ai/AI_main";
 import GPT from "../pages/ai/ChatGPT";
 import AI_image from "../pages/ai/ImageGenerator";
+import MySetting from "../components/mypage/MySetting";
+import ModifyProfile from "../components/mypage/ModifyProfile";
 
 
 // 레이즈 라우터 임포트 방법
@@ -44,7 +46,6 @@ import AI_image from "../pages/ai/ImageGenerator";
 // 같이 사라진다
 
 const Router = () => {
-  const isLogin = useRecoilValue(IsLoginAtom);
 
   return (
     <BrowserRouter>
@@ -59,6 +60,8 @@ const Router = () => {
           <Route path="/oauth" element={<BlockIfLoggedIn><OauthInfo /></BlockIfLoggedIn>} />
           <Route path="/join" element={<BlockIfLoggedIn><SignUp /></BlockIfLoggedIn>} />
           <Route path="/mypage" element={<MyPage /> } />
+          <Route path="/mypage/setting" element={<MySetting />} />
+          <Route path="/modify/profile" element={<ModifyProfile />} />
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />} />
           {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}

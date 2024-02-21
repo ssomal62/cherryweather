@@ -1,8 +1,5 @@
 package com.example.demo.account.service.impl;
-import com.example.demo.account.dto.AccountDetails;
-import com.example.demo.account.dto.ModifyUserInfoRequestDto;
-import com.example.demo.account.dto.SignUpRequestDto;
-import com.example.demo.account.dto.UserInfoDto;
+import com.example.demo.account.dto.*;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.ActivitiesArea;
 import com.example.demo.account.entity.Agreement;
@@ -20,8 +17,10 @@ import com.example.demo.auth.dto.oauth.OAuthAccountInfoDto2;
 import com.example.demo.common.exception.AuthException;
 import com.example.demo.common.exception.DuplicatedException;
 import com.example.demo.common.exception.NotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,12 +48,17 @@ public class AccountServiceImpl implements AccountService {
     private final InterestRepository interestRepository;
     private final AgreementRepository agreementRepository;
     private final ActivitiesAreaRepository activitiesAreaRepository;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
 
     // ## 회원 가입 ## //
     @Transactional
     @Override
     public void createAccount(final SignUpRequestDto signUpRequestDto) {
+
+        // 이메일 중복체크
+        checkDuplicateEmail(signUpRequestDto.getEmail());
+
         // 회원 정보 저장
         String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
         Account account = accountRepository.save(signUpRequestDto.toAccountEntity(encodedPassword));
@@ -202,6 +206,16 @@ public class AccountServiceImpl implements AccountService {
         return ResponseEntity.ok(userInfoDto);
     }
 
+    // 알림 설정 수정
+    @Override
+    @Transactional
+    public void modifyNotification(final AccountDetails accountDetails, AgreementUpdateDto agreementUpdateDto) {
+        Long accountId = accountDetails.getAccount().getAccountId();
+        Agreement agreement = agreementRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException("Agreement not found for account ID: " + accountId));
+
+        agreement.updateNotification(agreementUpdateDto.isAgreementGetNotified());
+    }
 
     @Override
     public Account findAccountByEmail(final String email) {
@@ -213,7 +227,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public void deleteAccount(final AccountDetails accountDetails) {
-        accountRepository.delete(accountDetails.getAccount());
+        Account account = accountDetails.getAccount();
+        account.markAsDeleted();
+        accountRepository.save(account);
     }
 
     // 이메일 중복 체크
@@ -238,6 +254,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public void createAccountByOAuth(OAuthAccountInfoDto2 accountInfo, String provider) {
+    }
+
+    public boolean checkPassword(AccountDetails accountDetails, String rawPassword) {
+        String storedPasswordHash = accountDetails.getPassword(); // 저장된 패스워드 해시 가져오기
+        return passwordEncoder.matches(rawPassword, storedPasswordHash); // 비밀번호 비교
+    }
+
+    public void checkPasswordIsCorrect(String requestedPassword, Account account) {
+        if (!passwordEncoder.matches(requestedPassword, account.getPassword())) {
+            throw new AuthException(INVALID_ID_OR_PW);
+        }
     }
 
 

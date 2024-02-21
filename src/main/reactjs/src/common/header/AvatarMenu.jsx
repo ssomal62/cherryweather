@@ -1,6 +1,6 @@
 import React from 'react';
 import {Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from "@nextui-org/react";
-import p1 from "../../assets/images/club/person/5.jpg";
+// import p1 from "../../assets/images/club/person/5.jpg";
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -47,7 +47,7 @@ const AvatarMenu = () => {
                     color="secondary"
                     name="Jason Hughes"
                     size="sm"
-                    src={p1}
+                    src="https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/default_image.jpg?type=f&w=600&h=600&ttype=jpg"
                 />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">

@@ -21,7 +21,7 @@ public class ActivitiesArea {
     @Column(name = "ACTIVITIES_AREA_ID")
     private Long activitiesAreaId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ACCOUNT_ID", nullable = false)
     private Account account;
 

@@ -28,3 +28,36 @@ export const useFetchUserInfo = () => {
         }
     }, [userInfo]);
 }
+
+export const useModifyUserInfo = () => {
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const cookies = new Cookies();
+
+    const modifyUserInfo = useCallback(async () => {
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${cookies.get('accessToken')}`,
+                },
+            };
+            const modifyInfoRequestDto = {
+                password: userInfo.password,
+                profileName: userInfo.profileName,
+                phoneNumber: userInfo.phoneNumber,
+                profileImage: userInfo.profileImage,
+                interests: userInfo.interests,
+                activityAreas: userInfo.activityAreas,
+            };
+
+            const response = await instance.patch('/my-info/modify', modifyInfoRequestDto, config);
+            console.log('유저 정보 수정 성공', response.data);
+
+            setUserInfo(response.data);
+        } catch (error) {
+            console.error('유저 정보 수정 실패', error);
+        }
+    }, [userInfo, setUserInfo, cookies]);
+
+    return modifyUserInfo;
+};

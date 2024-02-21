@@ -136,4 +136,9 @@ public class Account {
         this.profileImage = profileImage;
     }
 
+    public void markAsDeleted() {
+        this.userStatus = UserStatus.DELETED;
+        this.profileName = "알수없음";
+    }
+
 }

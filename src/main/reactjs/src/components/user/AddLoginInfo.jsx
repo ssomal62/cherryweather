@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NextButton from "../club/addClub/NextButton";
-import { Input } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import styled from "styled-components";
 
 const AddLoginInfo = ({ onNext, onChange, formData }) => {
@@ -10,7 +10,6 @@ const AddLoginInfo = ({ onNext, onChange, formData }) => {
 
 
   useEffect(() => {
-  
     const isFormFilled = email && password && confirmPassword;
     const isPasswordMatch = password === confirmPassword;
     setIsNextDisabled(!(isFormFilled && isPasswordMatch));
@@ -39,6 +38,7 @@ const AddLoginInfo = ({ onNext, onChange, formData }) => {
           onChange={onChange}
           style={{ fontSize: 20, fontWeight: 600 }}
         />
+        <Button className="self-center">버튼 텍스트</Button>
       </div>
       <div style={{marginBottom : "5px"}}>
       <Span>

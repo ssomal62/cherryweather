@@ -3,9 +3,11 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { userInfoState } from '../../recoil/hooks/UseFetchUserInfo';
 import Image from '../../assets/images/club/person/1.jpg'
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const userInfo = useRecoilValue(userInfoState);
+    const navigate = useNavigate();
     return (
       <Container>
             <ImageWapper>
@@ -13,7 +15,7 @@ const Profile = () => {
             </ImageWapper>
             <NickName>{userInfo.profileName}</NickName>
             <Rating>내 온도 <b style={{color:"#F31260"}}>36.5</b></Rating>
-            <InfoBtn>프로필 편집</InfoBtn>
+            <InfoBtn onClick={()=>navigate("/modify/profile")}>프로필 편집</InfoBtn>
       </Container>
     );
 };
@@ -49,13 +51,13 @@ background: #F31260;
 color: #FFFFFF;
 `;
 
-const ProfileImg = styled.img`
+export const ProfileImg = styled.img`
 width: auto;
 height: 80px;
 border-radius: 50%;
 `;
 
-const ImageWapper = styled.div`
+export const ImageWapper = styled.div`
 display: flex;
 flex: 1 1 auto;
 padding: 10px;
