@@ -29,7 +29,6 @@ const AddClubNameInput = ({onNext, name, setName}) => {
 
             <br/><br/>
             <NextButton isNextDisabled={isNextDisabled} onNext={onNext}/>
-
         </>
     );
 };

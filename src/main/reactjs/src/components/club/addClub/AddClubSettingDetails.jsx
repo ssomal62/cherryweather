@@ -4,20 +4,17 @@ import {TbPhoto} from "react-icons/tb";
 import {FaHashtag} from "react-icons/fa6";
 import {v4 as uuidv4} from 'uuid';
 import NextButton from "./NextButton";
+import defaultImage from '../../../assets/images/defalut/club_profile.jpg'
 
 const AddClubSettingDetails = ({onNext, description, file, setCode, setDescription, onFileSelect}) => {
 
-
-    const defaultImage = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/sample_logos/cw020.jpg?type=f&w=600&h=600&ttype=jpg`;
-
     const [isNextDisabled, setIsNextDisabled] = useState(true);
-    const [preview, setPreview] = useState(defaultImage);
+    const [preview, setPreview] = useState();
     const [fileSelected, setFileSelected] = useState(false);
 
     const fileInputRef = useRef(null);
 
     useEffect(() => {
-        setIsNextDisabled(description.length < 2);
         if (file) {
             const fileReader = new FileReader();
             fileReader.onloadend = () => {
@@ -28,7 +25,12 @@ const AddClubSettingDetails = ({onNext, description, file, setCode, setDescripti
         } else {
             setPreview(defaultImage);
         }
-    }, [file, description]);
+    }, [file]);
+
+    useEffect(() => {
+      setIsNextDisabled(description.length < 2);
+    }, [description]);
+
 
     const handleClick = () => {
         fileInputRef.current.click();
@@ -82,9 +84,9 @@ const AddClubSettingDetails = ({onNext, description, file, setCode, setDescripti
                 {
                     fileSelected ? null : (
                         <div className="absolute z-10 w-full h-[300px] from-slate-800 bg-gradient-to-b to-transparent"
-                             style={{...styles.imgBlock}}>
-                            <TbPhoto style={{...styles.icon}}/>
-                            <span style={{...styles.description}}>클럽 소개 사진을 넣어주세요</span>
+                             style={styles.imgBlock}>
+                            <TbPhoto style={styles.icon}/>
+                            <span style={styles.description}>클럽 소개 사진을 넣어주세요</span>
                         </div>
                     )}
 
