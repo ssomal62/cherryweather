@@ -73,7 +73,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 
- 	// 파일 관련
+	// 파일 관련
 	implementation 'commons-fileupload:commons-fileupload:1.4'
 
 	// 비동기 및 반응형 웹 애플리케이션을 개발하기 위한 모듈
@@ -127,18 +127,20 @@ sourceSets {
 }
 */
 
-//
-
+processResources {
+	dependsOn "copyReactFile"
+	dependsOn "copyPrivate"
+}
 
 task cleanStatic(type: Delete) {
 	delete "$projectDir/src/main/resources/static/static"
 }
 
-//task copyReactFile(type: Copy) {
-//	dependsOn "buildReact"
-//	from "$reactAppDir/build"
-//	into "$projectDir/src/main/resources/static"
-//}
+task copyReactFile(type: Copy) {
+	dependsOn "buildReact"
+	from "$reactAppDir/build"
+	into "$projectDir/src/main/resources/static"
+}
 
 task copyPrivate(type: Copy) {
 	copy {
@@ -148,32 +150,43 @@ task copyPrivate(type: Copy) {
 	}
 }
 
-//task buildReact(type: Exec) {
-//	dependsOn "installReact"
-//	dependsOn "cleanStatic" // static 디렉토리 삭제 작업에 의존합니다.
-//	workingDir "$reactAppDir"
-//	inputs.dir "$reactAppDir"
-//	group = BasePlugin.BUILD_GROUP
-//	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-//		commandLine "npm.cmd", "run-script", "build"
-//	} else {
-//		commandLine "npm", "run-script", "build"
-//	}
-//}
+task buildReact(type: Exec) {
+	dependsOn "installReact"
+	dependsOn "cleanStatic" // static 디렉토리 삭제 작업에 의존합니다.
+	workingDir "$reactAppDir"
+	inputs.dir "$reactAppDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "run-script", "build"
+	} else {
+		commandLine "npm", "run-script", "build"
+	}
+}
 
-//task installReact(type: Exec) {
-//	workingDir "$reactAppDir"
-//	inputs.dir "$reactAppDir"
-//	group = BasePlugin.BUILD_GROUP
-//	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-//		commandLine "npm.cmd", "audit", "fix"
-//		commandLine "npm.cmd", "install"
-//	} else {
-//		commandLine "npm", "audit", "fix"
-//		commandLine "npm", "install"
-//	}
-//}
+task installReact(type: Exec) {
+	dependsOn"installCrossEnv"
+	workingDir "$reactAppDir"
+	inputs.dir "$reactAppDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "audit", "fix"
+		commandLine "npm.cmd", "install"
+	} else {
+		commandLine "npm", "audit", "fix"
+		commandLine "npm", "install"
+	}
+}
 
+task installCrossEnv(type: Exec) {
+	workingDir "$reactAppDir"
+	inputs.dir "$reactAppDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "install", "-g", "cross-env"
+	} else {
+		commandLine "npm", "install", "-g", "cross-env"
+	}
+}
 
 // For Test Coverage Report with Jacoco
 // test라는 Gradle의 일반적인 task를 재구성해 테스트 종료 시 jacocoTestReport라는 task를 실행하도록 한 구성입니다.

@@ -2,6 +2,7 @@ package com.example.demo.ai_image.entity;
 
 
 import com.example.demo.account.entity.Account;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,6 +23,7 @@ public class AI_image {
     private long aiImageId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ACCOUNT_ID")
     private Account account;
 

@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 public class ImageUploadRequestDto {
-
+// 추가되었습니다.
     @NonNull
     private String imageURL;
 
