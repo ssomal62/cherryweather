@@ -1,7 +1,8 @@
 package com.example.demo.gpt.service;
 
 import com.example.demo.gpt.dto.GPTRequest;
+import reactor.core.publisher.Mono;
 
 public interface GPTService {
-    String chat(GPTRequest request);
+    Mono<String> chat(GPTRequest request);
 }

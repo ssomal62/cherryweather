@@ -6,6 +6,7 @@ import com.example.demo.gpt.service.GPTService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
@@ -16,7 +17,7 @@ public class GPTController {
     private final GPTService gptService;
 
     @PostMapping("/chat")
-    public String chat(@RequestBody GPTRequest request) {
+    public Mono<String> chat(@RequestBody GPTRequest request) {
         return gptService.chat(request);
     }
 }
