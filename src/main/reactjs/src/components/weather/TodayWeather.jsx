@@ -87,8 +87,8 @@ const TodayWeather = () => {
         const sunset = formatTime(data.sunset);
         return (
             <div>
-                <Card className = "py-4 rounded-none" style = {cardStyle} onClick={handleCardClick}>
-                    <CardBody className = "overflow-visible py-2 relative" style = {{height: '210px'}}>
+                <div className = "py-4 rounded-none" style = {cardStyle} onClick={handleCardClick}>
+                    <div className = "overflow-visible py-2 relative" style = {{height: '210px'}}>
                         <div className = "font-sans text-6xl font-bold text-white/90 text-shadow-small absolute" style = {{textShadow: '0 0 4px black'}} onClick={handleCardClick}>
                             {data.currentTemp}℃<br/>
                         </div>
@@ -102,16 +102,16 @@ const TodayWeather = () => {
                         <div className = "font-sans text-xl text-white/90 text-shadow-small absolute bottom-7 right-3" style = {{textShadow: '0 0 4px black'}}>
                             {data.weather}
                         </div>
-                    </CardBody>
-                    <CardFooter
-                        className = "justify-between bg-white/50 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                    </div>
+                    <div
+                        className = "justify-between bg-white/50 border-white/20 border-1 overflow-hidden py-1 before:rounded-xl rounded-large bottom-1">
                         <img alt = "" src = {require('../../assets/images/weather/icon/sunrise.png')} style = {{width: '20px'}}/> : <small>{sunrise}</small>
                         <img alt = "" src = {require('../../assets/images/weather/icon/sunset.png')} style = {{width: '20px'}}/> : <small>{sunset}</small>
                         <img alt = "" src = {require('../../assets/images/weather/icon/wind.png')} style = {{width: '20px'}}/> : <small>{data.windSpeed}m/s</small>
                         <img alt = "" src = {require('../../assets/images/weather/icon/umbrellar.png')} style = {{width: '20px'}}/> : <small>{data.rainProbability}%
                                                                                                                                                                    / {data.rainfall}</small>
-                    </CardFooter>
-                </Card>
+                    </div>
+                </div>
             </div>
         );
     }

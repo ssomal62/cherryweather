@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
 import {Spinner} from "@nextui-org/react";
 
-const SunMoonInfo = () => {
+const TodayDetail = () => {
 
     const {fetchData, data, loading, error} = UseFetchWeather("/weather/daily");
 
@@ -25,16 +25,30 @@ const SunMoonInfo = () => {
         const moonrise = formatTime(data.moonrise)
         const moonset = formatTime(data.moonset)
         return (
-            <div style = {{width: '200px', height: '200px', border: '1px solid black'}}>
-                일출 : {sunrise}<br/>
-                일몰 : {sunset}<br/>
-                월출 : {moonrise}<br/>
-                월몰 : {moonset}<br/>
+            <div>
+                <div style = {{width: '200px', height: '200px', border: '1px solid black'}}>
+                    일출 : {sunrise}<br/>
+                    일몰 : {sunset}<br/>
+                    월출 : {moonrise}<br/>
+                    월몰 : {moonset}<br/>
+                </div>
+                <div style = {{width: '200px', height: '200px', border: '1px solid black'}}>
+                    습도 : {data.humidity}%
+                </div>
+                <div style = {{width: '200px', height: '200px', border: '1px solid black'}}>
+                    강수 확률 : {data.rainProbability}%<br/>
+                    강수량 : {data.rainfall}
+                </div>
+                <div style = {{width: '200px', height: '200px', border: '1px solid black'}}>
+                    풍향 : {data.windDirection}<br/>
+                    풍속 : {data.windSpeed}m/s
+                </div>
             </div>
+
         );
     }
 };
-export default SunMoonInfo;
+export default TodayDetail;
 
 const formatTime = (time) => {
     if (!time) return '';
