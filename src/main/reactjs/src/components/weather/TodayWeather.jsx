@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {Card, CardBody, CardFooter, Spinner} from "@nextui-org/react";
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
-import WeatherDetail from "../../pages/weather/WeatherDetail";
 import {useNavigate} from "react-router-dom";
 
 //시간 포맷 함수
@@ -88,7 +87,7 @@ const TodayWeather = () => {
         const sunset = formatTime(data.sunset);
         return (
             <div>
-                <Card className = "py-4 weatherInfo" style = {cardStyle} onClick={handleCardClick}>
+                <Card className = "py-4 rounded-none" style = {cardStyle} onClick={handleCardClick}>
                     <CardBody className = "overflow-visible py-2 relative" style = {{height: '210px'}}>
                         <div className = "font-sans text-6xl font-bold text-white/90 text-shadow-small absolute" style = {{textShadow: '0 0 4px black'}} onClick={handleCardClick}>
                             {data.currentTemp}℃<br/>
