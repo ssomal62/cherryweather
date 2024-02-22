@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin
-@RequestMapping("/api/a/")
+@RequestMapping("/api/weather/")
 public class DaylightController {
 
     private final DaylightService daylightService;
