@@ -32,7 +32,7 @@ export default function Widget() {
                         <li onClick={() => navigate('/image')}><FcMms style={{...styles.icon}}/></li>
                         <li onClick={() => navigate('/image')}><FcEditImage style={{...styles.icon}}/></li>
                         <li onClick={() => navigate('/imageList')}><FcGallery style={{...styles.icon}}/></li>
-                        <li onClick={() => navigate('/')}><FcSms style={{...styles.icon}}/></li>
+                        <li onClick={() => navigate('/gpt')}><FcSms style={{...styles.icon}}/></li>
                     </ul>
                 </div>
             </div>
