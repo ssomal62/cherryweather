@@ -2,7 +2,7 @@ package com.example.demo.weather.controller;
 
 import com.example.demo.weather.dto.*;
 import com.example.demo.weather.service.NowWeatherService;
-import com.example.demo.weather.service.TodayWeatherServie;
+import com.example.demo.weather.service.TodayWeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ import java.util.List;
 public class WeatherController {
 
     private final NowWeatherService nowWeatherService;
-    private final TodayWeatherServie todayWeatherServie;
+    private final TodayWeatherService todayWeatherService;
 
 
     @GetMapping("/now/info")
@@ -33,21 +33,21 @@ public class WeatherController {
 
     @GetMapping("/today/info")
     public List<TodayWeatherReqDto> getTodayWeather() {
-        return todayWeatherServie.getTodayWeather();
+        return todayWeatherService.getTodayWeather();
     }
 
     @GetMapping("/today")
     public List<TodayWeatherResDto> getFormattedTodayWeather() {
-        return todayWeatherServie.getFormattedTodayWeather();
+        return todayWeatherService.getFormattedTodayWeather();
     }
 
     @GetMapping("/daily")
     public DailyWeatherDto getDailyWeather() {
-        return todayWeatherServie.getDailyWeather(todayWeatherServie.getFormattedTodayWeather());
+        return todayWeatherService.getDailyWeather(todayWeatherService.getFormattedTodayWeather());
     }
 
     @GetMapping("/hourly")
     public List<HourlyWeatherDto> getHourlyWeather() {
-        return todayWeatherServie.getHourlyWeather();
+        return todayWeatherService.getHourlyWeather();
     }
 }

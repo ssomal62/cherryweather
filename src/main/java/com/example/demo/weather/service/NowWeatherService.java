@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +27,10 @@ public class NowWeatherService {
     private final GeoLocationService geoLocationService;
     private final WeatherServiceClient weatherServiceClient;
 
-    private final String baseDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-    private final String baseTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH00"));
+    private final ZoneId korTimeZone = ZoneId.of("Asia/Seoul");
+
+    private final String baseDate = LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    private final String baseTime = LocalTime.now(korTimeZone).format(DateTimeFormatter.ofPattern("HH00"));
 
     public List<NowWeatherReqDto> getNowWeather() {
 

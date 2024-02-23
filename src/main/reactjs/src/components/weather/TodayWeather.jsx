@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Card, CardBody, CardFooter, Spinner} from "@nextui-org/react";
+import {Card, CardBody, Spinner} from "@nextui-org/react";
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
 import {useNavigate} from "react-router-dom";
 

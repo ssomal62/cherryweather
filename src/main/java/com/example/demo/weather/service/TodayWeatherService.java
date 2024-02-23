@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,14 +22,15 @@ import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
-public class TodayWeatherServie {
+public class TodayWeatherService {
 
     private final GeoLocationService geoLocationService;
     private final WeatherServiceClient weatherServiceClient;
     private final DaylightService daylightService;
 
-    private final String baseDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-    private final String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    private final ZoneId korTimeZone = ZoneId.of("Asia/Seoul");
+    private final String baseDate = LocalDate.now(korTimeZone).minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    private final String currentDate = LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
     /* 오늘 단기 예보 조회*/
     public List<TodayWeatherReqDto> getTodayWeather() {
@@ -231,7 +233,7 @@ public class TodayWeatherServie {
     }
 
     public boolean isCurrentForecast(TodayWeatherResDto todayWeather) {
-        String currentHour = LocalTime.now().format(DateTimeFormatter.ofPattern("HH00"));
+        String currentHour = LocalTime.now(korTimeZone).format(DateTimeFormatter.ofPattern("HH00"));
         return Objects.equals(todayWeather.getFcstTime(), currentHour);
     }
 
@@ -253,7 +255,7 @@ public class TodayWeatherServie {
         Map<String, HourlyWeatherDto.HourlyWeatherDtoBuilder> dtoMap = new HashMap<>();
 
         // 현재 시간 및 날짜
-        LocalDateTime currentDateTime = LocalDateTime.now().minusHours(1);
+        LocalDateTime currentDateTime = LocalDateTime.now(korTimeZone).minusHours(1);
         LocalDateTime endDateTime = currentDateTime.plusHours(25);  // 다음 24시간 계산
 
         // 카테고리 값을 저장하기 위한 임시 구조
@@ -271,10 +273,10 @@ public class TodayWeatherServie {
                 String key = data.getFcstDate() + "-" + data.getFcstTime();
                 categoryValues.computeIfAbsent(key, k -> new HashMap<>()).put(data.getCategory(), data.getFcstValue());
 
-                //빌더가 없으면 생성
+                // 빌더가 없으면 생성
                 dtoMap.computeIfAbsent(key, k -> HourlyWeatherDto.builder()
-                                                        .fcstDate(data.getFcstDate())
-                                                        .fcstTime(data.getFcstTime()));
+                                                         .fcstDate(data.getFcstDate())
+                                                         .fcstTime(data.getFcstTime()));
 
                 // 데이터 처리 후 weather 값을 설정
                 dtoMap.forEach((k, builder) -> {
