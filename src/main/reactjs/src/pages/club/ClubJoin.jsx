@@ -8,10 +8,12 @@ import {useNavigate} from "react-router-dom";
 import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
 import {useRecoilValue} from "recoil";
 import {useMyMembership} from "../../recoil/hooks/UseMyMembership";
+import {useMembersState} from "../../recoil/hooks/UseMembersState";
 
 const ClubJoin = () => {
 
-    const club = useRecoilValue(clubDetailState);
+    const club = useRecoilValue(clubDetailState).clubDetail;
+    useMembersState(club.clubId);
     useMyMembership();
     const navigate = useNavigate();
 
@@ -29,8 +31,7 @@ const ClubJoin = () => {
                 <ParentContainer>
                     <ButtonSection>
                         <Button fullWidth size='lg' variant='flat' color='success'
-                                onPress={() => navigate(`/club-details/${club.clubId}`)}
-                        >
+                                onPress={() => navigate(`/club-details/${club.clubId}`)}>
                             클럽 메인
                         </Button>
                     </ButtonSection>
@@ -46,9 +47,14 @@ const ClubJoin = () => {
                     </ButtonSection>
                     <ButtonSection>
                         <Button fullWidth size='lg' variant='flat' color='default'
-                                //onPress={() => navigate(`/chat/room/${charRoom}`)}
-                        >
+                                onPress={() => navigate('/club-members')}>
                             멤버 목록 확인하기
+                        </Button>
+                    </ButtonSection>
+                    <ButtonSection>
+                        <Button fullWidth size='lg' variant='flat' color='default'
+                                onPress={() => navigate('/')}>
+                            홈으로 가기
                         </Button>
                     </ButtonSection>
 

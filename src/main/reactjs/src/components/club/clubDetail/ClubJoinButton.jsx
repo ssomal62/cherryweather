@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {Button} from "@nextui-org/react";
 import {useNavigate} from "react-router-dom";
@@ -7,81 +7,124 @@ import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
 import {useLikeClub} from "../../../recoil/hooks/UseLikedState";
 import {HeartIcon} from "../../../assets/icon/HeartIcon";
 import {Cookies} from "react-cookie";
-import axios from "axios";
+import {instance} from "../../../recoil/module/instance";
+import {IsLoginAtom} from "../../../recoil/LoginAtom";
+import LoginVerificationModal from "../../../utils/LoginVerificationModal";
+import {memberInfoState, useCheckMember} from "../../../recoil/hooks/CheckIsMember";
 
-const ClubJoinButton = ({isMember}) => {
+const ClubJoinButton = ({clubId}) => {
 
     const navigate = useNavigate();
-    const [liked, setLiked] = useState(false);
+
+    useCheckMember(clubId);
+
+    const isLogin = useRecoilValue(IsLoginAtom);
     const club = useRecoilValue(clubDetailState)
+    const membership = useRecoilValue(memberInfoState);
+
+    const [liked, setLiked] = useState(club.liked);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [role, setRole] = useState('');
 
     const {toggleLikeClub} = useLikeClub();
 
+    useEffect(() => {
+        setRole(club.clubDetail.joinApprovalStatus === "JOIN" ? "MEMBER" : "WAITING")
+        setLiked(club.liked);
+    }, [club.liked, club.clubDetail.joinApprovalStatus]);
+
+    const handleLikeClick = () => {
+        if (!isLogin) {
+            setIsModalOpen(true);
+            return;
+        }
+        setLiked(!liked);
+        toggleLikeClub({type: "CLUB", targetId: club.clubDetail.clubId});
+    };
+
+    const handleJoinClick = () => {
+        if (!isLogin) {
+            setIsModalOpen(true);
+            return;
+        }
+        onSave();
+    }
+
     const onSave = async () => {
+        console.log("클럽 조인 스테이ㅓ티" + club.clubDetail.joinApprovalStatus);
 
         const requestData = {
-            clubId: club.clubId,
+            clubId: club.clubDetail.clubId,
+            role  : role
         };
 
         const cookie = new Cookies();
         try {
-            const res = await axios.post('http://localhost:9002/api/membership', requestData, {
+            const res = await instance.post('/membership', requestData, {
                 headers: {
                     Authorization: `Bearer ${cookie.get('accessToken')}`
                 }
             });
 
-            navigate('/club-join');
+            if (club.clubDetail.joinApprovalStatus === "JOIN") {
+                navigate('/club-join');
+            }
+            if (club.clubDetail.joinApprovalStatus === "APPROVAL") {
+                navigate('/club-wait');
+            }
             console.log('Success:', res);
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
-    const handleLikeClick = () => {
-        setLiked(!liked);
-        toggleLikeClub(club.clubId).then(r => r);
-    };
+    const joinButtonRender = () => {
+        switch (membership?.role) {
+            case "HOST":
+            case "MEMBER":
+            case "MODERATOR":
+                return <Button fullWidth color="success" variant="solid" size="lg" radius="lg"
+                               style={{marginRight: "2%", height: "70%"}}>
+                            <span style={styles.font}>채팅하기</span>
+                        </Button>
+            case "WAITING" :
+                return <Button fullWidth color="primary" variant="solid" size="lg" radius="lg"
+                            style={{marginRight: "2%", height: "70%"}}>
+                        <span style={styles.font}>가입대기중</span>
+                        </Button>
+            default :
+                return <Button fullWidth color="danger" variant="solid" size="lg" radius="lg"
+                        style={{marginRight: "2%", height: "70%"}}
+                        onPress={handleJoinClick}>
+                        <span style={styles.font}>가입하기</span>
+                       </Button>
+        }
+    }
 
     return (
-        <Footer>
-            <ButtonContainer>
-                <Button
-                    isIconOnly
-                    className="text-default-900/60 data-[hover]:bg-foreground/10"
-                    radius="full"
-                    variant="light"
-                    onPress={() => setLiked((v) => !v)}
-                >
-                    <HeartIcon
-                        style={styles.icon}
-                        className={liked ? "[&>path]:stroke-transparent" : ""}
-                        fill={liked ? "currentColor" : "none"}
-                    />
-                </Button>
-            </ButtonContainer>
+        <>
+            <Footer>
+                <ButtonContainer>
+                    <Button
+                        isIconOnly
+                        className="text-default-900/60 data-[hover]:bg-foreground/10"
+                        radius="full"
+                        variant="light"
+                        onPress={handleLikeClick}
+                    >
+                        <HeartIcon
+                            style={styles.icon}
+                            className={liked ? "[&>path]:stroke-transparent" : ""}
+                            fill={liked ? "currentColor" : "none"}
+                        />
+                    </Button>
+                </ButtonContainer>
 
-            {isMember ? (
-                <Button fullWidth color="success" variant="solid" size="lg" radius="lg"
-                        style={{marginRight: "2%", height: "70%"}}
-                        //onPress={} 채팅 페이지로 이동
-                >
-                    <span style={styles.font}>
-                      채팅하기
-                    </span>
-                </Button>
-            ) : (
-                <Button fullWidth color="danger" variant="solid" size="lg" radius="lg"
-                        style={{marginRight: "2%", height: "70%"}}
-                        onPress={onSave}
-                >
-                    <span style={styles.font}>
-                      가입하기
-                    </span>
-                </Button>
-            )}
+                {joinButtonRender()}
 
-        </Footer>
+            </Footer>
+            <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+        </>
     );
 };
 

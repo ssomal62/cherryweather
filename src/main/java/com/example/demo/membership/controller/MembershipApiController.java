@@ -2,10 +2,7 @@ package com.example.demo.membership.controller;
 
 
 import com.example.demo.account.dto.AccountDetails;
-import com.example.demo.membership.dto.ClubSignupDTO;
-import com.example.demo.membership.dto.MembershipListDTO;
-import com.example.demo.membership.dto.UpdateMembership;
-import com.example.demo.membership.dto.MembershipQueryDTO;
+import com.example.demo.membership.dto.*;
 import com.example.demo.membership.service.MembershipQueryService;
 import com.example.demo.membership.service.MembershipService;
 import jakarta.validation.Valid;
@@ -53,12 +50,12 @@ public class MembershipApiController {
      */
     @GetMapping("/{clubId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Boolean> checkMember(
+    public ResponseEntity<MembershipInfo> checkMember(
             final @PathVariable(value = "clubId") long clubId,
             final @AuthenticationPrincipal AccountDetails accountDetails
     ) {
         return ResponseEntity.ok().body(
-                membershipService.checkMember(clubId, accountDetails)
+                membershipService.findMembership(clubId, accountDetails)
         );
     }
 
@@ -80,7 +77,7 @@ public class MembershipApiController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> singUpMembership(
             final @Valid @RequestBody ClubSignupDTO requestDTO,
             final @AuthenticationPrincipal AccountDetails accountDetails
@@ -95,21 +92,24 @@ public class MembershipApiController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> updateMembership(
-            @Valid @RequestBody UpdateMembership requestDTO
+            final @AuthenticationPrincipal AccountDetails accountDetails,
+            final @Valid @RequestBody UpdateMembership requestDTO
+
     ) {
-        membershipService.updateMembership(requestDTO);
+        membershipService.updateMembership(accountDetails, requestDTO);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 멤버십 삭제
      */
-    @DeleteMapping
+    @DeleteMapping("/{clubId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteMembership(
-            @Valid @RequestBody UpdateMembership requestDTO
+            final @AuthenticationPrincipal AccountDetails accountDetails,
+            final @PathVariable(value = "clubId") long clubId
     ) {
-        membershipService.deleteMembership(requestDTO);
+        membershipService.deleteMembership(accountDetails, clubId);
         return ResponseEntity.ok().build();
     }
 }

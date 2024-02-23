@@ -8,9 +8,11 @@ import com.example.demo.club.service.ClubService;
 import com.example.demo.common.exception.DuplicatedException;
 import com.example.demo.common.exception.NotFoundException;
 import com.example.demo.membership.dto.ClubSignupDTO;
+import com.example.demo.membership.dto.MembershipInfo;
 import com.example.demo.membership.dto.MembershipListDTO;
 import com.example.demo.membership.dto.UpdateMembership;
 import com.example.demo.membership.entity.Membership;
+import com.example.demo.membership.enums.ClubRole;
 import com.example.demo.membership.repository.MembershipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.example.demo.common.exception.enums.ExceptionStatus.*;
-import static com.example.demo.membership.enums.ClubRole.HOST;
-import static com.example.demo.membership.enums.ClubRole.MEMBER;
 import static com.example.demo.membership.enums.RegisteredStatus.ACTIVE;
+import static com.example.demo.membership.enums.RegisteredStatus.PENDING;
 
 @Service
 @RequiredArgsConstructor
@@ -46,19 +47,21 @@ public class MembershipService {
     public void saveMembership(ClubSignupDTO requestDTO, AccountDetails accountDetails) {
         Membership membership = createMembership(requestDTO, accountDetails);
         membershipRepository.save(membership);
+        clubService.increaseCurrentMembers(requestDTO.clubId());
     }
 
     @Transactional
-    public void updateMembership(UpdateMembership requestDTO) {
-        Membership existingMembership  = findMembership(requestDTO.clubId(), requestDTO.userEmail());
+    public void updateMembership(AccountDetails accountDetails, UpdateMembership requestDTO) {
+        Membership existingMembership  = findMembership(requestDTO.clubId(),accountDetails.getAccount().getEmail());
         existingMembership.updateMembership(requestDTO);
         membershipRepository.save(existingMembership);
     }
 
     @Transactional
-    public void deleteMembership(UpdateMembership requestDTO) {
-        Membership existingMembership  = findMembership(requestDTO.clubId(), requestDTO.userEmail());
-        membershipRepository.delete(existingMembership);
+    public void deleteMembership(AccountDetails accountDetails, long clubId) {
+        Membership existingMembership  = findMembership(clubId, accountDetails.getAccount().getEmail());
+        membershipRepository.deleteById(existingMembership.getMembershipId());
+        clubService.decreaseCurrentMembers(clubId);
     }
 
     public Membership findMembership(long clubId, String email) {
@@ -71,11 +74,14 @@ public class MembershipService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBERSHIP));
     }
 
-    public Boolean checkMember(long clubId, AccountDetails accountDetails) {
+    public MembershipInfo findMembership(long clubId, AccountDetails accountDetails) {
         Club findClub = clubService.findClubById(clubId);
         Account findAaccount = accountDetails.getAccount();
 
-        return membershipRepository.existsByClubAndAccount(findClub, findAaccount);
+        return MembershipInfo.builder()
+                .info(membershipRepository.findByClubAndAccount(findClub, findAaccount)
+                        .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBERSHIP)))
+                .build();
     }
 
     //==============  private method  ==============//
@@ -90,8 +96,8 @@ public class MembershipService {
         return Membership.builder()
                 .account(findAccount)
                 .club(findClub)
-                .status(ACTIVE)
-                .role(isFirstMember(findClub) ? HOST : MEMBER)
+                .status(requestDTO.role() == ClubRole.WAITING ? PENDING : ACTIVE)
+                .role(isFirstMember(findClub) ? ClubRole.HOST : requestDTO.role())
                 .build();
     }
 

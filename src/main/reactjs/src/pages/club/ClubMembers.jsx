@@ -14,8 +14,7 @@ const ClubMembers = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    const club = useRecoilValue(clubDetailState);
-
+    const club = useRecoilValue(clubDetailState).clubDetail;
     useMembersState(club.clubId);
 
     const members = useRecoilValue(membersState);
