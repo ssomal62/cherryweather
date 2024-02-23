@@ -32,11 +32,11 @@ public class NowWeatherService {
     private final String baseDate = LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     private final String baseTime = LocalTime.now(korTimeZone).format(DateTimeFormatter.ofPattern("HH00"));
 
-    public List<NowWeatherReqDto> getNowWeather() {
+    public List<NowWeatherReqDto> getNowWeather(String clientIp) {
 
         String functionName = "getUltraSrtNcst";
 
-        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
+        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation(clientIp);
         int nx = (int) geoLocationResDto.getNx();
         int ny = (int) geoLocationResDto.getNy();
 
@@ -58,7 +58,7 @@ public class NowWeatherService {
             } catch(JsonProcessingException e) {
                 throw new LookupException(JSON_PARSING_FAILED);
             }
-            //resultCode가 "03"이면 1시간 빼고 재 시도
+            // resultCode가 "03"이면 1시간 빼고 재 시도
             if(resultCode.equals("03")) {
                 LocalTime newBaseTime = LocalTime.parse(tempBaseTime, DateTimeFormatter.ofPattern("HHmm")).minusHours(1);
                 tempBaseTime = newBaseTime.format(DateTimeFormatter.ofPattern("HHmm"));
@@ -105,9 +105,9 @@ public class NowWeatherService {
         }
     }
 
-    public List<NowWeatherResDto> getFormattedNowWeather() {
+    public List<NowWeatherResDto> getFormattedNowWeather(String clientIp) {
         // 위치 정보
-        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
+        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation(clientIp);
         int nx = (int) geoLocationResDto.getNx();
         int ny = (int) geoLocationResDto.getNy();
         String r1 = geoLocationResDto.getR1();
@@ -115,7 +115,7 @@ public class NowWeatherService {
         String r3 = geoLocationResDto.getR3();
 
         // 날씨 정보
-        List<NowWeatherReqDto> weatherDataList = getNowWeather();
+        List<NowWeatherReqDto> weatherDataList = getNowWeather(clientIp);
 
         // 날씨 데이터를 포맷
         return formatWeatherData(weatherDataList, nx, ny, r1, r2, r3);
@@ -138,7 +138,7 @@ public class NowWeatherService {
                                                .build();
                 nowWeatherList.add(dto);
             }
-        }catch(JsonProcessingException e){
+        } catch(JsonProcessingException e) {
             throw new LookupException(JSON_PARSING_FAILED);
         }
         return nowWeatherList;

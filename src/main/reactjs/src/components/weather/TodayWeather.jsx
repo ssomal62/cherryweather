@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {Card, CardBody, Spinner} from "@nextui-org/react";
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
 import {useNavigate} from "react-router-dom";
+import UseClientIp from "../../recoil/hooks/useClientIp";
 
 //시간 포맷 함수
 const formatTime = (time) => {
@@ -12,6 +13,9 @@ const formatTime = (time) => {
     return `${hours}:${minutes.padStart(2, '0')}`;
 }
 const TodayWeather = () => {
+
+    UseClientIp(); //ip를 백엔드로 전송
+
     const {fetchData, data, loading, error} = UseFetchWeather('/weather/daily');
     const navigate = useNavigate();
 

@@ -33,14 +33,14 @@ public class TodayWeatherService {
     private final String currentDate = LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
     /* 오늘 단기 예보 조회*/
-    public List<TodayWeatherReqDto> getTodayWeather() {
+    public List<TodayWeatherReqDto> getTodayWeather(String clientIp) {
 
         String functionName = "getVilageFcst";
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode responseJson = null;
         String resultCode;
 
-        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
+        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation(clientIp);
         int nx = (int) geoLocationResDto.getNx();
         int ny = (int) geoLocationResDto.getNy();
         String ip = geoLocationResDto.getIp();
@@ -77,8 +77,8 @@ public class TodayWeatherService {
     }
 
     /* GeoLocation을 사용해서 위치값 받아오기*/
-    public List<TodayWeatherResDto> getFormattedTodayWeather() {
-        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation();
+    public List<TodayWeatherResDto> getFormattedTodayWeather(String clientIp) {
+        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation(clientIp);
         int nx = (int) geoLocationResDto.getNx();
         int ny = (int) geoLocationResDto.getNy();
         String r1 = geoLocationResDto.getR1();
@@ -86,7 +86,7 @@ public class TodayWeatherService {
         String r3 = geoLocationResDto.getR3();
         String ip = geoLocationResDto.getIp();
 
-        List<TodayWeatherReqDto> weatherDataList = getTodayWeather();
+        List<TodayWeatherReqDto> weatherDataList = getTodayWeather(clientIp);
 
         return formatWeatherData(weatherDataList, nx, ny, r1, r2, r3, ip);
     }
@@ -191,12 +191,12 @@ public class TodayWeatherService {
     }
 
     /* 현재 날씨 요약 정보 */
-    public DailyWeatherDto getDailyWeather(List<TodayWeatherResDto> todayWeatherList) {
+    public DailyWeatherDto getDailyWeather(List<TodayWeatherResDto> todayWeatherList, String clientIp) {
         DailyWeatherDto.DailyWeatherDtoBuilder builder = DailyWeatherDto.builder();
         String minTemp = null;
         String maxTemp = null;
 
-        DaylightDto daylightDto = daylightService.getDaylightInfo(geoLocationService.getGeoLocation());
+        DaylightDto daylightDto = daylightService.getDaylightInfo(geoLocationService.getGeoLocation(clientIp));
 
         for(TodayWeatherResDto todayWeather : todayWeatherList) {
             // 최저 기온, 최고 기온 찾기
@@ -250,8 +250,8 @@ public class TodayWeatherService {
     }
 
     /* 오늘 시간별 날씨 */
-    public List<HourlyWeatherDto> getHourlyWeather() {
-        List<TodayWeatherReqDto> rawForcastData = getTodayWeather();
+    public List<HourlyWeatherDto> getHourlyWeather(String clientIp) {
+        List<TodayWeatherReqDto> rawForcastData = getTodayWeather(clientIp);
         Map<String, HourlyWeatherDto.HourlyWeatherDtoBuilder> dtoMap = new HashMap<>();
 
         // 현재 시간 및 날짜
