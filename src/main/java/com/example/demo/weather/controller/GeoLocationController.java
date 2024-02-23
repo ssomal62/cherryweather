@@ -5,9 +5,9 @@ import com.example.demo.weather.dto.GeoLocationResDto;
 import com.example.demo.weather.service.GeoLocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,9 +16,10 @@ public class GeoLocationController {
 
     private final GeoLocationService geoLocationService;
 
-    @GetMapping("/reqlocation")
-    public ResponseEntity<GeoLocationReqDto> getGeoLocation() {
-        GeoLocationReqDto location = geoLocationService.getGeoLocation();
+    @PostMapping("/reqlocation")
+    public ResponseEntity<GeoLocationReqDto> getGeoLocation(@RequestBody Map<String,String > ipData) {
+        String clientIp = ipData.get("ip");
+        GeoLocationReqDto location = geoLocationService.getGeoLocation(clientIp);
         if(location != null) {
             return ResponseEntity.ok(location);
         } else {
@@ -26,9 +27,10 @@ public class GeoLocationController {
         }
     }
 
-    @GetMapping("/reslocation")
-    public ResponseEntity<GeoLocationResDto> getGeoLocation2() {
-        GeoLocationResDto location = geoLocationService.convertLocation();
+    @PostMapping("/reslocation")
+    public ResponseEntity<GeoLocationResDto> getGeoLocation2(@RequestBody Map<String,String > ipData) {
+        String clientIp = ipData.get("ip");
+        GeoLocationResDto location = geoLocationService.convertLocation(clientIp);
         if(location != null) {
             return ResponseEntity.ok(location);
         } else {
