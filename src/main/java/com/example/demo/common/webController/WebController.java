@@ -8,7 +8,7 @@ public class WebController {
 
     @GetMapping(value = {"", "/login", "/club", "/event", "/chat",
             "/mypage", "/oauth", "/login/local", "/join", "/club-add", "/ai", "/gpt", "/image",
-            "/imageList", "/weatherDetail", "/chat/room/:chatRoom/"})
+            "/imageList", "/weatherDetail", "/chat/room/:chatRoom/", "/alarm"})
     public String accountRoute() {
         return "forward:/index.html";
     }

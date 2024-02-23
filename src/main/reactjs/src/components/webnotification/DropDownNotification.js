@@ -1,30 +1,30 @@
 // DropDownNotification.js
 
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import {useRecoilValue} from "recoil";
+import { useRecoilValue } from "recoil";
 import {
   useFetchUserInfo,
   userInfoState,
 } from "../../recoil/hooks/UseFetchUserInfo";
-import {useFetchClubs} from "../../recoil/hooks/UseFetchClubs";
-import {useNavigate} from "react-router-dom";
-import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
-import {useClubDetailState} from "../../recoil/hooks/UseClubDetailState";
-import {useMyMembership} from "../../recoil/hooks/UseMyMembership";
-import {useMembersState} from "../../recoil/hooks/UseMembersState";
+import { useFetchClubs } from "../../recoil/hooks/UseFetchClubs";
+import { useNavigate } from "react-router-dom";
+import { UseFetchWeather } from "../../recoil/hooks/UseFetchWeather";
+import { useClubDetailState } from "../../recoil/hooks/UseClubDetailState";
+import { useMyMembership } from "../../recoil/hooks/UseMyMembership";
+import { useMembersState } from "../../recoil/hooks/UseMembersState";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
   const fetchClubs = useFetchClubs(); // 클럽 정보 가져오기
   const userInfoFetch = useFetchUserInfo();
   const navigate = useNavigate(); // useNavigate 훅 사용하기
-  const {fetchData, data: weatherData} = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
+  const { fetchData, data: weatherData } = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
   const getClubDetail = useClubDetailState(userInfo.clubId);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -45,24 +45,24 @@ const DropDownNotification = () => {
     return null;
   };
 
-  useEffect(() => {
-    if (userInfo.clubId) {
-      const userClubName = findUserClubName();
-      if (userClubName) {
-        console.log("사용자가 속한 클럽 이름:", userClubName);
-      } else {
-        console.log("사용자가 속한 클럽을 찾을 수 없습니다.");
-      }
-    } else {
-      console.log("사용자가 클럽에 속해 있지 않습니다.");
-    }
-  }, [userInfo, clubMembers]);
+  // useEffect(() => {
+  //   if (userInfo.clubId) {
+  //     const userClubName = findUserClubName();
+  //     if (userClubName) {
+  //       console.log("사용자가 속한 클럽 이름:", userClubName);
+  //     } else {
+  //       console.log("사용자가 속한 클럽을 찾을 수 없습니다.");
+  //     }
+  //   } else {
+  //     console.log("사용자가 클럽에 속해 있지 않습니다.");
+  //   }
+  // }, [userInfo, clubMembers]);
 
   useEffect(() => {
     fetchData();
     fetchClubs(); // 클럽 정보 가져오기
     userInfoFetch();
-  }, [fetchData, fetchClubs, userInfoFetch]);
+  }, []);
 
   useEffect(() => {
     if (weatherData && isOpen) {
