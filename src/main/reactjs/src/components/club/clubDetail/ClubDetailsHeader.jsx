@@ -7,17 +7,36 @@ import {useNavigate} from "react-router-dom";
 import {WiNightAltRain} from "react-icons/wi";
 import {useRecoilValue} from "recoil";
 import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
+import {IsLoginAtom} from "../../../recoil/LoginAtom";
+import {isMemberState} from "../../../recoil/hooks/CheckIsMember";
+import MemberVerificationModal from "../../../utils/MemberVerificationModal";
 
 export default function ClubDetailsHeader() {
 
-    const [scrolled, setScrolled] = useState(false);
+    const isLogin = useRecoilValue(IsLoginAtom);
+    const club = useRecoilValue(clubDetailState).clubDetail;
     const navigate = useNavigate();
+    const isMember = useRecoilValue(isMemberState);
 
-    const club = useRecoilValue(clubDetailState);
+    const [scrolled, setScrolled] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleNavigate = () => {
-        navigate('/clubs');
+        navigate('/community/clubs');
     };
+
+    const handleConfigurationsClick = () => {
+        if (!isLogin) {
+            setIsModalOpen(true);
+            return;
+        }
+
+        if(!isMember) {
+            setIsModalOpen(true);
+            return
+        }
+        navigate('/club-configurations')
+    }
 
     useEffect(() => {
         const handleScroll = () => {
@@ -32,6 +51,7 @@ export default function ClubDetailsHeader() {
 
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
 
     const styles = {
         navBar : {
@@ -72,36 +92,39 @@ export default function ClubDetailsHeader() {
     };
 
     return (
-        <Navbar style={styles.navBar}>
-            <NavbarContent justify="start">
-                <NavbarItem
-                    style={styles.iconBox}
-                    onClick={handleNavigate}
-                >
-                    <IoArrowBack style={styles.icon}/>
-                </NavbarItem>
-                <NavbarItem style={styles.text}>
-                    {club.name}
-                </NavbarItem>
-            </NavbarContent>
-            <NavbarContent className="items-center" justify="end">
-                <NavbarItem
-                    style={styles.iconBox}>
-                    <WiNightAltRain style={styles.icon}/>
-                </NavbarItem>
-                <NavbarItem
-                    style={styles.iconBox}
-                    onClick={() => navigate('/')}>
+        <>
+            <Navbar style={styles.navBar}>
+                <NavbarContent justify="start">
+                    <NavbarItem
+                        style={styles.iconBox}
+                        onClick={handleNavigate}
+                    >
+                        <IoArrowBack style={styles.icon}/>
+                    </NavbarItem>
+                    <NavbarItem style={styles.text}>
+                        {club.name}
+                    </NavbarItem>
+                </NavbarContent>
+                <NavbarContent className="items-center" justify="end">
+                    <NavbarItem
+                        style={styles.iconBox}>
+                        <WiNightAltRain style={styles.icon}/>
+                    </NavbarItem>
+                    <NavbarItem
+                        style={styles.iconBox}
+                        onClick={() => navigate('/')}>
                         <GoHome style={styles.icon}/>
-                </NavbarItem>
-                <NavbarItem
-                    style={styles.iconBox}
-                    onClick={() => navigate('/club-configurations')}
-                >
-                    <FiSettings style={styles.icon}/>
-                </NavbarItem>
-            </NavbarContent>
-        </Navbar>
+                    </NavbarItem>
+                    <NavbarItem
+                        style={styles.iconBox}
+                        onClick={handleConfigurationsClick}
+                    >
+                        <FiSettings style={styles.icon}/>
+                    </NavbarItem>
+                </NavbarContent>
+            </Navbar>
+            <MemberVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+        </>
     );
 }
 

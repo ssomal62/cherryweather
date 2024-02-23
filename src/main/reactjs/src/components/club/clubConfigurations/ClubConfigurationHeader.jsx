@@ -8,7 +8,8 @@ import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
 export default function ClubConfigurationHeader() {
 
     const navigate = useNavigate();
-    const club = useRecoilValue(clubDetailState);
+    const club = useRecoilValue(clubDetailState).clubDetail;
+
     return (
         <Navbar>
             <NavbarContent justify="start">

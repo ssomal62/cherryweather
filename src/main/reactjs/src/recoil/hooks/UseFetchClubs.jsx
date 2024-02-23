@@ -1,6 +1,7 @@
+import {useCallback, useState} from "react";
 import {atom, useSetRecoilState} from 'recoil';
-import {useCallback} from "react";
 import {instance} from "../module/instance";
+import {Cookies} from "react-cookie";
 
 export const clubListState = atom({
     key: 'clubListState',
@@ -8,17 +9,33 @@ export const clubListState = atom({
 });
 
 export const useFetchClubs = () => {
-    const setClubList = useSetRecoilState(clubListState); // 값을 불러오기 위한 문법
+    const cookie = new Cookies();
+    const setClubList = useSetRecoilState(clubListState);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    return useCallback(async () => {
-        console.log("⚠️[Club List] 조회를 시도합니다.")
+    const [accessToken, setAccessToken] = useState(() => cookie.get('accessToken'));
+
+    const fetchClubs = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+
         try {
-            const response =
-                await instance.get('/clubs');
+            const response = await instance.get('/clubs', {
+                headers: {
+                    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {})
+                }
+            });
             console.log('✅[Club List] Success', response);
             setClubList(response.data.summaryList);
         } catch (error) {
             console.error('⛔[Club List] Failed', error);
+            setError(error);
+        } finally {
+            setLoading(false);
         }
-    }, [setClubList]);
+
+    }, [accessToken, setClubList]);
+
+    return { fetchClubs, loading, error };
 };

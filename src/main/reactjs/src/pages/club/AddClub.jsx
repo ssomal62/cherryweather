@@ -14,25 +14,27 @@ import {Cookies} from "react-cookie";
 import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
 import {useRecoilValue} from "recoil";
 import {instance} from "../../recoil/module/instance";
+import AddClubInputNotice from "../../components/club/addClub/AddClubInputNotice";
 
 const AddClub = () => {
 
     const {clubId} = useParams();
 
-    const club = useRecoilValue(clubDetailState);
+    const club = useRecoilValue(clubDetailState).clubDetail;
 
     const [step, setStep] = useState(1);
     const [progress, setProgress] = useState(20);
     const [animationDirection, setAnimationDirection] = useState('left');
 
     const [category, setCategory] = useState(clubId ? club.category : '');
-    const [subCategory, setSubCategory] = useState(clubId ? club.subCategory : null);
+    const [subCategory, setSubCategory] = useState(clubId ? club.subCategory : '');
     const [name, setName] = useState(clubId ? club.name : '');
     const [description, setDescription] = useState(clubId ? club.description : '');
+    const [notice, setNotice] = useState(clubId ? club.notice : '');
     const [file, setFile] = useState('');
     const [joinApprovalStatus, setJoinApprovalStatus] = useState(clubId ? club.joinApprovalStatus : '');
     const [activitiesArea, setActivitiesArea] = useState(clubId ? club.activitiesArea : '');
-    const [code, setCode] = useState('');
+    const [code, setCode] = useState(clubId ? club.code : '');
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -40,102 +42,82 @@ const AddClub = () => {
 
     const navigate = useNavigate()
     const formData = new FormData();
+    const cookie = new Cookies();
+
+    const requestData = {
+        ...(clubId && {clubId: clubId}),
+        name              : name,
+        description       : description,
+        code              : code,
+        notice            : notice,
+        category          : category,
+        subCategory       : subCategory,
+        activitiesArea    : activitiesArea,
+        joinApprovalStatus: joinApprovalStatus,
+        status            : "PUBLIC",
+    };
 
     const handlePhotoChange = (file) => {
         setFile(file);
     };
 
+    const onFileUpload = async () => {
+        formData.append('file', file);
+        try {
+            const resFile = await instance.post('/clubs/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log('✅[Upload Profile] Success', resFile.data);
+        } catch (error) {
+            console.error('Upload Profile Error:', error);
+        }
+    }
+
     const onSave = async () => {
-
-        const requestData = {
-            name              : name,
-            description       : description,
-            code              : code,
-            status            : "PUBLIC",
-            category          : category,
-            subCategory       : subCategory,
-            activitiesArea    : activitiesArea,
-            joinApprovalStatus: joinApprovalStatus,
-        };
-
-        const cookie = new Cookies();
-
-        if (file) {
-            formData.append('file', file);
-
-            try {
-                const res = await instance.post('/clubs', requestData, {
-                    headers: {
-                        Authorization: `Bearer ${cookie.get('accessToken')}`
-                    }
-                });
-
-                const resFile = await instance.post('/clubs/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-
-                navigate('/');
-                console.log('✅[Add Club] Success', res);
-                console.log('✅[Add Club Profile] Success', resFile.data);
-            } catch (error) {
-                console.error('Error:', error);
+        try {
+            const res = await instance.post('/clubs', requestData, {
+                headers: {
+                    Authorization: `Bearer ${cookie.get('accessToken')}`
+                }
+            });
+            if(file) {
+                await onFileUpload();
             }
+            navigate('/');
+            console.log('✅[Add Club] Success', res);
+        } catch (error) {
+            console.error('Error:', error);
         }
     };
 
-
     const onUpdate = async () => {
-
-        console.log("진입확인");
-
-        const requestData = {
-            ...(clubId && {clubId: clubId}),
-            name              : name,
-            description       : description,
-            code              : code,
-            status            : "PUBLIC",
-            category          : category,
-            subCategory       : subCategory,
-            activitiesArea    : activitiesArea,
-            joinApprovalStatus: joinApprovalStatus,
-        };
-
-        const cookie = new Cookies();
-
-        if (file) {
-            formData.append('file', file);
-            try {
-                const res = await instance.put('/clubs', requestData, {
-                    headers: {
-                        Authorization: `Bearer ${cookie.get('accessToken')}`
-                    }
-                });
-
-                const resFile = await instance.post('/clubs/upload', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-
-                navigate('/');
-                console.log('✅[Update Club] Success', res);
-                console.log('✅[Update Club Profile] Success', resFile.data);
-            } catch (error) {
-                console.error('Error:', error);
+        try {
+            const res = await instance.put('/clubs', requestData, {
+                headers: {
+                    Authorization: `Bearer ${cookie.get('accessToken')}`
+                }
+            });
+            if(file) {
+                await onFileUpload();
             }
+            navigate(`/club-details/${clubId}`);
+            console.log('✅[Update Club] Success', res);
+        } catch (error) {
+            console.error('Error:', error);
         }
     };
 
     const nextStep = () => {
         setStep(step + 1);
-        setProgress(progress + 20);
+        setProgress(progress + 16.7);
         setAnimationDirection('left');
     };
+
     const prevStep = () => {
         setStep(step - 1);
-        setProgress(progress - 20);
+        setProgress(progress - 16.7);
         setAnimationDirection('left');
     }
 
@@ -147,8 +129,7 @@ const AddClub = () => {
                     category={category}
                     subCategory={subCategory}
                     setCategory={setCategory}
-                    setSubCategory={setSubCategory}
-                />;
+                    setSubCategory={setSubCategory}/>;
             case 2:
                 return <AddClubNameInput
                     onNext={nextStep}
@@ -161,8 +142,7 @@ const AddClub = () => {
                     description={description}
                     setDescription={setDescription}
                     setCode={setCode}
-                    onFileSelect={handlePhotoChange}
-                />;
+                    onFileSelect={handlePhotoChange}/>;
             case 4:
                 return <AddClubSelectJoinStatus
                     onNext={nextStep}
@@ -170,18 +150,25 @@ const AddClub = () => {
                     setJoinApprovalStatus={setJoinApprovalStatus}/>;
             case 5:
                 return <AddClubInputActivitiesArea
+                    onNext={nextStep}
+                    activitiesArea={activitiesArea}
+                    setActivitiesArea={setActivitiesArea}/>;
+            case 6:
+                return <AddClubInputNotice
+                    notice={notice}
+                    setNotice={setNotice}
                     isClubId={clubId}
                     onSave={onSave}
                     onUpdate={onUpdate}
-                    activitiesArea={activitiesArea}
-                    setActivitiesArea={setActivitiesArea}/>;
+                />
             default:
-                return navigate('/');
+                return navigate(-1);
         }
     };
 
     return (
         <Layout useHeader={false} useFooter={false} containerPadding="0">
+
             <div onClick={prevStep}>
                 <IoArrowBack style={{width: 30, height: 30, color: 'black'}}/>
             </div>
@@ -196,7 +183,6 @@ const AddClub = () => {
                     {renderStep()}
                 </AnimationLeftInWrapper>
             )}
-
         </Layout>
     );
 };
