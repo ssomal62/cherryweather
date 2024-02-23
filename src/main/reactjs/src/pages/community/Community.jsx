@@ -3,7 +3,7 @@ import Layout from "../../common/Layout";
 import {Tab, Tabs} from "@nextui-org/react";
 import Event from "../event/Event";
 import Club from "../club/Club";
-import Feeds from "../feed/Feeds";
+import Feed from "../feed/Feed";
 import {useNavigate, useParams} from "react-router-dom";
 
 
@@ -18,7 +18,7 @@ const Community = () => {
         { id: "feed", label: "피드" }
     ];
 
-    const [selected, setSelected] = useState("club");
+    const [selected, setSelected] = useState("event");
 
     useEffect(() => {
         const tabExists = tabs.some(tab => tab.id === selectPage);
@@ -41,9 +41,9 @@ const Community = () => {
             case 'club':
                 return <Club />;
             case 'feed':
-                return <Feeds />;
+                return <Feed />;
             default:
-                return <Club />;
+                return navigate('/');
         }
     };
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import Layout from "../../common/Layout";
 
-const MyComponent = () => {
+const Feed = () => {
     return (
         <Layout>
-            Feeds
+            Feed
         </Layout>
     );
 };
 
-export default MyComponent;
+export default Feed;
