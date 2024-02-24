@@ -4,62 +4,80 @@ import styled from "styled-components";
 import AnimationRightInWrapper from "../../utils/animations/AnimationRightInWrapper";
 import {Chip, Divider} from "@nextui-org/react";
 import ClubConfigurationHeader from "../../components/club/clubConfigurations/ClubConfigurationHeader";
-import {IoIosArrowForward} from "react-icons/io";
-import {useNavigate} from "react-router-dom";
 import {useRecoilValue} from "recoil";
-import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
+import {clubDetailState} from "../../recoil/hooks/UseClubApi";
+import EditClub from "../../components/club/clubConfigurations/EditClub";
+import TransferClub from "../../components/club/clubConfigurations/TransferClub";
+import LeaveClub from "../../components/club/clubConfigurations/LeaveClub";
+import DeleteClub from "../../components/club/clubConfigurations/DeleteClub";
+import ManageClubMembers from "../../components/club/clubConfigurations/ManageClubMembers";
+import ReportClub from "../../components/club/clubConfigurations/ReportClub";
+import {currentMembershipState} from "../../recoil/hooks/UseMembershipApi";
 
 const ClubConfigurations = () => {
 
+    const clubDetail = useRecoilValue(clubDetailState).clubDetail;
+    const myMembership = useRecoilValue(currentMembershipState);
+    const myRole = myMembership.info.role;
 
-    const navigate = useNavigate();
-    const club = useRecoilValue(clubDetailState);
     return (
 
         <Layout useHeader={false} useFooter={false} containerMargin="5" containerPadding="0">
             <AnimationRightInWrapper>
-                <ClubConfigurationHeader/>
+
+                <ClubConfigurationHeader clubDetail={clubDetail}/>
                 <Divider/>
 
-                <Section>
-                    <Chip size='sm' color='default' variant='faded'> 클럽 정보 </Chip>
-                    <div className="flex items-center justify-between" style={styles.font}
-                         onClick={()=> navigate(`/club-add/${club.clubId}`)}
-                    >
-                        <div className="flex items-center">
-                            <p>클럽 수정하기</p>
-                        </div>
-                        <div className="flex items-end">
-                            <IoIosArrowForward/>
-                        </div>
-                    </div>
-                </Section>
-                <Divider/>
-                <Section>
-                    <Chip size='sm' color='default' variant='faded'> 클럽 활동 </Chip>
-                    <div className="flex items-center justify-between" style={styles.font}
-                        onClick={()=> navigate('/club-members')}
-                    >
-                        <div className="flex items-center">
-                            <p>클럽 멤버관리</p>
-                        </div>
-                        <div className="flex items-end">
-                            <IoIosArrowForward/>
-                        </div>
-                    </div>
-                </Section>
-                <Divider/>
+                {
+                    (myRole === "HOST" || myRole === "MODERATOR") &&
+                    <>
+                        <Section>
+                            <Chip size='sm' color='default' variant='faded'> 클럽 정보 </Chip>
+                            <EditClub clubDetail={clubDetail}/>
+                        </Section>
+                        <Divider/>
+                    </>
+                }
+                {
+                    (myRole === "HOST" || myRole === "MODERATOR" || myRole === "MEMBER") &&
+                    <>
+                        <Section>
+                            <Chip size='sm' color='default' variant='faded'> 클럽 활동 </Chip>
+                            <ManageClubMembers/>
+                        </Section>
+                        <Divider/>
+                    </>
+                }
                 <Section>
                     <Chip size='sm' color='default' variant='faded'> 클럽 운영 </Chip>
-                    <div className="flex items-center justify-between" style={styles.font}>
-                        <div className="flex items-center">
-                            <p>클럽 삭제</p>
-                        </div>
-                        <div className="flex items-end">
-                            <IoIosArrowForward/>
-                        </div>
-                    </div>
+
+                    {
+                        (myRole === "MODERATOR" || myRole === "MEMBER") &&
+                        <LeaveClub message="탈퇴하기" clubDetail={clubDetail}/>
+                    }
+                    {
+                        myRole === "WAITING" &&
+                        <LeaveClub message="대기취소" clubDetail={clubDetail}/>
+                    }
+                    {
+                        myRole === "HOST" &&
+                        <>
+                            <TransferClub/>
+                            <DeleteClub/>
+                        </>
+                    }
                 </Section>
+                <Divider/>
+                {myRole !== "HOST" &&
+                    <>
+                        <Section>
+                            <Chip size='sm' color='default' variant='faded'> 클럽 신고 </Chip>
+                            <ReportClub/>
+                        </Section>
+                        <Divider/>
+                    </>
+                }
+
             </AnimationRightInWrapper>
         </Layout>
 
@@ -68,19 +86,10 @@ const ClubConfigurations = () => {
 
 export default ClubConfigurations;
 
-const styles = {
-    font      : {
-        color: 'black', margin: '5% 0 5% 2%',
-        cursor: 'pointer',
-    },
-}
-const bd = '0px solid aquamarine';
-
 const Section = styled.div`
   padding-right: 5%;
   padding-left: 5%;
   padding-top: 5%;
-  border: ${bd};
   display: block;
   width: 100%;
 `;

@@ -23,7 +23,6 @@ export default function ClubSearchHeader({setKeywords}) {
         <Navbar>
             <NavbarContent justify="start">
                 <NavbarItem
-                    style={styles.iconBox}
                     onClick={() => navigate(-1)}
                 >
                     <IoArrowBack style={styles.icon}/>
@@ -38,7 +37,6 @@ export default function ClubSearchHeader({setKeywords}) {
                         onKeyDown={handleInputKeyword}
                         radius="full"
                         placeholder="마른 하늘에 오징어볼"
-
                     />
                 </NavbarItem>
             </NavbarContent>
@@ -47,30 +45,19 @@ export default function ClubSearchHeader({setKeywords}) {
 }
 
 const styles = {
-    iconBox: {
-        borderRadius   : 50,
-        transition     : 'background-color 0.3s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease',
-        width          : 30,
-        height         : 30,
-        alignItems     : 'center',
-        display        : 'flex',
-        justifyContent : 'center',
-        cursor         : 'pointer',
-    },
     icon   : {
         width     : 24,
         height    : 24,
         color     : 'black',
     },
     endIcon   : {
-        width     : 20,
-        height    : 20,
+        width     : '20px',
+        height    : '20px',
         backgroundColor : 'gray',
         borderRadius: 50,
         color     : 'white',
         cursor : 'pointer',
     },
-
     title   : {
         fontWeight: 600,
         fontSize  : 20,

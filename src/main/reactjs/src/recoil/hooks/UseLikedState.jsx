@@ -1,36 +1,24 @@
-import {useRecoilState} from 'recoil';
-import axios from 'axios';
-import { atom } from 'recoil';
-
-export const likedClubsState = atom({
-    key: 'likedClubsState',
-    default: [],
-});
+import {Cookies} from "react-cookie";
+import {instance} from "../module/instance";
 
 export const useLikeClub = () => {
-    const [likedClubs, setLikedClubs] = useRecoilState(likedClubsState);
+    const cookie = new Cookies();
 
-    const toggleLikeClub = async (clubId) => {
-        const isLiked = likedClubs.includes(clubId);
-        const updatedLikedClubs = isLiked
-            ? likedClubs.filter(id => id !== clubId)
-            : [...likedClubs, clubId];
-
-        setLikedClubs(updatedLikedClubs);
-
-        // 서버에 좋아요 상태 변경 요청
+    const toggleLikeClub = async ({type, targetId}) => {
         try {
-            await axios.post('/api/like', {
-                clubId,
-                liked: !isLiked,
+            //console.log("⚠️[Like] 토글 시도")
+            await instance.post('/likes', {
+                type,
+                targetId,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${cookie.get('accessToken')}`
+                }
             });
-            // 성공 로직 (옵셔널)
+            //console.log('✅[Like] 토글 성공');
         } catch (error) {
-            console.error('Like status update failed', error);
-            // 실패 시 좋아요 상태 원복 (옵셔널)
-            setLikedClubs(likedClubs); // 요청 전 상태로 원복
+            console.error('⛔[Like] 토글 실패', error);
         }
     };
-
-    return { toggleLikeClub };
+    return {toggleLikeClub};
 };

@@ -2,6 +2,8 @@ package com.example.demo.club.event.listener;
 
 import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.club.event.ClubCreationEvent;
+import com.example.demo.club.event.ClubGrowthEvent;
+import com.example.demo.club.service.ClubService;
 import com.example.demo.membership.dto.ClubSignupDTO;
 import com.example.demo.membership.service.MembershipService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class ClubEventListener {
 
     private final MembershipService membershipService;
+    private final ClubService clubService;
 
     @EventListener
     public void handleCreateClubEvent(ClubCreationEvent event) {
@@ -22,5 +25,14 @@ public class ClubEventListener {
         ClubSignupDTO requestDTO = event.getRequestDTO();
 
         membershipService.saveMembership(requestDTO, accountDetails);
+    }
+
+    @EventListener
+    public void handleClubGrowthEvent(ClubGrowthEvent event) {
+        if (event.isIncrease()) {
+            clubService.increaseGrowthMeter(event.getClubId());
+        } else {
+            clubService.decreaseGrowthMeter(event.getClubId());
+        }
     }
 }
