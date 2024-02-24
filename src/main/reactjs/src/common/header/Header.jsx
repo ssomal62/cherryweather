@@ -8,11 +8,18 @@ import {IsLoginAtom} from "../../recoil/LoginAtom";
 import {AiOutlineLogin} from "react-icons/ai";
 import {NavLink, useNavigate} from "react-router-dom";
 import GoBellDropNotificationIcon from "./GoBellWithNotificationIcon";
+import { useFetchUserInfo } from "../../recoil/hooks/UseFetchUserInfo";
 
 export default function Header() {
     const isLogin = useRecoilValue(IsLoginAtom);
     const [registration, setRegistration] = useState(null);
     const navigate = useNavigate();
+
+    const fetchUserInfo = useFetchUserInfo();
+
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
 
     useEffect(() => {
         // Service Worker 등록
