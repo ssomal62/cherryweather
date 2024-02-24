@@ -68,7 +68,8 @@ const GPTChatRoom = () => {
                         <div className="user_chat_data">
                             <div className="chat_section msg_history" id="chat-messages">
                                 {chatList.map((message, index) => (
-                                    <div key={index} className="chat-message">
+                                    <div key={index}
+                                         className={"chat-message " + (index % 2 === 0 ? "received-message" : "sent-message")}>
                                         <p>{message}</p>
                                     </div>
                                 ))}
