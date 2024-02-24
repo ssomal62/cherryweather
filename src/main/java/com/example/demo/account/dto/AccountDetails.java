@@ -70,4 +70,8 @@ public class AccountDetails implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
+
+    public void setEmail(String email) {
+    }
 }

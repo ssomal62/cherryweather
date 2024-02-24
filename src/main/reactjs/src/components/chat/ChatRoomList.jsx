@@ -146,6 +146,7 @@ const ChatRoomList = () => {
             key={channel.chatId}
             to={`/chat/room/${channel.chatRoom}/
             ${channel.clubId != null ? channel.clubId : channel.raccountId}`}
+            channelName={channelName[index].name}
           >
             <div className="channel-list" style={{ marginTop: "60px" }}>
               <Badge className="list-photo">
@@ -155,7 +156,6 @@ const ChatRoomList = () => {
                   src="https://i.pravatar.cc/300?u=a042581f4e29026709d"
                 />
                 <div style={{ marginLeft: "10px", marginTop: "15px" }}>
-                  <span></span>
                   <span>{channelName[index].name}</span>
                 </div>
               </Badge>

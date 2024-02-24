@@ -48,6 +48,7 @@ public class ChatController {
         return Collections.singletonList(chatService.getChatInfoByClubId(clubId));
     }
 
+
     // 채팅방 생성
     @PostMapping("/insertclubchatroom")
     public void insertClubChat(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int clubId) {
@@ -58,6 +59,8 @@ public class ChatController {
     public void insertChatRoom(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int raccountId) {
         chatService.insertChatRoom(accountId, chatRoom, raccountId);
     }
+
+
 
 }
 

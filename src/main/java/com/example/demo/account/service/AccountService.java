@@ -8,6 +8,7 @@ import com.example.demo.account.entity.Account;
 import com.example.demo.auth.dto.oauth.OAuthAccountInfoDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface AccountService {
 
@@ -23,4 +24,7 @@ public interface AccountService {
 
     void deleteAccount(final @AuthenticationPrincipal AccountDetails accountDetails);
 
+
+    @Transactional(readOnly = true)
+    ResponseEntity<UserInfoDto> getUserInfoByEmail(String email);
 }

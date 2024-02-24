@@ -1,4 +1,5 @@
 package com.example.demo.account.service.impl;
+
 import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.account.dto.ModifyUserInfoRequestDto;
 import com.example.demo.account.dto.SignUpRequestDto;
@@ -241,5 +242,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<UserInfoDto> getUserInfoByEmail(String email) {
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT)); // 계정 정보 재조회
+        return ResponseEntity.ok().body(new UserInfoDto(account, null, null));
+    }
 }

@@ -41,11 +41,11 @@ function ClubChat({ club }) {
 
   const getChatInfo = async () => {
     try {
-      console.log("clubId: " + club.clubId);
+      console.log("clubId: " + club);
       console.log("getChatInfo");
       console.log("accountId: " + accountData.accountId);
       const response = await instance.get(
-        `/chat/getclubchatinfo?accountId=${accountData.accountId}&clubId=${club.clubId}`
+        `/chat/getclubchatinfo?accountId=${accountData.accountId}&clubId=${club}`
       );
       console.log("response: ", response.data);
       return response.data;
@@ -57,7 +57,7 @@ function ClubChat({ club }) {
   const getChatClubId = async () => {
     try {
       const response2 = await instance.get(
-        `/chat/getchatroombyclubid?clubId=${club.clubId}`
+        `/chat/getchatroombyclubid?clubId=${club}`
       );
       return response2.data;
     } catch (error) {
@@ -73,7 +73,7 @@ function ClubChat({ club }) {
         const clubId = clubArray.toString();
         if (chatroom) {
           await nc.disconnect();
-          navi(`/chat/room/${chatroom}/${club.clubId}`);
+          navi(`/chat/room/${chatroom}/${club}`);
         } else if (!clubId) {
           // chatroom == null 일 경우
           const newchannel = await nc.createChannel({
@@ -106,7 +106,7 @@ function ClubChat({ club }) {
           await nc.subscribe(newChatId);
           // 채팅방으로 이동
           await nc.disconnect();
-          navi(`/chat/room/${newChatId}/${club.clubId}`);
+          navi(`/chat/room/${newChatId}/${club}`);
         } else {
           await instance.post(
             "/chat/insertclubchatroom?accountId=" +
@@ -144,7 +144,14 @@ function ClubChat({ club }) {
 
   return (
     <div>
-      <button type="button" onClick={insertClubChat}>
+      <button
+        type="button"
+        onClick={insertClubChat}
+        style={{
+          fontSize: 18,
+          fontWeight: 600,
+        }}
+      >
         채팅하기
       </button>
     </div>

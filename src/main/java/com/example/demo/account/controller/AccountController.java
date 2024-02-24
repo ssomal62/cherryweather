@@ -74,6 +74,14 @@ public class AccountController {
         accountService.checkDuplicateEmail(email);
     }
 
+    // 이메밀로 user 정보 가져오기
+    @GetMapping("/getfinduser")
+    public ResponseEntity<UserInfoDto> findAccountByEmail(@RequestParam String email) {
+        return accountService.getUserInfoByEmail(email);
+    }
+
+
+
 
 
    }

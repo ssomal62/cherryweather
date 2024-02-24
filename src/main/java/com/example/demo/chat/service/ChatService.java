@@ -1,23 +1,24 @@
 package com.example.demo.chat.service;
 
 
+import com.example.demo.account.service.AccountService;
 import com.example.demo.chat.dto.ChatListDto;
 import com.example.demo.chat.entity.Chat;
 import com.example.demo.chat.repository.ChatRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ChatService {
 
     private final ChatRepository chatRepository;
+    private final AccountService accountService;
 
-    public ChatService(ChatRepository chatRepository) {
-        this.chatRepository = chatRepository;
-    }
     @Transactional
     public String getChatIdByAccountId(int accountId) {
         return chatRepository.getChatIdByAccountId(accountId);
@@ -93,10 +94,6 @@ public class ChatService {
             return "null";
         }
     }
-
-
-
-
 
 
 }

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "../../style/ChatRoomStyle.css";
 import * as ncloudchat from "ncloudchat";
 import { useNavigate, useParams } from "react-router-dom";
-import { Navbar, NavbarMenuToggle, User } from "@nextui-org/react";
+import { Textarea, User, useDisclosure } from "@nextui-org/react";
 import { IoIosArrowBack } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { TbCherryFilled } from "react-icons/tb";
@@ -11,12 +11,15 @@ import Layout from "../../common/Layout";
 import { Cookies } from "react-cookie";
 import { instance } from "../../recoil/module/instance";
 import ChatUserInfo from "./ChatUserInfo";
+import ChatUserList from "./ChatUserList";
+import ChatUserListModal from "./ChatUserList";
 
 const ChatRoom = () => {
   const [ncloud, setNcloud] = useState("");
   const [accountData, setAccountData] = useState("");
   const { chatRoom } = useParams();
   const [channels, setChannels] = useState([]);
+  const [channelName, setChannelName] = useState([]);
   const [currentChannelId, setCurrentChannelId] = useState("");
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
@@ -72,7 +75,7 @@ const ChatRoom = () => {
       // 채널 메세지 가져오기
       const fetchedMessages = await fetchChannelMessages(chat, chatRoom);
       setMessages(fetchedMessages);
-      console.log(messages[0]);
+
       // await chat.subscribe(channelId);
       // await chat.addUsers(channelId, [res2.data.uemail, res3.data.uemail]);
       // const existingChannelId = channelId;
@@ -157,17 +160,48 @@ const ChatRoom = () => {
   }, [ncloud]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMsg, setSelectedMsg] = useState({});
 
-  const handleAvatarClick = () => {
-    setIsModalOpen(!isModalOpen);
+  const openModal = () => {
+    setIsModalOpen(true);
+    document.body.classList.add("modal-opened-body");
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+    document.body.classList.remove("modal-opened-body");
+  };
+
+  const handleAvatarClick = (message) => {
+    setSelectedMsg(message);
+  };
+  console.log("채널 정보 :", channels);
+
   useEffect(() => {
-    document.body.style.overflow = isModalOpen ? "hidden" : "auto";
-  }, [isModalOpen]);
+    for (const channel of channels) {
+      if (channel.id === chatRoom) {
+        setChannelName(channel.name);
+        // do something with channelName
+        break;
+      }
+    }
+  }, [channels, chatRoom]);
+
+  console.log("채널 이름 : ", channelName);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [userModal, setUserModal] = useState(false);
+
+  const openuserModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeuserModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
-    <Layout>
+    <Layout useHeader={false} useFooter={false} containerPadding="0">
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-12">
@@ -176,20 +210,24 @@ const ChatRoom = () => {
                 <div className="chat-nav">
                   <span>
                     <IoIosArrowBack
-                      style={{ fontSize: "30px", cursor: "pointer" }}
+                      style={{ fontSize: "20px", cursor: "pointer" }}
                       onClick={() => navi("/chat")}
                     />
                   </span>
+                  <strong>{channelName}</strong>
+
                   <span>
                     <GiHamburgerMenu
                       style={{
                         float: "right",
                         cursor: "pointer",
-                        fontSize: "30px",
+                        fontSize: "20px",
                       }}
-                    />
+                      onClick={openuserModal}
+                    ></GiHamburgerMenu>
                   </span>
                 </div>
+                {isModalOpen && <ChatUserListModal onClose={closeModal} />}
 
                 {/* 현재 채널의 메시지 표시 */}
                 {messages.map &&
@@ -207,7 +245,10 @@ const ChatRoom = () => {
                       {/* data.email */}
                       {message.sender.id !== accountData.email ? (
                         <User
-                          onClick={handleAvatarClick}
+                          onClick={() => {
+                            handleAvatarClick(message);
+                            openModal();
+                          }}
                           className={
                             message.sender.id === accountData.email
                               ? "sent-message"
@@ -224,43 +265,72 @@ const ChatRoom = () => {
                         style={{
                           backgroundColor:
                             message.sender.id === accountData.email
-                              ? "lightblue"
-                              : "lightgreen",
+                              ? "#0084FF"
+                              : "#f1f0f0",
+                          color:
+                            message.sender.id === accountData.email
+                              ? "white"
+                              : "black",
                           padding: "5px",
                           borderRadius: "4px",
                           display: "inline-block",
+                          fontSize: "12px",
                         }}
                       >
-                        <strong>{message.sender.name}</strong>
+                        {message.sender.id === accountData.email ? null : (
+                          <strong>{message.sender.name}</strong>
+                        )}
                         <div>{message.content}</div>
-                        <div style={{ fontSize: "12px", color: "gray" }}>
+                        <div style={{ fontSize: "10px" }}>
                           {new Date(message.created_at).toLocaleString()}
                         </div>
                       </div>
                     </div>
                   ))}
                 {isModalOpen && (
-                  <ChatUserInfo messages={messages} accountData={accountData} />
+                  <div>
+                    <div className="modal-overlay" onClick={closeModal}></div>
+                    <ChatUserInfo
+                      className="modal-overlay"
+                      onClick={closeModal}
+                      selectedMsg={selectedMsg}
+                    />
+                  </div>
                 )}
                 <div ref={messagesEndRef} />
               </div>
               {/* 메시지 입력 및 전송 UI */}
               <div
                 className="type_msg"
-                style={{ position: "fixed", bottom: "50px", width: "600px" }}
+                style={{ position: "fixed", width: "300px" }}
               >
                 <div className="input_msg_write">
                   <form onSubmit={handleSubmit}>
-                    <input
+                    <Textarea
+                      label="Description"
+                      placeholder="Enter your description"
+                      className="max-w-xs write_msg"
                       type="text"
+                      variant="underlined"
+                      value={userInput}
+                      onChange={handleUserInput}
+                    />
+                    {/* <Input
+                      type="text"
+                      variant="underlined"
                       className="write_msg"
                       placeholder="Type a message"
                       value={userInput}
                       onChange={handleUserInput}
-                    />
+                    /> */}
                     <button type="submit" className="msg_send_btn">
                       <TbCherryFilled
-                        style={{ fontSize: "30px", color: "#F31260" }}
+                        style={{
+                          fontSize: "30px",
+                          color: "#F31260",
+                          marginLeft: "35px",
+                          marginTop: "10px",
+                        }}
                       />
                     </button>
                   </form>

@@ -24,13 +24,13 @@ public class Chat {
     @Column(updatable = false)
     private long chatId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "accountId")
     private Account account;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "clubId")
     private Club club;

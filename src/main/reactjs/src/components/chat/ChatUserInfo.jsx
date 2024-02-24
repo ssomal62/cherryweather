@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -8,62 +8,74 @@ import {
   Button,
 } from "@nextui-org/react";
 import "../../style/ChatUserInfoStyle.css";
+import { instance } from "../../recoil/module/instance";
 
-function ChatUserInfo({ closeModal, messages, accountData }) {
-  const [isFollowed, setIsFollowed] = useState(false);
-  console.log("messages : ", messages);
+function ChatUserInfo({ selectedMsg }) {
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const response = await instance.get(
+          "/account/getfinduser?email=" + selectedMsg.sender.id
+        );
+        console.log("response : ", response.data);
+        setUserInfo(response.data); // 사용자 정보 설정
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getUserInfo();
+  }, [selectedMsg]);
   return (
     <>
-      {messages.map((message, index) =>
-        message.sender.id !== accountData.email ? (
-          <Card className="max-w-[340px] modal" key={index}>
-            <CardHeader className="justify-between">
-              <div className="flex gap-5">
-                <Avatar
-                  isBordered
-                  radius="full"
-                  size="md"
-                  src={message.sender.profile}
-                />
-                <div className="flex flex-col gap-1 items-start justify-center">
-                  <h4 className="text-small font-semibold leading-none text-default-600">
-                    {message.sender.name}
-                  </h4>
-                </div>
-              </div>
-              <Button
-                color="primary"
+      {userInfo && (
+        <Card className="modal">
+          <CardHeader>
+            <div className="flex gap-5">
+              <Avatar
+                isBordered
                 radius="full"
-                size="sm"
-                variant={isFollowed ? "bordered" : "solid"}
-                onPress={() => setIsFollowed(!isFollowed)}
-              >
-                1:1 채팅
-              </Button>
-            </CardHeader>
-            <CardBody className="px-3 py-0 text-small text-default-400">
-              <p></p>
-              <span className="pt-2">
-                #취미
-                <span className="py-2" aria-label="computer" role="img">
-                  💻
-                </span>
-              </span>
-            </CardBody>
-            <CardFooter className="gap-3">
-              <div className="flex gap-1">
-                <p className="font-semibold text-default-400 text-small">4</p>
-                <p className=" text-default-400 text-small">Following</p>
+                size="md"
+                src={selectedMsg.sender.profile}
+              />
+              <div className="flex flex-col gap-1 items-start justify-center">
+                <h4 className="text-small font-semibold leading-none text-default-600">
+                  {selectedMsg.sender.name}
+                </h4>
+                <p className="text-small text-default-400">{userInfo.email}</p>
               </div>
-              <div className="flex gap-1">
-                <p className="font-semibold text-default-400 text-small">
-                  97.1K
-                </p>
-                <p className="text-default-400 text-small">Followers</p>
-              </div>
-            </CardFooter>
-          </Card>
-        ) : null
+            </div>
+          </CardHeader>
+
+          <CardBody className="px-3 py-5 text-small text-default-400">
+            {userInfo.interests}
+            {/* {userInfo.introduce ? (
+                <p>{userInfo.introduce}</p>
+              ) : (
+                <p>자기소개가 없습니다.</p>
+              )  
+              } */}
+          </CardBody>
+          <Button
+            color="danger"
+            radius="md"
+            size="sm"
+            style={{ display: "flex" }}
+          >
+            1:1 채팅
+          </Button>
+          {/* <CardFooter className="gap-3">
+            <div className="flex gap-1">
+              <p className="font-semibold text-default-400 text-small">4</p>
+              <p className=" text-default-400 text-small">Following</p>
+            </div>
+            <div className="flex gap-1">
+              <p className="font-semibold text-default-400 text-small">97.1K</p>
+              <p className="text-default-400 text-small">Followers</p>
+            </div>
+          </CardFooter> */}
+        </Card>
       )}
     </>
   );

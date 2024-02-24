@@ -47,6 +47,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
 
 
+
 //    @Query("SELECT chat.chatRoom FROM Chat chat WHERE (chat.accountid.accountId = :accountid AND chat.clubid.clubId = :clubid) OR (chat.accountid.accountId = :clubid AND chat.clubid.clubId = :accountid)")
 //    String findChatInfoByAccountIdAndClubId(@Param("accountid") int accountid, @Param("clubid") int clubid);
 }
