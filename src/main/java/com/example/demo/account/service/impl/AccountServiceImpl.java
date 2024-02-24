@@ -1,14 +1,10 @@
 package com.example.demo.account.service.impl;
-import com.example.demo.account.dto.AccountDetails;
-import com.example.demo.account.dto.ModifyUserInfoRequestDto;
-import com.example.demo.account.dto.SignUpRequestDto;
-import com.example.demo.account.dto.UserInfoDto;
+import com.example.demo.account.dto.*;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.entity.ActivitiesArea;
 import com.example.demo.account.entity.Agreement;
 import com.example.demo.account.entity.Interest;
 import com.example.demo.account.enums.ForbiddenUserName;
-import com.example.demo.account.enums.Gender;
 import com.example.demo.account.enums.RegisterType;
 import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.ActivitiesAreaRepository;
@@ -20,8 +16,10 @@ import com.example.demo.auth.dto.oauth.OAuthAccountInfoDto2;
 import com.example.demo.common.exception.AuthException;
 import com.example.demo.common.exception.DuplicatedException;
 import com.example.demo.common.exception.NotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,12 +47,17 @@ public class AccountServiceImpl implements AccountService {
     private final InterestRepository interestRepository;
     private final AgreementRepository agreementRepository;
     private final ActivitiesAreaRepository activitiesAreaRepository;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
 
     // ## 회원 가입 ## //
     @Transactional
     @Override
     public void createAccount(final SignUpRequestDto signUpRequestDto) {
+
+        // 이메일 중복체크
+        checkDuplicateEmail(signUpRequestDto.getEmail());
+
         // 회원 정보 저장
         String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
         Account account = accountRepository.save(signUpRequestDto.toAccountEntity(encodedPassword));
@@ -89,8 +92,13 @@ public class AccountServiceImpl implements AccountService {
                 .map(area -> new UserInfoDto.ActivityAreaInfo(area.getType(), area.getLocation()))
                 .collect(Collectors.toList());
 
+        // 여기서 Agreement 정보도 조회
+        boolean agreementGetNotified = agreementRepository.findByAccountId(account.getAccountId())
+                .map(Agreement::isAgreementGetNotified) // 메서드 참조를 사용하여 boolean 값 가져오기
+                .orElse(false); // Agreement 정보가 없다면 기본값으로 false 설정
+
         // 수정된 UserInfoDto 생성자를 사용하여 DTO 생성
-        UserInfoDto userInfoDto = new UserInfoDto(account, interests, activityAreas);
+        UserInfoDto userInfoDto = new UserInfoDto(account, interests, activityAreas, agreementGetNotified);
 
         return ResponseEntity.ok().body(userInfoDto);
     }
@@ -101,17 +109,16 @@ public class AccountServiceImpl implements AccountService {
         String email = oAuthAccountInfoDto.getEmail();
         String name = oAuthAccountInfoDto.getName();
         String encodedPassword = passwordEncoder.encode(generateRandomCode(10));
-
+        System.out.println("oAuthAccountInfoDto = " + oAuthAccountInfoDto);
         checkUsernameIsProhibited(name);
         checkEmailIsDuplicated(email);
 
         // 임의 값. 추후에 카카오한테 받아야함
         String phoneNumber = oAuthAccountInfoDto.getPhoneNumber() != null ? oAuthAccountInfoDto.getPhoneNumber() : "000-0000-0000";
-        String birthday = "2000-01-01"; // 임의의 생일
-        Gender gender = Gender.MALE; // 임의의 성별, Gender 열거형이라고 가정
-        String profileImage = "default_image.png"; // 기본 프로필 이미지
-        String profileName = "default_profile_name"; // 기본 프로필 이름
-        String rating = "13도"; // 기본 등급
+        String birthday = "2000-01-01";
+        String profileImage = "default_image.jpg";
+        String profileName = "default_profile_name";
+        String rating = "36.5";
 
 
         Account account = Account.builder()
@@ -125,9 +132,9 @@ public class AccountServiceImpl implements AccountService {
                 .registerType(RegisterType.valueOf(provider.toUpperCase()))
                 .rating(rating)
                 .dateOfBirth(birthday)
-                .gender(gender.name())
+                .gender(String.valueOf(oAuthAccountInfoDto.getGender()))
                 .profileImage(profileImage)
-                .profileName(profileName)
+                .profileName(RegisterType.valueOf(provider.toUpperCase())+" 간편로그인")
                 .build();
 
         accountRepository.save(account);
@@ -141,9 +148,13 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
 
+        // 어그리먼트 정보 업데이트
+        Agreement agreement = agreementRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Agreement not found"));
+
         // 비밀번호 업데이트
         if (requestDto.getPassword() != null && !requestDto.getPassword().isEmpty()) {
-            account.updatPassword(passwordEncoder.encode(requestDto.getPassword()));
+            account.updatePassword(passwordEncoder.encode(requestDto.getPassword()));
         }
 
         // 프로필 이름 업데이트
@@ -165,6 +176,10 @@ public class AccountServiceImpl implements AccountService {
         if (!account.getInterests().isEmpty()) {
             interestRepository.deleteAll(account.getInterests());
             account.getInterests().clear();
+        }
+
+        if(requestDto.getAgreementGetNotified() != null) {
+            agreement.updateNotification(requestDto.getAgreementGetNotified());
         }
 
         // 새로운 관심사 정보 추가
@@ -198,10 +213,20 @@ public class AccountServiceImpl implements AccountService {
                 .collect(Collectors.toList());
 
         accountRepository.save(account); // 계정 정보 업데이트
-        UserInfoDto userInfoDto = new UserInfoDto(account, interests, activityAreas);
+        UserInfoDto userInfoDto = new UserInfoDto(account, interests, activityAreas, agreement.isAgreementGetNotified());
         return ResponseEntity.ok(userInfoDto);
     }
 
+    // 알림 설정 수정
+    @Override
+    @Transactional
+    public void modifyNotification(final AccountDetails accountDetails, AgreementUpdateDto agreementUpdateDto) {
+        Long accountId = accountDetails.getAccount().getAccountId();
+        Agreement agreement = agreementRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException("Agreement not found for account ID: " + accountId));
+
+        agreement.updateNotification(agreementUpdateDto.isAgreementGetNotified());
+    }
 
     @Override
     public Account findAccountByEmail(final String email) {
@@ -213,7 +238,18 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public void deleteAccount(final AccountDetails accountDetails) {
-        accountRepository.delete(accountDetails.getAccount());
+        Account account = accountDetails.getAccount();
+        account.markAsDeleted();
+        accountRepository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(final AccountDetails accountDetails, String newPassword) {
+        Account account = accountDetails.getAccount();
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        account.updatePassword(encodedPassword); // 새 비밀번호 인코딩 및 저장
+        accountRepository.save(account);
     }
 
     // 이메일 중복 체크
@@ -240,6 +276,14 @@ public class AccountServiceImpl implements AccountService {
     public void createAccountByOAuth(OAuthAccountInfoDto2 accountInfo, String provider) {
     }
 
+    public boolean checkPassword(AccountDetails accountDetails, String rawPassword) {
+        String storedPasswordHash = accountDetails.getPassword(); // 저장된 패스워드 해시 가져오기
+        return passwordEncoder.matches(rawPassword, storedPasswordHash); // 비밀번호 비교
+    }
 
-
+    public void checkPasswordIsCorrect(String requestedPassword, Account account) {
+        if (!passwordEncoder.matches(requestedPassword, account.getPassword())) {
+            throw new AuthException(INVALID_ID_OR_PW);
+        }
+    }
 }

@@ -1,20 +1,17 @@
 package com.example.demo.account.controller;
 
-import com.example.demo.account.dto.AccountDetails;
-import com.example.demo.account.dto.ModifyUserInfoRequestDto;
-import com.example.demo.account.dto.SignUpRequestDto;
-import com.example.demo.account.dto.UserInfoDto;
+import com.example.demo.account.dto.*;
 import com.example.demo.account.service.impl.AccountServiceImpl;
+import com.example.demo.common.service.FileService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     private final AccountServiceImpl accountService;
+    private final FileService fileService;
 
     /**
      * 회원가입
@@ -56,15 +54,31 @@ public class AccountController {
     }
 
     /**
+     * 알림 설정 수정
+     */
+    @PatchMapping("/notification/modify")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
+    public void modifyNotification(
+            @AuthenticationPrincipal AccountDetails accountDetails,
+            @RequestBody AgreementUpdateDto agreementUpdateDto
+    ) {
+        accountService.modifyNotification(accountDetails, agreementUpdateDto);
+    }
+
+    /**
      * 회원 탈퇴
      */
     @DeleteMapping("/drop-out")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
-    public void dropOut(
-            final @AuthenticationPrincipal AccountDetails accountDetails
+    public ResponseEntity<String> dropOut(
+            final @AuthenticationPrincipal AccountDetails accountDetails,
+            @RequestParam String password
     ) {
+        accountService.checkPasswordIsCorrect(password, accountDetails.getAccount());
         accountService.deleteAccount(accountDetails);
+        return ResponseEntity.ok("Account successfully deleted");
     }
 
     /**
@@ -76,4 +90,29 @@ public class AccountController {
         accountService.checkDuplicateEmail(email);
     }
 
-   }
+    /**
+     * 패스워드 변경
+     */
+    @PostMapping("/change-password")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
+    public ResponseEntity<String> changePassword(@AuthenticationPrincipal AccountDetails accountDetails,
+                                            @RequestBody PasswordChangeRequestDto requestDto) {
+        // 이전 비밀번호 검증
+        accountService.checkPasswordIsCorrect(requestDto.getOldPassword(), accountDetails.getAccount());
+        // 새 비밀번호로 변경
+        accountService.changePassword(accountDetails, requestDto.getNewPassword());
+        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다!");
+    }
+
+    /**
+     * 프로필 이미지 저장
+     */
+    @PostMapping("/profile-upload")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Void> createUserProfile(
+            @RequestParam(value = "file") MultipartFile file) {
+        fileService.uploadSingleFile(file,"user-profile");
+        return ResponseEntity.ok().build();
+    }
+
+}

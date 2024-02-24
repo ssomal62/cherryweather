@@ -58,6 +58,11 @@ public class KakaoAccountResponse {
         Boolean genderNeedsAgreement;
 
         String gender;
+
+        String profileImage;
+
+
+
     }
 
 }

@@ -122,7 +122,7 @@ public class Account {
         this.userRole = userRole;
     }
 
-    public void updatPassword(String password) {
+    public void updatePassword(String password) {
         this.password = password;
     }
 
@@ -136,6 +136,11 @@ public class Account {
 
     public void updatProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public void markAsDeleted() {
+        this.userStatus = UserStatus.DELETED;
+        this.profileName = "알수없음";
     }
 
 }
