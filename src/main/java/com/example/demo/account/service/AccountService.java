@@ -22,5 +22,6 @@ public interface AccountService {
 
     void modifyNotification(final @AuthenticationPrincipal AccountDetails accountDetails, final AgreementUpdateDto agreementUpdateDto);
 
+    void changePassword(final @AuthenticationPrincipal AccountDetails accountDetails, final String newPassword);
 
 }

@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -89,6 +88,20 @@ public class AccountController {
     @ResponseStatus(HttpStatus.CREATED)
     public void checkDuplicateEmail(final @Valid @RequestParam String email) {
         accountService.checkDuplicateEmail(email);
+    }
+
+    /**
+     * 패스워드 변경
+     */
+    @PostMapping("/change-password")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
+    public ResponseEntity<String> changePassword(@AuthenticationPrincipal AccountDetails accountDetails,
+                                            @RequestBody PasswordChangeRequestDto requestDto) {
+        // 이전 비밀번호 검증
+        accountService.checkPasswordIsCorrect(requestDto.getOldPassword(), accountDetails.getAccount());
+        // 새 비밀번호로 변경
+        accountService.changePassword(accountDetails, requestDto.getNewPassword());
+        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다!");
     }
 
     /**

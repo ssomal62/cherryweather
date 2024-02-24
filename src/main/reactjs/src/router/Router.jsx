@@ -33,6 +33,7 @@ import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
 import ClubSearch from "../pages/club/ClubSearch";
+import NaverCallBack from "../pages/auth/NaverCallBack";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -73,6 +74,7 @@ const Router = () => {
           <Route path="/mypage" element={<MyPage /> } />
           <Route path="/mypage/setting" element={<MySetting />} />
           <Route path="/modify/profile" element={<ModifyProfile />} />
+          <Route path="/oauth/callback/naver" element={<BlockIfLoggedIn><NaverCallBack /></BlockIfLoggedIn>} />
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />} />
           {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}

@@ -122,7 +122,7 @@ public class Account {
         this.userRole = userRole;
     }
 
-    public void updatPassword(String password) {
+    public void updatePassword(String password) {
         this.password = password;
     }
 

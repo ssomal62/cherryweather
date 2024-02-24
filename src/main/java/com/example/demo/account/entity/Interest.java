@@ -20,7 +20,7 @@ public class Interest {
     @Column(name = "INTEREST_ID", nullable = false)
     private Long interestId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", nullable = false)
     private Account account;
 

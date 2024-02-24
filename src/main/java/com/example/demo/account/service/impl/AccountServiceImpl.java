@@ -5,7 +5,6 @@ import com.example.demo.account.entity.ActivitiesArea;
 import com.example.demo.account.entity.Agreement;
 import com.example.demo.account.entity.Interest;
 import com.example.demo.account.enums.ForbiddenUserName;
-import com.example.demo.account.enums.Gender;
 import com.example.demo.account.enums.RegisterType;
 import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.ActivitiesAreaRepository;
@@ -93,8 +92,13 @@ public class AccountServiceImpl implements AccountService {
                 .map(area -> new UserInfoDto.ActivityAreaInfo(area.getType(), area.getLocation()))
                 .collect(Collectors.toList());
 
+        // 여기서 Agreement 정보도 조회
+        boolean agreementGetNotified = agreementRepository.findByAccountId(account.getAccountId())
+                .map(Agreement::isAgreementGetNotified) // 메서드 참조를 사용하여 boolean 값 가져오기
+                .orElse(false); // Agreement 정보가 없다면 기본값으로 false 설정
+
         // 수정된 UserInfoDto 생성자를 사용하여 DTO 생성
-        UserInfoDto userInfoDto = new UserInfoDto(account, interests, activityAreas);
+        UserInfoDto userInfoDto = new UserInfoDto(account, interests, activityAreas, agreementGetNotified);
 
         return ResponseEntity.ok().body(userInfoDto);
     }
@@ -105,17 +109,16 @@ public class AccountServiceImpl implements AccountService {
         String email = oAuthAccountInfoDto.getEmail();
         String name = oAuthAccountInfoDto.getName();
         String encodedPassword = passwordEncoder.encode(generateRandomCode(10));
-
+        System.out.println("oAuthAccountInfoDto = " + oAuthAccountInfoDto);
         checkUsernameIsProhibited(name);
         checkEmailIsDuplicated(email);
 
         // 임의 값. 추후에 카카오한테 받아야함
         String phoneNumber = oAuthAccountInfoDto.getPhoneNumber() != null ? oAuthAccountInfoDto.getPhoneNumber() : "000-0000-0000";
-        String birthday = "2000-01-01"; // 임의의 생일
-        Gender gender = Gender.MALE; // 임의의 성별, Gender 열거형이라고 가정
-        String profileImage = "default_image.png"; // 기본 프로필 이미지
-        String profileName = "default_profile_name"; // 기본 프로필 이름
-        String rating = "13도"; // 기본 등급
+        String birthday = "2000-01-01";
+        String profileImage = "default_image.jpg";
+        String profileName = "default_profile_name";
+        String rating = "36.5";
 
 
         Account account = Account.builder()
@@ -129,9 +132,9 @@ public class AccountServiceImpl implements AccountService {
                 .registerType(RegisterType.valueOf(provider.toUpperCase()))
                 .rating(rating)
                 .dateOfBirth(birthday)
-                .gender(gender.name())
+                .gender(String.valueOf(oAuthAccountInfoDto.getGender()))
                 .profileImage(profileImage)
-                .profileName(profileName)
+                .profileName(RegisterType.valueOf(provider.toUpperCase())+" 간편로그인")
                 .build();
 
         accountRepository.save(account);
@@ -145,9 +148,13 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
 
+        // 어그리먼트 정보 업데이트
+        Agreement agreement = agreementRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Agreement not found"));
+
         // 비밀번호 업데이트
         if (requestDto.getPassword() != null && !requestDto.getPassword().isEmpty()) {
-            account.updatPassword(passwordEncoder.encode(requestDto.getPassword()));
+            account.updatePassword(passwordEncoder.encode(requestDto.getPassword()));
         }
 
         // 프로필 이름 업데이트
@@ -169,6 +176,10 @@ public class AccountServiceImpl implements AccountService {
         if (!account.getInterests().isEmpty()) {
             interestRepository.deleteAll(account.getInterests());
             account.getInterests().clear();
+        }
+
+        if(requestDto.getAgreementGetNotified() != null) {
+            agreement.updateNotification(requestDto.getAgreementGetNotified());
         }
 
         // 새로운 관심사 정보 추가
@@ -202,7 +213,7 @@ public class AccountServiceImpl implements AccountService {
                 .collect(Collectors.toList());
 
         accountRepository.save(account); // 계정 정보 업데이트
-        UserInfoDto userInfoDto = new UserInfoDto(account, interests, activityAreas);
+        UserInfoDto userInfoDto = new UserInfoDto(account, interests, activityAreas, agreement.isAgreementGetNotified());
         return ResponseEntity.ok(userInfoDto);
     }
 
@@ -229,6 +240,15 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccount(final AccountDetails accountDetails) {
         Account account = accountDetails.getAccount();
         account.markAsDeleted();
+        accountRepository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(final AccountDetails accountDetails, String newPassword) {
+        Account account = accountDetails.getAccount();
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        account.updatePassword(encodedPassword); // 새 비밀번호 인코딩 및 저장
         accountRepository.save(account);
     }
 
@@ -266,7 +286,4 @@ public class AccountServiceImpl implements AccountService {
             throw new AuthException(INVALID_ID_OR_PW);
         }
     }
-
-
-
 }
