@@ -1,28 +1,17 @@
 import * as ncloudchat from "ncloudchat";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
 
-function Adminchat(props) {
+function ClubChat({ club }) {
   const [accountData, setAccountData] = useState("");
   const [nc, setNc] = useState("");
-  const [chatInfo, setChatInfo] = useState([]);
   const navi = useNavigate();
   const cookies = new Cookies();
 
   useEffect(() => {
     unumchk();
-  }, []);
-
-  const buttonRef = useRef(null);
-
-  useEffect(() => {
-    // 여기서 setTimeout을 사용하여 일정 시간 후에 버튼을 클릭합니다.
-    const delayTimeInMilliseconds = 1000; // 5초 후에 클릭하려면 5000ms로 설정합니다.
-    setTimeout(() => {
-      buttonRef.current.click();
-    }, delayTimeInMilliseconds);
   }, []);
 
   const unumchk = async () => {
@@ -36,11 +25,9 @@ function Adminchat(props) {
 
       const res = await instance.get("/account/user-info", config);
       setAccountData(res.data);
-      console.log("res : ", res);
       const chat = new ncloudchat.Chat();
       chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");
       setNc(chat);
-      console.log("nc : ", nc);
       await chat.connect({
         id: res.data.email,
         name: res.data.name,
@@ -54,47 +41,86 @@ function Adminchat(props) {
 
   const getChatInfo = async () => {
     try {
+      console.log("clubId: " + club.clubId);
       console.log("getChatInfo");
       console.log("accountId: " + accountData.accountId);
       const response = await instance.get(
-        `/chat/getonetonechat?accountId=${accountData.accountId}&raccountId=1`
+        `/chat/getclubchatinfo?accountId=${accountData.accountId}&clubId=${club.clubId}`
       );
-      console.log("response: ", response);
+      console.log("response: ", response.data);
       return response.data;
     } catch (error) {
       console.error(error);
     }
   };
-  const adminChat = async () => {
+
+  const getChatClubId = async () => {
+    try {
+      const response2 = await instance.get(
+        `/chat/getchatroombyclubid?clubId=${club.clubId}`
+      );
+      return response2.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const insertClubChat = async () => {
     if (nc) {
       try {
-        const chatInfo = await getChatInfo();
-        const chatroom = chatInfo.chatRoom;
+        const chatroom = await getChatInfo();
+        const clubArray = await getChatClubId();
+        const clubId = clubArray.toString();
         if (chatroom) {
           await nc.disconnect();
-          navi(`/chat/room/${chatroom}/1`);
-        } else {
+          navi(`/chat/room/${chatroom}/${club.clubId}`);
+        } else if (!clubId) {
           // chatroom == null 일 경우
           const newchannel = await nc.createChannel({
             type: "PUBLIC",
-            name: "관리자 채팅방",
+            name: `${club.name} 채팅방`,
           });
           const newChatId = newchannel.id;
+          console.log("id:", accountData.accountId);
+          console.log("newChatId : ", newChatId);
+          console.log("club", club.clubId);
+          console.log("Before instance.post()");
+
+          // const requestData = {
+          //   accountId : accountData.accountId,
+          //   chatRoom: newChatId,
+          //   clubId : club.clubId,
+          // }
           const res = await instance.post(
-            "/chat/createchatroom?accountId=" +
+            "/chat/insertclubchatroom?accountId=" +
               accountData.accountId +
               "&chatRoom=" +
               newChatId +
-              "&raccountId=" +
-              1
+              "&clubId=" +
+              club.clubId
           );
 
-          console.log("res : ", res);
+          console.log(res.data);
+          console.log("res", res);
 
           await nc.subscribe(newChatId);
           // 채팅방으로 이동
           await nc.disconnect();
-          navi(`/chat/room/${newChatId}/1`);
+          navi(`/chat/room/${newChatId}/${club.clubId}`);
+        } else {
+          await instance.post(
+            "/chat/insertclubchatroom?accountId=" +
+              accountData.accountId +
+              "&chatRoom=" +
+              clubId +
+              "&clubId=" +
+              club.clubId
+          );
+
+          await nc.subscribe(clubId);
+          // 채팅방으로 이동
+          await nc.disconnect();
+          navi(`/chat/room/${clubId}/${club.clubId}`);
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);
@@ -117,12 +143,12 @@ function Adminchat(props) {
   }, [nc]);
 
   return (
-    <div style={{ textAlign: "center", fontSize: "50px" }}>
-      <button ref={buttonRef} type="button" onClick={adminChat}>
-        관리자와 채팅방으로 이동 중..
+    <div>
+      <button type="button" onClick={insertClubChat}>
+        채팅하기
       </button>
     </div>
   );
 }
 
-export default Adminchat;
+export default ClubChat;

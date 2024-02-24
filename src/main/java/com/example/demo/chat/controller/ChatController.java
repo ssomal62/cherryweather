@@ -1,51 +1,90 @@
 package com.example.demo.chat.controller;
 
 
+import com.example.demo.chat.dto.ChatListDto;
+import com.example.demo.chat.dto.CreatChatRoomDto;
 import com.example.demo.chat.entity.Chat;
 import com.example.demo.chat.service.ChatService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @RestController
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api/chat")
+@CrossOrigin
 public class ChatController {
     private final ChatService chatService;
 
-    @Autowired
-    public ChatController(ChatService chatService) {
-        this.chatService = chatService;
+//    @Autowired
+//    public ChatController(ChatService chatService) {
+//        this.chatService = chatService;
+//    }
+
+    // 채팅방 목록 데이터 전체 조회
+    @GetMapping("/getchatlist")
+    public List<ChatListDto> getChatList(@RequestParam long accountId) {
+        return chatService.getChatList(accountId);
     }
-
-   
-
+    // chatRoom(채팅방 주소) 조회
    @GetMapping("/getchatinfo")
-    public String getChatIdByAccountId(@RequestParam int accountid) {
-        return chatService.getChatIdByAccountId(accountid);
+    public String getChatIdByAccountId(@RequestParam int accountId) {
+        return chatService.getChatIdByAccountId(accountId);
     }
+    // 클럽 채팅방 정보 조회
+   @GetMapping("/getclubchatinfo")
+   public String getChatInfo(@RequestParam int accountId, @RequestParam int clubId) {
+       System.out.println("accountId:" + accountId);
+       System.out.println("clubId:" + clubId);
+       return chatService.getChatInfo(accountId, clubId);
+   }
+    // 1:1 혹은 관리자 채팅방 정보 조회
+    @GetMapping("/getonetonechat")
+    public Chat getOneToOneChatInfo(@RequestParam int accountId, @RequestParam int raccountId) {
+        return chatService.getOneToOneChatInfo(accountId, raccountId);
+    }
+
+
+    // clubId로 채팅방을 찾는 메소드 정의
+    @GetMapping("/getchatroombyclubid")
+    public List<String> getChatRoomByClubId(@RequestParam int clubId) {
+        return Collections.singletonList(chatService.getChatInfoByClubId(clubId));
+    }
+
+//    @GetMapping("/getchatlist")
+//    public String getChatListByAccountId(@RequestParam int accountId) {
+//        return chatService.getChatIdByAccountId(accountId);
+//    }
+
+
+
     // 채팅방 생성
-    @PostMapping("/insertchatroom")
-    public void insertChatRoom(@RequestParam int accountid, @RequestParam String chatRoom) {
-        chatService.insertChatRoom(accountid, chatRoom);
-    }
+
 
     @PostMapping("/insertclubchatroom")
-    public void insertClubChatRoom(@RequestParam int accountid, @RequestParam String chatRoom, @RequestParam int clubid) {
-        chatService.insertClubChatRoom(accountid, chatRoom, clubid);
+    public void insertClubChat(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int clubId) {
+        chatService.insertClubChatRoom(accountId, chatRoom, clubId);
     }
-    @PostMapping("/insertpersonalchatroom")
-    public void insertPersonalChatRoom(@RequestParam int accountid, @RequestParam int chatRoom, @RequestParam int raccountid) {
-        chatService.insertPersonalChatRoom(accountid, chatRoom, raccountid);
+
+
+    @PostMapping("/createchatroom")
+    public void insertChatRoom(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int raccountId) {
+        chatService.insertChatRoom(accountId, chatRoom, raccountId);
     }
-    @GetMapping("/getchatlist")
-    public List<Chat> getChatListByAccountId(@RequestParam int accountid) {
-        return chatService.getChatListByAccountId(accountid);
+
+    @PostMapping("/createchat")
+    public void insertClubChatRoom(
+            @RequestBody CreatChatRoomDto requestDto
+    ) {
+        System.out.println("accountId:" + requestDto.getAccountId());
+        chatService.createChat(requestDto);
     }
+
 
 
 }
+

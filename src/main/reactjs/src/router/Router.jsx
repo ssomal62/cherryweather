@@ -114,7 +114,7 @@ const Router = () => {
 
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/chat" element={<Chat />} />
-          <Route path="/chat/room/:chatRoom/" element={<ChatRoom />} />
+          <Route path="/chat/room/:chatRoom/:clubId" element={<ChatRoom />} />
           <Route path="/chat/admin" element={<Adminchat />} />
           {/* {isLogin && <Route path="/club" element={<Club />} />} */}
           <Route path="/event" element={<Event />} />

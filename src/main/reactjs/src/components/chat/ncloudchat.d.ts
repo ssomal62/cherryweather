@@ -1,1 +1,1 @@
-declare module 'ncloudchat';
+declare module "ncloudchat";
