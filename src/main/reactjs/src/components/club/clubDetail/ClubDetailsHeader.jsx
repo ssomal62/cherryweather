@@ -6,23 +6,19 @@ import {FiSettings} from "react-icons/fi";
 import {useNavigate} from "react-router-dom";
 import {WiNightAltRain} from "react-icons/wi";
 import {useRecoilValue} from "recoil";
-import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
-import {IsLoginAtom} from "../../../recoil/LoginAtom";
-import {isMemberState} from "../../../recoil/hooks/CheckIsMember";
 import MemberVerificationModal from "../../../utils/MemberVerificationModal";
+import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 
-export default function ClubDetailsHeader() {
+export default function ClubDetailsHeader({clubDetail, isLogin}) {
 
-    const isLogin = useRecoilValue(IsLoginAtom);
-    const club = useRecoilValue(clubDetailState).clubDetail;
     const navigate = useNavigate();
-    const isMember = useRecoilValue(isMemberState);
+    const myMembership = useRecoilValue(currentMembershipState);
 
     const [scrolled, setScrolled] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleNavigate = () => {
-        navigate('/community/clubs');
+        navigate('/community/club');
     };
 
     const handleConfigurationsClick = () => {
@@ -31,7 +27,7 @@ export default function ClubDetailsHeader() {
             return;
         }
 
-        if(!isMember) {
+        if(!myMembership) {
             setIsModalOpen(true);
             return
         }
@@ -102,7 +98,7 @@ export default function ClubDetailsHeader() {
                         <IoArrowBack style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem style={styles.text}>
-                        {club.name}
+                        {clubDetail.name}
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">

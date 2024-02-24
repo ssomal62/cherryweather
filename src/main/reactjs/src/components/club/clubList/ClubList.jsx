@@ -1,23 +1,18 @@
-import React, {useEffect} from "react";
+import React from "react";
 import CardListItem from "./ClubListItem";
-import {useRecoilValue} from "recoil";
-import {clubListState, useFetchClubs} from "../../../recoil/hooks/UseFetchClubs";
 import styled from "styled-components"
 import {Spinner} from "@nextui-org/react";
-import {useMyMembership} from "../../../recoil/hooks/UseMyMembership";
+import {useRecoilValue} from "recoil";
+import {clubListState, useClubData} from "../../../recoil/hooks/UseClubApi";
 
 
 const ClubList = () => {
 
-    const clubs = useRecoilValue(clubListState);
+    const {loading: loadingClubData} = useClubData({ state: clubListState, dynamicPath: ''});
 
-    useMyMembership();
+    const clubList = useRecoilValue(clubListState);
 
-    const {fetchClubs, loading} = useFetchClubs();
-
-    useEffect(() => {
-        fetchClubs();
-    }, [fetchClubs]);
+    const loading = loadingClubData;
 
     if (loading) {
         return (
@@ -29,7 +24,7 @@ const ClubList = () => {
 
     return (
         <div>
-            {clubs.map((club) => (
+            {clubList.map((club) => (
                 <CardListItemWrapper key={club.clubId}>
                     <CardListItem club={club}/>
                 </CardListItemWrapper>

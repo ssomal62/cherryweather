@@ -11,7 +11,7 @@ import AddClubSettingDetails from "../../components/club/addClub/AddClubSettingD
 import AddClubSelectJoinStatus from "../../components/club/addClub/AddClubSelectJoinStatus";
 import AddClubInputActivitiesArea from "../../components/club/addClub/AddClubInputActivitiesArea";
 import {Cookies} from "react-cookie";
-import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
+import {clubDetailState} from "../../recoil/hooks/UseClubApi";
 import {useRecoilValue} from "recoil";
 import {instance} from "../../recoil/module/instance";
 import AddClubInputNotice from "../../components/club/addClub/AddClubInputNotice";

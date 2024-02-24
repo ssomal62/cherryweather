@@ -16,10 +16,7 @@ const CardListItem = ({club}) => {
     const isLogin = useRecoilValue(IsLoginAtom);
 
     const clubProfile = (code) => {
-        if (code === '') {
-            return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/defalut.jpg?type=f&w=600&h=600&ttype=jpg`
-        }
-        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code}.jpg?type=f&w=600&h=600&ttype=jpg`
+        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "defalut"}.jpg?type=f&w=600&h=600&ttype=jpg`
     }
 
     const [liked, setLiked] = useState(club.liked);
@@ -33,7 +30,8 @@ const CardListItem = ({club}) => {
         setLiked(club.liked);
     }, [club.liked]);
 
-    const handleLikeClick = () => {
+    const handleLikeClick = (event) => {
+        event.stopPropagation();
         if (!isLogin) {
             setIsModalOpen(true);
             return;
@@ -58,7 +56,7 @@ const CardListItem = ({club}) => {
                         removeWrapper
                         alt="Woman listing to music"
                         className="z-0 w-full object-cover h-[30dvh] object-middle"
-                        src={clubProfile(club.code)}
+                        src={clubProfile(club?.code ?? '')}
                         width={600}
                     />
                 </div>
@@ -82,7 +80,7 @@ const CardListItem = ({club}) => {
                                 className="text-default-900/60 data-[hover]:bg-foreground/10 -translate-y-2 translate-x-2"
                                 radius="full"
                                 variant="light"
-                                onPress={handleLikeClick}
+                                onClick={(event) => handleLikeClick(event)}
                             >
                                 <HeartIcon
                                     style={{color: 'white'}}

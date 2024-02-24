@@ -4,19 +4,16 @@ import {Chip} from "@nextui-org/react";
 import FeedCards from "./FeedCards";
 import styled from "styled-components";
 import {useRecoilValue} from "recoil";
-import {IsLoginAtom} from "../../../recoil/LoginAtom";
-import {isMemberState, memberInfoState} from "../../../recoil/hooks/CheckIsMember";
 import MemberVerificationModal from "../../../utils/MemberVerificationModal";
+import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 
-const ClubFeed = () => {
+const ClubFeed = ({isLogin}) => {
 
-    const isLogin = useRecoilValue(IsLoginAtom);
-    const membership = useRecoilValue(memberInfoState);
-    const isMember = useRecoilValue(isMemberState);
+    const myMembership = useRecoilValue(currentMembershipState);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handelMoreClick = () => {
-        if (!isLogin || !isMember ||membership.role === "WAITING") {
+        if (!isLogin || !myMembership || myMembership.info.role === "WAITING") {
             setIsModalOpen(true);
             return;
         }

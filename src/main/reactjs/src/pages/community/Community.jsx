@@ -27,6 +27,7 @@ const Community = () => {
         } else {
             navigate("/community", { replace: true });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectPage, navigate]);
 
     const handleTabChange = (value) => {
