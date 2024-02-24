@@ -3,10 +3,12 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../recoil/LoginAtom";
 // import { lazy } from "react";
+
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 import Club from "../pages/club/Club";
 // import Login from "../pages/Login";
+import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
 import ClubDetails from "../pages/club/ClubDetails";
@@ -23,12 +25,14 @@ import GPT from "../pages/ai/ChatGPT";
 import AI_image from "../pages/ai/ImageGenerator";
 import WeatherDetail from "../pages/weather/WeatherDetail";
 import AI_imageList from "../pages/ai/SavedImage";
-
+import Community from "../pages/community/Community";
 import Chat from "../pages/chat/Chat";
 import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
 import ClubSearch from "../pages/club/ClubSearch";
+import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
+
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -88,9 +92,15 @@ const Router = () => {
                         }
                     />
                     <Route path="/mypage" element={<MyPage/>}/>
-                    {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
 
-                    <Route path="/clubs" element={<Club/>}/>
+                    {/* 로그인 상태가 true여야 접근할 수 있는 페이지 예시*/}
+                    {/* {isLogin && <Route path="/club" element={<Club />} />} */}
+
+                    <Route path="/community" element={<Community />}>
+                        <Route path=":selectPage" element={<Community />} />
+                    </Route>
+
+                    {/*<Route path="/clubs" element={<Club/>}/>*/}
                     <Route path="/club-details/:clubId" element={<ClubDetails/>}/>
                     <Route path="/club-add" element={<AddClub/>}>
                         <Route path=":clubId" element={<AddClub/>}/>
@@ -113,6 +123,7 @@ const Router = () => {
                     <Route path="/chat/admin" element={<Adminchat/>}/>
                     {/* {isLogin && <Route path="/club" element={<Club />} />} */}
                     <Route path="/event" element={<Event/>}/>
+
                 </Routes>
             </Suspense>
         </BrowserRouter>

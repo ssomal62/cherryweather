@@ -12,6 +12,8 @@ public record UpdateClubDTO(
         String name,
         String description,
         String joinApprovalStatus,
+        String code,
+        String notice,
         ClubCategory category,
         String subCategory,
         ClubStatus status,

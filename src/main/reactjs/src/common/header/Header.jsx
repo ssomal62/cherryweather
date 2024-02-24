@@ -114,7 +114,7 @@ const styles = {
         cursor:'pointer',
     },
     navBar: {
-        backgroundColor: 'rgba(255,255,255,0)',
+        backgroundColor: 'rgba(255,255,255,0.7)',
         backdropFilter : 'blur(0px)',
         maxWidth       : '600px',
         width          : '100%',

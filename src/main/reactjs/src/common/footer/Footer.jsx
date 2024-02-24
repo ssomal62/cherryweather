@@ -54,10 +54,10 @@ const Footer = () => {
                     className="h-[50px] flex justify-center"
                 ></Tab>
                 <Tab
-                    value="club"
+                    value="community"
                     title={
                         <div className="flex items-center flex-col"
-                             onClick={() => navigate('/clubs')}
+                             onClick={() => navigate('/community')}
                         >
                             <FiUsers style={styles.icon}/>
                         </div>
