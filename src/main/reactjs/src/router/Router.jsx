@@ -35,6 +35,7 @@ import ClubSearch from "../pages/club/ClubSearch";
 import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
 
 import NaverCallBack from "../pages/auth/NaverCallBack";
+import Club from "../pages/club/Club";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -61,43 +62,6 @@ const Router = () => {
     const isLogin = useRecoilValue(IsLoginAtom);
 
     return (
-        <BrowserRouter>
-            <Suspense fallback={<div>로딩중..잠만기달...</div>}>
-                {/* Suspense는 레이즈 라우터 사용시 컴포넌트가 로드되는 동안 표시하는 화면을 출력할 수 있다*/}
-                <Routes>
-                    {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
-                    <Route path="/" element={<Home/>}/>
-                    {/* 로그인 없이 접근 가능하나 로그인이 되어있으면 접근 불가한 페이지 */}
-                    <Route
-                        path="/login"
-                        element={
-                            <BlockIfLoggedIn>
-                                <SignIn/>
-                            </BlockIfLoggedIn>
-                        }
-                    />
-                    <Route path="/login/local" element={<LocalSignIn/>}/>
-                    <Route
-                        path="/oauth"
-                        element={
-                            <BlockIfLoggedIn>
-                                <OauthInfo/>
-                            </BlockIfLoggedIn>
-                        }
-                    />
-                    <Route
-                        path="/join"
-                        element={
-                            <BlockIfLoggedIn>
-                                <SignUp/>
-                            </BlockIfLoggedIn>
-                        }
-                    />
-                    <Route path="/mypage" element={<MyPage/>}/>
-
-                    {/* 로그인 상태가 true여야 접근할 수 있는 페이지 예시*/}
-                    {/* {isLogin && <Route path="/club" element={<Club />} />} */}
-  return (
     <BrowserRouter>
       <Suspense fallback={<div>로딩중..잠만기달...</div>}>
         {/* Suspense는 레이즈 라우터 사용시 컴포넌트가 로드되는 동안 표시하는 화면을 출력할 수 있다*/}
