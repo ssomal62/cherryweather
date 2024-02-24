@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Message {
+public class ChatRequest {
+    private List<Message> userMessages;
+    private List<Message> assistantMessages;
 
-    private String role;
-    private String content;
 
 }

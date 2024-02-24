@@ -2,63 +2,58 @@ import {atom, useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import {useCallback, useState} from "react";
 import {instance} from "../module/instance";
 import {Cookies} from "react-cookie";
-import {HeartFill} from "./UseSaveState";
-
-export const chatList = atom({
-    key: 'chatList',
-    default: [],
-});
 
 export const userMessage = atom({
     key: 'userMessage',
-    default: ["안녕 너는 누구야?"],
+    default: [],
 });
+//유저가 입력하는 값
 
-export const assistantMessages = atom({
-    key: 'assistantMessages',
+export const assistantMessage = atom({
+    key: 'assistantMessage',
     default: [],
 });
 
+export const chatListState = atom({
+    key: 'chatListState',
+    default: [],
+});
+// 서버에서 받아오는 값
 
+/*chatList - 모든 대화 리스트를 생성한다 .
+* 1.여기 있는 리스트로 항상 화면의 message를 출력함
+* 2. 기존의 대화 리스트에서 유저가 입력한 값을 추가받고 화면에서 보여준다. - 유저의 대화가 배열의 가장 마지막 index에 위치
+* 3. 서버에서 받은 응답을 이 배열의 마지막에 추가한다. - 서버에서 반환받은 값이 배열의 가장 마지막 index에 위치
+* 4. 다시 화면에 대화 리스트를 재출력한다
+* */
 
-export const useGptChat  = () => {
-    const setUserMessage = useSetRecoilState(userMessage);
-    const setAssistantMessages = useSetRecoilState(assistantMessages);
-    const setChatList = useSetRecoilState(chatList); // 값을 불러오기 위한 문법
+export const useGptChat = () => {
+    const [userMessages, setUserMessages] = useRecoilState(userMessage);
+    const setAssistantMessage = useSetRecoilState(assistantMessage);
+    const setChatList = useSetRecoilState(chatListState);
+    const currentAssistantMessages = useRecoilValue(assistantMessage);
     const cookie = new Cookies();
-
-    // 현재 userMessage와 assistantMesaages Recoil 상태의 값을 가져옴
-    const currentUserMessage = useRecoilValue(userMessage); // 상태 값 가져오는 함수 변경
-    const currentAssistantMessages = useRecoilValue(assistantMessages); // 상태 값 가져오는 함수 변경
 
     return useCallback(async (userInput) => {
         try {
-            const token = cookie.get('accessToken'); // 로컬 스토리지에서 JWT 토큰을 가져옵니다
-            console.log("hookUserInput :"+userInput)
-            console.log("token:"+token);
-            const config = {headers: { Authorization: `Bearer ${token}`}}
+            const token = cookie.get('accessToken');
+            // setUserMessages((prevUserMessages) => [...prevUserMessages, userInput]);
 
-            console.log("currentAssistantMessages : "+currentAssistantMessages)
-            console.log("currentUserMessage : "+currentUserMessage)
+            const config = { headers: { Authorization: `Bearer ${token}` }};
 
-            // 사용자 입력과 대화 목록을 함께 백엔드 서버로 전송
             const requestData = {
-                userMessages: currentUserMessage,
-                assistantMesaages: currentAssistantMessages,
+                userMessages: [...userMessages, userInput].map(message => ({ role: 'user', content: message })),
+                assistantMessages: currentAssistantMessages.map(message => ({ role: 'assistant', content: message })),
             };
 
             const response = await instance.post('/gpt/chat', requestData, config);
 
-            // 백엔드에서 반환한 assistant 응답을 배열에 추가
-            setAssistantMessages(prevState => [...prevState, response.data]);
+            setAssistantMessage(prevState => [...prevState, response.data]);
 
-            // 채팅 메시지를 배열에 추가
-            setChatList(prevState => [...prevState, { userMessage: userInput, assistantMessage: response.data }]);
-
-
-            console.log("받아온 메세지 ::   "+response.data)
+            setChatList((prevChatList) => [...prevChatList, response.data]);
+            // setChatList((prevChatList) => [...prevChatList, userInput, response.data]);
         } catch (error) {
             console.error('채팅 메세지를 불러오는데 실패했습니다..', error);
         }
-    }, [setChatList,setAssistantMessages]);
+    }, [setUserMessages, setAssistantMessage, userMessages, currentAssistantMessages, setChatList]);
 };

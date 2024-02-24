@@ -2,32 +2,46 @@ import React, {useState, useEffect, useRef} from "react";
 
 import "../../../style/GptChatRoomStyle.css";
 import Layout from "../../../common/Layout";
-import {assistantMessages, chatList, useGptChat, userMessage} from "../../../recoil/hooks/UseGptChat";
-import {atom, useRecoilState, useRecoilValue} from "recoil";
+import {assistantMessage, chatListState, useGptChat, userMessage} from "../../../recoil/hooks/UseGptChat";
+import {atom, useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
+// import {content} from "../../../../tailwind.config";
 
 
 const GPTChatRoom = () => {
 
     const fetchChatMessages = useGptChat(); //-> 초기값을 불러오는 함수를 호출한다.
-    const [userMessagess, setUserMessages] = useRecoilState(userMessage);
-    const [chatMessages, setChatMessages] = useRecoilState(chatList); // 디폴트 메세지가 넘어온다.
-    const [userInput, setUserInput] = useState("안녕? 너는 누구야?"); // 사용자 입력 상태
+    const [userMessages, setUserMessages] = useRecoilState(userMessage);
+    const assistantMessages = useRecoilValue(assistantMessage);
+    const setChatList = useSetRecoilState(chatListState);
+    const chatList = useRecoilValue(chatListState);
+    const [userInput, setUserInput] = useState(""); // 사용자 입력 상태
     const messagesEndRef = useRef(null); // 메시지 스크롤을 자동으로 내릴 Ref
-    // const assistantMessages = useRecoilValue(assistantMessages); // assistantMessages 추가
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if (userInput.trim() === "") return;
         try {
-            await fetchChatMessages(userInput);
-            // 사용자가 입력한 정보를 배열에 추가
+            // 사용자가 입력한 정보를 화면에 표시하고 리코일에 저장
             setUserMessages(prevState => [...prevState, userInput]);
-            setUserInput("");
+            console.log("setUserMessages : "+setUserMessages);
+            setUserInput(""); // 입력 필드 초기화
+
+            // // 채팅 리스트에 사용자 입력 추가 후 화면 재출력
+            setChatList(prevChatList => [...prevChatList, userInput]);
+            console.log("채팅 리스트 요청 --- 요청시 :  "+chatList)
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+            // 채팅 메시지를 백엔드로 전송하고 응답을 받아옴
+            const response = await fetchChatMessages(userInput);
+
+            // // 서버 응답을 채팅 리스트에 추가 후 화면 재출력
+            // setChatList(prevChatList => [...prevChatList, response]);
+            console.log("채팅 리스트 요청 --- 요청 후  :  "+chatList)
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         } catch (error) {
             console.error("메시지 전송에 실패했습니다.", error);
         }
     };
+
 
 
     useEffect(() => {
@@ -44,8 +58,8 @@ const GPTChatRoom = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 호출되도록 함
 
-
-    console.log('챗룸 - chatMessages:', chatMessages); // 채팅 메시지 확인
+    console.log("userMessages : "+userMessages)
+    console.log("assistantMessages : "+assistantMessages)
     return (
         <Layout>
             <div className="container-fluid">
@@ -53,14 +67,13 @@ const GPTChatRoom = () => {
                     <div className="col-sm-12">
                         <div className="user_chat_data">
                             <div className="chat_section msg_history" id="chat-messages">
-                                {chatMessages.map((message, index) => (
-                                    <div className="chat-message">
-                                        {/* 사용자 입력 메시지 표시 */}
-                                        {message.userMessage && <p>{message.userMessage}</p>}
-                                        {/* 백엔드에서 반환한 assistant 메시지 표시 */}
-                                        {message.assistantMessage && <p className="assistant">{message.assistantMessage}</p>}
+                                {chatList.map((message, index) => (
+                                    <div key={index} className="chat-message">
+                                        <p>{message}</p>
                                     </div>
                                 ))}
+                                {/* 채팅 메시지가 추가될 때마다 스크롤을 아래로 이동 */}
+                                <div ref={messagesEndRef} />
                             </div>
                             {/* 메시지 입력 및 전송 UI */}
                             <div

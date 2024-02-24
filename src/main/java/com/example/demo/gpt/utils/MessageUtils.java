@@ -6,10 +6,11 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 public class MessageUtils {
 
-    public static Message createMessageFromJson(String json) {
+    public static Message createMessageFromJson(Object json) {
+        String jsonString = json.toString();
         JSONObject jsonObject = null;
         try {
-            jsonObject = new JSONObject(json);
+            jsonObject = new JSONObject(jsonString);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,6 @@
 package com.example.demo.gpt.service;
 
+import com.example.demo.gpt.dto.ChatRequest;
 import com.example.demo.gpt.dto.GPTRequest;
 import com.example.demo.gpt.dto.GPTResponse;
 import com.example.demo.gpt.dto.Message;
@@ -37,8 +38,8 @@ public class GPTServiceImpl implements GPTService {
         this.apiUrl = apiUrl;
         this.model = model;
 
-        System.out.println("apiUrl = " + apiUrl);
         System.out.println("model = " + model);
+        System.out.println("apiUrl = " + apiUrl);
 
         // 고정된 메시지 리스트 초기화
         this.fixedMessages = new ArrayList<>();
@@ -75,27 +76,35 @@ public class GPTServiceImpl implements GPTService {
                 .role("user")
                 .content("정확해. 이제 그럼 사용자가 왔다고 생각하고 1단계를 물어보고, 답변을 듣고 2단계를 진행해보자.자 시작해봐")
                 .build());
+        fixedMessages.add(Message.builder()
+                .role("assistant")
+                .content("네 알겠어요. 우리가 대화한 내용을 기억하고 그렇게 행동할께요. 1단계와 2단계를 기억해서요. ")
+                .build());
+        fixedMessages.add(Message.builder()
+                .role("user")
+                .content("안녕 너는 누구야? 네 소개와 함께 오늘의 온도로 옷을 추천해줄래?")
+                .build());
     }
 
 
     @Override
-    public Mono<String> chat(GPTRequest request) {
+    public Mono<String> chat(ChatRequest request) {
         WebClient webClient = createWebClient();
         GPTRequest openaiRequestDto = createChatDto(request);
         String jsonRequest = convertToJson(openaiRequestDto);
 
 
-        System.out.println("openaiRequestDto = " + openaiRequestDto);
         System.out.println("jsonRequest = " + jsonRequest);
+        System.out.println("웹 클라이언트 객체 webClient = " + webClient);
+
 
         return callOpenAPI(webClient, jsonRequest)
                 .map(jsonResponse -> {
                     GPTResponse gptResponse = parseJsonResponse(jsonResponse);
-                    System.out.println("gptResponse = " + gptResponse);
+                    System.out.println("응답 객체 gptResponse = " + gptResponse);
                     System.out.println("gptResponse.getChoices().get(0).getMessage().getContent() = " + gptResponse.getChoices().get(0).getMessage().getContent());
-//                    return gptResponse.getChoices().get(0).getMessage().getContent();
-                    // 사용자가 입력한 메시지는 제외하고 assistant의 메시지만 추출하여 반환
-                    return gptResponse.getChoices().get(1).getMessage().getContent();
+
+                    return gptResponse.getChoices().get(0).getMessage().getContent();
                 })
                 .onErrorMap(WebClientResponseException.class, e -> {
                     System.out.println("WebClientResponseException: " + e.getMessage());
@@ -118,12 +127,50 @@ public class GPTServiceImpl implements GPTService {
     }
 
     // DTO 빌드
-    private GPTRequest createChatDto(GPTRequest requestDto) {
+    private GPTRequest createChatDto(ChatRequest requestDto) {
 
-        GPTRequest newChatDto = requestDto.ToRequestDtoForAPI(requestDto);
+        // ChatRequest에서 사용자 메시지와 어시스턴트 메시지를 추출합니다.
+        List<Message> userMessages = requestDto.getUserMessages();
+        System.out.println("userMessages = " + userMessages);
+        List<Message> assistantMessages = requestDto.getAssistantMessages();
+        System.out.println("assistantMessages = " + assistantMessages);
 
-        // GPTRequest 객체 생성
-        return newChatDto;
+        //1 .추출 -> assistant 의 있는 메세지 한개를 fixedMessage에 추가
+        //2 .추출 -> user 의 있는 메세지 한개를 fixedMessage에 추가
+        //3 .반복 -> 1,2 단계를 모두 빈배열이 될때까지 계속 반복한다.
+        //4 .조건 -> 기존의 fixed Message는 같이 출력되어야 한다.
+
+        // 기존의 fixedMessages를 유지한 채로 새로운 메시지를 번갈아가며 추가합니다.
+
+        int index = 0;
+        while (!userMessages.isEmpty() || !assistantMessages.isEmpty()) {
+            if (!userMessages.isEmpty()) {
+                // 새로운 메시지 추가 (user)
+                String userContent = userMessages.get(index).getContent().replaceAll("\\n", "");
+                this.fixedMessages.add(new Message("user", userContent));
+                userMessages.remove(index); // 추가한 메시지를 리스트에서 제거
+            }
+            if (!assistantMessages.isEmpty()) {
+                // 새로운 메시지 추가 (assistant)
+                String assistantContent = assistantMessages.get(index).getContent().replaceAll("\\n", "");
+                this.fixedMessages.add(new Message("assistant", assistantContent));
+                assistantMessages.remove(index); // 추가한 메시지를 리스트에서 제거
+            }
+        }
+
+
+
+
+        // 빌더를 사용하여 새로운 GPTRequest 객체를 생성합니다.
+        return GPTRequest.builder()
+                .model(this.model) // 원하는 모델 값을 설정합니다
+                .messages(new ArrayList<>(fixedMessages)) // 사용자 메시지 설정
+                .temperature(1) // 원하는 온도 값을 설정합니다
+                .max_tokens(800) // 원하는 최대 토큰 수를 설정합니다
+                .top_p(1) // 원하는 top_p 값을 설정합니다
+                .frequency_penalty(0) // 원하는 frequency_penalty 값을 설정합니다
+                .presence_penalty(0) // 원하는 presence_penalty 값을 설정합니다
+                .build(); // GPTRequest 객체를 생성하여 반환합니다
     }
 
     // JSON 요청으로 변환
@@ -146,7 +193,7 @@ public class GPTServiceImpl implements GPTService {
                 .bodyToMono(JsonNode.class);
     }
 
-    //private 메소드
+
     // ================================================================================================================================================================================================================================================================================================
     // Request 로깅 필터
     private ExchangeFilterFunction logRequest() {
