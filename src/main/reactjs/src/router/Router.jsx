@@ -1,12 +1,10 @@
 import React, {Suspense} from "react";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../recoil/LoginAtom";
 // import { lazy } from "react";
-
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
-import Club from "../pages/club/Club";
 // import Login from "../pages/Login";
 import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
@@ -25,6 +23,7 @@ import GPT from "../pages/ai/ChatGPT";
 import AI_image from "../pages/ai/ImageGenerator";
 import WeatherDetail from "../pages/weather/WeatherDetail";
 import AI_imageList from "../pages/ai/SavedImage";
+import Community from "../pages/community/Community";
 import MySetting from "../components/mypage/MySetting";
 import ModifyProfile from "../components/mypage/ModifyProfile";
 
@@ -33,6 +32,8 @@ import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
 import ClubSearch from "../pages/club/ClubSearch";
+import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
+
 import NaverCallBack from "../pages/auth/NaverCallBack";
 
 // 레이즈 라우터 임포트 방법
@@ -59,6 +60,43 @@ import NaverCallBack from "../pages/auth/NaverCallBack";
 const Router = () => {
     const isLogin = useRecoilValue(IsLoginAtom);
 
+    return (
+        <BrowserRouter>
+            <Suspense fallback={<div>로딩중..잠만기달...</div>}>
+                {/* Suspense는 레이즈 라우터 사용시 컴포넌트가 로드되는 동안 표시하는 화면을 출력할 수 있다*/}
+                <Routes>
+                    {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
+                    <Route path="/" element={<Home/>}/>
+                    {/* 로그인 없이 접근 가능하나 로그인이 되어있으면 접근 불가한 페이지 */}
+                    <Route
+                        path="/login"
+                        element={
+                            <BlockIfLoggedIn>
+                                <SignIn/>
+                            </BlockIfLoggedIn>
+                        }
+                    />
+                    <Route path="/login/local" element={<LocalSignIn/>}/>
+                    <Route
+                        path="/oauth"
+                        element={
+                            <BlockIfLoggedIn>
+                                <OauthInfo/>
+                            </BlockIfLoggedIn>
+                        }
+                    />
+                    <Route
+                        path="/join"
+                        element={
+                            <BlockIfLoggedIn>
+                                <SignUp/>
+                            </BlockIfLoggedIn>
+                        }
+                    />
+                    <Route path="/mypage" element={<MyPage/>}/>
+
+                    {/* 로그인 상태가 true여야 접근할 수 있는 페이지 예시*/}
+                    {/* {isLogin && <Route path="/club" element={<Club />} />} */}
   return (
     <BrowserRouter>
       <Suspense fallback={<div>로딩중..잠만기달...</div>}>
@@ -80,7 +118,11 @@ const Router = () => {
           {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}
              {/*<Route path=":num" element={<ClubDetails />} />*/}
 
-                    <Route path="/clubs" element={<Club/>}/>
+                    <Route path="/community" element={<Community />}>
+                        <Route path=":selectPage" element={<Community />} />
+                    </Route>
+
+                    {/*<Route path="/clubs" element={<Club/>}/>*/}
                     <Route path="/club-details/:clubId" element={<ClubDetails/>}/>
                     <Route path="/club-add" element={<AddClub/>}>
                         <Route path=":clubId" element={<AddClub/>}/>
@@ -88,6 +130,7 @@ const Router = () => {
                     <Route path="/club-configurations" element={<ClubConfigurations/>}/>
                     <Route path="/club-members" element={<ClubMembers/>}/>
                     <Route path="/club-join" element={<ClubJoin/>}/>
+                    <Route path="/club-wait" element={<ClubWaitingToJoin/>}/>
                     <Route path="/club-search" element={<ClubSearch/>}/>
 
                     <Route path="/ai" element={<AI_main/>}/>
@@ -96,15 +139,11 @@ const Router = () => {
                     <Route path="/imageList" element={<AI_imageList/>}/>
                     <Route path="/weatherDetail" element={<WeatherDetail/>}/>
 
-                    {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
-                    {/* {isLogin && <Route path="/club" element={<Club />} />} */}
                     <Route path="/chat" element={<Chat/>}/>
                     <Route path="/chat/room/:chatRoom/" element={<ChatRoom/>}/>
                     <Route path="/chat/admin" element={<Adminchat/>}/>
-                    {/* {isLogin && <Route path="/club" element={<Club />} />} */}
-                    <Route path="/event" element={<Event/>}/>
 
-                    {/* WebNotificationTest 경로 추가 */}
+                    <Route path="/event" element={<Event/>}/>
 
                     <Route
                         path="/web-notification-test"

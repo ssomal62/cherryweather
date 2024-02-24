@@ -8,10 +8,11 @@ public record CreateClubDTO(
         String name,
         String description,
         String code,
+        String notice,
         ClubCategory category,
         String subCategory,
         ClubStatus status,
         String activitiesArea,
         String joinApprovalStatus
-)  {
+) {
 }

@@ -5,14 +5,21 @@ import {GoCheckCircleFill} from "react-icons/go";
 import {Button} from "@nextui-org/react";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
-import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
+import {clubDetailState} from "../../recoil/hooks/UseClubApi";
 import {useRecoilValue} from "recoil";
-import {useMyMembership} from "../../recoil/hooks/UseMyMembership";
+import {
+    currentClubMembershipInfoState,
+    currentMembershipState,
+    useMembershipData
+} from "../../recoil/hooks/UseMembershipApi";
 
 const ClubJoin = () => {
 
-    const club = useRecoilValue(clubDetailState);
-    useMyMembership();
+    const clubDetail = useRecoilValue(clubDetailState).clubDetail;
+
+    useMembershipData({ state: currentClubMembershipInfoState, dynamicPath:`/${clubDetail.clubId}/memberships`});
+    useMembershipData({ state: currentMembershipState, dynamicPath:`/${clubDetail.clubId}/member`});
+
     const navigate = useNavigate();
 
     return (
@@ -29,8 +36,7 @@ const ClubJoin = () => {
                 <ParentContainer>
                     <ButtonSection>
                         <Button fullWidth size='lg' variant='flat' color='success'
-                                onPress={() => navigate(`/club-details/${club.clubId}`)}
-                        >
+                                onPress={() => navigate(`/club-details/${clubDetail.clubId}`)}>
                             클럽 메인
                         </Button>
                     </ButtonSection>
@@ -46,9 +52,14 @@ const ClubJoin = () => {
                     </ButtonSection>
                     <ButtonSection>
                         <Button fullWidth size='lg' variant='flat' color='default'
-                                //onPress={() => navigate(`/chat/room/${charRoom}`)}
-                        >
+                                onPress={() => navigate('/club-members')}>
                             멤버 목록 확인하기
+                        </Button>
+                    </ButtonSection>
+                    <ButtonSection>
+                        <Button fullWidth size='lg' variant='flat' color='default'
+                                onPress={() => navigate('/')}>
+                            홈으로 가기
                         </Button>
                     </ButtonSection>
 

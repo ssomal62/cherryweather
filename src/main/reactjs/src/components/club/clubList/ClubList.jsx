@@ -1,28 +1,32 @@
-import React, {useEffect} from "react";
+import React from "react";
 import CardListItem from "./ClubListItem";
-import {useRecoilValue} from "recoil";
-import {clubListState, useFetchClubs} from "../../../recoil/hooks/UseFetchClubs";
 import styled from "styled-components"
-import ClubListTabs from "./ClubListTabs";
+import {Spinner} from "@nextui-org/react";
+import {useRecoilValue} from "recoil";
+import {clubListState, useClubData} from "../../../recoil/hooks/UseClubApi";
 
 
 const ClubList = () => {
 
-    const fetchClubs = useFetchClubs(); // 함수를 담는것, 아래의 변수에 값을 넣기 위해 선행되는 행위,
-    const clubs = useRecoilValue(clubListState); // 실제로 값이 저장되어 있는 변수,
+    const {loading: loadingClubData} = useClubData({ state: clubListState, dynamicPath: ''});
 
-    useEffect(() => {
-        fetchClubs();
-    }, [fetchClubs]);
+    const clubList = useRecoilValue(clubListState);
+
+    const loading = loadingClubData;
+
+    if (loading) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh'}}>
+                <Spinner size="lg" color="danger"/>
+            </div>
+        );
+    }
 
     return (
         <div>
-            <ClubListTabs/>
-            {clubs.map((club) => (
+            {clubList.map((club) => (
                 <CardListItemWrapper key={club.clubId}>
-                    <CardListItem
-                        club={club}
-                    />
+                    <CardListItem club={club}/>
                 </CardListItemWrapper>
             ))}
             <br/><br/><br/>

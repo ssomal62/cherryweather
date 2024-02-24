@@ -9,15 +9,15 @@ import lombok.Builder;
 public record ClubSummary(
         long clubId,
         String name,
-
         String description,
-
         String code,
         String activitiesArea,
+        String joinApprovalStatus,
         int currentMembers,
         int maxMembers,
         ClubStatus status,
         ClubCategory category,
-        ClubGrade grade
+        ClubGrade grade,
+        Boolean liked
 ) {
 }

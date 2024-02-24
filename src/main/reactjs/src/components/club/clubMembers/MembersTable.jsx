@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
     Button,
     Chip,
@@ -18,9 +18,10 @@ import {
 import {VerticalDotsIcon} from "./VerticalDotsIcon";
 import {SearchIcon} from "./SearchIcon";
 import {ChevronDownIcon} from "./ChevronDownIcon";
-import {columns, statusOptions} from "./data";
 import {capitalize} from "./utils";
 import defaultAvatar from '../../../assets/icon/Avatar'
+import {HeartIcon} from "../../../assets/icon/HeartIcon";
+
 
 const statusColorMap = {
     active: "success",
@@ -29,26 +30,39 @@ const statusColorMap = {
     Inactive : "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["userName", "status", "actions"];
-
-
 export default function MembersTable({users}) {
+
     const [filterValue, setFilterValue] = React.useState("");
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-    const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
     const [statusFilter, setStatusFilter] = React.useState("all");
     const [sortDescriptor, setSortDescriptor] = React.useState({
         column: "status",
         direction: "ascending",
     });
 
+    const columns = [
+        {name: "", uid: "like"},
+        {name: "멤버", uid: "userName", sortable: true},
+        {name: "상태", uid: "status", sortable: true},
+        {name: "설정", uid: "actions"},
+    ];
+
+    const statusOptions = [
+        {name: "활동중", uid: "ACTIVE"},
+        {name: "차단", uid: "BANNED"},
+        {name: "대기중", uid: "PENDING"},
+        {name: "비활성", uid: "INACTIVE"},
+    ]
     const hasSearchFilter = Boolean(filterValue);
 
-    const headerColumns = React.useMemo(() => {
-        if (visibleColumns === "all") return columns;
+    ////like-start///
+    const [liked, setLiked] = useState(false);
 
-        return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
-    }, [visibleColumns]);
+    const handleLikeClick = () => {
+        setLiked(!liked);
+    };
+
+    ////like-end///
 
     const filteredItems = React.useMemo(() => {
         let filteredUsers = [...users];
@@ -63,7 +77,6 @@ export default function MembersTable({users}) {
                 Array.from(statusFilter).includes(user.status),
             );
         }
-
         return filteredUsers;
     }, [users, filterValue, statusFilter]);
 
@@ -85,6 +98,29 @@ export default function MembersTable({users}) {
         const cellValue = user[columnKey];
 
         switch (columnKey) {
+            case "like" :
+                return (
+                    <div className="relative flex justify-end items-center gap-2">
+                    <Button
+                        isIconOnly
+                        className="text-default-900/60 data-[hover]:bg-foreground/10"
+                        radius="full"
+                        variant="light"
+                        onPress={handleLikeClick}
+                       >
+                        <HeartIcon
+                            style={{
+                                width:24,
+                                height:24,
+                                color : 'pink',
+                                fill: liked ? "currentColor" : "none"
+                        }}
+                            //className={liked ? "[&>path]:stroke-transparent" : ""}
+                            //fill={liked ? "pink" : "none"}
+                        />
+                     </Button>
+                    </div>
+                    );
             case "userName":
                 return (
                     <User
@@ -112,9 +148,8 @@ export default function MembersTable({users}) {
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem>View</DropdownItem>
-                                <DropdownItem>Edit</DropdownItem>
-                                <DropdownItem>Delete</DropdownItem>
+                                <DropdownItem>권한 변경</DropdownItem>
+                                <DropdownItem>회원 추방</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
@@ -174,36 +209,13 @@ export default function MembersTable({users}) {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        <Dropdown>
-                            <DropdownTrigger className="hidden sm:flex">
-                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
-                                    기타
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                                disallowEmptySelection
-                                aria-label="Table Columns"
-                                closeOnSelect={false}
-                                selectedKeys={visibleColumns}
-                                selectionMode="multiple"
-                                onSelectionChange={setVisibleColumns}
-                            >
-                                {columns.map((column) => (
-                                    <DropdownItem key={column.uid} className="capitalize">
-                                        {capitalize(column.name)}
-                                    </DropdownItem>
-                                ))}
-                            </DropdownMenu>
-                        </Dropdown>
                     </div>
                 </div>
-
             </div>
         );
     }, [
         filterValue,
         statusFilter,
-        visibleColumns,
         users.length,
         onSearchChange,
         hasSearchFilter,
@@ -222,10 +234,9 @@ export default function MembersTable({users}) {
             onSelectionChange={setSelectedKeys}
             onSortChange={setSortDescriptor}
             radius='none'
-            //isStriped
             fullWidth
         >
-            <TableHeader columns={headerColumns}>
+            <TableHeader columns={columns}>
                 {(column) => (
                     <TableColumn
                         key={column.uid}
