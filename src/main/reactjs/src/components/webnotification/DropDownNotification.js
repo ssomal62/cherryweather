@@ -1,6 +1,6 @@
 // DropDownNotification.js
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dropdown,
   DropdownTrigger,
@@ -45,18 +45,7 @@ const DropDownNotification = () => {
     return null;
   };
 
-  // useEffect(() => {
-  //   if (userInfo.clubId) {
-  //     const userClubName = findUserClubName();
-  //     if (userClubName) {
-  //       console.log("사용자가 속한 클럽 이름:", userClubName);
-  //     } else {
-  //       console.log("사용자가 속한 클럽을 찾을 수 없습니다.");
-  //     }
-  //   } else {
-  //     console.log("사용자가 클럽에 속해 있지 않습니다.");
-  //   }
-  // }, [userInfo, clubMembers]);
+
 
   useEffect(() => {
     fetchData();

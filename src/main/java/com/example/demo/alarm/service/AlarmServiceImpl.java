@@ -2,20 +2,17 @@ package com.example.demo.alarm.service;
 
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.repository.AccountRepository;
-import com.example.demo.account.service.AccountService;
 import com.example.demo.alarm.dto.AlarmDto;
 import com.example.demo.alarm.entity.Alarm;
 import com.example.demo.alarm.repository.AlarmRepository;
 import com.example.demo.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_ACCOUNT;
 
@@ -75,15 +72,11 @@ public class AlarmServiceImpl implements AlarmService {
 //        return alarmList.stream().map(alarm -> AlarmDto.builder()
 //                .alarmId(alarm.getAlarmId())
 //                .account(alarm.getAccount())
-//                .name("김요")
+//                .name(alarm.getAccount().getName())
+//                .description(alarm.getDescription()) // description 설정 추가
 //                .createdAt(alarm.getCreatedAt())
 //                .build()
 //        ).collect(Collectors.toList());
-//    }
+//        }
+    }
 
-
-
-
-
-
-}
