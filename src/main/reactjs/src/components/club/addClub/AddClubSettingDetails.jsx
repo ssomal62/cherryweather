@@ -41,7 +41,7 @@ const AddClubSettingDetails = ({onNext, description, file, setCode, setDescripti
             const file = e.target.files[0];
             const shortUUID = generateShortUUID()
             const extension = getFileExtension(file.name);
-            const newFileName = 'cf-'+ shortUUID + '.' + extension; // 새로운 파일 이름
+            const newFileName = 'cf-'+ shortUUID + '.jpg'; //+ extension; // 새로운 파일 이름
             const modifiedFile = new File([file], newFileName, { type: file.type });
 
             setCode('cf-'+ shortUUID);
@@ -50,7 +50,7 @@ const AddClubSettingDetails = ({onNext, description, file, setCode, setDescripti
     };
 
     function getFileExtension(fileName) {
-        return fileName.split('.').pop(); // 마지막 점으로 분리된 부분을 반환
+        return fileName.split('.').pop();
     }
 
     function generateShortUUID() {

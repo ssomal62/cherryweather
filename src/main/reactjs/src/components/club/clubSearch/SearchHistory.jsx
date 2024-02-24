@@ -29,7 +29,6 @@ const SearchHistory = ({keywords,onRemove,onRemoveAll}) => {
 
     return (
         <section style={{padding: 20}}>
-
             <div className="flex items-center justify-between" style={styles.font}>
                 <div className="flex items-center">
                     <IoIosArrowForward className="mr-2"/>

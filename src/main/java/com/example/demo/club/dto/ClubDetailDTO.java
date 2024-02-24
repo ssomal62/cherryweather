@@ -5,6 +5,9 @@ import com.example.demo.club.entity.Club;
 import lombok.Builder;
 
 @Builder
-public record ClubDetailDTO(Club clubDetail) {
+public record ClubDetailDTO(
+        Club clubDetail,
+        Boolean liked
+) {
 
 }

@@ -23,16 +23,15 @@ public class GeoLocationService {
     private final ObjectMapper objectMapper;
     private final GeoConverter geoConverter;
 
-    public GeoLocationResDto convertLocation() {
-        GeoLocationReqDto reqDto = getGeoLocation();
+    public GeoLocationResDto convertLocation(String clientIp) {
+        GeoLocationReqDto reqDto = getGeoLocation(clientIp);
         return geoConverter.toXY(reqDto);
     }
 
-    public GeoLocationReqDto getGeoLocation() {
-        String ip = getClientPubliIP();
-        System.out.println("ip : " + ip);
+    public GeoLocationReqDto getGeoLocation(String clientIp) {
+        System.out.println("clientIp : " + clientIp);
         try {
-            String response = geoLocationClient.run(ip);
+            String response = geoLocationClient.run(clientIp);
             JsonNode root = objectMapper.readTree(response);
             JsonNode locationNode = root.path("geoLocation");
 
@@ -45,33 +44,10 @@ public class GeoLocationService {
                            .lat(locationNode.path("lat").asDouble())
                            .lon(locationNode.path("long").asDouble())
                            .net(locationNode.path("net").asText())
-                           .ip(ip)
+                           .ip(clientIp)
                            .build();
         } catch(Exception e) {
-
             throw new LookupException(LOCATION_INFO_LOOKUP_FAILED);
-        }
-    }
-
-    // ip-api.com에서 공인 ip를 획득하고 반환합니다.
-    public String getClientPubliIP() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://ip-api.com/json/";
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-
-        if(response.getStatusCode() == HttpStatus.OK) {
-            String responseBody = response.getBody();
-            // responseBody를 파싱하여 "query"의 값(IP 주소)를 추출합니다.
-            // Jackson ObjectMapper 또는 Gson을 사용하여 JSON을 파싱할 수 있습니다.
-            JsonNode jsonNode;
-            try {
-                jsonNode = objectMapper.readTree(responseBody);
-            } catch(JsonProcessingException e) {
-                throw new LookupException(JSON_PARSING_FAILED);
-            }
-            return jsonNode.get("query").asText();
-        } else {
-            throw new LookupException(IP_LOOKUP_FAILED);
         }
     }
 

@@ -3,7 +3,7 @@ import {Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
 import {useNavigate} from 'react-router-dom';
 import {useRecoilValue} from "recoil";
-import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
+import {clubDetailState} from "../../../recoil/hooks/UseClubApi";
 
 export default function ClubMembersHeader() {
 
