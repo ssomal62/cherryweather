@@ -40,6 +40,8 @@ const ChatRoomList = () => {
         customField: "json",
       });
 
+      // 다른 상대가 초대한 채팅방 정보 가져오기
+
       const filter = { state: true };
       const sort = { created_at: -1 };
       const option = { offset: 0, per_page: 100 };
@@ -66,7 +68,10 @@ const ChatRoomList = () => {
       for (const cname of fetchedChannels) {
         for (const channelId of channelIds) {
           if (cname.id === channelId.chatRoom) {
-            setChannelName([...channelName, { name: cname.name }]);
+            setChannelName((prevChannelName) => [
+              ...prevChannelName,
+              { name: cname.name },
+            ]);
           }
         }
       }

@@ -45,6 +45,8 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Query(value = "SELECT chat_room FROM chat WHERE club_id = ?1", nativeQuery = true)
     List<String> getChatRoomByClubId(int clubId);
 
+
+
 //    @Query("SELECT chat.chatRoom FROM Chat chat WHERE (chat.accountid.accountId = :accountid AND chat.clubid.clubId = :clubid) OR (chat.accountid.accountId = :clubid AND chat.clubid.clubId = :accountid)")
 //    String findChatInfoByAccountIdAndClubId(@Param("accountid") int accountid, @Param("clubid") int clubid);
 }

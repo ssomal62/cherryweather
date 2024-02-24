@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -10,8 +10,8 @@ import {
 import "../../style/ChatUserInfoStyle.css";
 
 function ChatUserInfo({ closeModal, messages, accountData }) {
-  const [isFollowed, setIsFollowed] = React.useState(false);
-
+  const [isFollowed, setIsFollowed] = useState(false);
+  console.log("messages : ", messages);
   return (
     <>
       {messages.map((message, index) =>
@@ -23,7 +23,7 @@ function ChatUserInfo({ closeModal, messages, accountData }) {
                   isBordered
                   radius="full"
                   size="md"
-                  src="message.sender.profile"
+                  src={message.sender.profile}
                 />
                 <div className="flex flex-col gap-1 items-start justify-center">
                   <h4 className="text-small font-semibold leading-none text-default-600">

@@ -2,7 +2,6 @@ package com.example.demo.chat.service;
 
 
 import com.example.demo.chat.dto.ChatListDto;
-import com.example.demo.chat.dto.CreatChatRoomDto;
 import com.example.demo.chat.entity.Chat;
 import com.example.demo.chat.repository.ChatRepository;
 import jakarta.transaction.Transactional;
@@ -67,16 +66,6 @@ public class ChatService {
         }
     }
 
-//    @Transactional
-//    public List<String> getClubIdsByAccountId(int accountId) {
-//        List<String> clubIds = chatRepository.getClubIdsByAccountId(accountId);
-//        return clubIds != null ? clubIds : Collections.emptyList();
-//    }
-
-//      @Transactional
-//      public void chatRoomInsert(int accountId, String chatroom, int clubId) {
-//          chatRepository.save(new Chat(accountId, chatroom, clubId));
-//      }
 
     // 채팅방을 생성하는 메소드 정의
     @Transactional
@@ -88,13 +77,6 @@ public class ChatService {
     public void insertChatRoom(int accountId, String chatRoom, int raccountid) {
         chatRepository.insertChatRoom(accountId, chatRoom, raccountid);
     }
-
-
-//    @Transactional
-//    public String getChatInfo(int accountId, int clubId) {
-//        // 채팅 정보를 가져오는 JPA 메서드 호출
-//        return chatRepository.findChatInfoByAccountIdAndClubId(accountId, clubId);
-//    }
 
 
     public void insertClubChatRoom(Chat chat) {
@@ -114,9 +96,6 @@ public class ChatService {
 
 
 
-    public void createChat(CreatChatRoomDto requestDto) {
-        chatRepository.insertClubChatRoom(requestDto.getAccountId(), requestDto.getChatRoom(), requestDto.getClubId());
-    }
 
 
 

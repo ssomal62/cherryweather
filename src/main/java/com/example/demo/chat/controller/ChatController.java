@@ -2,7 +2,6 @@ package com.example.demo.chat.controller;
 
 
 import com.example.demo.chat.dto.ChatListDto;
-import com.example.demo.chat.dto.CreatChatRoomDto;
 import com.example.demo.chat.entity.Chat;
 import com.example.demo.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +18,6 @@ import java.util.List;
 @CrossOrigin
 public class ChatController {
     private final ChatService chatService;
-
-//    @Autowired
-//    public ChatController(ChatService chatService) {
-//        this.chatService = chatService;
-//    }
 
     // 채팅방 목록 데이터 전체 조회
     @GetMapping("/getchatlist")
@@ -48,43 +42,22 @@ public class ChatController {
         return chatService.getOneToOneChatInfo(accountId, raccountId);
     }
 
-
     // clubId로 채팅방을 찾는 메소드 정의
     @GetMapping("/getchatroombyclubid")
     public List<String> getChatRoomByClubId(@RequestParam int clubId) {
         return Collections.singletonList(chatService.getChatInfoByClubId(clubId));
     }
 
-//    @GetMapping("/getchatlist")
-//    public String getChatListByAccountId(@RequestParam int accountId) {
-//        return chatService.getChatIdByAccountId(accountId);
-//    }
-
-
-
     // 채팅방 생성
-
-
     @PostMapping("/insertclubchatroom")
     public void insertClubChat(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int clubId) {
         chatService.insertClubChatRoom(accountId, chatRoom, clubId);
     }
 
-
     @PostMapping("/createchatroom")
     public void insertChatRoom(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int raccountId) {
         chatService.insertChatRoom(accountId, chatRoom, raccountId);
     }
-
-    @PostMapping("/createchat")
-    public void insertClubChatRoom(
-            @RequestBody CreatChatRoomDto requestDto
-    ) {
-        System.out.println("accountId:" + requestDto.getAccountId());
-        chatService.createChat(requestDto);
-    }
-
-
 
 }
 
