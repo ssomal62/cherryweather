@@ -5,8 +5,7 @@ import ClubMembersHeader from "../../components/club/clubMembers/ClubMembersHead
 import {Divider} from "@nextui-org/react";
 import AnimationRightInWrapper from "../../utils/animations/AnimationRightInWrapper";
 import {useRecoilValue} from "recoil";
-import {membersState, useMembersState} from "../../recoil/hooks/UseMembersState";
-import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
+import {currentClubMembershipInfoState} from "../../recoil/hooks/UseMembershipApi";
 
 const ClubMembers = () => {
 
@@ -14,17 +13,14 @@ const ClubMembers = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    const club = useRecoilValue(clubDetailState).clubDetail;
-    useMembersState(club.clubId);
-
-    const members = useRecoilValue(membersState);
+    const members = useRecoilValue(currentClubMembershipInfoState);
 
     return (
         <Layout useHeader={false} useFooter={false} containerMargin="5" containerPadding="0">
             <AnimationRightInWrapper>
                 <ClubMembersHeader/>
                 <Divider/>
-                <MembersTable users = {members}/>
+                <MembersTable users = {members.summaryList}/>
             </AnimationRightInWrapper>
         </Layout>
     );

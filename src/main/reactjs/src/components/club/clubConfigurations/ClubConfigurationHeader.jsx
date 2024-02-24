@@ -2,20 +2,17 @@ import React from "react";
 import {Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
 import {useNavigate} from 'react-router-dom';
-import {useRecoilValue} from "recoil";
-import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
 
-export default function ClubConfigurationHeader() {
+export default function ClubConfigurationHeader({clubDetail}) {
 
     const navigate = useNavigate();
-    const club = useRecoilValue(clubDetailState).clubDetail;
 
     return (
         <Navbar>
             <NavbarContent justify="start">
                 <NavbarItem
                     style={styles.iconBox}
-                    onClick={() => navigate(`/club-details/${club.clubId}`)}
+                    onClick={() => navigate(`/club-details/${clubDetail.clubId}`)}
                 >
                     <IoArrowBack style={styles.icon}/>
                 </NavbarItem>

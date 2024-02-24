@@ -6,11 +6,9 @@ import SoftCurveTop from "../../components/club/clubDetail/SoftCurveTop";
 import {Image, Spinner} from "@nextui-org/react";
 import styled from "styled-components";
 import ClubDetailsHeader from "../../components/club/clubDetail/ClubDetailsHeader";
-import {clubDetailState, useClubDetailState} from "../../recoil/hooks/UseClubDetailState";
+import {clubDetailState, useClubData} from "../../recoil/hooks/UseClubApi";
 import {useRecoilValue} from "recoil";
 import ClubJoinButton from "../../components/club/clubDetail/ClubJoinButton";
-import {useMembersState} from "../../recoil/hooks/UseMembersState";
-import {useCheckMember} from "../../recoil/hooks/CheckIsMember";
 import ClubDetailsSummary from "../../components/club/clubDetail/ClubDetailsSummary";
 import ClubNotice from "../../components/club/clubDetail/ClubNotice";
 import EventSection from "../../components/club/clubDetail/EventSection";
@@ -19,18 +17,30 @@ import ClubFeed from "../../components/club/clubDetail/ClubFeed";
 import ClubCategory from "../../components/club/clubDetail/ClubCategory";
 import ClubName from "../../components/club/clubDetail/ClubName";
 import LoginVerificationModal from "../../utils/LoginVerificationModal";
+import {IsLoginAtom} from "../../recoil/LoginAtom";
+import {
+    currentClubMembershipInfoState,
+    currentMembershipState,
+    useMembershipData
+} from "../../recoil/hooks/UseMembershipApi";
 
 const ClubDetails = () => {
 
     const {clubId} = useParams();
+    const isLogin = useRecoilValue(IsLoginAtom);
 
-    const loadingCheckMember = useCheckMember(clubId).loading
-    const loadingClubDetail = useClubDetailState(clubId).loading;
-    const loadingMembersState = useMembersState(clubId).loading;
+    const {loading: loadingClubMembershipData} =
+        useMembershipData({ state: currentClubMembershipInfoState, dynamicPath:`/${clubId}/memberships`});
 
-    const club = useRecoilValue(clubDetailState);
+    const {loading: loadingMyMembership} =
+        useMembershipData({ state: currentMembershipState, dynamicPath:`/${clubId}/member`});
 
-    const loading = loadingCheckMember || loadingClubDetail || loadingMembersState;
+    const {loading: loadingClubData} =
+        useClubData({ state: clubDetailState, dynamicPath:`/${clubId}`});
+
+    const loading = loadingMyMembership || loadingClubData || loadingClubMembershipData;
+
+    const clubDetail = useRecoilValue(clubDetailState).clubDetail;
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -39,10 +49,7 @@ const ClubDetails = () => {
     const [offsetY, setOffsetY] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const clubProfile = (code) => {
-        if (code === '') {
-            return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/defalut.jpg?type=f&w=600&h=600&ttype=jpg`
-        }
-        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code}.jpg?type=f&w=600&h=600&ttype=jpg`
+        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "defalut"}.jpg?type=f&w=600&h=600&ttype=jpg`
     }
 
     useEffect(() => {
@@ -68,7 +75,7 @@ const ClubDetails = () => {
     if (loading) {
         return (
             <Layout useHeader={false} useFooter={false} containerMargin="0" containerPadding="0">
-                <ClubDetailsHeader/>
+                <ClubDetailsHeader clubDetail={clubDetail} isLogin={isLogin}/>
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
                     <Spinner size="lg" color="danger"/>
                 </div>
@@ -78,17 +85,17 @@ const ClubDetails = () => {
 
     return (
         <Layout useHeader={false} useFooter={false} containerMargin="0" containerPadding="0">
-            <ClubDetailsHeader/>
+            <ClubDetailsHeader clubDetail={clubDetail} isLogin={isLogin}/>
             <ClubDetail>
                 <div style={styles.aspectRatio}>
                     <Content>
-                        <ClubCategory clubDetail={club.clubDetail}/>
-                        <ClubName clubDetail={club.clubDetail}/>
-                        <ClubDetailsSummary clubDetail={club.clubDetail}/>
+                        <ClubCategory clubDetail={clubDetail}/>
+                        <ClubName clubDetail={clubDetail}/>
+                        <ClubDetailsSummary clubDetail={clubDetail}/>
                         <EventSection />
-                        <ClubNotice clubDetail={club.clubDetail}/>
-                        <MemberSummary/>
-                        <ClubFeed/>
+                        <ClubNotice clubDetail={clubDetail}/>
+                        <MemberSummary isLogin={isLogin}/>
+                        <ClubFeed isLogin={isLogin}/>
                     </Content>
 
                     <Image radius='none' alt=""
@@ -98,7 +105,7 @@ const ClubDetails = () => {
                                transform: `translateY(${offsetY * -0.3}px)`,
                            }}
                            className="w-full object-cover object-middle"
-                           src={clubProfile(club.clubDetail.code)}
+                           src={clubProfile(clubDetail.code)}
                     />
                     <div style={styles.top}>
                         <SoftCurveTop color={'#ffffff'}/>

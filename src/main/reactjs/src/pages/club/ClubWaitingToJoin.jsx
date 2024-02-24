@@ -1,20 +1,25 @@
 import React from 'react';
 import Layout from "../../common/Layout";
 import AnimationRightInWrapper from "../../utils/animations/AnimationRightInWrapper";
-import { TbClockPlus } from "react-icons/tb";
+import {TbClockPlus} from "react-icons/tb";
 import {Button} from "@nextui-org/react";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
-import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
+import {clubDetailState} from "../../recoil/hooks/UseClubApi";
 import {useRecoilValue} from "recoil";
-import {useMyMembership} from "../../recoil/hooks/UseMyMembership";
-import {useMembersState} from "../../recoil/hooks/UseMembersState";
+import {
+    currentClubMembershipInfoState,
+    currentMembershipState,
+    useMembershipData
+} from "../../recoil/hooks/UseMembershipApi";
 
 const ClubWaitingToJoin = () => {
 
-    const club = useRecoilValue(clubDetailState).clubDetail;
-    useMembersState(club.clubId);
-    useMyMembership();
+    const clubDetail = useRecoilValue(clubDetailState).clubDetail;
+
+    useMembershipData({ state: currentClubMembershipInfoState, dynamicPath:`/${clubDetail.clubId}/memberships`});
+    useMembershipData({ state: currentMembershipState, dynamicPath:`/${clubDetail.clubId}/member`});
+
     const navigate = useNavigate();
 
     return (
@@ -31,7 +36,7 @@ const ClubWaitingToJoin = () => {
                 <ParentContainer>
                     <ButtonSection>
                         <Button fullWidth size='lg' variant='flat' color='success'
-                                onPress={() => navigate(`/club-details/${club.clubId}`)}>
+                                onPress={() => navigate(`/club-details/${clubDetail.clubId}`)}>
                             클럽 메인
                         </Button>
                     </ButtonSection>

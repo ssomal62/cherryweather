@@ -1,15 +1,12 @@
 import React, {useState} from 'react';
 import {IoIosArrowForward, IoMdLogIn} from "react-icons/io";
 import {instance} from "../../../recoil/module/instance";
-import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
-import {useRecoilValue} from "recoil";
 import {useNavigate} from "react-router-dom";
 import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
 import {Cookies} from "react-cookie";
 
-const LeaveClub = ({message}) => {
+const LeaveClub = ({message, clubDetail}) => {
 
-    const club = useRecoilValue(clubDetailState).clubDetail;
     const navigate = useNavigate();
     const [checkModalOpen, setCheckModalOpen] = useState(false);
     const [resultModalOpen, setResultModalOpen] = useState(false);
@@ -21,14 +18,14 @@ const LeaveClub = ({message}) => {
 
     const handelResultModal = () => {
         setResultModalOpen(false);
-        navigate(`/club-details/${club.clubId}`);
+        navigate(`/club-details/${clubDetail.clubId}`);
     }
 
     const onLeave = async () => {
 
         const cookie = new Cookies();
         try {
-            const res = await instance.delete(`/membership/${club.clubId}`, {
+            const res = await instance.delete(`/membership/${clubDetail.clubId}`, {
                 headers: {
                     Authorization: `Bearer ${cookie.get('accessToken')}`
                 }

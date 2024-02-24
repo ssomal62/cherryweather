@@ -44,6 +44,13 @@ public class MembershipService {
     }
 
     @Transactional
+    public MembershipListDTO findAllByClub(long clubId) {
+        Club findClub = clubService.findClubById(clubId);
+        List<Membership> findMembership = membershipRepository.findByClub(findClub);
+    return MembershipListDTO.fromMembership(findMembership);
+    }
+
+    @Transactional
     public void saveMembership(ClubSignupDTO requestDTO, AccountDetails accountDetails) {
         Membership membership = createMembership(requestDTO, accountDetails);
         membershipRepository.save(membership);
@@ -118,4 +125,6 @@ public class MembershipService {
         long memberCount = membershipRepository.countByClub(findClub);
         return memberCount == 0;
     }
+
+
 }

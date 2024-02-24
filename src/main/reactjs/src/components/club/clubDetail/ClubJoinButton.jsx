@@ -3,35 +3,37 @@ import styled from "styled-components";
 import {Button} from "@nextui-org/react";
 import {useNavigate} from "react-router-dom";
 import {useRecoilValue} from "recoil";
-import {clubDetailState} from "../../../recoil/hooks/UseClubDetailState";
+import {clubDetailState} from "../../../recoil/hooks/UseClubApi";
 import {useLikeClub} from "../../../recoil/hooks/UseLikedState";
 import {HeartIcon} from "../../../assets/icon/HeartIcon";
 import {Cookies} from "react-cookie";
 import {instance} from "../../../recoil/module/instance";
 import {IsLoginAtom} from "../../../recoil/LoginAtom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
-import {memberInfoState, useCheckMember} from "../../../recoil/hooks/CheckIsMember";
+import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 
-const ClubJoinButton = ({clubId}) => {
+const ClubJoinButton = () => {
 
     const navigate = useNavigate();
 
-    useCheckMember(clubId);
-
     const isLogin = useRecoilValue(IsLoginAtom);
-    const club = useRecoilValue(clubDetailState)
-    const membership = useRecoilValue(memberInfoState);
 
-    const [liked, setLiked] = useState(club.liked);
+    const { clubDetail, liked: clubLiked } = useRecoilValue(clubDetailState);
+
+    const myMembership = useRecoilValue(currentMembershipState);
+
+    const myRole = myMembership && myMembership.info ? myMembership.info.role : 'default';
+
+    const [liked, setLiked] = useState(clubLiked);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [role, setRole] = useState('');
 
     const {toggleLikeClub} = useLikeClub();
 
     useEffect(() => {
-        setRole(club.clubDetail.joinApprovalStatus === "JOIN" ? "MEMBER" : "WAITING")
-        setLiked(club.liked);
-    }, [club.liked, club.clubDetail.joinApprovalStatus]);
+        setRole(clubDetail.joinApprovalStatus === "JOIN" ? "MEMBER" : "WAITING")
+        setLiked(clubLiked);
+    }, [clubLiked, clubDetail.joinApprovalStatus]);
 
     const handleLikeClick = () => {
         if (!isLogin) {
@@ -39,7 +41,7 @@ const ClubJoinButton = ({clubId}) => {
             return;
         }
         setLiked(!liked);
-        toggleLikeClub({type: "CLUB", targetId: club.clubDetail.clubId});
+        toggleLikeClub({type: "CLUB", targetId: clubDetail.clubId});
     };
 
     const handleJoinClick = () => {
@@ -51,13 +53,13 @@ const ClubJoinButton = ({clubId}) => {
     }
 
     const onSave = async () => {
-        console.log("클럽 조인 스테이ㅓ티" + club.clubDetail.joinApprovalStatus);
 
         const requestData = {
-            clubId: club.clubDetail.clubId,
+            clubId: clubDetail.clubId,
             role  : role
         };
 
+        console.log("클럽이테일로그 확인" + clubDetail.clubId)
         const cookie = new Cookies();
         try {
             const res = await instance.post('/membership', requestData, {
@@ -66,10 +68,10 @@ const ClubJoinButton = ({clubId}) => {
                 }
             });
 
-            if (club.clubDetail.joinApprovalStatus === "JOIN") {
+            if (clubDetail.joinApprovalStatus === "JOIN") {
                 navigate('/club-join');
             }
-            if (club.clubDetail.joinApprovalStatus === "APPROVAL") {
+            if (clubDetail.joinApprovalStatus === "APPROVAL") {
                 navigate('/club-wait');
             }
             console.log('Success:', res);
@@ -79,7 +81,7 @@ const ClubJoinButton = ({clubId}) => {
     };
 
     const joinButtonRender = () => {
-        switch (membership?.role) {
+        switch (myRole) {
             case "HOST":
             case "MEMBER":
             case "MODERATOR":
@@ -92,6 +94,7 @@ const ClubJoinButton = ({clubId}) => {
                             style={{marginRight: "2%", height: "70%"}}>
                         <span style={styles.font}>가입대기중</span>
                         </Button>
+            case '':
             default :
                 return <Button fullWidth color="danger" variant="solid" size="lg" radius="lg"
                         style={{marginRight: "2%", height: "70%"}}

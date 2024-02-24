@@ -6,17 +6,17 @@ import styled from "styled-components";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../../../recoil/LoginAtom";
 import MemberVerificationModal from "../../../utils/MemberVerificationModal";
-import {isMemberState, memberInfoState} from "../../../recoil/hooks/CheckIsMember";
+import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 
 const EventSection = () => {
 
     const isLogin = useRecoilValue(IsLoginAtom);
-    const membership = useRecoilValue(memberInfoState);
-    const isMember = useRecoilValue(isMemberState);
+
+    const myMembership = useRecoilValue(currentMembershipState);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handelMoreClick = () => {
-        if (!isLogin || !isMember ||membership.role === "WAITING") {
+        if (!isLogin || !myMembership ||myMembership.info.role === "WAITING") {
             setIsModalOpen(true);
             return;
         }

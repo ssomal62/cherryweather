@@ -5,40 +5,41 @@ import AnimationRightInWrapper from "../../utils/animations/AnimationRightInWrap
 import {Chip, Divider} from "@nextui-org/react";
 import ClubConfigurationHeader from "../../components/club/clubConfigurations/ClubConfigurationHeader";
 import {useRecoilValue} from "recoil";
-import {clubDetailState} from "../../recoil/hooks/UseClubDetailState";
+import {clubDetailState} from "../../recoil/hooks/UseClubApi";
 import EditClub from "../../components/club/clubConfigurations/EditClub";
 import TransferClub from "../../components/club/clubConfigurations/TransferClub";
 import LeaveClub from "../../components/club/clubConfigurations/LeaveClub";
 import DeleteClub from "../../components/club/clubConfigurations/DeleteClub";
 import ManageClubMembers from "../../components/club/clubConfigurations/ManageClubMembers";
 import ReportClub from "../../components/club/clubConfigurations/ReportClub";
-import {memberInfoState} from "../../recoil/hooks/CheckIsMember";
+import {currentMembershipState} from "../../recoil/hooks/UseMembershipApi";
 
 const ClubConfigurations = () => {
 
-    const club = useRecoilValue(clubDetailState);
-    const membership = useRecoilValue(memberInfoState);
+    const clubDetail = useRecoilValue(clubDetailState).clubDetail;
+    const myMembership = useRecoilValue(currentMembershipState);
+    const myRole = myMembership.info.role;
 
     return (
 
         <Layout useHeader={false} useFooter={false} containerMargin="5" containerPadding="0">
             <AnimationRightInWrapper>
 
-                <ClubConfigurationHeader/>
+                <ClubConfigurationHeader clubDetail={clubDetail}/>
                 <Divider/>
 
                 {
-                    (membership.role === "HOST" || membership.role === "MODERATOR") &&
+                    (myRole === "HOST" || myRole === "MODERATOR") &&
                     <>
                         <Section>
                             <Chip size='sm' color='default' variant='faded'> 클럽 정보 </Chip>
-                            <EditClub clubDetail={club.clubDetail}/>
+                            <EditClub clubDetail={clubDetail}/>
                         </Section>
                         <Divider/>
                     </>
                 }
                 {
-                    (membership.role === "HOST" || membership.role === "MODERATOR" || membership.role === "MEMBER") &&
+                    (myRole === "HOST" || myRole === "MODERATOR" || myRole === "MEMBER") &&
                     <>
                         <Section>
                             <Chip size='sm' color='default' variant='faded'> 클럽 활동 </Chip>
@@ -51,15 +52,15 @@ const ClubConfigurations = () => {
                     <Chip size='sm' color='default' variant='faded'> 클럽 운영 </Chip>
 
                     {
-                        (membership.role === "MODERATOR" || membership.role === "MEMBER") &&
-                        <LeaveClub message="탈퇴하기"/>
+                        (myRole === "MODERATOR" || myRole === "MEMBER") &&
+                        <LeaveClub message="탈퇴하기" clubDetail={clubDetail}/>
                     }
                     {
-                        membership.role === "WAITING" &&
-                        <LeaveClub message="대기취소"/>
+                        myRole === "WAITING" &&
+                        <LeaveClub message="대기취소" clubDetail={clubDetail}/>
                     }
                     {
-                        membership.role === "HOST" &&
+                        myRole === "HOST" &&
                         <>
                             <TransferClub/>
                             <DeleteClub/>
@@ -67,7 +68,7 @@ const ClubConfigurations = () => {
                     }
                 </Section>
                 <Divider/>
-                {membership.role !== "HOST" &&
+                {myRole !== "HOST" &&
                     <>
                         <Section>
                             <Chip size='sm' color='default' variant='faded'> 클럽 신고 </Chip>

@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +21,7 @@ public class MembershipApiController {
     private final MembershipQueryService membershipQueryService;
 
     /**
-     * 멤버십 삭제 - 전체
+     * 모든 멤버십 조회
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -33,9 +32,9 @@ public class MembershipApiController {
     }
 
     /**
-     * 개인 멤버십 조회
+     * 개인 멤버십 목록 조회
      */
-    @GetMapping("/accounts")
+    @GetMapping("/my-memberships")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MembershipListDTO> findAllMembershipsByAccount(
             final @AuthenticationPrincipal AccountDetails accountDetails
@@ -46,9 +45,9 @@ public class MembershipApiController {
     }
 
     /**
-     * 멤버십 등록 여부
+     * 멤버십 조회 - 현재 클럽 특정 멤버
      */
-    @GetMapping("/{clubId}")
+    @GetMapping("/{clubId}/member")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MembershipInfo> checkMember(
             final @PathVariable(value = "clubId") long clubId,
@@ -60,7 +59,19 @@ public class MembershipApiController {
     }
 
     /**
-     * 멤버십 조회
+     * 멤버십 목록 조회 - 현재 클럽 모든 멤버
+     */
+    @GetMapping("/{clubId}/memberships")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MembershipListDTO> currentClubMembershipInfoS(
+            @PathVariable(value = "clubId") long clubId) {
+        return ResponseEntity.ok().body(
+                membershipService.findAllByClub(clubId)
+        );
+    }
+
+    /**
+     * 멤버십 조회 - 쿼리
      */
     @PostMapping("/query")
     @ResponseStatus(HttpStatus.OK)
