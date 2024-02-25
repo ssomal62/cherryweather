@@ -7,18 +7,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
 @RequestMapping("/api/geolocation")
 public class GeoLocationController {
 
     private final GeoLocationService geoLocationService;
 
-    @PostMapping("/reqlocation")
-    public ResponseEntity<GeoLocationReqDto> getGeoLocation(@RequestBody Map<String,String > ipData) {
-        String clientIp = ipData.get("ip");
+    @GetMapping("/reqlocation")
+    public ResponseEntity<GeoLocationReqDto> getGeoLocation(@RequestParam("ip") String clientIp) {
         GeoLocationReqDto location = geoLocationService.getGeoLocation(clientIp);
         if(location != null) {
             return ResponseEntity.ok(location);
@@ -27,9 +25,8 @@ public class GeoLocationController {
         }
     }
 
-    @PostMapping("/reslocation")
-    public ResponseEntity<GeoLocationResDto> getGeoLocation2(@RequestBody Map<String,String > ipData) {
-        String clientIp = ipData.get("ip");
+    @GetMapping("/reslocation")
+    public ResponseEntity<GeoLocationResDto> getGeoLocation2(@RequestParam("ip") String clientIp) {
         GeoLocationResDto location = geoLocationService.convertLocation(clientIp);
         if(location != null) {
             return ResponseEntity.ok(location);

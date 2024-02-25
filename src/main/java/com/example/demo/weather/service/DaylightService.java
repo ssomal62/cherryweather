@@ -34,7 +34,6 @@ public class DaylightService {
 
     public DaylightDto getDaylightInfo(GeoLocationReqDto geoLocationReqDto) {
         String url = String.format("%s?serviceKey=%s&locdate=%s&longitude=%s&latitude=%s&dnYn=Y", baseUrl, serviceKey, baseDate, geoLocationReqDto.getLon(), geoLocationReqDto.getLat());
-        System.out.println("url : " + url);
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         return parseJsonToDto(response.getBody());
     }
