@@ -30,11 +30,11 @@ const GPTChatRoom = () => {
             setChatList(prevChatList => [...prevChatList, userInput]);
             console.log("채팅 리스트 요청 --- 요청시 :  "+chatList)
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+
             // 채팅 메시지를 백엔드로 전송하고 응답을 받아옴
             const response = await fetchChatMessages(userInput);
 
             // // 서버 응답을 채팅 리스트에 추가 후 화면 재출력
-            // setChatList(prevChatList => [...prevChatList, response]);
             console.log("채팅 리스트 요청 --- 요청 후  :  "+chatList)
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         } catch (error) {
@@ -43,6 +43,19 @@ const GPTChatRoom = () => {
     };
 
 
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             await fetchChatMessages(userInput); // 채팅 메시지 불러오기
+    //         } catch (error) {
+    //             console.error("채팅 메시지를 불러오는데 실패했습니다.", error);
+    //         }
+    //     };
+    //
+    //     fetchData();
+    //
+    // }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -53,10 +66,11 @@ const GPTChatRoom = () => {
             }
         };
 
-        fetchData(); // useEffect 안에서 직접 호출
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 호출되도록 함
+        // userMessages가 null인 경우에만 fetchData 함수 실행
+        if (userMessages.length === 0 && assistantMessages.length === 0) {
+            fetchData();
+        }
+    }, [userMessages]); // userMessages 값이 변경될 때마다 useEffect 실행
 
     console.log("userMessages : "+userMessages)
     console.log("assistantMessages : "+assistantMessages)
@@ -68,8 +82,13 @@ const GPTChatRoom = () => {
                         <div className="user_chat_data">
                             <div className="chat_section msg_history" id="chat-messages">
                                 {chatList.map((message, index) => (
-                                    <div key={index}
-                                         className={"chat-message " + (index % 2 === 0 ? "received-message" : "sent-message")}>
+                                    <div key={index} className={"chat-message " + (index % 2 === 0 ? "received-message" : "sent-message")}>
+
+                                        {index % 2 === 0 ? (
+                                            <strong>체리</strong>
+                                        ) : (
+                                            <strong>유저</strong>
+                                        )}
                                         <p>{message}</p>
                                     </div>
                                 ))}

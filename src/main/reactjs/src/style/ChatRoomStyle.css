@@ -146,16 +146,22 @@
   width: 33px;
 }
 
-.sent-message {
-  float: right;
-  /* 아바타를 오른쪽으로 이동 */
-  margin-left: 10px;
-  /* 아바타와 메시지 사이의 간격 조정 */
+.received-message {
+  background-color: #f2f2f2; /* 짝수 index일 때의 배경색 */
+  float: left; /* 왼쪽 정렬 */
+  margin-right: 10px; /* 우측 여백 */
+  padding: 10px; /* 내부 여백 */
+  border-radius: 10px; /* 테두리 둥글기 */
+  margin-bottom: 25px; /* 수직 간격 */
 }
 
-.received-message {
-  margin-right: 10px;
-  vertical-align: top;
+.sent-message {
+  background-color: #dcf8c6; /* 홀수 index일 때의 배경색 */
+  float: right; /* 오른쪽 정렬 */
+  margin-left: 10px; /* 좌측 여백 */
+  padding: 10px; /* 내부 여백 */
+  border-radius: 10px; /* 테두리 둥글기 */
+  margin-bottom: 25px; /* 수직 간격 */
 }
 
 .chat-nav {

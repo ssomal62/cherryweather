@@ -82,7 +82,7 @@ public class GPTServiceImpl implements GPTService {
                 .build());
         fixedMessages.add(Message.builder()
                 .role("user")
-                .content("안녕 너는 누구야? 네 소개와 함께 오늘의 온도로 옷을 추천해줄래?")
+                .content("안녕 너는 누구야? 네 소개와 함께 오늘의 온도로 옷을 추천해줄래? 3~4가지 스타일로 내가 선택할 수 있게 예시를 들어줘")
                 .build());
     }
 
