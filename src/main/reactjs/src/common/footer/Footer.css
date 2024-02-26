@@ -1,27 +1,18 @@
 html {
-    /*box-sizing: border-box;*/
     --bgColorMenu: white;
-    --duration: 0.35s; /*이동속도*/
-}
-
-html *::before,
-html *::after {
-    /*box-sizing: inherit;*/
+    --duration: 0.35s; /* 이동 속도 */
 }
 
 .menu {
     margin: 0;
     display: flex;
-    /* Works well with 100% width  */
     max-width: 600px;
     width: 100%;
-    font-size: 150%; /* 여기도 원형크기 조절  *!*/
+    font-size: 150%; /* 아이콘 및 텍스트 크기 조절 */
     padding: 0 10%;
     position: relative;
     align-items: center;
     justify-content: center;
-    /*border-top-left-radius: 7% 40%;*/
-    /*border-top-right-radius: 7% 40%;*/
     background-color: var(--bgColorMenu);
     border-top: 1px solid #e5e7eb;
     box-shadow: 0px -5px 15px rgba(0, 0, 0, 0.1); /* 상단 방향 그림자 */
@@ -37,35 +28,20 @@ html *::after {
     position: relative;
     border-radius: 50%;
     align-items: center;
-    will-change: transform;
     justify-content: center;
     padding: 1.6vh 0 1.6vh;
-    transition: transform var(--timeOut, var(--duration));
+    transition: transform var(--duration);
 }
 
 .menu__item::before {
     content: "";
     z-index: -1;
-    width: 3em; /* 아이콘 원형 사이즈*/
-    height: 3em; /* 아이콘 원형 사이즈*/
+    width: 3em; /* 아이콘 원형 사이즈 */
+    height: 3em; /* 아이콘 원형 사이즈 */
     border-radius: 50%;
     position: absolute;
     transform: scale(0);
-    transition: background-color var(--timeOut, var(--duration)), transform var(--duration);
-    /*background-color: var(--bgColorItem);*/
-
-}
-
-.animated {
-    transition: transform 300ms ease; /* 애니메이션 효과 적용 */
-}
-
-.no-transition::before {
-    transition: none !important;
-}
-
-.no-transform-transition {
-    transition: none !important;
+    transition: background-color var(--duration), transform var(--duration);
 }
 
 .menu__item.active {
@@ -74,7 +50,7 @@ html *::after {
 
 .menu__item.active::before {
     transform: scale(1);
-    background-color: var(--bgColorItem);
+    background-color: var(--bgColorItem); /* 활성 메뉴 아이템 배경색 */
 }
 
 .icon {
@@ -85,36 +61,10 @@ html *::after {
     stroke-miterlimit: 10;
     stroke-linecap: round;
     stroke-linejoin: round;
-    /*stroke-dasharray: 1400; !* 선의 전체 길이보다 충분히 큰 값 *!*/
 }
 
 .icon.active {
-    transition: stroke-dashoffset 1.5s ease-in-out; /* 애니메이션 효과 */
-    stroke: var(--bgColorMenu);
-}
-
-
-.menu__item.active .icon {
-    animation: strok 1.5s reverse;
-}
-
-@keyframes strok {
-    100% {
-        stroke-dashoffset: 400;
-    }
-}
-
-
-.menu__border {
-    left: -2.7%;
-    bottom: 99%;
-    width: 25%;
-    height: 1.9em;
-    position: absolute;
-    clip-path: url(#menu);
-    will-change: transform;
-    background-color: var(--bgColorMenu);
-    transition: transform var(--timeOut, var(--duration));
+    stroke: var(--bgColorMenu); /* 활성 아이콘 색상 */
 }
 
 .svg-container {
@@ -123,15 +73,12 @@ html *::after {
     width: 25%;
     height: 1.2em;
     position: absolute;
-    will-change: transform;
-    /*background-color: var(--bgColorMenu);*/
     filter: drop-shadow(0px -15px 10px rgba(0, 0, 0, 0.1));
-    transition: transform var(--timeOut, var(--duration));
+    transition: transform var(--duration);
 }
-
 
 @media screen and (max-width: 50em) {
     .menu {
-        font-size: 0.8em;
+        font-size: 0.8em; /* 작은 화면에서의 폰트 크기 조정 */
     }
 }
