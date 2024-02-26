@@ -1,19 +1,20 @@
 import React from 'react';
 import {Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from "@nextui-org/react";
+// import p1 from "../../assets/images/club/person/5.jpg";
 import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { IsLoginAtom } from '../../recoil/LoginAtom';
 import { instance } from '../../recoil/module/instance';
 import { userInfoState } from '../../recoil/hooks/UseFetchUserInfo';
-import avatar from '../../assets/icon/Avatar'
 
 const AvatarMenu = () => {
     const cookies = new Cookies();
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useRecoilState(IsLoginAtom);
     const userInfo = useRecoilValue(userInfoState)
-    const { profileName, email } = userInfo;
+    const { profileName, email, profileImage } = userInfo;
+    const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600&ttype=jpg`;
 
     // 로그아웃 함수
     const submitLogout = async () => {
@@ -29,7 +30,7 @@ const AvatarMenu = () => {
             };
         const res = await instance.delete("/auth/sign-out", { data : requestBody, ...config });
         console.log(res);
-        cookies.remove("accessToken");
+        cookies.remove("accessToken", { path: '/'});
         setIsLogin(false);
         navigate("/");
         } catch (error) {
@@ -47,7 +48,7 @@ const AvatarMenu = () => {
                     color="secondary"
                     name="Jason Hughes"
                     size="sm"
-                    src={avatar}
+                    src={imagwUrl}
                 />
 
             </DropdownTrigger>
@@ -61,7 +62,7 @@ const AvatarMenu = () => {
                 {/* <DropdownItem key="analytics">Analytics</DropdownItem>
                 <DropdownItem key="system">System</DropdownItem>
                 <DropdownItem key="configurations">Configurations</DropdownItem> */}
-                <DropdownItem key="settings">설정</DropdownItem>
+                <DropdownItem key="settings" onClick={()=>navigate("/mypage/setting")}>설정</DropdownItem>
                 <DropdownItem key="logout" color="danger" onClick={submitLogout}>
                     로그아웃
                 </DropdownItem>

@@ -19,7 +19,7 @@ const Mypage = () => {
         <IoArrowBack style={{width: 30, height: 30, color: 'black'}} onClick={()=>navigate("/")}/>
         </div>
         <TitleWapper><Title>마이페이지</Title></TitleWapper>
-        <IconWapper><SettingsIcon /></IconWapper>
+        <IconWapper onClick={()=>navigate("/mypage/setting")}><SettingsIcon /></IconWapper>
     </Nav>
         <Container>
         <Profile />
@@ -34,13 +34,12 @@ const Mypage = () => {
 
 export default Mypage;
 
-const Container = styled.div`
+export const Container = styled.div`
     margin: auto;
     padding: 10px 0 48px;
     padding-bottom: calc(env(safe-area-inset-bottom) + 48px);
     max-width: 600px;
-    diyplay: block;
-
+    display: block;
 `;
 
 const SettingsIcon = styled(LuSettings)`
@@ -50,7 +49,6 @@ margin: 0 0 0 auto;
 position: relative;
 width: 24px;
 height: 24px;
-
 `;
 
 export const IconWapper = styled.div`

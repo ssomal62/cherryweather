@@ -14,6 +14,8 @@ public class ModifyUserInfoRequestDto {
     private String profileImage;
     private List<String> interests;
     private List<ActivityAreaModification> activityAreas;
+    private Boolean agreementGetNotified;
+
 
     @Data
     public static class ActivityAreaModification {
