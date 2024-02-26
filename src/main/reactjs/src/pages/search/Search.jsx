@@ -74,10 +74,8 @@ const Search = () => {
                     setInputValue={setInputValue}
                     inputValue={inputValue}
                 />
-                    <br/>
-
+                <br/>
                 {renderContent}
-
             </AnimationRightInWrapper>
         </Layout>
     );

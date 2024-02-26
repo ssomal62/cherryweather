@@ -38,10 +38,11 @@ const SearchResult = ({requestData}) => {
 
     const renderComponent = () => {
         switch(selected) {
-            case 'club':
-                return <ClubSearchResult clubList={clubList}/>;
             case 'event':
                 return <EventSearchResult />;
+            case 'club':
+            default:
+                return <ClubSearchResult clubList={clubList}/>;
         }
     };
 
