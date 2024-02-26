@@ -17,13 +17,12 @@ const WeatherDetail = () => {
             위성 화면
             <SatelliteImageViewer/>
             주간 날씨
-
-
+            ---
             미세먼지
 
             ...
             ...
-<div style={{marginBottom:'100px'}}>123</div>
+            <div style = {{marginBottom: '100px'}}>123</div>
         </Layout>
     );
 };

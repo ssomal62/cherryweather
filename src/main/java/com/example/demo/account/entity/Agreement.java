@@ -28,4 +28,8 @@ public class Agreement {
     @Column(name = "AGREEMENT_GET_NOTIFIED", nullable = false)
     private boolean agreementGetNotified;
 
+    public void updateNotification(final boolean isNotification) {
+        this.agreementGetNotified = isNotification;
+    }
+
 }
