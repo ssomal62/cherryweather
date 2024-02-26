@@ -22,7 +22,13 @@ const AddClubNameInput = ({onNext, name, setName}) => {
             <br/><br/>
 
             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                <Input type="text" variant='underlined' radius='lg'  placeholder="이름을 작성해주세요 (2자 이상)" value={name} onChange={handleNameChange}
+                <Input type="text"
+                       variant='underlined'
+                       radius='lg'
+                       placeholder="이름을 작성해주세요 (2자 이상)"
+                       value={name}
+                       autoFocus
+                       onChange={handleNameChange}
                 style={{fontSize:20, fontWeight:600}}
                 />
             </div>

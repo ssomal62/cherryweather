@@ -65,8 +65,8 @@ public class SignUpRequestDto {
                 .gender(this.gender)
                 .dateOfBirth(this.birthdate)
                 .profileName(this.profileName)
-                .profileImage("기본이미지 넣어야함")
-                .rating("13도")// DB에 맞게 형식 변환 필요
+                .profileImage("default_image.jpg")
+                .rating("36.5")
                 .registerType(LOCAL)
                 .userStatus(ACTIVE)
                 .userRole(ROLE_CUSTOMER)

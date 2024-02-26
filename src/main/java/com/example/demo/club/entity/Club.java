@@ -94,6 +94,8 @@ public class Club {
         this.description = requestDTO.description();
         this.category = requestDTO.category();
         this.subCategory = requestDTO.subCategory();
+        this.code = requestDTO.code();
+        this.notice = requestDTO.notice();
         this.status = requestDTO.status();
         this.joinApprovalStatus = requestDTO.joinApprovalStatus();
         this.activitiesArea = requestDTO.activitiesArea();

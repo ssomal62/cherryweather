@@ -1,9 +1,6 @@
 package com.example.demo.account.service;
 
-import com.example.demo.account.dto.AccountDetails;
-import com.example.demo.account.dto.ModifyUserInfoRequestDto;
-import com.example.demo.account.dto.SignUpRequestDto;
-import com.example.demo.account.dto.UserInfoDto;
+import com.example.demo.account.dto.*;
 import com.example.demo.account.entity.Account;
 import com.example.demo.auth.dto.oauth.OAuthAccountInfoDto;
 import org.springframework.http.ResponseEntity;
@@ -22,5 +19,9 @@ public interface AccountService {
     Account findAccountByEmail(final String email);
 
     void deleteAccount(final @AuthenticationPrincipal AccountDetails accountDetails);
+
+    void modifyNotification(final @AuthenticationPrincipal AccountDetails accountDetails, final AgreementUpdateDto agreementUpdateDto);
+
+    void changePassword(final @AuthenticationPrincipal AccountDetails accountDetails, final String newPassword);
 
 }

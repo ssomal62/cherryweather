@@ -1,16 +1,14 @@
 import React from "react";
 import Layout from "../common/Layout";
 import TodayWeather from "../components/weather/TodayWeather";
+import SampleFrame from "./weather/SampleFrame";
+
 
 const Home = () => {
     return (
-        <Layout containerMargin="0" containerPadding="0">
+        <Layout containerMargin="20px 0 0 0" containerPadding="20px 0 0 0">
+            <SampleFrame/>
             <TodayWeather/>
-            <img
-                alt=""
-                src={require("../assets/images/defalut/sample_main.png")}
-                style={{borderRadius: 30}}
-            />
         </Layout>
     );
 };

@@ -6,12 +6,14 @@ import com.example.demo.club.dto.ClubDetailDTO;
 import com.example.demo.club.dto.ClubListDTO;
 import com.example.demo.club.dto.CreateClubDTO;
 import com.example.demo.club.dto.UpdateClubDTO;
+import com.example.demo.club.entity.Club;
 import com.example.demo.club.service.ClubService;
 import com.example.demo.common.service.FileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,12 +27,15 @@ public class ClubApiController {
     private final FileService fileService;
 
     /**
-     * 클럽 목록 전체 조회 (필터 없음)
+     * 클럽 목록 전체
+     * <p>accessToken이 존재하면 클럽 좋아요 정보를 추가로 담아 목록을 반환합니다.</p>
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated() or isAnonymous()")
     //@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ClubListDTO> findAllClubs() {
+    public ResponseEntity<ClubListDTO> findAll() {
+
         return ResponseEntity.ok()
                 .body(clubService.findAll());
     }
@@ -40,12 +45,13 @@ public class ClubApiController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> createClub(
+    public ResponseEntity<Club> createClub(
             final @Valid @RequestBody CreateClubDTO requestDTO,
             final @AuthenticationPrincipal AccountDetails accountDetails
             ) {
-        clubService.saveClub(requestDTO, accountDetails);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(
+                clubService.saveClub(requestDTO, accountDetails)
+        );
     }
 
     /**
@@ -77,6 +83,7 @@ public class ClubApiController {
      */
     @GetMapping("/{clubId}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated() or isAnonymous()")
     public ResponseEntity<ClubDetailDTO> findClub(@PathVariable(value="clubId") long clubId) {
         return ResponseEntity.ok().body(
                 clubService.findDetail(clubId)

@@ -6,6 +6,7 @@ import com.example.demo.club.entity.Club;
 import com.example.demo.membership.dto.UpdateMembership;
 import com.example.demo.membership.enums.ClubRole;
 import com.example.demo.membership.enums.RegisteredStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,16 +36,15 @@ public class Membership {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private Account account;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
+    @JsonIgnore
     private Club club;
 
-    @Column
-    private String screenName;
-
-    @Column
+    @Column(name ="role")
     @Enumerated(EnumType.STRING)
     private ClubRole role;
 
@@ -52,17 +52,19 @@ public class Membership {
     @Enumerated(EnumType.STRING)
     private RegisteredStatus status;
 
+    @JsonIgnore
     @Column
     private Long updatedUserId;
 
+    @JsonIgnore
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
     public void updateMembership(UpdateMembership requestDTO) {
-        this.screenName = requestDTO.screenName();
         this.status = requestDTO.status();
         this.role = requestDTO.role();
         this.updatedUserId = requestDTO.updatedUserId();

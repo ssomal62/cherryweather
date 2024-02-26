@@ -1,6 +1,7 @@
 package com.example.demo.club.service;
 
 
+import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.club.dto.ClubListDTO;
 import com.example.demo.club.dto.ClubQueryDTO;
 import com.example.demo.club.entity.Club;
@@ -23,9 +24,10 @@ import java.util.Optional;
 public class ClubQueryService {
 
     private final ClubQueryRepository clubQueryRepository;
+    private final ClubService clubService;
 
     @Transactional
-    public ClubListDTO findAllByConditions(ClubQueryDTO requestDTO) {
+    public ClubListDTO findAllByConditions(ClubQueryDTO requestDTO, Optional<AccountDetails> accountDetailsOptional) {
 
         Specification<Club> spec = Specification.where(null);
 
@@ -37,7 +39,7 @@ public class ClubQueryService {
         spec = buildSpecificationForCreatedAt(requestDTO.createdAt(), spec);
 
         List<Club> clubs = clubQueryRepository.findAll(spec);
-        return ClubListDTO.fromClubs(clubs);
+        return clubService.fromClubs(clubs, accountDetailsOptional);
     }
 
     //==============  private method  ==============//

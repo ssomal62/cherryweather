@@ -3,11 +3,10 @@ import {Input, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure} from 
 import DaumPostcode from "react-daum-postcode";
 import {HiLocationMarker} from "react-icons/hi";
 import {LuAlertCircle} from "react-icons/lu";
-import FinishButton from "./FinishButton";
-import UpdateButton from "./UpdateButton";
+import NextButton from "./NextButton";
 
 
-const AddClubInputActivitiesArea = ({onSave, activitiesArea, onUpdate, setActivitiesArea, isClubId}) => {
+const AddClubInputActivitiesArea = ({onNext, activitiesArea, setActivitiesArea}) => {
 
     const [isNextDisabled, setIsNextDisabled] = useState(true);
     const [selectedArea, setSelectedArea] = useState(activitiesArea);
@@ -64,11 +63,8 @@ const AddClubInputActivitiesArea = ({onSave, activitiesArea, onUpdate, setActivi
                 </ModalContent>
             </Modal>
 
-            {isClubId ? (
-                <UpdateButton isNextDisabled={isNextDisabled} onUpdate={onUpdate} text="Update" />
-            ) : (
-                <FinishButton isNextDisabled={isNextDisabled} onSave={onSave} text="Save" />
-            )}
+            <NextButton isNextDisabled={isNextDisabled} onNext={onNext}/>
+
         </>
     );
 };
