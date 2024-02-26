@@ -57,7 +57,7 @@ function Adminchat(props) {
       console.log("getChatInfo");
       console.log("accountId: " + accountData.accountId);
       const response = await instance.get(
-        `/chat/getonetonechat?accountId=${accountData.accountId}&raccountId=1`
+        `/chat/getonetonechat?accountId=${accountData.accountId}&raccountId=50`
       );
       console.log("response: ", response);
       return response.data;
@@ -72,12 +72,12 @@ function Adminchat(props) {
         const chatroom = chatInfo.chatRoom;
         if (chatroom) {
           await nc.disconnect();
-          navi(`/chat/room/${chatroom}/1`);
+          navi(`/chat/room/${chatroom}/50`);
         } else {
           // chatroom == null 일 경우
           const newchannel = await nc.createChannel({
             type: "PUBLIC",
-            name: "관리자 채팅방",
+            name: `${accountData.name}님과 관리자의 채팅방`,
           });
           const newChatId = newchannel.id;
           const res = await instance.post(
@@ -86,7 +86,20 @@ function Adminchat(props) {
               "&chatRoom=" +
               newChatId +
               "&raccountId=" +
-              1
+              50 +
+              "&chatName=" +
+              `${newchannel.name}`
+          );
+
+          await instance.post(
+            "/chat/createchatroom?accountId=" +
+              50 +
+              "&chatRoom=" +
+              newChatId +
+              "&raccountId=" +
+              accountData.accountId +
+              "&chatName=" +
+              `${newchannel.name}`
           );
 
           console.log("res : ", res);
@@ -94,7 +107,7 @@ function Adminchat(props) {
           await nc.subscribe(newChatId);
           // 채팅방으로 이동
           await nc.disconnect();
-          navi(`/chat/room/${newChatId}/1`);
+          navi(`/chat/room/${newChatId}/50`);
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);

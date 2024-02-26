@@ -42,8 +42,12 @@ public class Chat {
     @Column
     private String chatRoom;
 
+    @Column
+    private String chatName;
 
-
+    public Long getAccountId() {
+        return account.getAccountId();
+    }
 }
 // 본인 사진
 //    @Column

@@ -9,10 +9,11 @@ import {
 } from "@nextui-org/react";
 import "../../style/ChatUserInfoStyle.css";
 import { instance } from "../../recoil/module/instance";
+import PersonalChat from "./PersonalChat";
 
-function ChatUserInfo({ selectedMsg }) {
+function ChatUserInfo({ selectedMsg, accountData, nc }) {
   const [userInfo, setUserInfo] = useState(null);
-
+  const [isChatClicked, setIsChatClicked] = useState(false);
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -27,6 +28,10 @@ function ChatUserInfo({ selectedMsg }) {
     };
     getUserInfo();
   }, [selectedMsg]);
+
+  const handlePersonalChat = () => {
+    setIsChatClicked(!isChatClicked);
+  };
   return (
     <>
       {userInfo && (
@@ -62,8 +67,16 @@ function ChatUserInfo({ selectedMsg }) {
             radius="md"
             size="sm"
             style={{ display: "flex" }}
+            onClick={handlePersonalChat}
           >
             1:1 채팅
+            {isChatClicked && (
+              <PersonalChat
+                userInfo={userInfo}
+                accountData={accountData}
+                nc={nc}
+              />
+            )}
           </Button>
           {/* <CardFooter className="gap-3">
             <div className="flex gap-1">

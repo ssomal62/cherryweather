@@ -94,7 +94,7 @@ const ClubJoinButton = () => {
             radius="lg"
             style={{ marginRight: "2%", height: "70%" }}
           >
-            <ClubChat club={clubDetail.clubId} />
+            <ClubChat club={clubDetail} />
           </Button>
         );
       case "WAITING":

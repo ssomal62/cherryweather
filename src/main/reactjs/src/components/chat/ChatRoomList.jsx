@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import * as ncloudchat from "ncloudchat";
 import { Link, useNavigate } from "react-router-dom";
-import { Badge, Avatar, Button } from "@nextui-org/react";
+import { Badge, Avatar, Button, Divider, Tabs, Tab } from "@nextui-org/react";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
+import Layout from "../../common/Layout";
+import { MdOutlinePadding } from "react-icons/md";
+import ChatRoomListClub from "./ChatRoomListClub";
+import ChatRoomListPersonal from "./ChatRoomListPersonal";
 
 const ChatRoomList = () => {
   const [ncloud, setNcloud] = useState("");
   const [channels, setChannels] = useState([]);
   const [channelName, setChannelName] = useState([]);
   const [accountData, setAccountData] = useState("");
-  const [clubId, setClubId] = useState({});
   const cookies = new Cookies();
   const navi = useNavigate();
-  const [admin, setAdmin] = useState(false);
   const [lastMessages, setLastMessages] = useState({});
-  const [selectedChannel, setSelectedChannel] = useState("");
 
   const accountCheck = async () => {
     try {
@@ -117,151 +118,65 @@ const ChatRoomList = () => {
     }
   };
 
-  const handleCreateChannel = async () => {
-    navi("/chat/admin");
+  const tabs = [
+    { id: "club", label: "클럽" },
+    { id: "personal", label: "개인" },
+  ];
+  const [selectedTab, setSelectedTab] = useState("club");
+  const handleTabChange = (value) => {
+    setSelectedTab(value);
+    console.log("선택", value);
+  };
+
+  const renderComponent = () => {
+    switch (selectedTab) {
+      case "club":
+        return (
+          <ChatRoomListClub channelName={channelName} channels={channels} />
+        );
+      case "personal":
+        return (
+          <ChatRoomListPersonal channelName={channelName} channels={channels} />
+        );
+      default:
+        // 다른 라우팅 처리 또는 반환 로직 추가
+        return null;
+    }
   };
 
   return (
-    <div>
-      <div>
-        <Button
-          onClick={handleCreateChannel}
-          style={{
-            position: "absolute",
-            right: "10px",
-            top: "70px",
-            backgroundColor: "#F31260",
-            color: "white",
-          }}
-        >
-          관리자와의 채팅
-        </Button>
-      </div>
+    <Layout containerMargin="0" MdOutlinePadding="0">
+      <Tabs
+        variant="underlined"
+        aria-label="Options"
+        fullWidth
+        size="lg"
+        className="mb-5"
+        onSelectionChange={handleTabChange}
+        item={tabs}
+        selectedKey={selectedTab}
+      >
+        {tabs.map((item) => (
+          <Tab
+            key={item.id}
+            title={item.label}
+            value={item.id}
+            style={styles.title}
+            selectedKey={selectedTab}
+          />
+        ))}
+      </Tabs>
+      {renderComponent()}
       {/* <h2 style={{ fontSize: 20, fontWeight: 400 }}>참여한 채팅</h2> */}
-      {channels.length === 0 ? (
-        <div>No chat rooms available</div>
-      ) : (
-        channels.map((channel, index) => (
-          <Link
-            key={channel.chatId}
-            to={`/chat/room/${channel.chatRoom}/
-            ${channel.clubId != null ? channel.clubId : channel.raccountId}`}
-            channelName={channelName[index].name}
-          >
-            <div className="channel-list" style={{ marginTop: "60px" }}>
-              <Badge className="list-photo">
-                <Avatar
-                  radius="md"
-                  size="lg"
-                  src="https://i.pravatar.cc/300?u=a042581f4e29026709d"
-                />
-                <div style={{ marginLeft: "10px", marginTop: "15px" }}>
-                  <span>{channelName[index].name}</span>
-                </div>
-              </Badge>
-            </div>
-          </Link>
-        ))
-      )}
-    </div>
+      <Divider />
+    </Layout>
   );
 };
-
 export default ChatRoomList;
 
-// if (ncloud) {
-//   try {
-//     const response = await instance.get(
-//       `/chat/getchatinfo?accountId=${accountData.accountId}`
-//     );
-//     const chatid = response.data.chatid;
-//     if (chatid) {
-//       await ncloud.disconnect();
-//       navi(`/chating/room/${chatid}`);
-//     } else {
-//       const newchannel = await ncloud.createChannel({
-//         type: "PUBLIC",
-//         name: "관리자 채팅방",
-//       });
-//       setChannels([...channels, { node: newchannel }]);
-//       await instance.post(
-//         "/chat/insertchatroom?accountid=" +
-//           accountData.accountId +
-//           "&chatRoom=" +
-//           newchannel
-//       );
-//       await ncloud.subscribe(newchannel.id);
-//       navi(`/chating/room/"${newchannel.id}"`);
-//     }
-//   } catch (error) {
-//     console.error("Error creating and subscribing channel:", error);
-//   }
-// }
-// const handleChannelSelect = async (channelId, receiverNum, pramunum) => {
-//   setSelectedChannel(channelId);
-
-//   if (ncloud) {
-//     await ncloud.subscribe(channelId);
-//     await ncloud.disconnect();
-//     if (accountData.accountId == pramunum) {
-//       navi(`/chating/room/${channelId}/${receiverNum}`);
-//     } else {
-//       navi(`/chating/room/${channelId}/${pramunum}`);
-//     }
-//   }
-// };
-
-// useEffect(() => {
-//   const initializeChat = async () => {
-//     try {
-//       const accessToken = cookies.get("accessToken");
-//       const config = {
-//         headers: {
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//       };
-
-//       const res = await instance.get("/account/user-info", config);
-//       setAccountData(res.data);
-//       console.log("res.data : ", res.data);
-
-//       // const config2 = {
-//       //     headers: {
-//       //         //제이슨타입
-//       //         'Content-Type': 'application/json',
-//       //         //바디 폼데이터
-//       //     },
-//       // }
-
-//       // const formData = {
-//       //     "clubId": 19,
-//       // }
-
-//       // const res2 = await instance.post('/membership/query', {});
-//       // setClubId(res2.data);
-//       // console.log('res2 : ', res2);
-
-//       const chat = new ncloudchat.Chat();
-//       chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");
-//       await chat.connect({
-//         id: accountData.email,
-//         name: accountData.name,
-//         profile: accountData.profileImage,
-//         customField: "json",
-//       });
-
-//       const filter = { state: true };
-//       const sort = { created_at: -1 };
-//       const option = { offset: 0, per_page: 100 };
-//       const response = await chat.getChannels(filter, sort, option);
-//       const channelsData = response.edges ? response.edges : [];
-//       const fetchedChannels = channelsData.map((edge) => edge.node);
-//       setChannels(fetchedChannels);
-//       setNcloud(chat);
-//     } catch (error) {
-//       console.error("Error initializing chat:", error);
-//     }
-//   };
-
-//   initializeChat();
-// }, []);
+const styles = {
+  title: {
+    fontSize: 20,
+    fontWeight: 900,
+  },
+};

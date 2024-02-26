@@ -286,11 +286,10 @@ public class AccountServiceImpl implements AccountService {
             throw new AuthException(INVALID_ID_OR_PW);
         }
     }
-    @Override
-    @Transactional(readOnly = true)
+
     public ResponseEntity<UserInfoDto> getUserInfoByEmail(String email) {
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT)); // 계정 정보 재조회
-        return ResponseEntity.ok().body(new UserInfoDto(account, null, null));
+        return ResponseEntity.ok().body(new UserInfoDto(account, null, null, false));
     }
 }

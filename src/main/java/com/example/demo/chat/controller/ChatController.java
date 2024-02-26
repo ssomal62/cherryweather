@@ -42,6 +42,7 @@ public class ChatController {
         return chatService.getOneToOneChatInfo(accountId, raccountId);
     }
 
+
     // clubId로 채팅방을 찾는 메소드 정의
     @GetMapping("/getchatroombyclubid")
     public List<String> getChatRoomByClubId(@RequestParam int clubId) {
@@ -51,16 +52,20 @@ public class ChatController {
 
     // 채팅방 생성
     @PostMapping("/insertclubchatroom")
-    public void insertClubChat(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int clubId) {
-        chatService.insertClubChatRoom(accountId, chatRoom, clubId);
+    public void insertClubChat(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int clubId, @RequestParam String chatName) {
+        chatService.insertClubChatRoom(accountId, chatRoom, clubId, chatName);
     }
 
     @PostMapping("/createchatroom")
-    public void insertChatRoom(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int raccountId) {
-        chatService.insertChatRoom(accountId, chatRoom, raccountId);
+    public void insertChatRoom(@RequestParam int accountId, @RequestParam String chatRoom, @RequestParam int raccountId, String chatName) {
+        chatService.insertChatRoom(accountId, chatRoom, raccountId, chatName);
     }
 
-
+    // 채팅방 삭제
+    @DeleteMapping("/deletechatroom")
+    public void deleteChatRoom(@RequestParam int chatId, @RequestParam String chatRoom) {
+        chatService.deleteChatRoom(chatId, chatRoom);
+    }
 
 }
 

@@ -12,5 +12,6 @@ public class ChatListDto {
     private Long clubId;
     private String chatRoom;
     private Long raccountId;
+    private String chatName;
 
 }

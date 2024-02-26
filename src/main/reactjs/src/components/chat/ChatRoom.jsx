@@ -6,32 +6,32 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Textarea, User, useDisclosure } from "@nextui-org/react";
 import { IoIosArrowBack } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { TbCherryFilled } from "react-icons/tb";
+import { BsSend } from "react-icons/bs";
 import Layout from "../../common/Layout";
 import { Cookies } from "react-cookie";
 import { instance } from "../../recoil/module/instance";
 import ChatUserInfo from "./ChatUserInfo";
-import ChatUserList from "./ChatUserList";
 import ChatUserListModal from "./ChatUserList";
+import { HiOutlinePaperClip } from "react-icons/hi";
 
 const ChatRoom = () => {
-  const [ncloud, setNcloud] = useState("");
+  const [ncloud, setNcloud] = useState(null);
   const [accountData, setAccountData] = useState("");
   const { chatRoom } = useParams();
   const [channels, setChannels] = useState([]);
   const [channelName, setChannelName] = useState([]);
-  const [currentChannelId, setCurrentChannelId] = useState("");
+  const [currentChannelId, setCurrentChannelId] = useState({});
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
   const messagesEndRef = useRef(null);
   const cookies = new Cookies();
   const navi = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMsg, setSelectedMsg] = useState({});
 
   useEffect(() => {
     const initializeChat = async () => {
-      const chat = new ncloudchat.Chat();
-      await chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");
-      setNcloud(chat);
       const accessToken = cookies.get("accessToken");
       const config = {
         headers: {
@@ -43,6 +43,9 @@ const ChatRoom = () => {
       setAccountData(res.data);
       console.log("accountData : ", accountData);
       console.log("ncloud : " + ncloud);
+      const chat = new ncloudchat.Chat();
+      await chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");
+      setNcloud(chat);
       chat.bind("onMessageReceived", async function (channel, message) {
         setMessages((prevMessages) => {
           const isDuplicate = prevMessages.some(
@@ -159,9 +162,6 @@ const ChatRoom = () => {
     };
   }, [ncloud]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMsg, setSelectedMsg] = useState({});
-
   const openModal = () => {
     setIsModalOpen(true);
     document.body.classList.add("modal-opened-body");
@@ -175,7 +175,6 @@ const ChatRoom = () => {
   const handleAvatarClick = (message) => {
     setSelectedMsg(message);
   };
-  console.log("채널 정보 :", channels);
 
   useEffect(() => {
     for (const channel of channels) {
@@ -186,22 +185,50 @@ const ChatRoom = () => {
       }
     }
   }, [channels, chatRoom]);
+  // 채팅방 나가기
+  useEffect(() => {
+    const fetchCurrentChatId = async () => {
+      try {
+        const response = await instance.get(
+          `/chat/getchatlist?accountId=${accountData.accountId}`
+        );
+        console.log("현재 채널", response.data);
+        const currentChat = response.data.find(
+          (chat) => chat.chatRoom === chatRoom
+        );
+        console.log("currentChat", currentChat);
+        setCurrentChannelId(currentChat);
+      } catch (error) {
+        console.error("Error occurred: ", error);
+      }
+    };
 
-  console.log("채널 이름 : ", channelName);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+    fetchCurrentChatId();
+  }, [accountData.accountId, chatRoom]);
 
-  const [userModal, setUserModal] = useState(false);
+  const disconnectChat = async () => {
+    if (currentChannelId) {
+      const message = {
+        type: "text",
+        message: `${accountData.name}님이 채팅방을 나갔습니다.`,
+      };
+      await ncloud.sendMessage(chatRoom, message);
+      await ncloud.unsubscribe(chatRoom);
+      await instance.delete(
+        `/chat/deletechatroom?chatId=${currentChannelId.chatId}&chatRoom=${chatRoom}`
+      );
 
-  const openuserModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeuserModal = () => {
-    setIsModalOpen(false);
+      navi("/chat");
+    }
   };
 
   return (
-    <Layout useHeader={false} useFooter={false} containerPadding="0">
+    <Layout
+      useHeader={false}
+      useFooter={false}
+      containerMargin="0"
+      containerPadding="0"
+    >
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-12">
@@ -210,7 +237,11 @@ const ChatRoom = () => {
                 <div className="chat-nav">
                   <span>
                     <IoIosArrowBack
-                      style={{ fontSize: "20px", cursor: "pointer" }}
+                      style={{
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        marginLeft: "10px",
+                      }}
                       onClick={() => navi("/chat")}
                     />
                   </span>
@@ -222,12 +253,19 @@ const ChatRoom = () => {
                         float: "right",
                         cursor: "pointer",
                         fontSize: "20px",
+                        marginRight: "10px",
                       }}
-                      onClick={openuserModal}
+                      onClick={onOpen}
                     ></GiHamburgerMenu>
                   </span>
                 </div>
-                {isModalOpen && <ChatUserListModal onClose={closeModal} />}
+
+                <ChatUserListModal
+                  disconnectChat={disconnectChat}
+                  channelName={channelName}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                />
 
                 {/* 현재 채널의 메시지 표시 */}
                 {messages.map &&
@@ -281,9 +319,25 @@ const ChatRoom = () => {
                           <strong>{message.sender.name}</strong>
                         )}
                         <div>{message.content}</div>
-                        <div style={{ fontSize: "10px" }}>
-                          {new Date(message.created_at).toLocaleString()}
-                        </div>
+                        <div style={{ fontSize: "10px" }}></div>
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "10px",
+                          textAlign:
+                            message.sender.id === accountData.email
+                              ? "right"
+                              : "left",
+                          marginLeft:
+                            message.sender.id === accountData.email
+                              ? "0"
+                              : "58px",
+                        }}
+                      >
+                        {new Date(message.created_at).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </div>
                     </div>
                   ))}
@@ -294,6 +348,8 @@ const ChatRoom = () => {
                       className="modal-overlay"
                       onClick={closeModal}
                       selectedMsg={selectedMsg}
+                      accountData={accountData}
+                      nc={ncloud}
                     />
                   </div>
                 )}
@@ -302,39 +358,41 @@ const ChatRoom = () => {
               {/* 메시지 입력 및 전송 UI */}
               <div
                 className="type_msg"
-                style={{ position: "fixed", width: "300px" }}
+                style={{ position: "fixed", bottom: 0, width: "100%" }}
               >
-                <div className="input_msg_write">
-                  <form onSubmit={handleSubmit}>
-                    <Textarea
-                      label="Description"
-                      placeholder="Enter your description"
-                      className="max-w-xs write_msg"
-                      type="text"
-                      variant="underlined"
-                      value={userInput}
-                      onChange={handleUserInput}
+                <form
+                  onSubmit={handleSubmit}
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <Textarea
+                    placeholder="메시지를 입력해주세요."
+                    className="write_msg"
+                    type="text"
+                    variant="underlined"
+                    value={userInput}
+                    onChange={handleUserInput}
+                    bordered
+                    style={{ flexGrow: 1 }} // 메시지 입력란이 남은 공간을 모두 차지하도록 설정
+                  />
+                  <HiOutlinePaperClip
+                    className="img_send_btn"
+                    style={{
+                      color: "#F31260",
+                      cursor: "pointer",
+                      alignContent: "left",
+                    }}
+                  >
+                    <input
+                      type="file"
+                      id="uploadfile"
+                      name="file"
+                      // onChange={fileUpload}
                     />
-                    {/* <Input
-                      type="text"
-                      variant="underlined"
-                      className="write_msg"
-                      placeholder="Type a message"
-                      value={userInput}
-                      onChange={handleUserInput}
-                    /> */}
-                    <button type="submit" className="msg_send_btn">
-                      <TbCherryFilled
-                        style={{
-                          fontSize: "30px",
-                          color: "#F31260",
-                          marginLeft: "35px",
-                          marginTop: "10px",
-                        }}
-                      />
-                    </button>
-                  </form>
-                </div>
+                  </HiOutlinePaperClip>
+                  <button type="submit" className="msg_send_btn">
+                    <BsSend style={{ color: "#F31260" }} />
+                  </button>
+                </form>
               </div>
             </div>
           </div>

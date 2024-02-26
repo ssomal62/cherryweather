@@ -64,7 +64,7 @@ const AddEvent = () => {
   };
 
   return (
-    <Layout useHeader={false} useFooter={false}>
+    <div>
       <Nav>
         <div style={{ flex: "1px" }}>
           <IoArrowBack
@@ -222,7 +222,7 @@ const AddEvent = () => {
       <div className="bottom-0 left-0 right-0">
         <CreateButton text="생성" />
       </div>
-    </Layout>
+    </div>
   );
 };
 

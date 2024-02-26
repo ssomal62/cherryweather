@@ -1,7 +1,6 @@
 package com.example.demo.chat.service;
 
 
-import com.example.demo.account.service.AccountService;
 import com.example.demo.chat.dto.ChatListDto;
 import com.example.demo.chat.entity.Chat;
 import com.example.demo.chat.repository.ChatRepository;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 public class ChatService {
 
     private final ChatRepository chatRepository;
-    private final AccountService accountService;
 
     @Transactional
     public String getChatIdByAccountId(int accountId) {
@@ -41,19 +39,20 @@ public class ChatService {
                             accountIdFromChat,
                             clubId,
                             chat.getChatRoom(),
-                            raccountId
+                            raccountId,
+                            chat.getChatName()
                     );
                 })
                 .collect(Collectors.toList());
     }
     @Transactional
     public Chat getOneToOneChatInfo(long accountId, long raccountId) {
-        // raccountId가 1인 것만 조회
         Chat chat = chatRepository.findByAccountAccountIdAndRaccountId(accountId, raccountId);
 
         // 조회된 채팅 정보를 문자열로 반환 (여기서는 간단히 chat.toString()을 사용)
         return chat;
     }
+
 
     @Transactional
     public String getChatInfoByClubId(int clubId) {
@@ -63,20 +62,20 @@ public class ChatService {
             return chatRooms.get(0).toString();
         } else {
             // 채팅방이 없을 때 처리
-            return "null";
+            return null;
         }
     }
 
 
     // 채팅방을 생성하는 메소드 정의
     @Transactional
-    public void insertClubChatRoom(int accountId, String chatRoom, int clubId) {
-        chatRepository.insertClubChatRoom(accountId, chatRoom, clubId);
+    public void insertClubChatRoom(int accountId, String chatRoom, int clubId, String chatName) {
+        chatRepository.insertClubChatRoom(accountId, chatRoom, clubId, chatName);
     }
 
     @Transactional
-    public void insertChatRoom(int accountId, String chatRoom, int raccountid) {
-        chatRepository.insertChatRoom(accountId, chatRoom, raccountid);
+    public void insertChatRoom(int accountId, String chatRoom, int raccountid, String chatName) {
+        chatRepository.insertChatRoom(accountId, chatRoom, raccountid, chatName);
     }
 
 
@@ -91,9 +90,12 @@ public class ChatService {
             return chatRooms.get(0);
         } else {
             // 채팅방이 없을 때 처리
-            return "null";
+            return null;
         }
     }
 
-
+    @Transactional
+    public void deleteChatRoom(int chatId, String chatRoom) {
+        chatRepository.deleteByChatIdAndChatRoom(chatId, chatRoom);
+    }
 }
