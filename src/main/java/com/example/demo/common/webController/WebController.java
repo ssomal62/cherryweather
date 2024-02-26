@@ -14,8 +14,9 @@ public class WebController {
             "/chat","/chat/admin","/chat/room/**",
             "/ai", "/gpt", "/image", "/imageList",
             "/weatherDetail","/community/**",
-            "/oauth/callback/naver","/modify/profile", "/mypage/setting"
+            "/oauth/callback/naver","/modify/profile", "/mypage/setting", "/chat/room/:chatRoom/", "/alarm"
     })
+
     public String accountRoute() {
         return "forward:/index.html";
     }
