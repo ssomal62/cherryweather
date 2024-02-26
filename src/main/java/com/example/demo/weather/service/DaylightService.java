@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.JSON_PARSING_FAILED;
@@ -21,9 +22,11 @@ import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.JSO
 public class DaylightService {
 
     private final RestTemplate restTemplate;
+
+    private final ZoneId korTimeZone = ZoneId.of("Asia/Seoul");
     private final String baseUrl = "https://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
 
-    private final String baseDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    private final String baseDate = LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
     @Value("${weather.kma.serviceKey}")
     private String serviceKey;

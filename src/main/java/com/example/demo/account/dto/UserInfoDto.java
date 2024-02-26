@@ -21,10 +21,11 @@ public class UserInfoDto {
     String profileImage;
     List<String> interests;
     List<ActivityAreaInfo> activityAreas;
+    boolean agreementGetNotified;
 
 
     // 생성자를 통해 모든 필드를 초기화합니다.
-    public UserInfoDto(Account account, List<String> interests, List<ActivityAreaInfo> activityAreas){
+    public UserInfoDto(Account account, List<String> interests, List<ActivityAreaInfo> activityAreas,boolean agreementGetNotified){
         this.accountId = account.getAccountId();
         this.name = account.getName();
         this.email = account.getEmail();
@@ -41,6 +42,7 @@ public class UserInfoDto {
                 .stream()
                 .map(area -> new ActivityAreaInfo(area.getType(), area.getLocation()))
                 .collect(Collectors.toList());
+        this.agreementGetNotified = agreementGetNotified;
     }
 
     @Value

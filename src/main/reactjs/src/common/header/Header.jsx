@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
-import {Navbar, NavbarContent} from "@nextui-org/react";
+import {Navbar, NavbarContent,} from "@nextui-org/react";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
 import {useRecoilValue} from "recoil";
@@ -14,22 +14,28 @@ export default function Header() {
     const [registration, setRegistration] = useState(null);
     const navigate = useNavigate();
 
-  useEffect(() => {
-    // Service Worker 등록
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/serviceWorker.js")
-        .then((reg) => {
-          console.log("Service Worker 등록 성공:", reg);
-          setRegistration(reg);
-        })
-        .catch((error) => {
-          console.log("Service Worker 등록 실패:", error);
-        });
-    } else {
-      console.log("Service Worker를 지원하지 않습니다.");
-    }
-  }, []);
+    const fetchUserInfo = useFetchUserInfo();
+
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
+
+    useEffect(() => {
+        // Service Worker 등록
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker
+                .register("/serviceWorker.js")
+                .then((reg) => {
+                    console.log("Service Worker 등록 성공:", reg);
+                    setRegistration(reg);
+                })
+                .catch((error) => {
+                    console.log("Service Worker 등록 실패:", error);
+                });
+        } else {
+            console.log("Service Worker를 지원하지 않습니다.");
+        }
+    }, []);
 
   const makeNotiTest = () => {
     // 함수 내용은 기존 WebNotificationTest 컴포넌트의 makeNotiTest 함수를 참고하여 이동시켜주세요.
@@ -114,7 +120,7 @@ const styles = {
         cursor:'pointer',
     },
     navBar: {
-        backgroundColor: 'rgba(255,255,255,0)',
+        backgroundColor: 'rgba(255,255,255,0.7)',
         backdropFilter : 'blur(0px)',
         maxWidth       : '600px',
         width          : '100%',

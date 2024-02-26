@@ -2,9 +2,9 @@ import {useCallback, useState} from "react";
 
 //여러 엔드포인트로부터 데이터를 가져오는 범용 훅
 export const UseFetchWeather = (endpoint) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
   // useEffect(() => {
   const fetchData = useCallback(async () => {
@@ -29,5 +29,5 @@ export const UseFetchWeather = (endpoint) => {
   // };
   // fetchData();
 
-  return {fetchData, data, loading, error};
+    return {fetchData, data, loading, error};
 };
