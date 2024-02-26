@@ -158,7 +158,7 @@ public class AI_imageServiceImp implements AI_imageService {
                 .model(imageDto.getModel())
                 .n(imageDto.getN())
                 .size(imageDto.getSize())
-                .prompt(prompt_1)
+                .prompt(imageDto.getPrompt())
                 .build();
     }
 

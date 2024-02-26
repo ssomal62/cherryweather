@@ -124,14 +124,14 @@
   /* 주변 요소와의 여백 설정 */
 }
 
+
+
 .type_msg {
-  border-top: 1px solid #c4c4c4;
   position: fixed;
   bottom: 0;
-  width: calc(100% - 30px);
-  /* 컨테이너의 패딩을 고려하여 너비 조정 */
-  background-color: white;
-  /* 입력 영역 배경색 설정 */
+  width: 80%;
+  height: 100px;
+  max-width: 550px;
 }
 
 .msg_send_btn {
@@ -146,16 +146,33 @@
   width: 33px;
 }
 
+
+.img_send_btn {
+  cursor: pointer;
+  font-size: 17px;
+  height: 33px;
+  position: relative;
+  /*right: 50%;*/
+  /*top: 50%;*/
+  /* 부모 요소인 .input_msg_write 기준으로 세로 중앙에 위치시키기 위해 top 값을 50%로 설정 */
+  /*transform: translateY(-50%);*/
+  /*width: 33px;*/
+}
+
 .sent-message {
   float: right;
   /* 아바타를 오른쪽으로 이동 */
   margin-left: 10px;
   /* 아바타와 메시지 사이의 간격 조정 */
+  /*width: 100%;*/
+  display: block;
 }
 
 .received-message {
   margin-right: 10px;
   vertical-align: top;
+  display: block;
+  width: 100%;
 }
 
 .chat-nav {
@@ -168,10 +185,20 @@
 .chat-message {
   white-space: pre-wrap; /* 단어 단위로 개행되도록 설정 */
   max-width: 600px; /* 최대 너비를 600px로 제한 */
+  /*display: block; !* 메시지를 수직으로 정렬 *!*/
+  min-height: 20px; /* 최소 높이 설정 */
+
+  display: flex;
+  flex-direction: column;
+
 
 }
 
 .chat_section.msg_history {
   overflow-x: hidden; /* 가로 스크롤 숨기기 */
   overflow-y: auto; /* 세로 스크롤 표시 */
+}
+
+.spinner{
+  /*margin-top: -100px;*/
 }
