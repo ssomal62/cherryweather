@@ -16,15 +16,17 @@ public class AlarmDto {
 
     Long alarmId;
     String name;
-    Account account;
+    Long targetId;
+    String type;
+    Integer importance;
     LocalDateTime createdAt;
     String description;
 
-    public List<AlarmDto> toDtoList(List<Alarm> alarmList) {
+    public static List<AlarmDto> toDtoList(List<Alarm> alarmList) {
         return alarmList.stream().map(alarm -> AlarmDto.builder()
                 .alarmId(alarm.getAlarmId())
-                .account(alarm.getAccount())
                 .name(alarm.getAccount().getName())
+                .description(alarm.getDescription())
                 .createdAt(alarm.getCreatedAt())
                 .build()
         ).collect(Collectors.toList());

@@ -14,6 +14,7 @@ import {
 } from "../../recoil/hooks/UseFetchUserInfo";
 import {useNavigate} from "react-router-dom";
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
+import {alramListState, useAlarmData} from "../../recoil/hooks/UseAlramApi";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
@@ -28,6 +29,10 @@ const DropDownNotification = () => {
     fetchData();
     userInfoFetch();
   }, []);
+
+  useAlarmData({state: alramListState, dynamicPath: ""});
+
+  const alramList = useRecoilValue(alramListState);
 
   useEffect(() => {
     if (weatherData && isOpen) {
@@ -45,7 +50,10 @@ const DropDownNotification = () => {
         <span></span>
       </DropdownTrigger>
       <DropdownMenu aria-label="Notifications" color="danger">
-        <DropdownItem key="login" onClick={() => navigate("/mypage")}>
+        {alramList.map((item, index) => (
+          <DropdownItem key={index}>{item.description}</DropdownItem>
+        ))}
+        {/* <DropdownItem key="login" onClick={() => navigate("/mypage")}>
           {userInfo.name}님이 로그인 되었습니다.
         </DropdownItem>
         <DropdownItem key="weather" onClick={() => navigate("/weatherDetail")}>
@@ -53,10 +61,7 @@ const DropDownNotification = () => {
             ? `오늘의 날씨: ${weatherData.weather}, ${weatherData.currentTemp}°C`
             : "날씨 정보를 불러오는 중..."}
         </DropdownItem>
-        <DropdownItem>모임에 가입하였습니다.</DropdownItem>
-        <DropdownItem key="room">새로운 정모가 개설 되었습니다.</DropdownItem>
-        <DropdownItem key="chat">설정 변경</DropdownItem>
-        <DropdownItem key="ai">ai 이미지가 생성되었습니다.</DropdownItem>
+        <DropdownItem key="ai">ai 이미지가 생성되었습니다.</DropdownItem> */}
       </DropdownMenu>
     </Dropdown>
   );
