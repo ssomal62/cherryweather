@@ -1,7 +1,7 @@
-import React, {Suspense} from "react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import {useRecoilValue} from "recoil";
-import {IsLoginAtom} from "../recoil/LoginAtom";
+import React, { Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { IsLoginAtom } from "../recoil/LoginAtom";
 // import { lazy } from "react";
 
 // 일반적인 임포트 방법
@@ -31,6 +31,9 @@ import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
 import ClubSearch from "../pages/club/ClubSearch";
 import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
+import NaverCallBack from "../pages/auth/NaverCallBack";
+import MySetting from "../components/mypage/MySetting";
+import ModifyProfile from "../components/mypage/ModifyProfile";
 
 
 // 레이즈 라우터 임포트 방법
@@ -55,7 +58,7 @@ import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
 // 같이 사라진다
 
 const Router = () => {
-    const isLogin = useRecoilValue(IsLoginAtom);
+  const isLogin = useRecoilValue(IsLoginAtom);
 
   return (
     <BrowserRouter>
@@ -110,15 +113,15 @@ const Router = () => {
             <Route path=":selectPage" element={<Community />} />
           </Route>
 
-                    {/*<Route path="/clubs" element={<Club/>}/>*/}
-                    <Route path="/club-details/:clubId" element={<ClubDetails/>}/>
-                    <Route path="/club-add" element={<AddClub/>}>
-                        <Route path=":clubId" element={<AddClub/>}/>
-                    </Route>
-                    <Route path="/club-configurations" element={<ClubConfigurations/>}/>
-                    <Route path="/club-members" element={<ClubMembers/>}/>
-                    <Route path="/club-join" element={<ClubJoin/>}/>
-                    <Route path="/club-search" element={<ClubSearch/>}/>
+          {/*<Route path="/clubs" element={<Club/>}/>*/}
+          <Route path="/club-details/:clubId" element={<ClubDetails />} />
+          <Route path="/club-add" element={<AddClub />}>
+            <Route path=":clubId" element={<AddClub />} />
+          </Route>
+          <Route path="/club-configurations" element={<ClubConfigurations />} />
+          <Route path="/club-members" element={<ClubMembers />} />
+          <Route path="/club-join" element={<ClubJoin />} />
+          <Route path="/club-search" element={<ClubSearch />} />
           {/*<Route path="/clubs" element={<Club/>}/>*/}
           <Route path="/club-details/:clubId" element={<ClubDetails />} />
           <Route path="/club-add" element={<AddClub />}>
@@ -132,16 +135,16 @@ const Router = () => {
           <Route path="/imageList" element={<AI_imageList />} />
           <Route path="/weatherDetail" element={<WeatherDetail />} />
 
-                    <Route path="/chat" element={<Chat/>}/>
-                    <Route path="/chat/room/:chatRoom/" element={<ChatRoom/>}/>
-                    <Route path="/chat/admin" element={<Adminchat/>}/>
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/room/:chatRoom/" element={<ChatRoom />} />
+          <Route path="/chat/admin" element={<Adminchat />} />
 
-                    {/* {isLogin && <Route path="/club" element={<Club />} />} */}
-                    <Route path="/event" element={<Event/>}/>
-                </Routes>
-            </Suspense>
-        </BrowserRouter>
-    );
+          {/* {isLogin && <Route path="/club" element={<Club />} />} */}
+          <Route path="/event" element={<Event />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
 };
 
 export default Router;

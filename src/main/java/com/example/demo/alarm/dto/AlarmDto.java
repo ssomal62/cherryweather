@@ -19,6 +19,7 @@ public class AlarmDto {
     Integer importance;
     LocalDateTime createdAt;
     String description;
+    boolean isShowAlarm;
 
     public static List<AlarmDto> toDtoList(List<Alarm> alarmList) {
         return alarmList.stream().map(alarm ->
@@ -28,7 +29,8 @@ public class AlarmDto {
                 .description(alarm.getDescription())
                 .type(alarm.getType())
                 .importance(alarm.getImportance())
-                .createdAt(LocalDateTime.now())
+                .createdAt(alarm.getCreatedAt())
+                .isShowAlarm(alarm.isShowAlarm())
                 .build()
         ).toList();
     }

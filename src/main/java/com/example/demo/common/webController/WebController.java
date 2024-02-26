@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WebController {
 
-<<<<<<<<< Temporary merge branch 1
     @GetMapping(value = {"",
             "/login", "/oauth", "/login/local", "/join","/mypage",
             "/club-add", "/club-add/**","/club-configurations",

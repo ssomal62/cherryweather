@@ -1,26 +1,26 @@
 // DropDownNotification.js
 
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import {useRecoilValue} from "recoil";
+import { useRecoilValue } from "recoil";
 import {
   useFetchUserInfo,
   userInfoState,
 } from "../../recoil/hooks/UseFetchUserInfo";
-import {useNavigate} from "react-router-dom";
-import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
-import {alramListState, useAlarmData} from "../../recoil/hooks/UseAlramApi";
+import { useNavigate } from "react-router-dom";
+import { UseFetchWeather } from "../../recoil/hooks/UseFetchWeather";
+import { alramListState, useAlarmData } from "../../recoil/hooks/UseAlramApi";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
   const userInfoFetch = useFetchUserInfo();
   const navigate = useNavigate(); // useNavigate 훅 사용하기
-  const {fetchData, data: weatherData} = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
+  const { fetchData, data: weatherData } = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -30,11 +30,12 @@ const DropDownNotification = () => {
     userInfoFetch();
   }, []);
 
-  useAlarmData({state: alramListState, dynamicPath: ""});
+  useAlarmData({ state: alramListState, dynamicPath: "" });
   const alramList = useRecoilValue(alramListState);
 
-  console.log(alramList);
-  console.log(alramListState);
+  // 최대 5개의 최신 알림만 표시하도록 알림 목록을 처리
+  const displayedAlarmList = alramList.slice(0, 5).reverse();
+
   useEffect(() => {
     if (weatherData && isOpen) {
       console.log(
@@ -51,7 +52,7 @@ const DropDownNotification = () => {
         <span></span>
       </DropdownTrigger>
       <DropdownMenu aria-label="Notifications" color="danger">
-        {alramList.map((item, index) => (
+        {displayedAlarmList.map((item, index) => (
           <DropdownItem key={index}>{item.description}</DropdownItem>
         ))}
         {/* <DropdownItem key="login" onClick={() => navigate("/mypage")}>

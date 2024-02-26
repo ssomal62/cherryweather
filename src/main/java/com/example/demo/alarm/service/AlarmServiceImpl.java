@@ -37,5 +37,13 @@ public class AlarmServiceImpl {
         return AlarmDto.toDtoList(alarmList);
     }
 
+    @Transactional
+    public void updateAlarmVisibility(Long alarmId, boolean isShowAlarm) {
+        Alarm alarm = alarmRepository.findById(alarmId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid alarm ID"));
+        alarm.setShowAlarm(isShowAlarm);
+        alarmRepository.save(alarm);
+    }
+
     }
 

@@ -1,6 +1,7 @@
 package com.example.demo.alarm.controller;
 
 import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.account.service.AccountService;
 import com.example.demo.alarm.dto.AlarmDto;
 import com.example.demo.alarm.service.AlarmServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -30,4 +31,13 @@ public class AlarmController {
     public List<AlarmDto> findAlarmDtoList(@AuthenticationPrincipal AccountDetails accountDetails) {
         return alarmService.findAlarmListByAccountId(accountDetails);
     }
+
+    // 사용자 알림 수신 동의 업데이트 하는 부분
+//    @PostMapping("/api/alarm-agreement")
+//    public ResponseEntity<Void> updateAlarmAgreement(
+//            @PathVariable Long id, @RequestBody Boolean isShowAlarm
+//    ) {
+//        alarmService.updateAlarmAgreement(id, isShowAlarm); // 이 부분에서 accountService 사용
+//        return ResponseEntity.ok().build();
+//    }
 }
