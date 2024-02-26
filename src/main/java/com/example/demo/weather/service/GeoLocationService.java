@@ -4,16 +4,12 @@ import com.example.demo.common.geoLocation.GeoLocationClient;
 import com.example.demo.weather.dto.GeoLocationReqDto;
 import com.example.demo.weather.dto.GeoLocationResDto;
 import com.example.demo.weather.exception.LookupException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.*;
+import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.LOCATION_INFO_LOOKUP_FAILED;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +25,6 @@ public class GeoLocationService {
     }
 
     public GeoLocationReqDto getGeoLocation(String clientIp) {
-        System.out.println("clientIp : " + clientIp);
         try {
             String response = geoLocationClient.run(clientIp);
             JsonNode root = objectMapper.readTree(response);
@@ -50,5 +45,4 @@ public class GeoLocationService {
             throw new LookupException(LOCATION_INFO_LOOKUP_FAILED);
         }
     }
-
 }

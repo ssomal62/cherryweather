@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {Chip, ScrollShadow, Spinner} from "@nextui-org/react";
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
+import UseClientIp from "../../recoil/hooks/UseClientIp";
 
 //시간 포맷 함수
 const formatTime = (time) => {
@@ -21,25 +22,31 @@ const formatDate = (date) => {
 }
 
 const HourlyWeather = () => {
-    const {fetchData, data, loading, error} = UseFetchWeather('/weather/hourly');
+    const clientIp = UseClientIp(); //ip를 백엔드로 전송
+    const {fetchData, data, loading, error} = UseFetchWeather(`/weather/hourly?ip=${clientIp}`);
 
     useEffect(() => {
-        const loadData = async () => {
-            await fetchData();
+        if (clientIp) {
+            fetchData();
         }
-        loadData();
+    }, [fetchData, clientIp]);
 
-    }, [fetchData])
+    if (loading) {
+        return (
+            <div>
+                <Spinner label = "Loading..."/>
+            </div>
+        )
+    }
 
-    return (
-        <div>
-            {loading && (
-                <div>
-                    <Spinner label = "Loading..."/>
-                </div>
-            )}
-            {error && <div>Error: {error.message}</div>}
-            <ScrollShadow hideScrollBar offset={0} orientation = "horizontal" className = "max-w-[600px] max-h-[110px]">
+    if (error) {
+        return (
+            <div>Error: {error.message}</div>
+        )
+    }
+    if (data) {
+        return (
+            <ScrollShadow hideScrollBar offset = {0} orientation = "horizontal" className = "max-w-[600px] max-h-[110px]">
                 <div style = {{display: 'flex', flexDirection: 'row'}}>
                     {data && data.map((hourlyData, index) => (
                         <Chip key = {index} className = "py-4 mt-1 ml-1" variant = "shadow" color = "danger" style = {{width: '1800ps', height: '100px'}}>
@@ -51,8 +58,8 @@ const HourlyWeather = () => {
                     ))}
                 </div>
             </ScrollShadow>
-        </div>
-    );
+        )
+    }
 };
 
 export default HourlyWeather;
