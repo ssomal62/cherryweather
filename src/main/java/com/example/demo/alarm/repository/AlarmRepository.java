@@ -8,5 +8,5 @@ import java.util.List;
 
 
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
-    List<Alarm> findByAccount(Account account);
+    List<Alarm> findByAccountOrderByCreatedAtDesc(Account account);
 }

@@ -15,7 +15,7 @@ import {clubDetailState} from "../../recoil/hooks/UseClubApi";
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import {instance} from "../../recoil/module/instance";
 import AddClubInputNotice from "../../components/club/addClub/AddClubInputNotice";
-import {alramListState} from "../../recoil/hooks/UseAlramApi";
+import {alramListState, useAlarmData} from "../../recoil/hooks/UseAlramApi";
 
 const AddClub = () => {
   const {clubId} = useParams();
@@ -43,9 +43,6 @@ const AddClub = () => {
     clubId ? club.activitiesArea : ""
   );
   const [code, setCode] = useState(clubId ? club.code : "");
-
-  //   // 알람 리스트 상태 업데이트 함수
-  //   const setAlramList = useSetRecoilState(alramListState);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -95,20 +92,34 @@ const AddClub = () => {
       });
       if (file) {
         await onFileUpload();
+
+        console.log("✅[Add Club] Success", res);
       }
 
-      //   setAlramList((newAlramList) => [
-      //     // 내용 값 입력
-      //     ...newAlramList,
-      //     {
-      //       description: "새로운 모임이 추가되었습니다!",
-      //     },
-      //   ]);
+      const alarmData = {
+        name: null,
+        targetId: res.data.clubId,
+        type: "CLUB",
+        importance: 1,
+        description: "새로운 클럽이 생성되었습니다.",
+      };
 
-      console.log("✅[Add Club] Success", res);
+      sendAlarmData(alarmData);
       navigate("/");
     } catch (error) {
       console.error("Error:", error);
+    }
+  };
+
+  const sendAlarmData = async (data) => {
+    try {
+      await instance.post("/alarm", data, {
+        headers: {
+          Authorization: `Bearer ${cookie.get("accessToken")}`,
+        },
+      });
+    } catch (error) {
+      console.error("Alarm Data Error:", error);
     }
   };
 

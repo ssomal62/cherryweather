@@ -20,6 +20,7 @@ const GoBellDropNotificationIcon = ({onClick}) => {
       setIsModalOpen(true);
     }
   }, [isLogin, isOpen]);
+
   const handleClick = () => {
     // 아이콘 클릭 핸들러
     if (!isLogin) {

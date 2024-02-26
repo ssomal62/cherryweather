@@ -18,6 +18,7 @@ export const useAlarmData = ({
   const setState = useSetRecoilState(state);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const setAlarmList = useSetRecoilState(alramListState);
 
   const fetchData = useCallback(async () => {
     console.log(`🔰[${state.key}] Try Access`);
@@ -51,13 +52,14 @@ export const useAlarmData = ({
       console.log(`✅[${state.key}] Success`, response);
 
       setState(response.data);
+      setAlarmList(response.data); // 알람 리스트 업데이트
     } catch (error) {
       console.error(`⛔[${state.key}] Failed`, error);
       setError(error);
     } finally {
       setLoading(false);
     }
-  }, [method, dynamicPath, requestBody, setState]);
+  }, [method, dynamicPath, requestBody, setState, setAlarmList]);
 
   useEffect(() => {
     fetchData();

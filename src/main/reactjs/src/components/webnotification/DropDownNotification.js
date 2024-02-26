@@ -31,9 +31,10 @@ const DropDownNotification = () => {
   }, []);
 
   useAlarmData({state: alramListState, dynamicPath: ""});
-
   const alramList = useRecoilValue(alramListState);
 
+  console.log(alramList);
+  console.log(alramListState);
   useEffect(() => {
     if (weatherData && isOpen) {
       console.log(
