@@ -4,7 +4,7 @@ import {TiLocation} from "react-icons/ti";
 import {IoChatbubbleEllipses} from "react-icons/io5";
 import {BsFillPeopleFill} from "react-icons/bs";
 import {HeartIcon} from "../../../assets/icon/HeartIcon";
-import {useLikeClub} from "../../../recoil/hooks/UseLikedState";
+import {useLikeClub} from "../../../recoil/hooks/UseLikeApi";
 import {IsLoginAtom} from "../../../recoil/LoginAtom";
 import {useRecoilValue} from "recoil";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
