@@ -1,55 +1,31 @@
 // DropDownNotification.js
 
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import { useRecoilValue } from "recoil";
+import {useRecoilValue} from "recoil";
 import {
   useFetchUserInfo,
   userInfoState,
 } from "../../recoil/hooks/UseFetchUserInfo";
-import { useFetchClubs } from "../../recoil/hooks/UseFetchClubs";
-import { useNavigate } from "react-router-dom";
-import { UseFetchWeather } from "../../recoil/hooks/UseFetchWeather";
-import { useClubDetailState } from "../../recoil/hooks/UseClubDetailState";
-import { useMyMembership } from "../../recoil/hooks/UseMyMembership";
-import { useMembersState } from "../../recoil/hooks/UseMembersState";
+import {useNavigate} from "react-router-dom";
+import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
-  const fetchClubs = useFetchClubs(); // 클럽 정보 가져오기
   const userInfoFetch = useFetchUserInfo();
   const navigate = useNavigate(); // useNavigate 훅 사용하기
-  const { fetchData, data: weatherData } = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
-  const getClubDetail = useClubDetailState(userInfo.clubId);
+  const {fetchData, data: weatherData} = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  // 사용자의 멤버십 정보를 가져옴
-  const userMembership = useMyMembership();
-  // 클럽 멤버십 정보를 상태로 관리
-  const clubMembers = useMembersState(userInfo.clubId);
-
-  // 클럽 이름을 찾아내는 함수
-  const findUserClubName = () => {
-    if (clubMembers && userInfo.accountId) {
-      const userClub = clubMembers.find(
-        (member) => member.accountId === userInfo.accountId
-      );
-      return userClub ? userClub.clubName : null;
-    }
-    return null;
-  };
-
-
 
   useEffect(() => {
     fetchData();
-    fetchClubs(); // 클럽 정보 가져오기
     userInfoFetch();
   }, []);
 
@@ -77,11 +53,7 @@ const DropDownNotification = () => {
             ? `오늘의 날씨: ${weatherData.weather}, ${weatherData.currentTemp}°C`
             : "날씨 정보를 불러오는 중..."}
         </DropdownItem>
-        <DropdownItem>
-          {userMembership
-            ? `${findUserClubName()} 모임이 생성되었습니다.`
-            : "가입한 모임이 없습니다."}
-        </DropdownItem>
+        <DropdownItem>모임에 가입하였습니다.</DropdownItem>
         <DropdownItem key="room">새로운 정모가 개설 되었습니다.</DropdownItem>
         <DropdownItem key="chat">설정 변경</DropdownItem>
         <DropdownItem key="ai">ai 이미지가 생성되었습니다.</DropdownItem>
