@@ -1,23 +1,34 @@
-import React, {useState} from "react";
+import React from "react";
 import {Input, Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
 import {useNavigate} from 'react-router-dom';
 import {SearchIcon} from '../../../assets/icon/SearchIcon'
 import {IoIosClose} from "react-icons/io";
+import weatherPhrases from './WeatherPlaceholder.json'
 
-export default function ClubSearchHeader({setKeywords}) {
+export default function SearchHeader({ handleSearch, setInputValue, inputValue}) {
 
     const navigate = useNavigate();
-    const [inputValue, setInputValue] = useState('');
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
-    const handleInputKeyword = (e) => {
+
+    const handleInputChange = (e) => setInputValue(e.target.value);
+
+    const handleInputEnter = (e) => {
         if (e.key === 'Enter') {
-            setKeywords(keywords => [inputValue, ...keywords]);
-            setInputValue('');
+            handleSearch(inputValue);
         }
     };
+
+    const handleClearInput = () => {
+        setInputValue('');
+        handleSearch('');
+    };
+
+    const todayWeather = "비";
+
+    const todayWeatherActivities = weatherPhrases[todayWeather].activities;
+    const todayWeatherIcon = weatherPhrases[todayWeather].icon;
+    const todayActivity = todayWeatherActivities[Math.floor(Math.random() * todayWeatherActivities.length)];
+    const todayPlaceholder = `     ${todayWeatherIcon} ${todayActivity}`;
 
     return (
         <Navbar>
@@ -30,13 +41,13 @@ export default function ClubSearchHeader({setKeywords}) {
                 <NavbarItem justify="end" style={styles.title} className="max-w-full">
                     <Input
                         startContent={<SearchIcon style={styles.icon}/>}
-                        endContent={<IoIosClose style={styles.endIcon} onClick={() => setInputValue('')}/>}
+                        endContent={<IoIosClose style={styles.endIcon} onClick={handleClearInput}/>}
                         type="text"
                         value={inputValue}
                         onChange={handleInputChange}
-                        onKeyDown={handleInputKeyword}
+                        onKeyDown={handleInputEnter}
                         radius="full"
-                        placeholder="마른 하늘에 오징어볼"
+                        placeholder={todayPlaceholder}
                     />
                 </NavbarItem>
             </NavbarContent>

@@ -9,9 +9,7 @@ import {clubListState, useClubData} from "../../../recoil/hooks/UseClubApi";
 const ClubList = () => {
 
     const {loading: loadingClubData} = useClubData({ state: clubListState, dynamicPath: ''});
-
     const clubList = useRecoilValue(clubListState);
-
     const loading = loadingClubData;
 
     if (loading) {

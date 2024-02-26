@@ -9,11 +9,11 @@ public class WebController {
     @GetMapping(value = {"",
             "/login", "/oauth", "/login/local", "/join","/mypage",
             "/club-add", "/club-add/**","/club-configurations",
-            "/club-members","/club-join","/club-wait","/club-search","/club-details/**",
+            "/club-members","/club-join","/club-wait","/club-details/**",
             "/event",
             "/chat","/chat/admin","/chat/room/**",
             "/ai", "/gpt", "/image", "/imageList",
-            "/weatherDetail","/community/**",
+            "/weatherDetail","/community/**","/search",
             "/oauth/callback/naver","/modify/profile", "/mypage/setting"
     })
     public String accountRoute() {

@@ -6,10 +6,7 @@ import com.example.demo.club.service.ClubQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +27,7 @@ public class ClubQueryAPIController {
      * @param requestDTO 클라이언트로부터 받은 조회 조건을 담고 있는 {@link ClubQueryDTO} 객체
      * @return 조건에 맞는 클럽 목록을 담고 있는 {@link ClubListDTO} 객체. 조건에 맞는 클럽이 없는 경우 빈 목록을 포함합니다.
      */
-    @GetMapping
+    @PostMapping
     public ResponseEntity<ClubListDTO> findAllByConditions(
             @RequestBody ClubQueryDTO requestDTO
             ) {

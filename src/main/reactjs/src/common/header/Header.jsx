@@ -85,7 +85,7 @@ export default function Header() {
             >
                 <IoOptionsOutline style={styles.icon}/>
                 <IoSearchOutline style={styles.icon}
-                                 onClick={()=>navigate('/club-search')}
+                                 onClick={()=>navigate('/search')}
                 />
 
                 <GoBellDropNotificationIcon onClick={makeNotiTest} />
