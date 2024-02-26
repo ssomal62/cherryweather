@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Card, CardBody, Spinner} from "@nextui-org/react";
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
 import {useNavigate} from "react-router-dom";
-import UseClientIp from "../../recoil/hooks/useClientIp";
+import UseClientIp from "../../recoil/hooks/UseClientIp";
 
 //시간 포맷 함수
 const formatTime = (time) => {
@@ -14,9 +14,8 @@ const formatTime = (time) => {
 }
 const TodayWeather = () => {
 
-    UseClientIp(); //ip를 백엔드로 전송
-
-    const {fetchData, data, loading, error} = UseFetchWeather('/weather/daily');
+    const clientIp = UseClientIp(); //ip를 백엔드로 전송
+    const {fetchData, data, loading, error} = UseFetchWeather(`/weather/daily?ip=${clientIp}`);
     const navigate = useNavigate();
 
     // 이동 함수
@@ -25,12 +24,10 @@ const TodayWeather = () => {
     }
 
     useEffect(() => {
-        const loadData = async () => {
-            await fetchData();
+        if (clientIp) {
+            fetchData();
         }
-        loadData();
-
-    }, [fetchData])
+    }, [fetchData, clientIp]);
 
     //현재 낮인지 밤인지 판별
     const isDaytime = () => {
@@ -91,9 +88,10 @@ const TodayWeather = () => {
         const sunset = formatTime(data.sunset);
         return (
             <div>
-                <div className = "py-4 rounded-none" style = {cardStyle} onClick={handleCardClick}>
+                <div className = "py-4 rounded-none" style = {cardStyle} onClick = {handleCardClick}>
                     <div className = "overflow-visible py-2 relative" style = {{height: '210px'}}>
-                        <div className = "font-sans text-6xl font-bold text-white/90 text-shadow-small absolute" style = {{textShadow: '0 0 4px black'}} onClick={handleCardClick}>
+                        <div className = "font-sans text-6xl font-bold text-white/90 text-shadow-small absolute" style = {{textShadow: '0 0 4px black'}}
+                             onClick = {handleCardClick}>
                             {data.currentTemp}℃<br/>
                         </div>
                         <div className = "font-sans text-medium text-white/90 text-shadow-small absolute bottom-14 left-4" style = {{textShadow: '0 0 4px black'}}>

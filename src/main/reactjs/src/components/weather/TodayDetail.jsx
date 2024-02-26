@@ -1,17 +1,17 @@
 import React, {useEffect} from 'react';
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
 import {Spinner} from "@nextui-org/react";
+import UseClientIp from "../../recoil/hooks/UseClientIp";
 
 const TodayDetail = () => {
-
-    const {fetchData, data, loading, error} = UseFetchWeather("/weather/daily");
+    const clientIp = UseClientIp(); //ip를 백엔드로 전송
+    const {fetchData, data, loading, error} = UseFetchWeather(`/weather/daily?ip=${clientIp}`);
 
     useEffect(() => {
-        const loadData = async () => {
-            await fetchData();
+        if (clientIp) {
+            fetchData();
         }
-        loadData();
-    }, [fetchData]);
+    }, [fetchData, clientIp]);
 
     if (loading) {
         return <Spinner label = "Loading..." color = "danger" className = "mt-16"/>
