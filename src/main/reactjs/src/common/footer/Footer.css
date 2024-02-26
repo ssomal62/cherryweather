@@ -15,7 +15,7 @@ html {
     justify-content: center;
     background-color: var(--bgColorMenu);
     border-top: 1px solid #e5e7eb;
-    box-shadow: 0px -5px 15px rgba(0, 0, 0, 0.1); /* 상단 방향 그림자 */
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1); /* 상단 방향 그림자 */
 }
 
 .menu__item {
