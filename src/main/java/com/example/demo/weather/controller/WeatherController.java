@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,39 +18,34 @@ public class WeatherController {
     private final TodayWeatherService todayWeatherService;
 
 
-    @PostMapping("/now/info")
-    public List<NowWeatherReqDto> getNowWeather(@RequestBody Map<String, String> ipData) {
-        String clientIp = ipData.get("ip");
+    @GetMapping("/now/info")
+    public List<NowWeatherReqDto> getNowWeather(@RequestParam("ip") String clientIp) {
+        System.out.println("Weather Controller getNowWeather IP : " + clientIp);
         return nowWeatherService.getNowWeather(clientIp);
     }
 
-    @PostMapping("/now")
-    public List<NowWeatherResDto> getFormattedNowWeather(@RequestBody Map<String, String> ipData) {
-        String clientIp = ipData.get("ip");
+    @GetMapping("/now")
+    public List<NowWeatherResDto> getFormattedNowWeather(@RequestParam("ip") String clientIp) {
         return nowWeatherService.getFormattedNowWeather(clientIp);
     }
 
-    @PostMapping("/today/info")
-    public List<TodayWeatherReqDto> getTodayWeather(@RequestBody Map<String, String> ipData) {
-        String clientIp = ipData.get("ip");
+    @GetMapping("/today/info")
+    public List<TodayWeatherReqDto> getTodayWeather(@RequestParam("ip") String clientIp) {
         return todayWeatherService.getTodayWeather(clientIp);
     }
 
-    @PostMapping("/today")
-    public List<TodayWeatherResDto> getFormattedTodayWeather(@RequestBody Map<String, String> ipData) {
-        String clientIp = ipData.get("ip");
+    @GetMapping("/today")
+    public List<TodayWeatherResDto> getFormattedTodayWeather(@RequestParam("ip") String clientIp) {
         return todayWeatherService.getFormattedTodayWeather(clientIp);
     }
 
-    @PostMapping("/daily")
-    public DailyWeatherDto getDailyWeather(@RequestBody Map<String, String> ipData) {
-        String clientIp = ipData.get("ip");
+    @GetMapping("/daily")
+    public DailyWeatherDto getDailyWeather(@RequestParam("ip") String clientIp) {
         return todayWeatherService.getDailyWeather(todayWeatherService.getFormattedTodayWeather(clientIp), clientIp);
     }
 
-    @PostMapping("/hourly")
-    public List<HourlyWeatherDto> getHourlyWeather(@RequestBody Map<String, String> ipData) {
-        String clientIp = ipData.get("ip");
+    @GetMapping("/hourly")
+    public List<HourlyWeatherDto> getHourlyWeather(@RequestParam("ip") String clientIp) {
         return todayWeatherService.getHourlyWeather(clientIp);
     }
 }

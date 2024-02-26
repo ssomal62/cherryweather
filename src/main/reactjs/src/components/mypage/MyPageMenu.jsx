@@ -69,9 +69,8 @@ const styles = {
   },
 };
 
-const IconWapper = styled.div``;
 
-const Title = styled.span`
+export const Title = styled.span`
   margin-left: 16px;
   font-style: normal;
   font-weight: 600;
@@ -80,7 +79,7 @@ const Title = styled.span`
   color: #242729;
 `;
 
-const Wapper = styled.div`
+export const Wapper = styled.div`
   height: 100%;
   display: -ms-flexbox;
   display: flex;
@@ -88,7 +87,7 @@ const Wapper = styled.div`
   align-items: center;
 `;
 
-const MenuWapper = styled.div`
+export const MenuWapper = styled.div`
   height: 100%;
   display: -ms-flexbox;
   display: flex;
@@ -99,7 +98,7 @@ const MenuWapper = styled.div`
   align-items: center;
 `;
 
-const MenuBtn = styled.button`
+export const MenuBtn = styled.button`
   padding: 0 24px;
   display: block;
   width: 100%;

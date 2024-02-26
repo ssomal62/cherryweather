@@ -30,20 +30,14 @@ public class OAuthAccountInfoDto {
     String phoneNumber; // 카카오계정(전화번호)
 
     @Nullable
-//    Gender gender; // 성별
+    Gender gender; // 성별
 //
-//    @Nullable
-//    String birthday; // 생일
-//
-//    @Nullable
-//    String profileImage; // 프로필 사진
+    @Nullable
+    String profileImage; // 프로필 사진
 //
 //    @Nullable
 //    String profileNickname; // 프로필 닉네임
 
-
-//    @Nullable
-//    Gender gender;
 
     @Builder
     public OAuthAccountInfoDto(KakaoAccountResponse kakaoResponse, KakaoAccountResponse.KakaoAccount kakaoAccount) {
@@ -51,7 +45,8 @@ public class OAuthAccountInfoDto {
         this.name = kakaoAccount.getName();
         this.email = kakaoAccount.getEmail();
         this.phoneNumber = kakaoAccount.getPhoneNumber();
-//        this.gender = Gender.valueOf(kakaoAccount.getGender().toUpperCase());
+        this.gender = Gender.valueOf(kakaoAccount.getGender().toUpperCase());
+        this.profileImage = kakaoAccount.getProfileImage();
     }
 
     public OAuthAccountInfoDto(NaverAccountResponse naverAccount) {
@@ -60,7 +55,8 @@ public class OAuthAccountInfoDto {
         this.name = naverAccountResponse.getName();
         this.email = naverAccountResponse.getEmail();
         this.phoneNumber = naverAccountResponse.getPhoneNumber();
-//        this.gender = toEnum(naverAccountResponse.getGender());
+        this.gender = toEnum(naverAccountResponse.getGender());
+        this.profileImage = naverAccountResponse.getProfileImage();
     }
 
     private Gender toEnum(String gender) {

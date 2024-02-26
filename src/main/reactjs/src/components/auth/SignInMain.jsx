@@ -21,6 +21,15 @@ const SignInMain = () => {
         // "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://localhost:9002/oauth&response_type=code";
     };
 
+    //네이버 간편 로그인
+    const naverClientId = "YGYdbBp5kD7D7_W4_BKN";
+    const naverRedirectUri = "http://cherryweather.site/oauth/callback/naver";
+
+    const onNaverLogin = () => {
+      window.location.href =
+     `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientId}&state=STATE_STRING&redirect_uri=${naverRedirectUri}&state=1234`
+    }
+
   return (
     <>
       <IconWapper>
@@ -38,7 +47,7 @@ const SignInMain = () => {
           <IconImg alt="kakao" src={kakaoImgUrl} />
           <LoginBtnText>카카오로 로그인하기</LoginBtnText>
         </LoginBtn>
-        <LoginBtn style={{ backgroundColor: "rgb(30, 200, 0)" }}>
+        <LoginBtn onClick={onNaverLogin} style={{ backgroundColor: "rgb(30, 200, 0)" }}>
           <IconImg alt="naver" src={naverImgUrl} />
           <LoginBtnText>네이버로 로그인하기</LoginBtnText>
         </LoginBtn>
@@ -104,7 +113,6 @@ export const LoginBtnText = styled.span`
 
 export const LoginContainer = styled.div`
   flex: 0 1 auto;
-  flex-direction: column;
   flex-direction: column;
   align-items: center;
   -webkit-box-pack: center;

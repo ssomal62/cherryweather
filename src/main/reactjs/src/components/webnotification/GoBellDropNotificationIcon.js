@@ -4,21 +4,31 @@ import {Badge} from "@nextui-org/react";
 import DropDownNotification from "./DropDownNotification";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../../recoil/LoginAtom";
+import LoginVerificationModal from "../../utils/LoginVerificationModal";
 
 const GoBellDropNotificationIcon = ({onClick}) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  /////
   const isLogin = useRecoilValue(IsLoginAtom);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleBellClick = () => {
-    if (isLogin) {
-      toggleDropdown();
+  useEffect(() => {
+    // 화면이 로드될 때 로그인 상태를 확인하여 모달 열기
+    if (!isLogin && isOpen) {
+      setIsOpen(false); // 열려있는 경우 닫기
+      setIsModalOpen(true);
     }
-    // 로그인 상태와 상관없이 알림 테스트 함수를 호출합니다.
-    onClick();
+  }, [isLogin, isOpen]);
+
+  const handleClick = () => {
+    // 아이콘 클릭 핸들러
+    if (!isLogin) {
+      setIsModalOpen(true);
+    } else {
+      setIsOpen(!isOpen);
+    }
   };
-
-  const toggleDropdown = () => setIsOpen(!isOpen);
-
   return (
     <>
       <div
@@ -29,7 +39,7 @@ const GoBellDropNotificationIcon = ({onClick}) => {
             fontSize: "1.4em",
             position: "relative",
           }}
-          onClick={handleBellClick}
+          onClick={handleClick}
         />
         {isLogin && (
           <Badge
@@ -41,6 +51,10 @@ const GoBellDropNotificationIcon = ({onClick}) => {
 
         {isLogin && isOpen && <DropDownNotification />}
       </div>
+      <LoginVerificationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </>
   );
 };

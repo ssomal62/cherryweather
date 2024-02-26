@@ -28,13 +28,22 @@ public class Alarm {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+//    @JsonIgnore
     private Account account;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    @Column
+    private Integer importance;
+
+    @Column
+    private  Long targetId;
+
+    @Column
+    private String type;
 
     @Column
     private String description;
 
+    @CreatedDate
+    private LocalDateTime createdAt;
 
 }
