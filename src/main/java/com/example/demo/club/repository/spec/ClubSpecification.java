@@ -4,6 +4,7 @@ import com.example.demo.club.entity.Club;
 import com.example.demo.club.enums.ClubCategory;
 import com.example.demo.club.enums.ClubGrade;
 import com.example.demo.club.enums.ClubStatus;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
@@ -22,10 +23,17 @@ public class ClubSpecification {
     }
 
     /**
-     * 클럽 이름 기준으로 조회합니다.
+     * 클럽 이름/설명/서브카테고리/태그 내에서 키워드 기준으로 조회합니다.
      */
-    public static Specification<Club> likeClubName(String name) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + name + "%");
+    public static Specification<Club> likeClubName(String keyword) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate nameLike = criteriaBuilder.like(root.get("name"), "%" + keyword + "%");
+            Predicate tagLike = criteriaBuilder.like(root.get("tag"), "%" + keyword + "%");
+            Predicate descriptionLike = criteriaBuilder.like(root.get("description"), "%" + keyword + "%");
+            Predicate subCategoryLike = criteriaBuilder.like(root.get("subCategory"), "%" + keyword + "%");
+
+            return criteriaBuilder.or(nameLike, tagLike, descriptionLike, subCategoryLike);
+        };
     }
 
     /**

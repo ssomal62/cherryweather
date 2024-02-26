@@ -1,21 +1,15 @@
 package com.example.demo.club.controller;
 
-import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.club.dto.ClubListDTO;
 import com.example.demo.club.dto.ClubQueryDTO;
 import com.example.demo.club.service.ClubQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,13 +34,7 @@ public class ClubQueryAPIController {
     public ResponseEntity<ClubListDTO> findAllByConditions(
             @RequestBody ClubQueryDTO requestDTO
             ) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isAuthenticated = authentication != null && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
-
-        Optional<AccountDetails> accountDetailsOptional = isAuthenticated ?
-                Optional.ofNullable((AccountDetails) authentication.getPrincipal()) :
-                Optional.empty();
-        ClubListDTO clubs = clubQueryService.findAllByConditions(requestDTO, accountDetailsOptional);
+        ClubListDTO clubs = clubQueryService.findAllByConditions(requestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(clubs);
     }
 }
