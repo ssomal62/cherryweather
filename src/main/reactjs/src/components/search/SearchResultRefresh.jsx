@@ -4,7 +4,7 @@ import {IoIosArrowForward} from "react-icons/io";
 import {Spinner, Tab, Tabs} from "@nextui-org/react";
 import EventSearchResult from "./EventSearchResult";
 import ClubSearchResult from "./ClubSearchResult";
-import {searchClubListState, useClubData} from "../../../recoil/hooks/UseClubApi";
+import {searchClubListState, useClubData} from "../../recoil/hooks/UseClubApi";
 import {useRecoilValue} from "recoil";
 
 const SearchResultRefresh = ({requestData}) => {

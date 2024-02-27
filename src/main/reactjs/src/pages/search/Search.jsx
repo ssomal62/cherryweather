@@ -1,14 +1,14 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import Layout from "../../common/Layout";
-import SearchHeader from "../../components/club/search/SearchHeader";
+import SearchHeader from "../../components/search/SearchHeader";
 import {Divider} from "@nextui-org/react";
-import SearchHistory from "../../components/club/search/SearchHistory";
-import RecommendKeywords from "../../components/club/search/RecommendKeywords";
+import SearchHistory from "../../components/search/SearchHistory";
+import RecommendKeywords from "../../components/search/RecommendKeywords";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useRecoilValue} from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import {searchClubListState} from "../../recoil/hooks/UseClubApi";
-import SearchResultRefresh from "../../components/club/search/SearchResultRefresh";
-import SearchResult from "../../components/club/search/SearchResult";
+import SearchResultRefresh from "../../components/search/SearchResultRefresh";
+import SearchResult from "../../components/search/SearchResult";
 
 const Search = () => {
 
@@ -22,6 +22,7 @@ const Search = () => {
     const from = location.state?.from || '/';
 
     const searchClubList = useRecoilValue(searchClubListState);
+    const setSearchClubLit = useSetRecoilState(searchClubListState);
 
 
     useEffect(() => {
@@ -64,6 +65,7 @@ const Search = () => {
     }
 
     const handleSearch = (searchTerm) => {
+        setSearchClubLit([]);
         if (searchTerm.trim() !== '') {
             setKeywords(prevKeywords => {
                 const filterKeywords = prevKeywords.filter(keyword => keyword!== searchTerm);
@@ -98,11 +100,13 @@ const Search = () => {
                         onRemoveAll={onRemoveAll}
                         setInputValue={setInputValue}
                         handleSearch={handleSearch}
+                        setSearchTriggered={setSearchTriggered}
                     />
                     <Divider />
                     <RecommendKeywords
                         setInputValue={setInputValue}
                         handleSearch={handleSearch}
+                        setSearchTriggered={setSearchTriggered}
                     />
                 </>
             );

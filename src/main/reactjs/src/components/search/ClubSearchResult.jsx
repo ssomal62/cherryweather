@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import CardListItem from "../clubList/ClubListItem";
+import CardListItem from "../club/clubList/ClubListItem";
 import {LuAlertCircle} from "react-icons/lu";
 
 const ClubSearchResult = ({clubList}) => {

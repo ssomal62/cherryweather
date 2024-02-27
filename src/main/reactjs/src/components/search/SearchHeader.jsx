@@ -1,11 +1,11 @@
 import React from "react";
 import {Input, Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
-import {SearchIcon} from '../../../assets/icon/SearchIcon'
+import {SearchIcon} from '../../assets/icon/SearchIcon'
 import {IoIosClose} from "react-icons/io";
 import weatherPhrases from './WeatherPlaceholder.json'
 import {useSetRecoilState} from "recoil";
-import {searchClubListState} from "../../../recoil/hooks/UseClubApi";
+import {searchClubListState} from "../../recoil/hooks/UseClubApi";
 
 export default function SearchHeader({ handleSearch, setInputValue, inputValue, handleBack, setSearchTriggered}) {
 

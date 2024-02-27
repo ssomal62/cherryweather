@@ -5,7 +5,7 @@ import {Tab, Tabs} from "@nextui-org/react";
 import EventSearchResult from "./EventSearchResult";
 import ClubSearchResult from "./ClubSearchResult";
 import {useRecoilValue} from "recoil";
-import {searchClubListState} from "../../../recoil/hooks/UseClubApi";
+import {searchClubListState} from "../../recoil/hooks/UseClubApi";
 
 const SearchResult = () => {
 
