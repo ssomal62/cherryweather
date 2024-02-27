@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {Button} from "@nextui-org/react";
 import {IoIosArrowForward, IoIosClose} from "react-icons/io";
+import { LuAlertCircle } from "react-icons/lu";
 
-const SearchHistory = ({keywords,onRemove,onRemoveAll}) => {
+const SearchHistory = ({keywords,onRemove,onRemoveAll, setInputValue, handleSearch}) => {
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
@@ -13,6 +14,11 @@ const SearchHistory = ({keywords,onRemove,onRemoveAll}) => {
         setScrollLeft(e.currentTarget.scrollLeft);
     };
 
+    const handelButtonClick = (e) => {
+        handleSearch(e.target.value);
+        setInputValue(e.target.value);
+    }
+
     const stopDragging = (e) => {
         if (!isDragging) return;
         setIsDragging(false);
@@ -20,15 +26,14 @@ const SearchHistory = ({keywords,onRemove,onRemoveAll}) => {
 
     const handleMouseMove = (e) => {
         if (!isDragging) return;
-        e.preventDefault(); // 텍스트 선택 방지
+        e.preventDefault();
         const x = e.pageX - e.currentTarget.offsetLeft;
-        const walk = (x - startX) * 2; // 드래그 거리에 따라 스크롤 속도 조절
+        const walk = (x - startX) * 2;
         e.currentTarget.scrollLeft = scrollLeft - walk;
     };
 
-
     return (
-        <section style={{padding: 20}}>
+        <section style={{padding: 20, height:"17vh"}}>
             <div className="flex items-center justify-between" style={styles.font}>
                 <div className="flex items-center">
                     <IoIosArrowForward className="mr-2"/>
@@ -56,6 +61,7 @@ const SearchHistory = ({keywords,onRemove,onRemoveAll}) => {
                  }}
             >
                 {
+                    keywords.length !== 0 ? (
                     keywords.map((item, index) => (
                         <div key={index}
                              style={{marginRight: '10px'}}>
@@ -64,18 +70,22 @@ const SearchHistory = ({keywords,onRemove,onRemoveAll}) => {
                                 radius="full"
                                 color="default"
                                 variant="bordered"
-                                endContent={<IoIosClose style={{cursor:'pointer'}} onClick={()=> onRemove(index)}/>}
+                                endContent={<IoIosClose style={{cursor:'pointer'}} onClick={(e)=> {e.stopPropagation(); onRemove(index);}}/>}
+                                value={item}
+                                onClick={(e) => handelButtonClick(e)}
                             >
                                 {item}
                             </Button>
                         </div>
                     ))
+                    )
+                        :
+                        (<div style={styles.noData}> <LuAlertCircle/>&nbsp;최근 키워드가 없습니다</div>)
                 }
             </div>
         </section>
     );
 };
-
 
 export default SearchHistory;
 
@@ -90,6 +100,15 @@ const styles = {
         overflow  : 'hidden',
         position  : 'relative',
         cursor    : 'pointer',
+    },
+    noData: {
+        color: 'gray',
+        fontSize : 'small',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
     }
 }
 

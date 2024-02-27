@@ -1,11 +1,10 @@
 import React from 'react';
-import Layout from "../../common/Layout";
 
 const Feed = () => {
     return (
-        <Layout>
+        <div>
             Feed
-        </Layout>
+        </div>
     );
 };
 

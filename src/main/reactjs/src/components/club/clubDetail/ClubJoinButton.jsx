@@ -4,7 +4,7 @@ import {Button} from "@nextui-org/react";
 import {useNavigate} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {clubDetailState} from "../../../recoil/hooks/UseClubApi";
-import {useLikeClub} from "../../../recoil/hooks/UseLikedState";
+import {useLikeClub} from "../../../recoil/hooks/UseLikeApi";
 import {HeartIcon} from "../../../assets/icon/HeartIcon";
 import {Cookies} from "react-cookie";
 import {instance} from "../../../recoil/module/instance";

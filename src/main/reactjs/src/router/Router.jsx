@@ -25,13 +25,19 @@ import AI_image from "../pages/ai/ImageGenerator";
 import WeatherDetail from "../pages/weather/WeatherDetail";
 import AI_imageList from "../pages/ai/SavedImage";
 import Community from "../pages/community/Community";
+import MySetting from "../components/mypage/MySetting";
+import ModifyProfile from "../components/mypage/ModifyProfile";
+
 import Chat from "../pages/chat/Chat";
 import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
 import ClubSearch from "../pages/club/ClubSearch";
 import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
+
 import NaverCallBack from "../pages/auth/NaverCallBack";
+import Club from "../pages/club/Club";
+import Search from "../pages/search/Search";
 import MySetting from "../components/mypage/MySetting";
 import ModifyProfile from "../components/mypage/ModifyProfile";
 
@@ -128,23 +134,30 @@ const Router = () => {
             <Route path=":clubId" element={<AddClub />} />
           </Route>
           <Route path="/club-wait" element={<ClubWaitingToJoin />} />
+                    <Route path="/club-details/:clubId" element={<ClubDetails/>}/>
+                    <Route path="/club-add" element={<AddClub/>}>
+                        <Route path=":clubId" element={<AddClub/>}/>
+                    </Route>
+                    <Route path="/club-configurations" element={<ClubConfigurations/>}/>
+                    <Route path="/club-members" element={<ClubMembers/>}/>
+                    <Route path="/club-join" element={<ClubJoin/>}/>
+                    <Route path="/club-wait" element={<ClubWaitingToJoin/>}/>
 
-          <Route path="/ai" element={<AI_main />} />
-          <Route path="/gpt" element={<GPT />} />
-          <Route path="/image" element={<AI_image />} />
-          <Route path="/imageList" element={<AI_imageList />} />
-          <Route path="/weatherDetail" element={<WeatherDetail />} />
+                    <Route path="/ai" element={<AI_main/>}/>
+                    <Route path="/gpt" element={<GPT/>}/>
+                    <Route path="/image" element={<AI_image/>}/>
+                    <Route path="/imageList" element={<AI_imageList/>}/>
+                    <Route path="/weatherDetail" element={<WeatherDetail/>}/>
 
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/chat/room/:chatRoom/" element={<ChatRoom />} />
-          <Route path="/chat/admin" element={<Adminchat />} />
+                    <Route path="/chat" element={<Chat/>}/>
+                    <Route path="/chat/room/:chatRoom/" element={<ChatRoom/>}/>
+                    <Route path="/chat/admin" element={<Adminchat/>}/>
 
-          {/* {isLogin && <Route path="/club" element={<Club />} />} */}
-          <Route path="/event" element={<Event />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
-  );
+                    <Route path="/event" element={<Event/>}/>
+                </Routes>
+            </Suspense>
+        </BrowserRouter>
+    );
 };
 
 export default Router;
