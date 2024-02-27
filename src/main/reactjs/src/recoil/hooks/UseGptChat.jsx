@@ -58,10 +58,16 @@ export const useGptChat = () => {
             if (response.data.includes('style')) {
                 setGeneratedImageState(true);
                 setPromptState(response.data);
-                console.log("if 문에 전달된 response.data :"+ response.data);
+            } else if (response.data.includes('(추천)')){
+                setAssistantMessage(prevState => [...prevState, response.data]);
+                setChatList(prevChatList => [
+                    ...prevChatList,
+                    { content: response.data, isSpecialMessage: true }
+                ]);
+                setGeneratedImageState(false);
             } else {
                 setAssistantMessage(prevState => [...prevState, response.data]);
-                setChatList((prevChatList) => [...prevChatList, response.data]);
+                setChatList((prevChatList) => [...prevChatList,{ content: response.data, isSpecialMessage: false }]);
                 setGeneratedImageState(false);
             }
         } catch (error) {

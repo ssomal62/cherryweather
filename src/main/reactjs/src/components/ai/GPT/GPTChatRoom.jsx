@@ -16,6 +16,7 @@ import {Button, Spinner} from "@nextui-org/react";
 import {useFetchImage} from "../../../recoil/hooks/UseFetchImage";
 import {useFetchUserInfo, userInfoState} from "../../../recoil/hooks/UseFetchUserInfo";
 import {useStartChat} from "../../../recoil/hooks/UseStartChat";
+import {useImageCreation} from "../../../recoil/hooks/useImageCreation";
 // import {content} from "../../../../tailwind.config";
 
 
@@ -31,6 +32,7 @@ const GPTChatRoom = () => {
     const [isImageState, setImageState] = useRecoilState(imageState); // imageState 상태 추가
     const fetchImage = useFetchImage(prompt);
     const chatRestart = useStartChat();
+    const { handleImageCreateClick } = useImageCreation();
 
     const fetchUserInfo = useFetchUserInfo();
     const userInfo = useRecoilValue(userInfoState);
@@ -38,6 +40,7 @@ const GPTChatRoom = () => {
 
     useEffect(() => {
         fetchUserInfo();
+        initializeState();
     }, []);
 
     console.log(userInfo.email)
@@ -63,7 +66,11 @@ const GPTChatRoom = () => {
             setUserInput(""); // 입력 필드 초기화
 
             // // 채팅 리스트에 사용자 입력 추가 후 화면 재출력
-            setChatList(prevChatList => [...prevChatList, userInput]);
+            // 사용자 입력을 채팅 리스트에 객체 형태로 추가하는 부분 수정
+            setChatList(prevChatList => [
+                ...prevChatList,
+                { content: userInput, isSpecialMessage: false } // 사용자 입력도 객체 형태로 추가
+            ]);
             console.log("채팅 리스트 요청 --- 요청시 :  " + chatList)
             messagesEndRef.current.scrollIntoView({behavior: "smooth"});
             setIsLoading(true); // 데이터 가져오는 동안 로딩 상태 활성화
@@ -79,23 +86,6 @@ const GPTChatRoom = () => {
             console.error("메시지 전송에 실패했습니다.", error);
         }
     };
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             setIsLoading(true); // 스피너 표시
-    //             await fetchChatMessages(userInput); // 채팅 메시지 불러오기
-    //             setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
-    //         } catch (error) {
-    //             console.error("채팅 메시지를 불러오는데 실패했습니다.", error);
-    //         }
-    //     };
-    //
-    //     // userMessages가 null인 경우에만 fetchData 함수 실행
-    //     if (userMessages.length === 0 && assistantMessages.length === 0) {
-    //         fetchData();
-    //     }
-    // }, [userMessages]); // userMessages 값이 변경될 때마다 useEffect 실행
 
     // useEffect 수정
     useEffect(() => {
@@ -121,13 +111,13 @@ const GPTChatRoom = () => {
         }
     }, [chatList]); // chatList가 변경될 때마다 메시지 스크롤을 마지막 채팅으로 이동
 
-    //위치 확인용
-    // useEffect(() => {
-    //     setIsLoading(true); // 스피너 표시
-    //     return () => {
-    //         setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
-    //     };
-    // }, []); // 컴포넌트가 마운트될 때만 실행
+    // 위치 확인용
+    useEffect(() => {
+        setIsLoading(true); // 스피너 표시
+        return () => {
+            setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
+        };
+    }, []); // 컴포넌트가 마운트될 때만 실행
 
     useEffect(() => {
         if (isImageState) {
@@ -142,8 +132,12 @@ const GPTChatRoom = () => {
     }, [isImageState]);
 
 
-    console.log("userMessages : " + userMessages)
-    console.log("assistantMessages : " + assistantMessages)
+    const initializeState = () => {
+        setUserMessages([]); // 사용자 메시지 상태 초기화
+        setChatList([]); // 채팅 리스트 상태 초기화
+        // 기타 상태 초기화...
+    };
+
     return (
         <Layout>
 
@@ -184,7 +178,12 @@ const GPTChatRoom = () => {
                                                     <strong>유저<br/></strong>
                                                 </>
                                             )}
-                                            <p>{message}</p>
+                                            <p>{message.content}</p>
+                                            {/* 특별한 메시지 아래에 버튼 추가 */}
+                                            {message.isSpecialMessage && (
+                                                <button onClick={() => handleImageCreateClick(message.content)}>
+                                                    이미지 생성</button>
+                                            )}
                                             {index === chatList.length - 1 && (
                                                 <div>
                                                     <div ref={messagesEndRef}/>
@@ -197,7 +196,7 @@ const GPTChatRoom = () => {
 
 
                             {isLoading && (
-                                <Spinner size="sm" color="danger" labelColor="danger" style={{marginTop: "-140px"}}/>
+                                <Spinner size="md" color="danger" labelColor="danger" style={{marginTop: "-140px"}}/>
                             )}
                             {/* 메시지 입력 및 전송 UI */}
                             <div
