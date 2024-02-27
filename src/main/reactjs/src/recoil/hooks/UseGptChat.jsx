@@ -54,15 +54,14 @@ export const useGptChat = () => {
 
             const response = await instance.post('/gpt/chat', requestData, config);
 
-            setAssistantMessage(prevState => [...prevState, response.data]);
-            setChatList((prevChatList) => [...prevChatList, response.data]);
-
             // 검사하여 이미지 생성 여부 판단 후 imageState 값을 변경
-            if (response.data.includes('style guide')) {
+            if (response.data.includes('style')) {
                 setGeneratedImageState(true);
                 setPromptState(response.data);
                 console.log("if 문에 전달된 response.data :"+ response.data);
             } else {
+                setAssistantMessage(prevState => [...prevState, response.data]);
+                setChatList((prevChatList) => [...prevChatList, response.data]);
                 setGeneratedImageState(false);
             }
         } catch (error) {

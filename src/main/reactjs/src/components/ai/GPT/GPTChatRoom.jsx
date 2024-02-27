@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 
-import "../../../style/GptChatRoomStyle.css";
+import "./GptChatRoomStyle.css";
 import Layout from "../../../common/Layout";
 import {useNavigate} from "react-router-dom";
 import {
@@ -12,8 +12,10 @@ import {
     userMessage
 } from "../../../recoil/hooks/UseGptChat";
 import {atom, useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {Spinner} from "@nextui-org/react";
+import {Button, Spinner} from "@nextui-org/react";
 import {useFetchImage} from "../../../recoil/hooks/UseFetchImage";
+import {useFetchUserInfo, userInfoState} from "../../../recoil/hooks/UseFetchUserInfo";
+import {useStartChat} from "../../../recoil/hooks/UseStartChat";
 // import {content} from "../../../../tailwind.config";
 
 
@@ -28,10 +30,29 @@ const GPTChatRoom = () => {
     const [isLoading, setIsLoading] = useState(false); // isLoading 상태 추가
     const [isImageState, setImageState] = useRecoilState(imageState); // imageState 상태 추가
     const fetchImage = useFetchImage(prompt);
-    // const prompt = useRecoilValue(promptState);
+    const chatRestart = useStartChat();
 
-    console.log(isImageState);
+    const fetchUserInfo = useFetchUserInfo();
+    const userInfo = useRecoilValue(userInfoState);
     const messagesEndRef = useRef(null); // 메시지 스크롤을 자동으로 내릴 Ref
+
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
+
+    console.log(userInfo.email)
+    console.log(userInfo.gender)
+    console.log(userInfo)
+
+    // useState로 버튼 클릭 상태 관리
+    const [isStarted, setIsStarted] = useState(false);
+
+    // 시작하기 버튼 클릭 핸들러
+    const handleStartClick = async () => {
+        setIsStarted(true); // 버튼 클릭 상태를 true로 변경
+        const response = await chatRestart();
+    };
+
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if (userInput.trim() === "") return;
@@ -59,22 +80,39 @@ const GPTChatRoom = () => {
         }
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setIsLoading(true); // 스피너 표시
-                await fetchChatMessages(userInput); // 채팅 메시지 불러오기
-                setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
-            } catch (error) {
-                console.error("채팅 메시지를 불러오는데 실패했습니다.", error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             setIsLoading(true); // 스피너 표시
+    //             await fetchChatMessages(userInput); // 채팅 메시지 불러오기
+    //             setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
+    //         } catch (error) {
+    //             console.error("채팅 메시지를 불러오는데 실패했습니다.", error);
+    //         }
+    //     };
+    //
+    //     // userMessages가 null인 경우에만 fetchData 함수 실행
+    //     if (userMessages.length === 0 && assistantMessages.length === 0) {
+    //         fetchData();
+    //     }
+    // }, [userMessages]); // userMessages 값이 변경될 때마다 useEffect 실행
 
-        // userMessages가 null인 경우에만 fetchData 함수 실행
-        if (userMessages.length === 0 && assistantMessages.length === 0) {
+    // useEffect 수정
+    useEffect(() => {
+        if (isStarted) { // 시작하기 버튼 클릭 시만 fetchData 함수 실행
+            const fetchData = async () => {
+                try {
+                    setIsLoading(true);
+                    await fetchChatMessages(userInput);
+                    setIsLoading(false);
+                } catch (error) {
+                    console.error("채팅 메시지를 불러오는데 실패했습니다.", error);
+                }
+            };
+
             fetchData();
         }
-    }, [userMessages]); // userMessages 값이 변경될 때마다 useEffect 실행
+    }, [isStarted]); // isStarted 상태 변경 시 useEffect 실행
 
 
     useEffect(() => {
@@ -94,8 +132,8 @@ const GPTChatRoom = () => {
     useEffect(() => {
         if (isImageState) {
             // imageState 값이 true일 때 수행할 작업
-            //response.data 의 값
             console.log('챗룸에서 이미지 생성용 프롬프트 : ' + prompt);
+            setImageState(false);
             navigate('/image');
         } else {
             // imageState 값이 false일 때 수행할 작업
@@ -114,11 +152,29 @@ const GPTChatRoom = () => {
                     <div className="col-sm-12">
                         <div className="user_chat_data">
                             <div className="chat_section msg_history" id="chat-messages">
+                                <div style={{width: "100%"}}>
+                                    <img src='https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/cherry.svg'
+                                         alt="" style={{width:'200px',height:'200px',marginBottom:'20px', }}/>
+                                    <div className="chat-message received-message">
+                                        <strong>체리<br/></strong>
+                                        <p>안녕하세요, 저는 🍒체리입니다! 요즘엔 좀 심심해서 패션 컨설턴트 일을 잠깐 맡고 있어요.
+                                            여러분의 오늘을 더욱 빛내줄 옷차림을 추천해드릴 수 있어요.
+                                            어떤 스타일을 선호하시나요? 함께 이야기 해볼까요?😊 </p>
+                                    </div>
+                                </div>
+                                 {/*시작하기 버튼 렌더링 조건과 위치 조정*/}
+                                {
+                                    !isStarted && (
+                                        <Button className='startButton' color="danger" variant="bordered" onClick={handleStartClick}>
+                                            대화 시작
+                                        </Button>
+                                    )
+                                }
 
                                 {chatList.map((message, index) => (
                                     <div key={index} style={{width: "100%",}}>
                                         <div
-                                            className={"chat-message " + (index % 2 === 0 ? "received-message" : "sent-message")}>
+                                            className={"chat-message " + (index % 2 === 0 ? "received-message" : "user-message")}>
                                             {index % 2 === 0 ? (
                                                 <>
                                                     <strong>체리<br/></strong>
@@ -153,14 +209,15 @@ const GPTChatRoom = () => {
                                         <input
                                             type="text"
                                             className="write_msg"
-                                            placeholder="Type a message"
+                                            placeholder="메세지를 입력하세요."
                                             value={userInput}
                                             onChange={(e) => setUserInput(e.target.value)}
+                                            disabled={!isStarted}
                                         />
-                                        {/*{isImageState && (*/}
-                                        {/*    <button type="button" className="img_send_btn">이미지 생성</button>*/}
-                                        {/*)}*/}
-                                        <button type="submit" className="msg_send_btn">Send</button>
+                                        {/* 시작하기 버튼 클릭 전에는 Send 버튼 숨김 */}
+                                        {isStarted && (
+                                            <button type="submit" className="msg_send_btn">Send</button>
+                                        )}
                                     </form>
                                 </div>
                             </div>

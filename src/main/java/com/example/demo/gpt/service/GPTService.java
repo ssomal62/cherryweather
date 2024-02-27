@@ -6,4 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface GPTService {
     Mono<String> chat(ChatRequest request);
+
+    void startNewChatSession();
 }
