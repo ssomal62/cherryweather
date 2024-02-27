@@ -25,6 +25,7 @@ public class AlarmServiceImpl {
         Alarm alarm = Alarm.builder()
                 .account(accountDetails.getAccount())
                 .type(alarmDto.getType())
+                .targetId(alarmDto.getTargetId())
                 .importance(alarmDto.getImportance())
                 .description(alarmDto.getDescription())
                 .build();

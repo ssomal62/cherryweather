@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { GoBell } from "react-icons/go";
-import { Badge } from "@nextui-org/react";
+import React, {useEffect, useState} from "react";
+import {GoBell} from "react-icons/go";
+import {Badge} from "@nextui-org/react";
 import DropDownNotification from "./DropDownNotification";
-import { useRecoilValue } from "recoil";
-import { IsLoginAtom } from "../../recoil/LoginAtom";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../../recoil/LoginAtom";
 import LoginVerificationModal from "../../utils/LoginVerificationModal";
-import { userInfoState } from "../../recoil/hooks/UseFetchUserInfo";
-import { alramListState } from "../../recoil/hooks/UseAlramApi";
+import {userInfoState} from "../../recoil/hooks/UseFetchUserInfo";
+import {alramListState} from "../../recoil/hooks/UseAlramApi";
 
-const GoBellDropNotificationIcon = ({ onClick }) => {
+const GoBellDropNotificationIcon = ({onClick}) => {
   const [isOpen, setIsOpen] = useState(false);
   const userInfo = useRecoilValue(userInfoState); // 알림 수신 동의 상태 가져옴.
   const alarmList = useRecoilValue(alramListState);
@@ -26,10 +26,6 @@ const GoBellDropNotificationIcon = ({ onClick }) => {
   // 실제 알림 개수 계산(예시 alramList 사용)
   const actualNotificationCount = alarmList.length;
 
-  // 알림 수신 동의 및 로그인 상태 확인
-  //  const shouldShowNotifications = isLogin && userInfo.agreementGetNotified;
-
-
   const handleClick = () => {
     // 아이콘 클릭 핸들러
     if (!isLogin) {
@@ -41,7 +37,7 @@ const GoBellDropNotificationIcon = ({ onClick }) => {
   return (
     <>
       <div
-        style={{ position: "relative", display: "flex", alignItems: "center" }}
+        style={{position: "relative", display: "flex", alignItems: "center"}}
       >
         <GoBell
           style={{
@@ -50,14 +46,18 @@ const GoBellDropNotificationIcon = ({ onClick }) => {
           }}
           onClick={handleClick}
         />
-        {isLogin && userInfo.agreementGetNotified && ( // 알림 수신 동의가 true일 때만 표시
-          <Badge
-            content="99+"
-            // {actualNotificationCount > 99 ? '99+' : actualNotificationCount.toString()}
-            color="danger"
-            style={{ position: "absolute", top: "-15px", right: "3px" }} // 위치를 조정합니다.
-          />
-        )}
+        {isLogin &&
+          userInfo.agreementGetNotified && ( // 알림 수신 동의가 true일 때만 표시
+            <Badge
+              content={
+                actualNotificationCount > 99
+                  ? "99+"
+                  : actualNotificationCount.toString()
+              }
+              color="danger"
+              style={{position: "absolute", top: "-15px", right: "3px"}} // 위치를 조정합니다.
+            />
+          )}
 
         {isLogin && isOpen && <DropDownNotification />}
       </div>

@@ -1,12 +1,10 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { IsLoginAtom } from "../recoil/LoginAtom";
+import React, {Suspense} from "react";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../recoil/LoginAtom";
 // import { lazy } from "react";
-
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
-import Club from "../pages/club/Club";
 // import Login from "../pages/Login";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
@@ -32,15 +30,11 @@ import Chat from "../pages/chat/Chat";
 import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
-import ClubSearch from "../pages/club/ClubSearch";
 import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
 
 import NaverCallBack from "../pages/auth/NaverCallBack";
 import Club from "../pages/club/Club";
 import Search from "../pages/search/Search";
-import MySetting from "../components/mypage/MySetting";
-import ModifyProfile from "../components/mypage/ModifyProfile";
-
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -112,14 +106,11 @@ const Router = () => {
           />
           {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
           <Route path="/club" element={<Club />} />
-          {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}
-          {/*<Route path=":num" element={<ClubDetails />} />*/}
-
           <Route path="/community" element={<Community />}>
             <Route path=":selectPage" element={<Community />} />
           </Route>
+          <Route path="/search" element={<Search />} />
 
-          {/*<Route path="/clubs" element={<Club/>}/>*/}
           <Route path="/club-details/:clubId" element={<ClubDetails />} />
           <Route path="/club-add" element={<AddClub />}>
             <Route path=":clubId" element={<AddClub />} />
@@ -127,37 +118,23 @@ const Router = () => {
           <Route path="/club-configurations" element={<ClubConfigurations />} />
           <Route path="/club-members" element={<ClubMembers />} />
           <Route path="/club-join" element={<ClubJoin />} />
-          <Route path="/club-search" element={<ClubSearch />} />
-          {/*<Route path="/clubs" element={<Club/>}/>*/}
-          <Route path="/club-details/:clubId" element={<ClubDetails />} />
-          <Route path="/club-add" element={<AddClub />}>
-            <Route path=":clubId" element={<AddClub />} />
-          </Route>
           <Route path="/club-wait" element={<ClubWaitingToJoin />} />
-                    <Route path="/club-details/:clubId" element={<ClubDetails/>}/>
-                    <Route path="/club-add" element={<AddClub/>}>
-                        <Route path=":clubId" element={<AddClub/>}/>
-                    </Route>
-                    <Route path="/club-configurations" element={<ClubConfigurations/>}/>
-                    <Route path="/club-members" element={<ClubMembers/>}/>
-                    <Route path="/club-join" element={<ClubJoin/>}/>
-                    <Route path="/club-wait" element={<ClubWaitingToJoin/>}/>
 
-                    <Route path="/ai" element={<AI_main/>}/>
-                    <Route path="/gpt" element={<GPT/>}/>
-                    <Route path="/image" element={<AI_image/>}/>
-                    <Route path="/imageList" element={<AI_imageList/>}/>
-                    <Route path="/weatherDetail" element={<WeatherDetail/>}/>
+          <Route path="/ai" element={<AI_main />} />
+          <Route path="/gpt" element={<GPT />} />
+          <Route path="/image" element={<AI_image />} />
+          <Route path="/imageList" element={<AI_imageList />} />
+          <Route path="/weatherDetail" element={<WeatherDetail />} />
 
-                    <Route path="/chat" element={<Chat/>}/>
-                    <Route path="/chat/room/:chatRoom/" element={<ChatRoom/>}/>
-                    <Route path="/chat/admin" element={<Adminchat/>}/>
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/room/:chatRoom/" element={<ChatRoom />} />
+          <Route path="/chat/admin" element={<Adminchat />} />
 
-                    <Route path="/event" element={<Event/>}/>
-                </Routes>
-            </Suspense>
-        </BrowserRouter>
-    );
+          <Route path="/event" element={<Event />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
 };
 
 export default Router;

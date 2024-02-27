@@ -28,6 +28,7 @@ public class AlarmDto {
                 .name(alarm.getAccount().getName())
                 .description(alarm.getDescription())
                 .type(alarm.getType())
+                .targetId(alarm.getTargetId())
                 .importance(alarm.getImportance())
                 .createdAt(alarm.getCreatedAt())
                 .isShowAlarm(alarm.isShowAlarm())

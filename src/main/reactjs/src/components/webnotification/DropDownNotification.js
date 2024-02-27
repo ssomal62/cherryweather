@@ -38,8 +38,11 @@ const DropDownNotification = () => {
   useAlarmData({state: alramListState, dynamicPath: ""});
   const alramList = useRecoilValue(alramListState);
 
-  // 최대 5개의 최신 알림만 표시하도록 알림 목록을 처리
-  const displayedAlarmList = alramList.slice(0, 5).reverse();
+  // 새로운 배열을 만들어서 작업합니다.
+  const sortedAlramList = [...alramList].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+  const displayedAlramList = sortedAlramList.slice(0, 5);
 
   useEffect(() => {
     if (weatherData && isOpen) {
@@ -67,8 +70,13 @@ const DropDownNotification = () => {
         <span></span>
       </DropdownTrigger>
       <DropdownMenu aria-label="Notifications" color="danger">
-        {displayedAlarmList.map((item, index) => (
-          <DropdownItem key={index}>{item.description}</DropdownItem>
+        {displayedAlramList.map((item, index) => (
+          <DropdownItem
+            key={index}
+            onClick={() => navigate(`/club-details/${item.targetId}`)}
+          >
+            {item.description}
+          </DropdownItem>
         ))}
       </DropdownMenu>
     </Dropdown>
