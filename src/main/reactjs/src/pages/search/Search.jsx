@@ -1,10 +1,13 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import Layout from "../../common/Layout";
 import SearchHeader from "../../components/club/search/SearchHeader";
-import AnimationRightInWrapper from "../../utils/animations/AnimationRightInWrapper";
 import {Divider} from "@nextui-org/react";
 import SearchHistory from "../../components/club/search/SearchHistory";
 import RecommendKeywords from "../../components/club/search/RecommendKeywords";
+import {useLocation, useNavigate} from "react-router-dom";
+import {useRecoilValue} from "recoil";
+import {searchClubListState} from "../../recoil/hooks/UseClubApi";
+import SearchResultRefresh from "../../components/club/search/SearchResultRefresh";
 import SearchResult from "../../components/club/search/SearchResult";
 
 const Search = () => {
@@ -13,6 +16,32 @@ const Search = () => {
     const [searchWord, setSearchWord] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [searchTriggered, setSearchTriggered] = useState(false);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const from = location.state?.from || '/';
+
+    const searchClubList = useRecoilValue(searchClubListState);
+
+
+    useEffect(() => {
+        const savedSearchResult = localStorage.getItem('searchResult');
+        if (savedSearchResult) {
+            const inputValue = JSON.parse(savedSearchResult);
+            setInputValue(inputValue);
+        }
+    }, []);
+
+    useEffect(() => {
+        const savedSearchTriggered = localStorage.getItem('searchTriggered');
+        if (savedSearchTriggered) {
+            setSearchTriggered(savedSearchTriggered === 'true');
+        }
+    }, []);
+
+    function handleBack() {
+        navigate(from);
+    }
 
     useEffect(() => {
         const savedKeywords = localStorage.getItem('keywords');
@@ -42,8 +71,11 @@ const Search = () => {
             });
             setSearchWord(searchTerm);
             setSearchTriggered(true);
+            localStorage.setItem('searchResult', JSON.stringify(searchTerm));
+            localStorage.setItem('searchTriggered', 'true');
         } else {
             setSearchTriggered(false);
+            localStorage.setItem('searchTriggered', 'false');
         }
     };
 
@@ -53,30 +85,41 @@ const Search = () => {
     }), [searchWord]);
 
     const renderContent = useMemo(() => {
-        if (searchTriggered && searchWord.trim() !== '') {
-            return <SearchResult requestData={requestData} />;
-        } else {
+        if (searchClubList.length > 0 && searchTriggered)  {
+            return <SearchResult/>;
+        } else if (searchTriggered && searchWord.trim() !== '') {
+            return <SearchResultRefresh requestData={requestData} />;
+        } else  {
             return (
                 <>
-                    <SearchHistory keywords={keywords} onRemove={onRemove} onRemoveAll={onRemoveAll} />
+                    <SearchHistory
+                        keywords={keywords}
+                        onRemove={onRemove}
+                        onRemoveAll={onRemoveAll}
+                        setInputValue={setInputValue}
+                        handleSearch={handleSearch}
+                    />
                     <Divider />
-                    <RecommendKeywords handleSearch={handleSearch}/>
+                    <RecommendKeywords
+                        setInputValue={setInputValue}
+                        handleSearch={handleSearch}
+                    />
                 </>
             );
         }
-    }, [searchTriggered, searchWord, keywords, requestData]);
+    }, [searchTriggered, searchClubList, searchWord, keywords, requestData, inputValue]);
 
     return (
         <Layout useHeader={false} containerMargin="0" containerPadding="0">
-            <AnimationRightInWrapper>
                 <SearchHeader
+                    handleBack={handleBack}
                     handleSearch={handleSearch}
                     setInputValue={setInputValue}
                     inputValue={inputValue}
+                    setSearchTriggered={setSearchTriggered}
                 />
                 <br/>
                 {renderContent}
-            </AnimationRightInWrapper>
         </Layout>
     );
 };

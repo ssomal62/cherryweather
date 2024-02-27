@@ -1,17 +1,35 @@
 import React, {useState} from 'react';
 import styled from "styled-components";
 import {IoIosArrowForward} from "react-icons/io";
-import {Tab, Tabs} from "@nextui-org/react";
+import {Spinner, Tab, Tabs} from "@nextui-org/react";
 import EventSearchResult from "./EventSearchResult";
 import ClubSearchResult from "./ClubSearchResult";
+import {searchClubListState, useClubData} from "../../../recoil/hooks/UseClubApi";
 import {useRecoilValue} from "recoil";
-import {searchClubListState} from "../../../recoil/hooks/UseClubApi";
 
-const SearchResult = () => {
+const SearchResultRefresh = ({requestData}) => {
 
     const [selected, setSelected] = useState("club");
 
+    const {loading: loadingClubData} =
+        useClubData({
+            method:'post',
+            state: searchClubListState,
+            dynamicPath: '/query',
+            requestBody: requestData
+        });
+
+    const loading = loadingClubData;
+
     const searchClubList = useRecoilValue(searchClubListState);
+
+    if (loading) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh'}}>
+                <Spinner size="lg" color="danger"/>
+            </div>
+        );
+    }
 
     const tabs = [
         { id: "club", label: "클럽" },
@@ -60,7 +78,7 @@ const SearchResult = () => {
     );
 };
 
-export default SearchResult;
+export default SearchResultRefresh;
 
 const Section = styled.div
 `

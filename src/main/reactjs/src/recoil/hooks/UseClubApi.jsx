@@ -16,6 +16,11 @@ export const clubListState = atom({
     default: [],
 });
 
+export const searchClubListState = atom({
+    key: 'clubListState',
+    default: [],
+});
+
 /**
  * 클럽 상세 정보 상태를 관리하는 Atom.<p>
  * **response.data.clubDetail** : 해당 클럽 상세정보 <p>

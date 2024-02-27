@@ -5,7 +5,6 @@ import {LuAlertCircle} from "react-icons/lu";
 
 const ClubSearchResult = ({clubList}) => {
 
-
     return (
         <Section>
             {

@@ -3,13 +3,14 @@ import {IoIosArrowForward} from "react-icons/io";
 import {Button} from "@nextui-org/react";
 import recommendKeyword from './WeatherCategoryKeywords.json'
 
-const RecommendKeywords = ({handleSearch}) => {
+const RecommendKeywords = ({setInputValue, handleSearch}) => {
 
     const todayWeather = "눈";
     const todayWeatherKeywords = recommendKeyword.find(item => item.weather === todayWeather);
 
     const handelButtonClick = (e) => {
         handleSearch(e.target.value);
+        setInputValue(e.target.value);
     }
 
     return (
