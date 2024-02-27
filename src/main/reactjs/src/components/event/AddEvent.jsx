@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Layout from "../../common/Layout";
 import styled from "styled-components";
 import {
   Button,

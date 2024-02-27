@@ -29,6 +29,7 @@ const ChatRoom = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMsg, setSelectedMsg] = useState({});
+  const [uploadImage, setUploadImage] = useState(null);
 
   useEffect(() => {
     const initializeChat = async () => {
@@ -127,18 +128,35 @@ const ChatRoom = () => {
         if (!ncloud) {
           throw new Error("Chat is not initialized");
         }
-        // await nc.subscribe(channelId);
-        const response = await ncloud.sendMessage(chatRoom, {
-          type: "text",
-          message: userInput,
-        });
-        // 메시지 전송 후 상태 변경하지 않도록 수정
-        // setMessages(prevMessages => [...prevMessages, response]);
+
+        if (uploadImage) {
+          // Send image
+          await ncloud.sendImage(chatRoom, uploadImage);
+          const response = await ncloud.sendMessage(chatRoom, {
+            type: "text",
+            message: userInput,
+          });
+          // setMessages(prevMessages => [...prevMessages, response]);
+        } else {
+          // Send message
+          const response = await ncloud.sendMessage(chatRoom, {
+            type: "text",
+            message: userInput,
+          });
+          // setMessages(prevMessages => [...prevMessages, response]);
+        }
+
         setUserInput("");
+        setUploadImage(null);
       } catch (error) {
         console.error("Error:", error);
       }
     }
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setUploadImage(file);
   };
 
   useEffect(() => {
@@ -372,23 +390,24 @@ const ChatRoom = () => {
                     value={userInput}
                     onChange={handleUserInput}
                     bordered
-                    style={{ flexGrow: 1 }} // 메시지 입력란이 남은 공간을 모두 차지하도록 설정
+                    style={{}} // 메시지 입력란이 남은 공간을 모두 차지하도록 설정
                   />
-                  <HiOutlinePaperClip
-                    className="img_send_btn"
-                    style={{
-                      color: "#F31260",
-                      cursor: "pointer",
-                      alignContent: "left",
-                    }}
-                  >
+                  <div>
                     <input
                       type="file"
-                      id="uploadfile"
+                      id="uploadImage"
                       name="file"
-                      // onChange={fileUpload}
+                      onChange={handleImageUpload}
                     />
-                  </HiOutlinePaperClip>
+                    <HiOutlinePaperClip
+                      className="img_send_btn"
+                      style={{
+                        color: "#F31260",
+                        cursor: "pointer",
+                        alignContent: "left",
+                      }}
+                    />
+                  </div>
                   <button type="submit" className="msg_send_btn">
                     <BsSend style={{ color: "#F31260" }} />
                   </button>

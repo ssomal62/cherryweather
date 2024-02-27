@@ -4,6 +4,7 @@ package com.example.demo.chat.controller;
 import com.example.demo.chat.dto.ChatListDto;
 import com.example.demo.chat.entity.Chat;
 import com.example.demo.chat.service.ChatService;
+import com.example.demo.common.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ import java.util.List;
 @CrossOrigin
 public class ChatController {
     private final ChatService chatService;
-
+    private final FileService fileService;
     // 채팅방 목록 데이터 전체 조회
     @GetMapping("/getchatlist")
     public List<ChatListDto> getChatList(@RequestParam long accountId) {
