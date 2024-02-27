@@ -6,7 +6,6 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
-// import p1 from "../../assets/images/club/person/5.jpg";
 import {Cookies} from "react-cookie";
 import {useNavigate} from "react-router-dom";
 import {useRecoilState, useRecoilValue} from "recoil";
@@ -18,9 +17,11 @@ const AvatarMenu = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useRecoilState(IsLoginAtom);
+
   const userInfo = useRecoilValue(userInfoState);
+
   const {profileName, email, profileImage} = userInfo;
-  const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600&ttype=jpg`;
+  const imageUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}.jpg?type=f&w=600&h=600&ttype=jpg`;
 
   // 로그아웃 함수
   const submitLogout = async () => {
@@ -57,7 +58,7 @@ const AvatarMenu = () => {
           color="secondary"
           name="Jason Hughes"
           size="sm"
-          src={imagwUrl}
+          src={imageUrl}
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="Profile Actions" variant="flat">
