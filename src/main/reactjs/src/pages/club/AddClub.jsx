@@ -12,10 +12,9 @@ import AddClubSelectJoinStatus from "../../components/club/addClub/AddClubSelect
 import AddClubInputActivitiesArea from "../../components/club/addClub/AddClubInputActivitiesArea";
 import {Cookies} from "react-cookie";
 import {clubDetailState} from "../../recoil/hooks/UseClubApi";
-import {useRecoilValue, useSetRecoilState} from "recoil";
+import {useRecoilValue} from "recoil";
 import {instance} from "../../recoil/module/instance";
 import AddClubInputNotice from "../../components/club/addClub/AddClubInputNotice";
-import {alramListState, useAlarmData} from "../../recoil/hooks/UseAlramApi";
 
 const AddClub = () => {
   const {clubId} = useParams();

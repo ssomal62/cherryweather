@@ -5,15 +5,11 @@ import {Spinner} from "@nextui-org/react";
 import {useRecoilValue} from "recoil";
 import {clubListState, useClubData} from "../../../recoil/hooks/UseClubApi";
 
-
 const ClubList = () => {
 
     const {loading: loadingClubData} = useClubData({ state: clubListState, dynamicPath: ''});
-
-    const clubList = useRecoilValue(clubListState);
-
     const loading = loadingClubData;
-
+    const clubList = useRecoilValue(clubListState);
     if (loading) {
         return (
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh'}}>

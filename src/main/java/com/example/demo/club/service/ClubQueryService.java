@@ -12,6 +12,9 @@ import com.example.demo.club.repository.ClubQueryRepository;
 import com.example.demo.club.repository.spec.ClubSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +30,12 @@ public class ClubQueryService {
     private final ClubService clubService;
 
     @Transactional
-    public ClubListDTO findAllByConditions(ClubQueryDTO requestDTO, Optional<AccountDetails> accountDetailsOptional) {
-
+    public ClubListDTO findAllByConditions(ClubQueryDTO requestDTO) {
+        Optional<AccountDetails> accountDetailsOptional = getCurrentAccountDetails();
         Specification<Club> spec = Specification.where(null);
 
         spec = buildSpecificationForStatus(requestDTO.status(), spec);
-        spec = buildSpecificationForName(requestDTO.name(), spec);
+        spec = buildSpecificationForName(requestDTO.keyword(), spec);
         spec = buildSpecificationForActivitiesArea(requestDTO.activitiesArea(), spec);
         spec = buildSpecificationForCategory(requestDTO.category(), spec);
         spec = buildSpecificationForGrade(requestDTO.grade(), spec);
@@ -44,6 +47,17 @@ public class ClubQueryService {
 
     //==============  private method  ==============//
 
+    /**
+     * 현재 인증된 사용자의 상세 정보를 반환
+     * @return 인증된 사용자의 {@link AccountDetails}를 포함하는 {@link Optional}, 인증되지 않은 경우 빈 {@link Optional}.
+     */
+    private Optional<AccountDetails> getCurrentAccountDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = authentication != null && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
+
+        return isAuthenticated ? Optional.ofNullable((AccountDetails) authentication.getPrincipal()) : Optional.empty();
+    }
+
     private Specification<Club> buildSpecificationForStatus(ClubStatus status, Specification<Club> spec) {
         return Optional.ofNullable(status)
                 .map(ClubSpecification::equalClubStatus)
@@ -51,8 +65,8 @@ public class ClubQueryService {
                 .orElse(spec);
     }
 
-    private Specification<Club> buildSpecificationForName(String name, Specification<Club> spec) {
-        return Optional.ofNullable(name)
+    private Specification<Club> buildSpecificationForName(String keyword, Specification<Club> spec) {
+        return Optional.ofNullable(keyword)
                 .map(ClubSpecification::likeClubName)
                 .map(spec::and)
                 .orElse(spec);

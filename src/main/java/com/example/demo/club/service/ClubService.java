@@ -194,6 +194,7 @@ public class ClubService {
                 .currentMembers(club.getCurrentMembers())
                 .maxMembers(club.getMaxMembers())
                 .status(club.getStatus())
+                .tag(club.getTag())
                 .category(club.getCategory())
                 .grade(club.getGrade())
                 .build();
@@ -218,6 +219,7 @@ public class ClubService {
                     .currentMembers(summary.currentMembers())
                     .maxMembers(summary.maxMembers())
                     .status(summary.status())
+                    .tag(summary.tag())
                     .category(summary.category())
                     .grade(summary.grade())
                     .liked(liked)

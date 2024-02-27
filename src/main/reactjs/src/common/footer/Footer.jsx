@@ -1,106 +1,123 @@
-import React from "react";
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import './Footer.css';
+import { HiOutlineHome, HiOutlineChat } from "react-icons/hi";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { FiUsers } from "react-icons/fi";
+import Sweater from "../../assets/icon/Sweater";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "@nextui-org/react";
 import styled from "styled-components";
-import {Tab, Tabs} from "@nextui-org/react";
-import {HiOutlineHome} from "react-icons/hi2";
-import {IoMdAddCircleOutline} from "react-icons/io";
-import {HiOutlineChat} from "react-icons/hi";
-import {FiUsers} from "react-icons/fi";
-import {MdOutlineAutoMode} from "react-icons/md";
-import {useNavigate} from "react-router-dom";
+
+const bgColorsIcon = ["#3C3C3C", "#3C3C3C", "#3C3C3C", "#3C3C3C", "#3C3C3C"];
 
 const Footer = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const menuRef = useRef(null);
+    const location = useLocation();
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [borderStyle, setBorderStyle] = useState({});
+    const [isMounted, setIsMounted] = useState(false);
+
+    const menuItems = [
+        { Icon: HiOutlineHome, path: '/', index: 0 },
+        { Icon: Sweater, path: '/ai', index: 1 },
+        { Icon: IoAddCircleOutline, path: '/club-add', index: 2 },
+        { Icon: FiUsers, path: '/community', index: 3 },
+        { Icon: HiOutlineChat, path: '/chat', index: 4 }
+    ];
+
+    const getCurrentIndex = () => {
+        if (location.pathname.startsWith('/community')) {
+            return menuItems.findIndex(item => item.path === '/community');
+        }
+        return menuItems.findIndex(item => item.path === location.pathname);
+    };
+
+    const [activeIndex, setActiveIndex] = useState(getCurrentIndex());
+
+    useLayoutEffect(() => {
+        const currentIndex = getCurrentIndex();
+        setInitialSvgPosition(currentIndex);
+        setIsAnimating(false); // 초기 애니메이션 중지
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        const currentIndex = getCurrentIndex();
+        setActiveIndex(currentIndex);
+        if (!isMounted) {
+            setInitialSvgPosition(currentIndex);
+            setTimeout(() => setIsMounted(true), 350);
+        } else {
+            updateBorderStyle(currentIndex);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.pathname]);
+
+    const calculateLeft = (index) => (64.0 * index) + 32.0;
+
+    const setInitialSvgPosition = (index) => {
+        setBorderStyle({
+            transform: `translateX(${calculateLeft(index)}%)`,
+            transition: 'none',
+            display: index === -1 ? 'none' : 'block'
+        });
+    };
+
+    const updateBorderStyle = (index) => {
+        setBorderStyle({
+            transform: `translateX(${calculateLeft(index)}%)`,
+            transition: isMounted ? 'transform 300ms ease' : 'none',
+            display: index === -1 ? 'none' : 'block'
+        });
+    };
+
+    const handleItemClick = (index, path) => {
+        setActiveIndex(index);
+        updateBorderStyle(index);
+        setTimeout(() => navigate(path), 350);
+    };
 
     return (
         <BottomNav>
-            <Tabs
-                aria-label="Options"
-                color="danger"
-                variant="solid"
-                radius="full"
-                align="center"
-            >
-                <Tab
-                    value="home"
-                    title={
-                        <div className="flex items-center flex-col "
-                             onClick={ () => navigate('/')}
-                        >
-                            <HiOutlineHome style={styles.icon}/>
-                        </div>
-                    }
-                    className="h-[50px] flex justify-center"
-                ></Tab>
-                <Tab
-                    value="ai-weather"
-                    title={
-                        <div className="flex items-center flex-col "
-                             onClick={ () => navigate('/ai')}
-                        >
-                            <MdOutlineAutoMode style={styles.icon}/>
-                        </div>
-                    }
-                    className="h-[50px] flex justify-center"
-                ></Tab>
-                <Tab
-                    value="add"
-                    title={
-                        <div className="flex items-center flex-col "
-                             onClick={ () => navigate('/club-add')}
-                        >
-                            <IoMdAddCircleOutline style={styles.icon}/>
-                        </div>
-                    }
-                    className="h-[50px] flex justify-center"
-                ></Tab>
-                <Tab
-                    value="community"
-                    title={
-                        <div className="flex items-center flex-col"
-                             onClick={() => navigate('/community')}
-                        >
-                            <FiUsers style={styles.icon}/>
-                        </div>
-                    }
-                    className="h-[50px] flex justify-center"
-                ></Tab>
-                <Tab
-                    value="chat"
-                    title={
-                        <div
-                            className="flex items-center flex-col "
-                            onClick={() => navigate("/chat")}
-                        >
-                            <HiOutlineChat style={styles.icon}/>
-                        </div>
-                    }
-                    className="h-[50px] flex justify-center"
-                ></Tab>
-            </Tabs>
+            <div className="menu" ref={menuRef}>
+                {menuItems.map((item, index) => (
+                    <Button key={index} color='success'
+                            className={`menu__item ${index === activeIndex ? 'active' : ''} ${!isMounted || isAnimating ? 'no-transition no-transform-transition' : ''}`}
+                            onClick={() => handleItemClick(index, item.path)}
+                            style={{ '--bgColorItem': bgColorsIcon[index] }}>
+                        <item.Icon className="icon" style={{ stroke: index === activeIndex ? 'var(--bgColorMenu)' : '#c4c4c4' }}/>
+                    </Button>
+                ))}
+                <div className={`svg-container ${!isMounted || isAnimating ? 'no-transition no-transform-transition' : ''}`} style={borderStyle}>
+                    <svg viewBox="0 0 200 45.5">
+                        <defs>
+                            <clipPath id="menu" clipPathUnits="objectBoundingBox" transform="scale(0.0049285362247413 0.021978021978022)">
+                                <path d="M6.7,45.5c5.7,0.1,14.1-0.4,23.3-4c5.7-2.3,9.9-5,18.1-10.5c10.7-7.1,11.8-9.2,20.6-14.3c5-2.9,9.2-5.2,15.2-7 c7.1-2.1,13.3-2.3,17.6-2.1c4.2-0.2,10.5,0.1,17.6,2.1c6.1,1.8,10.2,4.1,15.2,7c8.8,5,9.9,7.1,20.6,14.3c8.3,5.5,12.4,8.2,18.1,10.5 c9.2,3.6,17.6,4.2,23.3,4H6.7z"/>
+                            </clipPath>
+                        </defs>
+
+                        <path d="M6.7,45.5c5.7,0.1,14.1-0.4,23.3-4c5.7-2.3,9.9-5,18.1-10.5c10.7-7.1,11.8-9.2,20.6-14.3c5-2.9,9.2-5.2,15.2-7 c7.1-2.1,13.3-2.3,17.6-2.1c4.2-0.2,10.5,0.1,17.6,2.1c6.1,1.8,10.2,4.1,15.2,7c8.8,5,9.9,7.1,20.6,14.3c8.3,5.5,12.4,8.2,18.1,10.5 c9.2,3.6,17.6,4.2,23.3,4H6.7z"  fill="white"
+                              clipPath="url(#menu)" filter="url(#shadow)"/>
+                    </svg>
+                </div>
+            </div>
         </BottomNav>
     );
 };
 
 export default Footer;
 
-const styles = {
-  icon: {
-    width: 24,
-    height: 24,
-  },
-};
-
 const BottomNav = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
-  opacity: 90%;
-  bottom: 10px;
+  bottom: 0;
   left: 0;
   right: 0;
   max-width: 600px;
   margin: 0 auto;
   padding-bottom: env(safe-area-inset-bottom);
   z-index: 30;
-`;
+`
