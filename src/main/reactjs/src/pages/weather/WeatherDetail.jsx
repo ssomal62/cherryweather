@@ -4,6 +4,7 @@ import HourlyWeather from "../../components/weather/HourlyWeather";
 import TodayWeather from "../../components/weather/TodayWeather";
 import SatelliteImageViewer from "../../components/weather/SatelliteImageViewer";
 import TodayDetail from "../../components/weather/TodayDetail";
+import AirQuality from "../../components/weather/AirQuality";
 
 const WeatherDetail = () => {
     return (
@@ -19,6 +20,7 @@ const WeatherDetail = () => {
             주간 날씨
             ---
             미세먼지
+            <AirQuality/>
 
             ...
             ...
