@@ -41,7 +41,6 @@ const CardListItem = ({club}) => {
         const scrollY = sessionStorage.getItem('scrollPosition');
         if (scrollY) {
             window.scrollTo(0, parseInt(scrollY, 10));
-            sessionStorage.removeItem('scrollPosition');
         }
     }, []);
 

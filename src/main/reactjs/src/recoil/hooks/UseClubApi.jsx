@@ -17,7 +17,7 @@ export const clubListState = atom({
 });
 
 export const searchClubListState = atom({
-    key: 'clubListState',
+    key: 'searchClubListState',
     default: [],
 });
 
@@ -86,6 +86,10 @@ export const useClubData = ({ method = 'get', state, dynamicPath, requestBody = 
             console.log(`✅[${state.key}] Success`, response);
 
             if (state.key === 'clubListState') {
+                setState(response.data.summaryList);
+            }
+
+            if (state.key === 'searchClubListState') {
                 setState(response.data.summaryList);
             }
 

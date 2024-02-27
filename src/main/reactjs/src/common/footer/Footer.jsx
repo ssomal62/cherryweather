@@ -76,6 +76,9 @@ const Footer = () => {
         setActiveIndex(index);
         updateBorderStyle(index);
         setTimeout(() => navigate(path), 350);
+        localStorage.removeItem('searchResult');
+        localStorage.removeItem('searchTriggered');
+        sessionStorage.removeItem('scrollPosition');
     };
 
     return (

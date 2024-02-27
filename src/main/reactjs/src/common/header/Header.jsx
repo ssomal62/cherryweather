@@ -45,6 +45,7 @@ export default function Header() {
         setSearchState([]);
         localStorage.removeItem('searchResult');
         localStorage.removeItem('searchTriggered');
+        sessionStorage.removeItem('scrollPosition');
         navigate('/search', {state: {from: location.pathname}});
     }
 

@@ -33,6 +33,9 @@ const Community = () => {
     const handleTabChange = (value) => {
         setSelected(value);
         navigate(`/community/${value}`, { replace: true });
+        localStorage.removeItem('searchResult');
+        localStorage.removeItem('searchTriggered');
+        sessionStorage.removeItem('scrollPosition');
     };
 
     const renderComponent = () => {
