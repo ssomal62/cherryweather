@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Input, Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
 import {SearchIcon} from '../../assets/icon/SearchIcon'
@@ -14,14 +14,19 @@ export default function SearchHeader({ handleSearch, setInputValue, inputValue, 
     const handleInputEnter = (e) => {
         if (e.key === 'Enter') {
             setSearchState([]);
-            localStorage.removeItem('searchResult');
-            localStorage.removeItem('searchTriggered');
+            sessionStorage.removeItem('searchResult');
+            sessionStorage.removeItem('searchTriggered');
             handleSearch(inputValue);
             if (inputValue.trim() === '') {
                 setSearchTriggered(false);
             }
         }
     };
+
+    useEffect(() => {
+        setInputValue(inputValue)
+    }, [setInputValue]);
+
 
     const handleClearInput = () => {
         setInputValue('');

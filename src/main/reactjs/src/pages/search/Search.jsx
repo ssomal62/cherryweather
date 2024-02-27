@@ -26,7 +26,7 @@ const Search = () => {
 
 
     useEffect(() => {
-        const savedSearchResult = localStorage.getItem('searchResult');
+        const savedSearchResult = sessionStorage.getItem('searchResult');
         if (savedSearchResult) {
             const inputValue = JSON.parse(savedSearchResult);
             setInputValue(inputValue);
@@ -34,7 +34,7 @@ const Search = () => {
     }, []);
 
     useEffect(() => {
-        const savedSearchTriggered = localStorage.getItem('searchTriggered');
+        const savedSearchTriggered = sessionStorage.getItem('searchTriggered');
         if (savedSearchTriggered) {
             setSearchTriggered(savedSearchTriggered === 'true');
         }
@@ -73,11 +73,11 @@ const Search = () => {
             });
             setSearchWord(searchTerm);
             setSearchTriggered(true);
-            localStorage.setItem('searchResult', JSON.stringify(searchTerm));
-            localStorage.setItem('searchTriggered', 'true');
+            sessionStorage.setItem('searchResult', JSON.stringify(searchTerm));
+            sessionStorage.setItem('searchTriggered', 'true');
         } else {
             setSearchTriggered(false);
-            localStorage.setItem('searchTriggered', 'false');
+            sessionStorage.setItem('searchTriggered', 'false');
         }
     };
 

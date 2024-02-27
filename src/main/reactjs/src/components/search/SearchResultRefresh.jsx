@@ -55,7 +55,7 @@ const SearchResultRefresh = ({requestData}) => {
             <div className="flex items-center justify-between" style={styles.font}>
                 <div className="flex items-center">
                     <IoIosArrowForward className="mr-2"/>
-                    <p className="text-md font-bold"><span style={{color:"#F31260"}}>{JSON.parse(localStorage.getItem('searchResult'))}</span> 검색 결과</p>
+                    <p className="text-md font-bold"><span style={{color:"#F31260"}}>{JSON.parse(sessionStorage.getItem('searchResult'))}</span> 검색 결과</p>
                 </div>
             </div>
 
