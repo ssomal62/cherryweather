@@ -56,9 +56,7 @@ public class Alarm {
     private LocalDateTime createdAt;
 
     // showAlarm 필드의 getter
-    public boolean isShowAlarm() {
-        return showAlarm;
-    }
+    private boolean isShowAlarm;
 
     // showAlarm 필드의 setter
     public void  setShowAlarm(boolean showAlarm) {
