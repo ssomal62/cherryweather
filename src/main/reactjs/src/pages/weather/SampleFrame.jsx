@@ -37,6 +37,7 @@ const styles = {
     block             : {
         marginTop: 60,
         maxWidth: '600px',
+        width:'100%',
         position: 'relative',
         overflow: 'hidden',
     },
