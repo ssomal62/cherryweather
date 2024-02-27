@@ -33,8 +33,8 @@ import ChatRoom from "../components/chat/ChatRoom";
 import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
 
 import NaverCallBack from "../pages/auth/NaverCallBack";
-import Club from "../pages/club/Club";
 import Search from "../pages/search/Search";
+import AddClubSuccess from "../pages/club/AddClubSuccess";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -104,8 +104,6 @@ const Router = () => {
                             </BlockIfLoggedIn>
                         }
                     />
-                    {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
-                    <Route path="/club" element={<Club/>}/>
                     <Route path="/community" element={<Community/>}>
                         <Route path=":selectPage" element={<Community/>}/>
                     </Route>
@@ -115,6 +113,7 @@ const Router = () => {
                     <Route path="/club-add" element={<AddClub/>}>
                         <Route path=":clubId" element={<AddClub/>}/>
                     </Route>
+                    <Route path="/add-success/:clubId" element={<AddClubSuccess/>}/>
                     <Route path="/club-configurations" element={<ClubConfigurations/>}/>
                     <Route path="/club-members" element={<ClubMembers/>}/>
                     <Route path="/club-join" element={<ClubJoin/>}/>
