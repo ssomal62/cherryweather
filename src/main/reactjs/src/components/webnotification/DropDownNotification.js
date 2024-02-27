@@ -44,12 +44,23 @@ const DropDownNotification = () => {
   );
   const displayedAlramList = sortedAlramList.slice(0, 5);
 
+  // 현재 알림과 지난 알림을 분리한다.
+  const now = new Date();
+  const sixHourAgo = new Date(now.getTime() - 60 * 360 * 1000); // 1시간 전 시간을 계산한다.
+
+  const currentAlarms = displayedAlramList.filter(
+    (alram) => new Date(alram.createdAt) > sixHourAgo
+  );
+
+  const pastAlarms = displayedAlramList.filter(
+    (alram) => new Date(alram.createdAt) <= sixHourAgo
+  );
+
   useEffect(() => {
     if (weatherData && isOpen) {
       console.log(
         `오늘의 날씨: ${weatherData.weather}, 현재 온도: ${weatherData.currentTemp}°C`
       );
-      // 여기에 사용자에게 날씨 정보를 알림으로 띄우는 기능을 추가합니다.
       // 예: alert(`오늘의 날씨: ${weatherData.weather}, 현재 온도: ${weatherData.currentTemp}°C`);
     }
   }, [weatherData, isOpen]); // weatherData만 의존성 배열에 추가
@@ -70,7 +81,17 @@ const DropDownNotification = () => {
         <span></span>
       </DropdownTrigger>
       <DropdownMenu aria-label="Notifications" color="danger">
-        {displayedAlramList.map((item, index) => (
+        <DropdownItem>현재 알림</DropdownItem>
+        {currentAlarms.map((item, index) => (
+          <DropdownItem
+            key={index}
+            onClick={() => navigate(`/club-details/${item.targetId}`)}
+          >
+            {item.description}
+          </DropdownItem>
+        ))}
+        <DropdownItem>지난 알림</DropdownItem>
+        {pastAlarms.map((item, index) => (
           <DropdownItem
             key={index}
             onClick={() => navigate(`/club-details/${item.targetId}`)}
