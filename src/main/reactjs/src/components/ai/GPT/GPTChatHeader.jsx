@@ -104,7 +104,7 @@ export default function GPTChatHeader({clubDetail, isLogin, handleBack}) {
                         <IoArrowBack style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem style={styles.text}>
-                        <p>Cherry's Pick</p>
+                        <p>체리의 의상 다락방</p>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">
