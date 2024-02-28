@@ -31,6 +31,7 @@ public class AlarmServiceImpl {
                 .build();
         alarmRepository.save(alarm);
     }
+
     // 알람 list 받아오기
     @Transactional
     public List<AlarmDto> findAlarmListByAccountId(AccountDetails accountDetails) {
@@ -46,5 +47,10 @@ public class AlarmServiceImpl {
         alarmRepository.save(alarm);
     }
 
+    @Transactional
+    public void deleteAlarm(long alarmId) {
+        alarmRepository.deleteById(alarmId);
     }
+
+}
 

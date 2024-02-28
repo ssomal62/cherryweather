@@ -7,7 +7,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import {useRecoilValue} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {
   useFetchUserInfo,
   userInfoState,
@@ -15,6 +15,7 @@ import {
 import {useNavigate} from "react-router-dom";
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
 import {alramListState, useAlarmData} from "../../recoil/hooks/UseAlramApi";
+import {instance} from "../../recoil/module/instance";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
@@ -24,6 +25,7 @@ const DropDownNotification = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [alarmList, setAlarmList] = useRecoilState(alramListState);
 
   useEffect(() => {
     fetchData();
@@ -65,6 +67,25 @@ const DropDownNotification = () => {
     }
   }, [weatherData, isOpen]); // weatherData만 의존성 배열에 추가
 
+  // 알림 삭제 및 상세 페이지로 이동 함수
+  const deleteAlarmAndNavigate = async (alarmId, targetId) => {
+    try {
+      console.log("알람아이디" + alarmId);
+      await instance.delete(`/alarm/${alarmId}`);
+
+      // 삭제 후 알림 목록에서 해당 알림을 제거하고 상태를 업데이트
+      const updatedAlarms = alarmList.filter(
+        (alarm) => alarm.alarmId !== alarmId
+      );
+
+      setAlarmList(updatedAlarms);
+      // 상세 페이지로 nav
+      navigate(`/club-details/${targetId}`);
+    } catch (error) {
+      console.error("알림 삭제 실패:", error);
+    }
+  };
+
   return (
     <Dropdown
       isOpen={isOpen}
@@ -85,7 +106,7 @@ const DropDownNotification = () => {
         {currentAlarms.map((item, index) => (
           <DropdownItem
             key={index}
-            onClick={() => navigate(`/club-details/${item.targetId}`)}
+            onClick={() => deleteAlarmAndNavigate(item.alarmId, item.targetId)}
           >
             {item.description}
           </DropdownItem>
@@ -94,7 +115,7 @@ const DropDownNotification = () => {
         {pastAlarms.map((item, index) => (
           <DropdownItem
             key={index}
-            onClick={() => navigate(`/club-details/${item.targetId}`)}
+            onClick={() => deleteAlarmAndNavigate(item.alarmId, item.targetId)}
           >
             {item.description}
           </DropdownItem>
