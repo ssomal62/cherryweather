@@ -158,7 +158,8 @@ public class AirInfoService {
             case "1" -> "좋음";
             case "2" -> "보통";
             case "3" -> "나쁨";
-            default -> "매우 나쁨";
+            case "4" -> "매우 나쁨";
+            default -> "통신 장애";
         };
     }
 

@@ -48,4 +48,19 @@ public class WeatherController {
     public List<HourlyWeatherDto> getHourlyWeather(@RequestParam("ip") String clientIp) {
         return todayWeatherService.getHourlyWeather(clientIp);
     }
+
+    @GetMapping("/firsthalf")
+    public List<WeeklyWeatherDto> getFirstHalfWeather(@RequestParam("ip") String clientIp) {
+        return todayWeatherService.getFirstHalfWeeklyWeather(clientIp);
+    }
+
+    @GetMapping("/secondhalf")
+    public List<WeeklyWeatherDto> getSecondHalfWeather(@RequestParam("ip") String clientIp) {
+        return todayWeatherService.getSecondHalfWeeklyWeather(clientIp);
+    }
+
+    @GetMapping("/weekly")
+    public List<WeeklyWeatherDto> getWeeklyWeather(@RequestParam("ip") String clientIp) {
+        return todayWeatherService.getWeeklyWeather(clientIp);
+    }
 }
