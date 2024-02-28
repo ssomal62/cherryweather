@@ -26,14 +26,16 @@ public class DaylightService {
     private final ZoneId korTimeZone = ZoneId.of("Asia/Seoul");
     private final String baseUrl = "https://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo";
 
-    private final String baseDate = LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    public String getBaseDate() {
+        return LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    }
 
     @Value("${weather.kma.serviceKey}")
     private String serviceKey;
 
 
     public DaylightDto getDaylightInfo(GeoLocationReqDto geoLocationReqDto) {
-        String url = String.format("%s?serviceKey=%s&locdate=%s&longitude=%s&latitude=%s&dnYn=Y", baseUrl, serviceKey, baseDate, geoLocationReqDto.getLon(), geoLocationReqDto.getLat());
+        String url = String.format("%s?serviceKey=%s&locdate=%s&longitude=%s&latitude=%s&dnYn=Y", baseUrl, serviceKey, getBaseDate(), geoLocationReqDto.getLon(), geoLocationReqDto.getLat());
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         return parseJsonToDto(response.getBody());
     }

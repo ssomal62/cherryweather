@@ -7,9 +7,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -17,6 +20,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.example.demo.weather.exception.enums.WeatherExeptionStatus.*;
 
@@ -27,10 +31,14 @@ public class TodayWeatherService {
     private final GeoLocationService geoLocationService;
     private final WeatherServiceClient weatherServiceClient;
     private final DaylightService daylightService;
+    private final ResourceLoader resourceLoader;
 
     private final ZoneId korTimeZone = ZoneId.of("Asia/Seoul");
-    private final String baseDate = LocalDate.now(korTimeZone).minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-    private final String currentDate = LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+
+    public String getBaseDate() {
+        return LocalDate.now(korTimeZone).minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    }
 
     /* 오늘 단기 예보 조회*/
     public List<TodayWeatherReqDto> getTodayWeather(String clientIp) {
@@ -45,7 +53,7 @@ public class TodayWeatherService {
         int ny = (int) geoLocationResDto.getNy();
         String ip = geoLocationResDto.getIp();
 
-        ResponseEntity<String> response = weatherServiceClient.getTodayWeatherForecast(functionName, baseDate, nx, ny);
+        ResponseEntity<String> response = weatherServiceClient.getTodayWeatherForecast(functionName, getBaseDate(), nx, ny);
         try {
             responseJson = objectMapper.readTree(response.getBody());
             resultCode = responseJson.path("response").path("header").path("resultCode").asText();
@@ -102,7 +110,7 @@ public class TodayWeatherService {
             JsonNode itemsNode = root.path("response").path("body").path("items").path("item");
             for(JsonNode item : itemsNode) {
                 String fcstDate = item.path("fcstDate").asText();
-                if(!fcstDate.equals(baseDate)) {
+                if(!fcstDate.equals(getBaseDate())) {
                     TodayWeatherReqDto dto = TodayWeatherReqDto.builder()
                                                      .baseDate(item.path("baseDate").asText())
                                                      .baseTime(item.path("baseTime").asText())
@@ -217,7 +225,8 @@ public class TodayWeatherService {
                         .rainProbability(todayWeather.getPOP())
                         .rainfall(todayWeather.getPCP())
                         .humidity(todayWeather.getREH())
-                        .ip(todayWeather.getIp());
+                        .ip(todayWeather.getIp())
+                        .fcstDate(todayWeather.getFcstDate());
                 break; // 현재 시각에 해당하는 날씨 정보만 설정하고 반복문
             }
         }
@@ -233,8 +242,9 @@ public class TodayWeatherService {
     }
 
     public boolean isCurrentForecast(TodayWeatherResDto todayWeather) {
+        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String currentHour = LocalTime.now(korTimeZone).format(DateTimeFormatter.ofPattern("HH00"));
-        return Objects.equals(todayWeather.getFcstTime(), currentHour);
+        return Objects.equals(todayWeather.getFcstTime(), currentHour) && Objects.equals(todayWeather.getFcstDate(), currentDate);
     }
 
     /* PTY, SKY 값을 기준으로 날씨 지정 */
@@ -299,5 +309,218 @@ public class TodayWeatherService {
                        .sorted(Comparator.comparing(HourlyWeatherDto::getFcstDate)
                                        .thenComparing(HourlyWeatherDto::getFcstTime))
                        .collect(Collectors.toList());
+    }
+
+    /* 주간 날씨 조회 */
+    public List<WeeklyWeatherDto> getFirstHalfWeeklyWeather(String clientIp) {
+
+        // 날씨 정보 조회
+        List<TodayWeatherReqDto> weeklyWeatherDataList = getTodayWeather(clientIp);
+
+        List<TodayWeatherReqDto> combinedWeatherDataList = new ArrayList<>();
+        combinedWeatherDataList.addAll(weeklyWeatherDataList);
+        combinedWeatherDataList.sort(Comparator.comparing(TodayWeatherReqDto::getFcstDate));
+
+        // 데이터 가공
+        Map<String, WeeklyWeatherDto.WeeklyWeatherDtoBuilder> builders = new HashMap<>();
+        Map<String, String> skyMap = new HashMap<>();
+        Map<String, String> ptyMap = new HashMap<>();
+
+        String baseTime = "0600"; // 오전 6시 기준으로 데이터 가공
+
+        for(TodayWeatherReqDto data : combinedWeatherDataList) {
+            String key = data.getFcstDate();
+
+            WeeklyWeatherDto.WeeklyWeatherDtoBuilder builder =
+                    builders.computeIfAbsent(key, k -> WeeklyWeatherDto.builder()
+                                                               .fcstDate(key)
+                                                               .fcstTime(baseTime)
+                    );
+            switch(data.getCategory()) {
+                case "POP":
+                    if(data.getFcstTime().equals(baseTime)) builder.POP(data.getFcstValue());
+                    break;
+                case "PTY":
+                    if(data.getFcstTime().equals(baseTime)) ptyMap.put(key, data.getFcstValue());
+                    break;
+                case "SKY":
+                    if(data.getFcstTime().equals(baseTime)) skyMap.put(key, data.getFcstValue());
+                    break;
+                case "TMX":
+                    builder.TMX(data.getFcstValue());
+                    break;
+                case "TMN":
+                    builder.TMN(data.getFcstValue());
+                    break;
+            }
+        }
+        builders.forEach((k, builder) -> {
+            String weatherCondition = getWeatherCondition(ptyMap.getOrDefault(k, "0"), skyMap.getOrDefault(k, "1"));
+            builder.weather(weatherCondition);
+        });
+
+        return builders.values().stream()
+                       .map(WeeklyWeatherDto.WeeklyWeatherDtoBuilder::build)
+                       .sorted(Comparator.comparing(WeeklyWeatherDto::getFcstDate))
+                       .filter(dto -> dto.getTMN() != null || dto.getTMX() != null || dto.getPOP() != null)
+                       .collect(Collectors.toList());
+    }
+
+    public List<WeeklyWeatherDto> getSecondHalfWeeklyWeather(String clientIp) {
+        // 위치 정보
+        GeoLocationResDto geoLocationResDto = geoLocationService.convertLocation(clientIp);
+        String r1 = geoLocationResDto.getR1();
+        String r2 = geoLocationResDto.getR2();
+        String regionName = getSimpleRegionName(r1, r2);
+        String regionCode = getRegionCode(regionName);
+
+        System.out.println("r1 : " + r1 + " / r2 : " + r2 + " / regionName : " + regionName + " / regionCode : " + regionCode);
+
+        String functionName_1 = "getMidTa";
+        String functionName_2 = "getMidLandFcst";
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode responseJson = null;
+        String resultCode;
+        String[] fcstTimes = {"0600", "1800"};
+
+        for(String fcstTime : fcstTimes) {
+            ResponseEntity<String> response_1 = weatherServiceClient.getSecondHalfWeatherForecast(functionName_1, getBaseDate(), fcstTime, regionCode);
+            // 중기 기온과 육상 예보의 지역 코드가 다르기 때문에 일단 수도권으로 고정 ( regionCode = 11B00000 )
+            ResponseEntity<String> response_2 = weatherServiceClient.getSecondHalfWeatherForecast(functionName_2, getBaseDate(), fcstTime, "11B00000");
+            try {
+                responseJson = objectMapper.readTree(response_1.getBody());
+                resultCode = responseJson.path("response").path("header").path("resultCode").asText();
+
+                // resultCode에 따른 예외 처리
+                switch(resultCode) {
+                    case "00": // 정상 처리
+                        return formatedSecondHalfWeeklyWeather(response_1.getBody(), response_2.getBody());
+                    case "03":
+                        continue;
+                    case "01":
+                        throw new LookupException(WEATHER_API_APPLICATION_ERROR);
+                    case "02":
+                        throw new LookupException(WEATHER_API_DB_ERROR);
+                    case "04":
+                        throw new LookupException(WEATHER_API_HTTP_ERROR);
+                    case "05":
+                        throw new LookupException(WEATHER_API_SERVICE_TIME_OUT);
+                    case "10":
+                        throw new LookupException(WEATHER_API_INVALID_REQUEST_PARAMETER_ERROR);
+                    case "11":
+                        throw new LookupException(WEATHER_API_NO_MANDATORY_REQUEST_PARAMETERS_ERROR);
+                    case "12":
+                        throw new LookupException(WEATHER_API_NO_OPENAPI_SERVICE_ERROR);
+                    case "20":
+                        throw new LookupException(WEATHER_API_SERVICE_ACCESS_DENIED_ERROR);
+                    case "21":
+                        throw new LookupException(WEATHER_API_TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR);
+                    case "22":
+                        throw new LookupException(WEATHER_API_LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR);
+                    case "30":
+                        throw new LookupException(WEATHER_API_SERVICE_KEY_IS_NOT_REGISTERED_ERROR);
+                    case "31":
+                        throw new LookupException(WEATHER_API_DEADLINE_HAS_EXPIRED_ERROR);
+                    case "32":
+                        throw new LookupException(WEATHER_API_UNREGISTERED_IP_ERROR);
+                    case "33":
+                        throw new LookupException(WEATHER_API_UNSIGNED_CALL_ERROR);
+                    default:
+                        throw new LookupException(WEATHER_API_UNKNOWN_ERROR);
+                }
+            } catch(JsonProcessingException e) {
+                throw new LookupException(WeatherExeptionStatus.JSON_PARSING_FAILED);
+            }
+        }
+        throw new LookupException(WEATHER_API_NODATA_ERROR);
+    }
+
+    public List<WeeklyWeatherDto> formatedSecondHalfWeeklyWeather(String response_1, String response_2) {
+        System.out.println("WeeklyWeatherDto - response1 : " + response_1);
+        System.out.println("WeeklyWeatherDto - response2 : " + response_2);
+        ObjectMapper mapper = new ObjectMapper();
+        List<WeeklyWeatherDto> weatherDtoList = new ArrayList<>();
+
+        try {
+            LocalDate baseLocalDate = LocalDate.parse(getBaseDate(), DateTimeFormatter.ofPattern("yyyyMMdd"));
+            JsonNode root_1 = mapper.readTree(response_1);
+            JsonNode itemsNode_1 = root_1.path("response").path("body").path("items").path("item");
+            JsonNode root_2 = mapper.readTree(response_2);
+            JsonNode itemsNode_2 = root_2.path("response").path("body").path("items").path("item");
+
+            if(itemsNode_1.isArray() && itemsNode_2.isArray()) {
+                JsonNode item_1 = itemsNode_1.get(0);
+                JsonNode item_2 = itemsNode_2.get(0);
+
+                for(int i = 3; i <= 7; i++) {
+                    LocalDate forecastDate = baseLocalDate.plusDays(i);
+                    String forecastDateString = forecastDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                    String tmnField = "taMin" + i;
+                    String tmxField = "taMax" + i;
+                    String rnStAmField = "rnSt" + i + "Am";
+                    String wfAmField = "wf" + i + "Am";
+
+
+                    WeeklyWeatherDto dto = WeeklyWeatherDto.builder()
+                                                 .fcstDate(forecastDateString)
+                                                 .fcstTime("0600")
+                                                 .TMN(item_1.has(tmnField) ? item_1.get(tmnField).asText() : null)
+                                                 .TMX(item_1.has(tmxField) ? item_1.get(tmxField).asText() : null)
+                                                 .weather(item_2.has(wfAmField) ? item_2.get(wfAmField).asText() : null)
+                                                 .POP(item_2.has(rnStAmField) ? item_2.get(rnStAmField).asText() : null)
+                                                 .build();
+                    weatherDtoList.add(dto);
+                }
+            }
+        } catch(Exception e) {
+            throw new LookupException(JSON_PARSING_FAILED);
+        }
+        return weatherDtoList;
+    }
+
+
+    /* 주소에서 도시 이름만 추출 */
+    public String getSimpleRegionName(String r1, String r2) {
+        String simpleRegionName;
+
+        if(r1.endsWith("특별시") || r1.endsWith("광역시") || r1.endsWith("특별자치시")) {
+            simpleRegionName = r1.replaceAll("특별시$", "").replaceAll("광역시$", "").replaceAll("특별자치시$", "");
+        } else if(r1.endsWith("도")) {
+            simpleRegionName = r1.replaceAll("시$", "").replaceAll("군$", "");
+        } else {
+            simpleRegionName = null;
+        }
+        return simpleRegionName; // 서울 도 지역 이름 반환
+    }
+
+    /* 도시 이름으로 지역 코드 추출 */
+    public String getRegionCode(String regionName) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Resource resource = resourceLoader.getResource("classpath:weather/cityCode.json");
+            InputStream inputStream = resource.getInputStream();
+            // json 파일을 객체 배열로 변환
+            List<Map<String, String>> regions = Arrays.asList(mapper.readValue(inputStream, Map[].class));
+            // regionName에 해당하는 코드 추출
+            Optional<String> regionCode = regions.stream()
+                                                  .filter(region -> regionName.equals(region.get("regionName")))
+                                                  .map(region -> region.get("regionCode"))
+                                                  .findFirst();
+            // 코드가 없는 경우 null 반환
+            return regionCode.orElse(null); // 코드 반환
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null; // 오류 발생시 null 반환
+        }
+    }
+
+    public List<WeeklyWeatherDto> getWeeklyWeather(String clientIp) {
+        List<WeeklyWeatherDto> firstHalfData = getFirstHalfWeeklyWeather(clientIp);
+        List<WeeklyWeatherDto> secondHalfData = getSecondHalfWeeklyWeather(clientIp);
+
+        List<WeeklyWeatherDto> weeklyWeatherList = Stream.concat(firstHalfData.stream(), secondHalfData.stream())
+                                                       .sorted(Comparator.comparing(WeeklyWeatherDto::getFcstDate))
+                                                       .collect(Collectors.toList());
+        return weeklyWeatherList;
     }
 }

@@ -7,7 +7,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SatelliteImageDto {
-
     private String satImg;
-
 }
