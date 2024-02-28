@@ -27,7 +27,7 @@ const MainItem = () => {
                                 </p>
                             </div>
                         </div>
-                        <Button radius="full" size="sm">이동하기</Button>
+                        <Button radius="full" size="sm" onClick={() => navigate('/gpt')}>이동하기</Button>
                     </CardFooter>
                 </Card>
             </div>
@@ -53,7 +53,7 @@ const MainItem = () => {
                                 </p>
                             </div>
                         </div>
-                        <Button radius="full" size="sm">이동하기</Button>
+                        <Button radius="full" size="sm" onClick={() => navigate('/imageList')}>이동하기</Button>
                     </CardFooter>
                 </Card>
             </div>
@@ -79,7 +79,7 @@ const MainItem = () => {
                                 </p>
                             </div>
                         </div>
-                        <Button radius="full" size="sm">이동하기</Button>
+                        <Button radius="full" size="sm" onClick={() => navigate('/image')}>이동하기</Button>
                     </CardFooter>
                 </Card>
             </div>
