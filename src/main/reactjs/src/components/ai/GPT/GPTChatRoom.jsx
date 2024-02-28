@@ -1,8 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 
-import "./GptChatRoomStyle.css";
-import Layout from "../../../common/Layout";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {
     assistantMessage,
     chatListState,
@@ -17,7 +15,9 @@ import {useFetchImage} from "../../../recoil/hooks/UseFetchImage";
 import {useFetchUserInfo, userInfoState} from "../../../recoil/hooks/UseFetchUserInfo";
 import {useStartChat} from "../../../recoil/hooks/UseStartChat";
 import {useImageCreation} from "../../../recoil/hooks/useImageCreation";
-// import {content} from "../../../../tailwind.config";
+import "./GptChatRoomStyle.css";
+import GPTChatHeader from "./GPTChatHeader";
+import {IsLoginAtom} from "../../../recoil/LoginAtom";
 
 
 const GPTChatRoom = () => {
@@ -32,7 +32,7 @@ const GPTChatRoom = () => {
     const [isImageState, setImageState] = useRecoilState(imageState); // imageState 상태 추가
     const fetchImage = useFetchImage(prompt);
     const chatRestart = useStartChat();
-    const { handleImageCreateClick } = useImageCreation();
+    const { handleImageCreateClick } = useImageCreation(isLoading, setIsLoading);
 
     const fetchUserInfo = useFetchUserInfo();
     const userInfo = useRecoilValue(userInfoState);
@@ -53,7 +53,9 @@ const GPTChatRoom = () => {
     // 시작하기 버튼 클릭 핸들러
     const handleStartClick = async () => {
         setIsStarted(true); // 버튼 클릭 상태를 true로 변경
+        setIsLoading(true); // 데이터 가져오는 동안 로딩 상태 활성화
         const response = await chatRestart();
+        setIsLoading(false); // 데이터 가져온 후 로딩 상태 비활성화
     };
 
     const handleSendMessage = async (e) => {
@@ -87,7 +89,7 @@ const GPTChatRoom = () => {
         }
     };
 
-    // useEffect 수정
+    //시작하기 버튼 클릭시 데이터 가져오기 시작
     useEffect(() => {
         if (isStarted) { // 시작하기 버튼 클릭 시만 fetchData 함수 실행
             const fetchData = async () => {
@@ -104,14 +106,14 @@ const GPTChatRoom = () => {
         }
     }, [isStarted]); // isStarted 상태 변경 시 useEffect 실행
 
-
+    // 채팅 추가시 화면 아래로 내리기
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({behavior: "smooth"});
         }
     }, [chatList]); // chatList가 변경될 때마다 메시지 스크롤을 마지막 채팅으로 이동
 
-    // 위치 확인용
+    // 스피너 위치 확인용
     useEffect(() => {
         setIsLoading(true); // 스피너 표시
         return () => {
@@ -119,6 +121,7 @@ const GPTChatRoom = () => {
         };
     }, []); // 컴포넌트가 마운트될 때만 실행
 
+    //이미지 생성되면 이미지 페이지로 전환
     useEffect(() => {
         if (isImageState) {
             // imageState 값이 true일 때 수행할 작업
@@ -131,44 +134,56 @@ const GPTChatRoom = () => {
         }
     }, [isImageState]);
 
-
+    //초기화 함수
     const initializeState = () => {
         setUserMessages([]); // 사용자 메시지 상태 초기화
         setChatList([]); // 채팅 리스트 상태 초기화
-        // 기타 상태 초기화...
     };
 
+
+
+
     return (
-        <Layout>
+        // <Layout>
 
             <div className="container-fluid">
-                <div className="row">
-                    <div className="col-sm-12">
-                        <div className="user_chat_data">
-                            <div className="chat_section msg_history" id="chat-messages">
+                            <div className="chat_section_g">
                                 <div style={{width: "100%"}}>
-                                    <img src='https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/cherry.svg'
-                                         alt="" style={{width:'200px',height:'200px',marginBottom:'20px', }}/>
-                                    <div className="chat-message received-message">
+                                    <div style={{display: 'flex', alignItems: 'center', marginBottom: '20px'}}>
+                                        <img
+                                            src='https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/cherry.svg'
+                                            alt=""
+                                            style={{width: '200px', height: '200px'}}
+                                        />
+                                        <div className='cherry' style={{marginLeft: '20px'}}>
+                                            <div><strong>이름: </strong>체리</div>
+                                            <div><strong>나이: </strong>20살</div>
+                                            <div><strong>취미: </strong>코딩 공부</div>
+                                            <div><strong>특이사항: <br/></strong>패션 컨설턴트?</div>
+                                        </div>
+                                    </div>
+                                    <div className="chat-message_g received-message_g">
                                         <strong>체리<br/></strong>
                                         <p>안녕하세요, 저는 🍒체리입니다! 요즘엔 좀 심심해서 패션 컨설턴트 일을 잠깐 맡고 있어요.
                                             여러분의 오늘을 더욱 빛내줄 옷차림을 추천해드릴 수 있어요.
                                             어떤 스타일을 선호하시나요? 함께 이야기 해볼까요?😊 </p>
                                     </div>
                                 </div>
-                                 {/*시작하기 버튼 렌더링 조건과 위치 조정*/}
+                                {/*시작하기 버튼 렌더링 조건과 위치 조정*/}
                                 {
                                     !isStarted && (
-                                        <Button className='startButton' color="danger" variant="bordered" onClick={handleStartClick}>
+                                        <Button className='startButton' color="danger" variant="bordered"
+                                                onClick={handleStartClick}>
                                             대화 시작
                                         </Button>
                                     )
+
                                 }
 
                                 {chatList.map((message, index) => (
                                     <div key={index} style={{width: "100%",}}>
                                         <div
-                                            className={"chat-message " + (index % 2 === 0 ? "received-message" : "user-message")}>
+                                            className={"chat-message_g " + (index % 2 === 0 ? "received-message_g" : "user-message")}>
                                             {index % 2 === 0 ? (
                                                 <>
                                                     <strong>체리<br/></strong>
@@ -196,18 +211,18 @@ const GPTChatRoom = () => {
 
 
                             {isLoading && (
-                                <Spinner size="md" color="danger" labelColor="danger" style={{marginTop: "-140px"}}/>
+                                <Spinner className="spinnerChat" size="sm" color="danger" labelColor="danger"/>
                             )}
                             {/* 메시지 입력 및 전송 UI */}
                             <div
-                                className="type_msg"
+                                className="type_msg_g"
                                 // style={{position: 'fixed', bottom: '50px', width: '100%'}}
                             >
-                                <div className="input_msg_write">
+                                <div className="input_msg_write_g">
                                     <form onSubmit={handleSendMessage}>
                                         <input
                                             type="text"
-                                            className="write_msg"
+                                            className="write_msg_g"
                                             placeholder="메세지를 입력하세요."
                                             value={userInput}
                                             onChange={(e) => setUserInput(e.target.value)}
@@ -215,17 +230,14 @@ const GPTChatRoom = () => {
                                         />
                                         {/* 시작하기 버튼 클릭 전에는 Send 버튼 숨김 */}
                                         {isStarted && (
-                                            <button type="submit" className="msg_send_btn">Send</button>
+                                            <button type="submit" className="msg_send_btn_g">Send</button>
                                         )}
                                     </form>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
-        </Layout>
+        // </Layout>
     );
 };
 
