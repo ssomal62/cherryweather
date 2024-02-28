@@ -33,7 +33,7 @@ const SearchResultRefresh = ({requestData}) => {
 
     const tabs = [
         { id: "club", label: "클럽" },
-        { id: "event", label: "정모" },
+        { id: "event", label: "모임" },
     ];
 
     const renderComponent = () => {

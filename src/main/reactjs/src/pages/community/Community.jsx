@@ -13,7 +13,7 @@ const Community = () => {
     const navigate = useNavigate();
 
     const tabs = [
-        { id: "event", label: "이벤트" },
+        { id: "event", label: "모임" },
         { id: "club", label: "클럽" },
         { id: "feed", label: "피드" }
     ];
@@ -33,8 +33,8 @@ const Community = () => {
     const handleTabChange = (value) => {
         setSelected(value);
         navigate(`/community/${value}`, { replace: true });
-        localStorage.removeItem('searchResult');
-        localStorage.removeItem('searchTriggered');
+        sessionStorage.removeItem('searchResult');
+        sessionStorage.removeItem('searchTriggered');
         sessionStorage.removeItem('scrollPosition');
     };
 

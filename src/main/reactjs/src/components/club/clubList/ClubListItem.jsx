@@ -17,7 +17,7 @@ const CardListItem = ({club}) => {
     const isLogin = useRecoilValue(IsLoginAtom);
 
     const clubProfile = (code) => {
-        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "defalut"}.jpg?type=f&w=600&h=600&ttype=jpg`
+        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "default"}.jpg?type=f&w=600&h=600&ttype=jpg`
     }
 
     const [liked, setLiked] = useState(club.liked);
