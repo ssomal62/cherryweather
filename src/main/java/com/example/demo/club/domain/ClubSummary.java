@@ -15,6 +15,7 @@ public record ClubSummary(
         String joinApprovalStatus,
         int currentMembers,
         int maxMembers,
+        String tag,
         ClubStatus status,
         ClubCategory category,
         ClubGrade grade,

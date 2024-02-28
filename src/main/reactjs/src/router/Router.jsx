@@ -1,12 +1,11 @@
 import React, {Suspense} from "react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../recoil/LoginAtom";
 // import { lazy } from "react";
 // 일반적인 임포트 방법
 import Home from "../pages/Home";
 // import Login from "../pages/Login";
-import WebNotificationTest from "../components/webnotification/WebNotificationTest";
 import OauthInfo from "../pages/OAuthInfo";
 import AddClub from "../pages/club/AddClub";
 import ClubDetails from "../pages/club/ClubDetails";
@@ -31,11 +30,11 @@ import Chat from "../pages/chat/Chat";
 import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
-import ClubSearch from "../pages/club/ClubSearch";
 import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
 
 import NaverCallBack from "../pages/auth/NaverCallBack";
 import Club from "../pages/club/Club";
+import Search from "../pages/search/Search";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -62,31 +61,56 @@ const Router = () => {
     const isLogin = useRecoilValue(IsLoginAtom);
 
     return (
-    <BrowserRouter>
-      <Suspense fallback={<div>로딩중..잠만기달...</div>}>
-        {/* Suspense는 레이즈 라우터 사용시 컴포넌트가 로드되는 동안 표시하는 화면을 출력할 수 있다*/}
-        <Routes>
-          {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
-          <Route path="/" element={<Home />} />
-          {/* 로그인 없이 접근 가능하나 로그인이 되어있으면 접근 불가한 페이지 */}
-          <Route path="/login" element={<BlockIfLoggedIn><SignIn /></BlockIfLoggedIn>} />
-          <Route path="/login/local" element={<LocalSignIn />} />
-          <Route path="/oauth" element={<BlockIfLoggedIn><OauthInfo /></BlockIfLoggedIn>} />
-          <Route path="/join" element={<BlockIfLoggedIn><SignUp /></BlockIfLoggedIn>} />
-          <Route path="/mypage" element={<MyPage /> } />
-          <Route path="/mypage/setting" element={<MySetting />} />
-          <Route path="/modify/profile" element={<ModifyProfile />} />
-          <Route path="/oauth/callback/naver" element={<BlockIfLoggedIn><NaverCallBack /></BlockIfLoggedIn>} />
-          {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
-          <Route path="/club" element={<Club />} />
-          {/* <Route path="/clubdetails/:num" element={<ClubDetails />} /> */}
-             {/*<Route path=":num" element={<ClubDetails />} />*/}
-
-                    <Route path="/community" element={<Community />}>
-                        <Route path=":selectPage" element={<Community />} />
+        <BrowserRouter>
+            <Suspense fallback={<div>로딩중..잠만기달...</div>}>
+                {/* Suspense는 레이즈 라우터 사용시 컴포넌트가 로드되는 동안 표시하는 화면을 출력할 수 있다*/}
+                <Routes>
+                    {/* 로그인 여부와 상관없이 접근할 수 있는 페이지  */}
+                    <Route path="/" element={<Home/>}/>
+                    {/* 로그인 없이 접근 가능하나 로그인이 되어있으면 접근 불가한 페이지 */}
+                    <Route
+                        path="/login"
+                        element={
+                            <BlockIfLoggedIn>
+                                <SignIn/>
+                            </BlockIfLoggedIn>
+                        }
+                    />
+                    <Route path="/login/local" element={<LocalSignIn/>}/>
+                    <Route
+                        path="/oauth"
+                        element={
+                            <BlockIfLoggedIn>
+                                <OauthInfo/>
+                            </BlockIfLoggedIn>
+                        }
+                    />
+                    <Route
+                        path="/join"
+                        element={
+                            <BlockIfLoggedIn>
+                                <SignUp/>
+                            </BlockIfLoggedIn>
+                        }
+                    />
+                    <Route path="/mypage" element={<MyPage/>}/>
+                    <Route path="/mypage/setting" element={<MySetting/>}/>
+                    <Route path="/modify/profile" element={<ModifyProfile/>}/>
+                    <Route
+                        path="/oauth/callback/naver"
+                        element={
+                            <BlockIfLoggedIn>
+                                <NaverCallBack/>
+                            </BlockIfLoggedIn>
+                        }
+                    />
+                    {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
+                    <Route path="/club" element={<Club/>}/>
+                    <Route path="/community" element={<Community/>}>
+                        <Route path=":selectPage" element={<Community/>}/>
                     </Route>
+                    <Route path="/search" element={<Search/>}/>
 
-                    {/*<Route path="/clubs" element={<Club/>}/>*/}
                     <Route path="/club-details/:clubId" element={<ClubDetails/>}/>
                     <Route path="/club-add" element={<AddClub/>}>
                         <Route path=":clubId" element={<AddClub/>}/>
@@ -95,7 +119,6 @@ const Router = () => {
                     <Route path="/club-members" element={<ClubMembers/>}/>
                     <Route path="/club-join" element={<ClubJoin/>}/>
                     <Route path="/club-wait" element={<ClubWaitingToJoin/>}/>
-                    <Route path="/club-search" element={<ClubSearch/>}/>
 
                     <Route path="/ai" element={<AI_main/>}/>
                     <Route path="/gpt" element={<GPT/>}/>
@@ -108,11 +131,6 @@ const Router = () => {
                     <Route path="/chat/admin" element={<Adminchat/>}/>
 
                     <Route path="/event" element={<Event/>}/>
-
-                    <Route
-                        path="/web-notification-test"
-                        element={<WebNotificationTest/>}
-                    />
                 </Routes>
             </Suspense>
         </BrowserRouter>

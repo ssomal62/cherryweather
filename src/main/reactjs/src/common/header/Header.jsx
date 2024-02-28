@@ -3,19 +3,22 @@ import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
 import {Navbar, NavbarContent,} from "@nextui-org/react";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
-import {useRecoilValue} from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import {IsLoginAtom} from "../../recoil/LoginAtom";
 import {AiOutlineLogin} from "react-icons/ai";
-import {NavLink, useNavigate} from "react-router-dom";
-import GoBellDropNotificationIcon from "./GoBellWithNotificationIcon";
-import { useFetchUserInfo } from "../../recoil/hooks/UseFetchUserInfo";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
+import GoBellDropNotificationIcon from "../../components/webnotification/GoBellDropNotificationIcon";
+import {useFetchUserInfo} from "../../recoil/hooks/UseFetchUserInfo";
+import {searchClubListState} from "../../recoil/hooks/UseClubApi";
 
 export default function Header() {
     const isLogin = useRecoilValue(IsLoginAtom);
     const [registration, setRegistration] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const fetchUserInfo = useFetchUserInfo();
+    const setSearchState = useSetRecoilState(searchClubListState);
 
     useEffect(() => {
         fetchUserInfo();
@@ -38,13 +41,20 @@ export default function Header() {
         }
     }, []);
 
+    const handleSearchClick = () => {
+        setSearchState([]);
+        localStorage.removeItem('searchResult');
+        localStorage.removeItem('searchTriggered');
+        navigate('/search', {state: {from: location.pathname}});
+    }
+
     const makeNotiTest = () => {
         // 함수 내용은 기존 WebNotificationTest 컴포넌트의 makeNotiTest 함수를 참고하여 이동시켜주세요.
         if (isLogin) {
             if (Notification.permission === "granted") {
                 const options = {
-                    body: "오늘의 날씨는",
-                    icon: require("../../assets/images/sun.png"),
+                    body              : "오늘의 날씨는",
+                    icon              : require("../../assets/images/sun.png"),
                     requireInteraction: true,
                 };
 
@@ -81,19 +91,19 @@ export default function Header() {
                 as="div"
                 className="items-center"
                 justify="end"
-                style={{ position: "relative" }}
+                style={{position: "relative"}}
             >
                 <IoOptionsOutline style={styles.icon}/>
                 <IoSearchOutline style={styles.icon}
-                                 onClick={()=>navigate('/club-search')}
+                                 onClick={handleSearchClick}
                 />
 
-                <GoBellDropNotificationIcon onClick={makeNotiTest} />
+                <GoBellDropNotificationIcon onClick={makeNotiTest}/>
                 {isLogin ? (
-                    <AvatarMenu />
+                    <AvatarMenu/>
                 ) : (
                     <NavLink to="/login">
-                        <AiOutlineLogin style={styles.icon} />
+                        <AiOutlineLogin style={styles.icon}/>
                     </NavLink>
                 )}
             </NavbarContent>
@@ -118,7 +128,7 @@ const styles = {
         height     : 22,
         color      : "black",
         marginRight: 3,
-        cursor:'pointer',
+        cursor     : 'pointer',
     },
     navBar: {
         backgroundColor: 'rgba(255,255,255,0.7)',

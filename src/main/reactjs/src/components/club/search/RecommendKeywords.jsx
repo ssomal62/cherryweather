@@ -1,14 +1,21 @@
 import React from 'react';
 import {IoIosArrowForward} from "react-icons/io";
 import {Button} from "@nextui-org/react";
+import recommendKeyword from './WeatherCategoryKeywords.json'
 
+const RecommendKeywords = ({setInputValue, handleSearch}) => {
 
-const RecommendKeywords = () => {
-    const rKeywords=["🚲자전거","🎣낚시","🎨전시","🏃🏼‍♂️러닝","🤓스터디","🧑🏼‍🍳요리","🎠방탈출","🎮게임"]
+    const todayWeather = "눈";
+    const todayWeatherKeywords = recommendKeyword.find(item => item.weather === todayWeather);
+
+    const handelButtonClick = (e) => {
+        handleSearch(e.target.value);
+        setInputValue(e.target.value);
+    }
+
     return (
 
-        <section >
-
+        <section>
             <div className="flex items-center justify-between" style={styles.font}>
                 <div className="flex items-center">
                     <IoIosArrowForward className="mr-2"/>
@@ -16,27 +23,32 @@ const RecommendKeywords = () => {
                 </div>
             </div>
 
+            <div style={styles.message}> 오늘 날씨는 {todayWeather} ! 이런 클럽은 어떠세요?</div>
             <div style={{
-                display: 'flex',
+                display       : 'flex',
                 justifyContent: 'center',
-                flexWrap: 'wrap',
+                flexWrap      : 'wrap',
             }}>
+
                 {
-                    rKeywords.map((item, index) => (
+                    todayWeatherKeywords?.recommendKeywords.map((keyword, index) => (
                         <React.Fragment key={index}>
-                            <div style={{margin:'0px 10px 0 0'}}>
+                            <div style={{margin: '0px 10px 0 0'}}>
                                 <Button
                                     radius="full"
                                     color="success"
                                     variant="flat"
+                                    value={keyword.value}
+                                    onClick={(e)=>handelButtonClick(e)}
                                 >
-                                    {item}
+                                    {keyword.display}
                                 </Button>
                             </div>
-                            {((index + 1) % 3 === 0) && <div style={{ width: '100%' }}><br /></div>}
+                            {((index + 1) % 3 === 0) && <div style={{width: '100%'}}><br/></div>}
                         </React.Fragment>
                     ))
                 }
+
             </div>
         </section>
     );
@@ -48,7 +60,7 @@ const styles = {
     font         : {
         color       : 'black',
         marginBottom: '5%',
-        padding: '20px',
+        padding     : '20px',
     },
     slideSections: {
         display   : 'flex',
@@ -56,6 +68,15 @@ const styles = {
         overflow  : 'hidden',
         position  : 'relative',
         cursor    : 'pointer',
+    },
+    message: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+        margin: '10% 0 20% 0',
     }
 }
+
 
