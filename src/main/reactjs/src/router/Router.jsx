@@ -35,6 +35,8 @@ import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
 import NaverCallBack from "../pages/auth/NaverCallBack";
 import Search from "../pages/search/Search";
 import AddClubSuccess from "../pages/club/AddClubSuccess";
+import FeedEditor from "../pages/feed/FeedEditor";
+import ClubFeedList from "../pages/club/ClubFeedList";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -107,6 +109,7 @@ const Router = () => {
                     <Route path="/community" element={<Community/>}>
                         <Route path=":selectPage" element={<Community/>}/>
                     </Route>
+
                     <Route path="/search" element={<Search/>}/>
 
                     <Route path="/club-details/:clubId" element={<ClubDetails/>}/>
@@ -118,6 +121,11 @@ const Router = () => {
                     <Route path="/club-members" element={<ClubMembers/>}/>
                     <Route path="/club-join" element={<ClubJoin/>}/>
                     <Route path="/club-wait" element={<ClubWaitingToJoin/>}/>
+                    <Route path="/club-feed/:clubId" element={<ClubFeedList/>}/>
+
+                    <Route path="/feed-editor" element={<FeedEditor/>}>
+                        <Route path=":feedId" element={<FeedEditor/>}/>
+                    </Route>
 
                     <Route path="/ai" element={<AI_main/>}/>
                     <Route path="/gpt" element={<GPT/>}/>

@@ -1,0 +1,67 @@
+{
+  "list": [
+    {
+      "feed": {
+        "feedId": 10,
+        "userName": "사하라",
+        "userProfile": "2",
+        "content": "나 이럴 수는 없네..",
+        "feedCode": "feedSample.gif",
+        "countLiked": "99",
+        "liked": false,
+        "weather": "맑음",
+        "isPublic": true,
+        "createAt": "2024-01-28T00:00:00+09:00"
+      },
+      "club": {
+        "clubId": 46,
+        "name": "클럽네임",
+        "code": "cf-d804e45",
+        "description": "호스트테스트",
+        "activities_area": "강남구"
+      }
+    },
+    {
+      "feed": {
+        "feedId": 7,
+        "userName": "모압",
+        "userProfile": "20",
+        "content": "사실 이미지는 필수가 아니라네. 이렇게 글만 쓸수도 있지. 게다가 공개설정을 false로 하면 클럽피드 안에서만 보인다네",
+        "feedCode": null,
+        "countLiked": "5",
+        "liked": true,
+        "weather": "비",
+        "isPublic": true,
+        "createAt": "2024-02-22T00:00:00+09:00"
+      },
+      "club": {
+        "clubId": 5,
+        "name": "청바지",
+        "code": "5",
+        "description": "청춘은 바야흐로 지남",
+        "activities_area": "도봉구"
+      }
+    },
+    {
+      "feed": {
+        "feedId": 13,
+        "userName": "유즈케스",
+        "userProfile": "5",
+        "content": "나 저럴 수는 있네..",
+        "feedCode": "windmill_dribbble.gif",
+        "countLiked": "5",
+        "liked": true,
+        "weather": "흐림",
+        "isPublic": false,
+        "createAt": "2024-02-28T00:00:00+09:00"
+      },
+      "club": {
+        "clubId": 43,
+        "name": "수정했어",
+        "code": "cf-4536a15",
+        "description": "휴대폰을 사랑하는 모임.",
+        "activities_area": "여수시"
+      }
+    }
+  ]
+}
