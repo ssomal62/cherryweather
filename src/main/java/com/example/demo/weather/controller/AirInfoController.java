@@ -1,5 +1,6 @@
 package com.example.demo.weather.controller;
 
+import com.example.demo.weather.dto.AirQualityDto;
 import com.example.demo.weather.dto.MonitoringStationDto;
 import com.example.demo.weather.dto.TmLocationDto;
 import com.example.demo.weather.service.AirInfoService;
@@ -22,5 +23,10 @@ public class AirInfoController {
     @GetMapping("/station")
     public MonitoringStationDto getStation(@RequestParam("ip") String clientIp) {
         return airInfoService.getStation(clientIp);
+    }
+
+    @GetMapping("/airquality")
+    public AirQualityDto getAirQuality(@RequestParam("ip") String clientIp) {
+        return airInfoService.getAirQuality(clientIp);
     }
 }
