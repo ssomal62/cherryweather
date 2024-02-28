@@ -6,10 +6,14 @@ export const UseFetchWeather = (endpoint) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+  // useEffect(() => {
+
+  // fetchData();
     const fetchData = useCallback(async () => {
         setLoading(true);
         try {
-            const url = `${process.env.REACT_APP_API}${endpoint}`;
+            const url = `${process.env.REACT_APP_API}${endpoint}`;   // 서버
+            // const url = `http://localhost:9002/api${endpoint}`;     // 로컬
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`HTTP error! status : ${response.status}`);
@@ -25,5 +29,5 @@ export const UseFetchWeather = (endpoint) => {
         }
     }, [endpoint]);   //endpoint가 변경될 때마다 훅이 데이터를 다시 가져옴
 
-    return {fetchData, data, loading, error};
+  return {fetchData, data, loading, error};
 };

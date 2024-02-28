@@ -60,7 +60,7 @@ import ClubFeedList from "../pages/club/ClubFeedList";
 // 같이 사라진다
 
 const Router = () => {
-    const isLogin = useRecoilValue(IsLoginAtom);
+  const isLogin = useRecoilValue(IsLoginAtom);
 
     return (
         <BrowserRouter>

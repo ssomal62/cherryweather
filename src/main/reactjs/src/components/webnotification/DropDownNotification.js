@@ -7,7 +7,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import {useRecoilValue} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {
   useFetchUserInfo,
   userInfoState,
@@ -15,6 +15,7 @@ import {
 import {useNavigate} from "react-router-dom";
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
 import {alramListState, useAlarmData} from "../../recoil/hooks/UseAlramApi";
+import {instance} from "../../recoil/module/instance";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
@@ -24,45 +25,101 @@ const DropDownNotification = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [alarmList, setAlarmList] = useRecoilState(alramListState);
 
   useEffect(() => {
     fetchData();
     userInfoFetch();
   }, []);
 
+  useEffect(() => {
+    // 알림 수신 동의가 false 일 경우 드롭다운을 닫는다.
+    setIsOpen(userInfo.agreementGetNotified);
+  }, [userInfo.agreementGetNotified]);
+
   useAlarmData({state: alramListState, dynamicPath: ""});
   const alramList = useRecoilValue(alramListState);
 
-  console.log(alramList);
-  console.log(alramListState);
+  // 새로운 배열을 만들어서 작업합니다.
+  const sortedAlramList = [...alramList].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+  const displayedAlramList = sortedAlramList.slice(0, 5);
+
+  // 현재 알림과 지난 알림을 분리한다.
+  const now = new Date();
+  const sixHourAgo = new Date(now.getTime() - 60 * 360 * 1000); // 1시간 전 시간을 계산한다.
+
+  const currentAlarms = displayedAlramList.filter(
+    (alram) => new Date(alram.createdAt) > sixHourAgo
+  );
+
+  const pastAlarms = displayedAlramList.filter(
+    (alram) => new Date(alram.createdAt) <= sixHourAgo
+  );
+
   useEffect(() => {
     if (weatherData && isOpen) {
       console.log(
         `오늘의 날씨: ${weatherData.weather}, 현재 온도: ${weatherData.currentTemp}°C`
       );
-      // 여기에 사용자에게 날씨 정보를 알림으로 띄우는 기능을 추가합니다.
       // 예: alert(`오늘의 날씨: ${weatherData.weather}, 현재 온도: ${weatherData.currentTemp}°C`);
     }
   }, [weatherData, isOpen]); // weatherData만 의존성 배열에 추가
 
+  // 알림 삭제 및 상세 페이지로 이동 함수
+  const deleteAlarmAndNavigate = async (alarmId, targetId) => {
+    try {
+      console.log("알람아이디" + alarmId);
+      await instance.delete(`/alarm/${alarmId}`);
+
+      // 삭제 후 알림 목록에서 해당 알림을 제거하고 상태를 업데이트
+      const updatedAlarms = alarmList.filter(
+        (alarm) => alarm.alarmId !== alarmId
+      );
+
+      setAlarmList(updatedAlarms);
+      // 상세 페이지로 nav
+      navigate(`/club-details/${targetId}`);
+    } catch (error) {
+      console.error("알림 삭제 실패:", error);
+    }
+  };
+
   return (
-    <Dropdown isOpen onClick={() => setIsOpen(!isOpen)} ref={dropdownRef}>
+    <Dropdown
+      isOpen={isOpen}
+      onClick={() => {
+        if (userInfo.agreementGetNotified) {
+          setIsOpen(!isOpen);
+        } else {
+          setIsOpen(false);
+        }
+      }}
+      ref={dropdownRef}
+    >
       <DropdownTrigger>
         <span></span>
       </DropdownTrigger>
       <DropdownMenu aria-label="Notifications" color="danger">
-        {alramList.map((item, index) => (
-          <DropdownItem key={index}>{item.description}</DropdownItem>
+        <DropdownItem>현재 알림</DropdownItem>
+        {currentAlarms.map((item, index) => (
+          <DropdownItem
+            key={index}
+            onClick={() => deleteAlarmAndNavigate(item.alarmId, item.targetId)}
+          >
+            {item.description}
+          </DropdownItem>
         ))}
-        {/* <DropdownItem key="login" onClick={() => navigate("/mypage")}>
-          {userInfo.name}님이 로그인 되었습니다.
-        </DropdownItem>
-        <DropdownItem key="weather" onClick={() => navigate("/weatherDetail")}>
-          {weatherData
-            ? `오늘의 날씨: ${weatherData.weather}, ${weatherData.currentTemp}°C`
-            : "날씨 정보를 불러오는 중..."}
-        </DropdownItem>
-        <DropdownItem key="ai">ai 이미지가 생성되었습니다.</DropdownItem> */}
+        <DropdownItem>지난 알림</DropdownItem>
+        {pastAlarms.map((item, index) => (
+          <DropdownItem
+            key={index}
+            onClick={() => deleteAlarmAndNavigate(item.alarmId, item.targetId)}
+          >
+            {item.description}
+          </DropdownItem>
+        ))}
       </DropdownMenu>
     </Dropdown>
   );
