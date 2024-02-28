@@ -25,11 +25,13 @@ public class AlarmServiceImpl {
         Alarm alarm = Alarm.builder()
                 .account(accountDetails.getAccount())
                 .type(alarmDto.getType())
+                .targetId(alarmDto.getTargetId())
                 .importance(alarmDto.getImportance())
                 .description(alarmDto.getDescription())
                 .build();
         alarmRepository.save(alarm);
     }
+
     // 알람 list 받아오기
     @Transactional
     public List<AlarmDto> findAlarmListByAccountId(AccountDetails accountDetails) {
@@ -37,5 +39,18 @@ public class AlarmServiceImpl {
         return AlarmDto.toDtoList(alarmList);
     }
 
+    @Transactional
+    public void updateAlarmVisibility(Long alarmId, boolean isShowAlarm) {
+        Alarm alarm = alarmRepository.findById(alarmId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid alarm ID"));
+        alarm.setShowAlarm(isShowAlarm);
+        alarmRepository.save(alarm);
     }
+
+    @Transactional
+    public void deleteAlarm(long alarmId) {
+        alarmRepository.deleteById(alarmId);
+    }
+
+}
 
