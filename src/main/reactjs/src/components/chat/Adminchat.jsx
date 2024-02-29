@@ -1,8 +1,8 @@
 import * as ncloudchat from "ncloudchat";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { instance } from "../../recoil/module/instance";
-import { Cookies } from "react-cookie";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {instance} from "../../recoil/module/instance";
+import {Cookies} from "react-cookie";
 import styled from "styled-components";
 
 function Adminchat() {
@@ -100,12 +100,30 @@ function Adminchat() {
           await nc.disconnect();
           navi(`/chat/room/${newChatId}/50`);
           window.location.reload();
+
+          // // 관리자 채팅방 생성 알림 전송, 주석처리완료
+          // const chatAdminAlarmData = {
+          //   name : null,
+          //   targetId : "adminChat_" + newChatId,
+          //   type : "ADMINCHAT",
+          //   importance : 2,
+          //   description : `${accountData.name}님과 관리자의 채팅방이 생성되었습니다.`,
+          // };
+          // sendAlarmData(chatAdminAlarmData);
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);
       }
     }
   };
+
+  // const sendAlarmData = async (data) => {
+  //   const accessToken = Cookies.get("accessToken");
+  //   if (!accessToken) {
+  //     console.error("Access token is not available.");
+  //     return;
+  //   }
+  // }
 
   useEffect(() => {
     const disconnectChat = async () => {

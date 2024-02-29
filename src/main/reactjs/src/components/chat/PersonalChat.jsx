@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { instance } from "../../recoil/module/instance";
+import React, {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import {instance} from "../../recoil/module/instance";
+import {Cookies} from "react-cookie";
 
-function PersonalChat({ userInfo, accountData, nc }) {
+function PersonalChat({userInfo, accountData, nc}) {
   const navi = useNavigate();
 
   useEffect(() => {
@@ -65,12 +66,31 @@ function PersonalChat({ userInfo, accountData, nc }) {
           // 채팅방으로 이동
           navi(`/chat/room/${newChatId}/${userInfo.accountId}`);
           window.location.reload();
+
+          // 개인 채팅방 생성 알림 전송(주석부분)
+          // const chatPersonalAlarmData = {
+          //   name: null,
+          //   targetId: "personalChat_" + newChatId, // targetId에 구분자 추가
+          //   type: "PERSONALCHAT",
+          //   importance: 2,
+          //   description: `${accountData.name}님과의 채팅방이 생성되었습니다.`,
+          // };
+          // sendAlarmData(chatPersonalAlarmData);
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);
       }
     }
   };
+
+  //   const sendAlarmData = async (data) => {
+  //   const accessToken = Cookies.get("accessToken");
+  //   if (!accessToken) {
+  //     console.error("Access token is not available.");
+  //     return;
+  //   }
+  // }
+
   useEffect(() => {
     const disconnectChat = async () => {
       if (nc && nc !== null) {
