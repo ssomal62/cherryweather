@@ -8,7 +8,7 @@ const Profile = () => {
     const userInfo = useRecoilValue(userInfoState);
     const fetchUserInfo = useFetchUserInfo();
     const { profileImage, profileName } = userInfo;
-    const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600&ttype=jpg`;
+    const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}.jpg?type=f&w=600&h=600&ttype=jpg`;
     useEffect(() => {
       fetchUserInfo();
     }, []);

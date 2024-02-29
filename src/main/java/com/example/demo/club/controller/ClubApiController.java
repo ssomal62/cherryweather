@@ -2,10 +2,7 @@ package com.example.demo.club.controller;
 
 
 import com.example.demo.account.dto.AccountDetails;
-import com.example.demo.club.dto.ClubDetailDTO;
-import com.example.demo.club.dto.ClubListDTO;
-import com.example.demo.club.dto.CreateClubDTO;
-import com.example.demo.club.dto.UpdateClubDTO;
+import com.example.demo.club.dto.*;
 import com.example.demo.club.entity.Club;
 import com.example.demo.club.service.ClubService;
 import com.example.demo.common.service.FileService;
@@ -17,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,9 +34,19 @@ public class ClubApiController {
     @PreAuthorize("isAuthenticated() or isAnonymous()")
     //@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<ClubListDTO> findAll() {
-
         return ResponseEntity.ok()
                 .body(clubService.findAll());
+    }
+
+    /**
+     * 사용자의 좋아요 한 클럽 목록
+     */
+    @GetMapping("/liked")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated() or isAnonymous()")
+    public ResponseEntity<List<LikeWithClubList>> findClubLikesForCurrentUser() {
+        return ResponseEntity.ok()
+                .body(clubService.findClubLikesForCurrentUser());
     }
 
     /**

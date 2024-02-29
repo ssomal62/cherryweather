@@ -12,12 +12,17 @@ import {Cookies} from "react-cookie";
  * - GET /clubs/query: 검색 쿼리에 따른 클럽의 요약 정보를 가져옵니다.
  */
 export const clubListState = atom({
-    key: 'clubListState',
+    key    : 'clubListState',
     default: [],
 });
 
 export const searchClubListState = atom({
-    key: 'searchClubListState',
+    key    : 'searchClubListState',
+    default: [],
+});
+
+export const likedClubListState = atom({
+    key    : 'likedClubListState',
     default: [],
 });
 
@@ -30,8 +35,8 @@ export const searchClubListState = atom({
  * - GET /clubs/{clubId}: 해당 클럽의 상세 정보를 가져옵니다.
  */
 export const clubDetailState = atom({
-    key             : 'clubDetailState',
-    default         : {
+    key    : 'clubDetailState',
+    default: {
         clubDetail: {},
         liked     : false
     },
@@ -48,8 +53,8 @@ export const clubDetailState = atom({
  * @param requestBody HTTP 요청 본문. 기본값은 null.
  * @returns 로딩 상태와 에러 상태를 포함하는 객체.
  */
-export const useClubData = ({ method = 'get', state, dynamicPath, requestBody = null}) => {
-    const cookie = useMemo(() => new Cookies(),[]);
+export const useClubData = ({method = 'get', state, dynamicPath, requestBody = null}) => {
+    const cookie = useMemo(() => new Cookies(), []);
     const setState = useSetRecoilState(state);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -64,40 +69,37 @@ export const useClubData = ({ method = 'get', state, dynamicPath, requestBody = 
             let response;
             const url = `/clubs${dynamicPath}`;
             const headers = {
-                ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {})
+                ...(accessToken ? {Authorization: `Bearer ${accessToken}`} : {})
             };
 
-            switch(method.toLowerCase()) {
+            switch (method.toLowerCase()) {
                 case 'post':
-                    response = await instance.post(url, requestBody,{headers});
+                    response = await instance.post(url, requestBody, {headers});
                     break;
                 case 'put':
-                    response = await instance.put(url, requestBody,{headers});
+                    response = await instance.put(url, requestBody, {headers});
                     break;
                 case 'delete':
-                    response = await instance.delete(url,{headers});
+                    response = await instance.delete(url, {headers});
                     break;
                 case 'get':
                 default:
-                    response = await instance.get(url,{headers});
+                    response = await instance.get(url, {headers});
                     break;
             }
 
             console.log(`✅[${state.key}] Success`, response);
 
-            if (state.key === 'clubListState') {
-                setState(response.data.summaryList);
-            }
-
-            if (state.key === 'searchClubListState') {
-                setState(response.data.summaryList);
-            }
 
             if (state.key === 'clubDetailState') {
                 setState({
                     clubDetail: response.data.clubDetail,
-                    liked: response.data.liked
-                });
+                    liked     : response.data.liked
+                })
+            } else if (state.key === 'likedClubListState') {
+                setState(response.data);
+            } else {
+                setState(response.data.summaryList);
             }
 
         } catch (error) {
@@ -112,5 +114,5 @@ export const useClubData = ({ method = 'get', state, dynamicPath, requestBody = 
         fetchData();
     }, [fetchData]);
 
-    return { loading, error };
+    return {loading, error};
 };
