@@ -21,18 +21,6 @@ export const useDeleteImage  = () => {
             console.log("token:"+token);
             const config = {headers: { Authorization: `Bearer ${token}`}}
 
-            // const response = await axios.delete('http://192.168.0.20:9002/api/ai_image/delete',
-            //     {
-            //     ...config,
-            //     data:{bucketURL}
-            //     });
-
-            // const response = await axios.delete('http://localhost:9002/api/ai_image/delete',
-            //     {
-            //         ...config,
-            //         data:{ imageURL:bucketURL}
-            //     });
-
             const response = await instance.delete('/ai_image/delete',
                 {
                     ...config,
