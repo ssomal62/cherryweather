@@ -28,7 +28,7 @@ const MyPageMenu = () => {
             key       : "imageList",
             label     : "내 AI 코디",
             icon      : <TbJacket style={styles.icon}/>,
-            navigateTo: "/imageList",
+            navigateTo: "/ai",
         },
         {
             key       : "activity-area",
