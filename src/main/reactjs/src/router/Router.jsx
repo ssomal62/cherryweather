@@ -1,7 +1,7 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { IsLoginAtom } from "../recoil/LoginAtom";
+import React, {Suspense} from "react";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../recoil/LoginAtom";
 // import { lazy } from "react";
 // 일반적인 임포트 방법
 import Home from "../pages/Home";

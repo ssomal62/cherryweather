@@ -16,8 +16,12 @@ public class WebController {
             "/club-add", "/club-add/**","/club-configurations",
             "/club-members","/club-join","/club-wait","/club-details/**",
             "/event",
-            "/alarm"
+            "/chat","/chat/admin","/chat/room/**",
+            "/ai", "/gpt", "/image", "/imageList",
+            "/weatherDetail", "/community/**",
+            "/oauth/callback/naver","/modify/profile", "/mypage/setting", "/chat/room/:chatRoom/", "/alarm", "/alarm/**"
     })
+
     public String accountRoute() {
         return "forward:/index.html";
     }

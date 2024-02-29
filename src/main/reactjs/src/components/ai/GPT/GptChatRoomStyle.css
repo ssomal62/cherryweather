@@ -1,0 +1,121 @@
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat_section_g {
+  padding-top: 15px;
+  padding-bottom: 120px;
+}
+
+.profile_name {
+  background-color: #f8f9fa !important;
+  width: 100%;
+  padding: 10px;
+  border-bottom: 5px solid #716d6d;
+}
+
+.type_msg_g {
+  position: sticky;
+  bottom: 0;
+  /*width: calc(100% - 20px); !* 뷰포트 너비의 100%에서 20px를 뺀 값으로 계산 *!*/
+  width: 100%;
+  height: 100px;
+  max-width: 600px;
+  background-color: #ffffff;
+
+}
+
+.input_msg_write_g {
+   width: 100%; /* 상위 요소의 너비에 맞춰서 100%로 설정 */
+   border-top: 1px solid #cccccc;
+}
+
+
+.write_msg_g {
+  border: medium none;
+  color: #4c4c4c;
+  font-size: 15px;
+  min-height: 48px;
+  width: 80%;
+  padding: 10px;
+  background-color: #ffffff;
+  overflow: hidden;
+  margin: 10px;
+  border-radius: 50px;
+}
+
+.msg_send_btn_g {
+  cursor: pointer;
+  font-size: 17px;
+  height: 33px;
+  position: absolute;
+  right: 2%; /* 오른쪽에서 10% 떨어진 곳에 위치 */
+  top: 50%; /* 상위 요소의 수직 중앙에 위치 */
+  transform: translate(-50%, -50%); /* 자기 크기의 반만큼 위와 왼쪽으로 이동 */
+  width: 33px;
+}
+
+
+.user-message {
+  background-color: #eae9e9;
+  float: right;
+  width: 60%;
+  margin-left: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+}
+
+.received-message_g {
+  /*margin-right: 10px;*/
+  vertical-align: top;
+  display: block;
+  width: 100%;
+  background-color: #ef1460 !important;
+  padding: 5px 10px 5px 12px;
+  border-right: 6px;
+  color: white;
+}
+
+.cherry{
+  margin-right: 10px;
+  vertical-align: top;
+  padding: 10px;
+  width: 160px;
+  background-color: #848e93 !important;
+  color: white;
+  border-radius: 10px;
+}
+
+.chat-message_g {
+  white-space: pre-wrap; /* 단어 단위로 개행되도록 설정 */
+  max-width: 600px; /* 최대 너비를 600px로 제한 */
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px 5px 10px;
+  margin-bottom: 25px; /* 수직 간격 */
+
+}
+
+.startButton {
+  position: fixed;
+  top: 81%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 45px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #f11461;
+  cursor: pointer;
+  border-radius: 30px;
+}
+
+.spinnerChat{
+  position: fixed;
+  top: 81%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

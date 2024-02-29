@@ -1,8 +1,9 @@
-import {atom, useRecoilState, useSetRecoilState} from 'recoil';
+import {atom, useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import {useCallback} from "react";
 import {instance} from "../module/instance";
 import {Cookies} from "react-cookie";
 import {HeartFill} from "./UseSaveState";
+import {promptState} from "./UseGptChat";
 
 export const imageURLState = atom({
     key: 'imageURLState',
@@ -10,6 +11,8 @@ export const imageURLState = atom({
 });
 
 export const useFetchImage = () => {
+    const prompt = useRecoilValue(promptState);
+    console.log("이미지 패치 훅 prompt : "+ prompt);
     const setImageURL = useSetRecoilState(imageURLState); // 값을 불러오기 위한 문법
     const cookie = new Cookies();
     const [heart, setHeart] = useRecoilState(HeartFill); // HeartFill 상태 사용
@@ -26,7 +29,7 @@ export const useFetchImage = () => {
             const response = await instance.post('/ai_image/create',
                 {
                     model: "dall-e-3",
-                    prompt: "",
+                    prompt: prompt,
                     size: "1024x1024"
                 }, config
             );

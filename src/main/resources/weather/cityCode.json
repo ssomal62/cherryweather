@@ -1,0 +1,806 @@
+[
+  {
+    "regionName": "백령도",
+    "regionCode": "11A00101"
+  },
+  {
+    "regionName": "서울",
+    "regionCode": "11B10101"
+  },
+  {
+    "regionName": "과천",
+    "regionCode": "11B10102"
+  },
+  {
+    "regionName": "광명",
+    "regionCode": "11B10103"
+  },
+  {
+    "regionName": "강화",
+    "regionCode": "11B20101"
+  },
+  {
+    "regionName": "김포",
+    "regionCode": "11B20102"
+  },
+  {
+    "regionName": "인천",
+    "regionCode": "11B20201"
+  },
+  {
+    "regionName": "시흥",
+    "regionCode": "11B20202"
+  },
+  {
+    "regionName": "안산",
+    "regionCode": "11B20203"
+  },
+  {
+    "regionName": "부천",
+    "regionCode": "11B20204"
+  },
+  {
+    "regionName": "의정부",
+    "regionCode": "11B20301"
+  },
+  {
+    "regionName": "고양",
+    "regionCode": "11B20302"
+  },
+  {
+    "regionName": "양주",
+    "regionCode": "11B20304"
+  },
+  {
+    "regionName": "파주",
+    "regionCode": "11B20305"
+  },
+  {
+    "regionName": "동두천",
+    "regionCode": "11B20401"
+  },
+  {
+    "regionName": "연천",
+    "regionCode": "11B20402"
+  },
+  {
+    "regionName": "포천",
+    "regionCode": "11B20403"
+  },
+  {
+    "regionName": "가평",
+    "regionCode": "11B20404"
+  },
+  {
+    "regionName": "구리",
+    "regionCode": "11B20501"
+  },
+  {
+    "regionName": "남양주",
+    "regionCode": "11B20502"
+  },
+  {
+    "regionName": "양평",
+    "regionCode": "11B20503"
+  },
+  {
+    "regionName": "하남",
+    "regionCode": "11B20504"
+  },
+  {
+    "regionName": "수원",
+    "regionCode": "11B20601"
+  },
+  {
+    "regionName": "안양",
+    "regionCode": "11B20602"
+  },
+  {
+    "regionName": "오산",
+    "regionCode": "11B20603"
+  },
+  {
+    "regionName": "화성",
+    "regionCode": "11B20604"
+  },
+  {
+    "regionName": "성남",
+    "regionCode": "11B20605"
+  },
+  {
+    "regionName": "평택",
+    "regionCode": "11B20606"
+  },
+  {
+    "regionName": "의왕",
+    "regionCode": "11B20609"
+  },
+  {
+    "regionName": "군포",
+    "regionCode": "11B20610"
+  },
+  {
+    "regionName": "안성",
+    "regionCode": "11B20611"
+  },
+  {
+    "regionName": "용인",
+    "regionCode": "11B20612"
+  },
+  {
+    "regionName": "이천",
+    "regionCode": "11B20701"
+  },
+  {
+    "regionName": "광주",
+    "regionCode": "11B20702"
+  },
+  {
+    "regionName": "여주",
+    "regionCode": "11B20703"
+  },
+  {
+    "regionName": "충주",
+    "regionCode": "11C10101"
+  },
+  {
+    "regionName": "진천",
+    "regionCode": "11C10102"
+  },
+  {
+    "regionName": "음성",
+    "regionCode": "11C10103"
+  },
+  {
+    "regionName": "제천",
+    "regionCode": "11C10201"
+  },
+  {
+    "regionName": "단양",
+    "regionCode": "11C10202"
+  },
+  {
+    "regionName": "청주",
+    "regionCode": "11C10301"
+  },
+  {
+    "regionName": "보은",
+    "regionCode": "11C10302"
+  },
+  {
+    "regionName": "괴산",
+    "regionCode": "11C10303"
+  },
+  {
+    "regionName": "증평",
+    "regionCode": "11C10304"
+  },
+  {
+    "regionName": "추풍령",
+    "regionCode": "11C10401"
+  },
+  {
+    "regionName": "영동",
+    "regionCode": "11C10402"
+  },
+  {
+    "regionName": "옥천",
+    "regionCode": "11C10403"
+  },
+  {
+    "regionName": "서산",
+    "regionCode": "11C20101"
+  },
+  {
+    "regionName": "태안",
+    "regionCode": "11C20102"
+  },
+  {
+    "regionName": "당진",
+    "regionCode": "11C20103"
+  },
+  {
+    "regionName": "홍성",
+    "regionCode": "11C20104"
+  },
+  {
+    "regionName": "보령",
+    "regionCode": "11C20201"
+  },
+  {
+    "regionName": "서천",
+    "regionCode": "11C20202"
+  },
+  {
+    "regionName": "천안",
+    "regionCode": "11C20301"
+  },
+  {
+    "regionName": "아산",
+    "regionCode": "11C20302"
+  },
+  {
+    "regionName": "예산",
+    "regionCode": "11C20303"
+  },
+  {
+    "regionName": "대전",
+    "regionCode": "11C20401"
+  },
+  {
+    "regionName": "공주",
+    "regionCode": "11C20402"
+  },
+  {
+    "regionName": "계룡",
+    "regionCode": "11C20403"
+  },
+  {
+    "regionName": "세종",
+    "regionCode": "11C20404"
+  },
+  {
+    "regionName": "부여",
+    "regionCode": "11C20501"
+  },
+  {
+    "regionName": "청양",
+    "regionCode": "11C20502"
+  },
+  {
+    "regionName": "금산",
+    "regionCode": "11C20601"
+  },
+  {
+    "regionName": "논산",
+    "regionCode": "11C20602"
+  },
+  {
+    "regionName": "철원",
+    "regionCode": "11D10101"
+  },
+  {
+    "regionName": "화천",
+    "regionCode": "11D10102"
+  },
+  {
+    "regionName": "인제",
+    "regionCode": "11D10201"
+  },
+  {
+    "regionName": "양구",
+    "regionCode": "11D10202"
+  },
+  {
+    "regionName": "춘천",
+    "regionCode": "11D10301"
+  },
+  {
+    "regionName": "홍천",
+    "regionCode": "11D10302"
+  },
+  {
+    "regionName": "원주",
+    "regionCode": "11D10401"
+  },
+  {
+    "regionName": "횡성",
+    "regionCode": "11D10402"
+  },
+  {
+    "regionName": "영월",
+    "regionCode": "11D10501"
+  },
+  {
+    "regionName": "정선",
+    "regionCode": "11D10502"
+  },
+  {
+    "regionName": "평창",
+    "regionCode": "11D10503"
+  },
+  {
+    "regionName": "대관령",
+    "regionCode": "11D20201"
+  },
+  {
+    "regionName": "태백",
+    "regionCode": "11D20301"
+  },
+  {
+    "regionName": "속초",
+    "regionCode": "11D20401"
+  },
+  {
+    "regionName": "고성",
+    "regionCode": "11D20402"
+  },
+  {
+    "regionName": "양양",
+    "regionCode": "11D20403"
+  },
+  {
+    "regionName": "강릉",
+    "regionCode": "11D20501"
+  },
+  {
+    "regionName": "동해",
+    "regionCode": "11D20601"
+  },
+  {
+    "regionName": "삼척",
+    "regionCode": "11D20602"
+  },
+  {
+    "regionName": "울릉도",
+    "regionCode": "11E00101"
+  },
+  {
+    "regionName": "독도",
+    "regionCode": "11E00102"
+  },
+  {
+    "regionName": "전주",
+    "regionCode": "11F10201"
+  },
+  {
+    "regionName": "익산",
+    "regionCode": "11F10202"
+  },
+  {
+    "regionName": "정읍",
+    "regionCode": "11F10203"
+  },
+  {
+    "regionName": "완주",
+    "regionCode": "11F10204"
+  },
+  {
+    "regionName": "장수",
+    "regionCode": "11F10301"
+  },
+  {
+    "regionName": "무주",
+    "regionCode": "11F10302"
+  },
+  {
+    "regionName": "진안",
+    "regionCode": "11F10303"
+  },
+  {
+    "regionName": "남원",
+    "regionCode": "11F10401"
+  },
+  {
+    "regionName": "임실",
+    "regionCode": "11F10402"
+  },
+  {
+    "regionName": "순창",
+    "regionCode": "11F10403"
+  },
+  {
+    "regionName": "군산",
+    "regionCode": "21F10501"
+  },
+  {
+    "regionName": "김제",
+    "regionCode": "21F10502"
+  },
+  {
+    "regionName": "고창",
+    "regionCode": "21F10601"
+  },
+  {
+    "regionName": "부안",
+    "regionCode": "21F10602"
+  },
+  {
+    "regionName": "함평",
+    "regionCode": "21F20101"
+  },
+  {
+    "regionName": "영광",
+    "regionCode": "21F20102"
+  },
+  {
+    "regionName": "진도",
+    "regionCode": "21F20201"
+  },
+  {
+    "regionName": "완도",
+    "regionCode": "11F20301"
+  },
+  {
+    "regionName": "해남",
+    "regionCode": "11F20302"
+  },
+  {
+    "regionName": "강진",
+    "regionCode": "11F20303"
+  },
+  {
+    "regionName": "장흥",
+    "regionCode": "11F20304"
+  },
+  {
+    "regionName": "여수",
+    "regionCode": "11F20401"
+  },
+  {
+    "regionName": "광양",
+    "regionCode": "11F20402"
+  },
+  {
+    "regionName": "고흥",
+    "regionCode": "11F20403"
+  },
+  {
+    "regionName": "보성",
+    "regionCode": "11F20404"
+  },
+  {
+    "regionName": "순천시",
+    "regionCode": "11F20405"
+  },
+  {
+    "regionName": "광주",
+    "regionCode": "11F20501"
+  },
+  {
+    "regionName": "장성",
+    "regionCode": "11F20502"
+  },
+  {
+    "regionName": "나주",
+    "regionCode": "11F20503"
+  },
+  {
+    "regionName": "담양",
+    "regionCode": "11F20504"
+  },
+  {
+    "regionName": "화순",
+    "regionCode": "11F20505"
+  },
+  {
+    "regionName": "구례",
+    "regionCode": "11F20601"
+  },
+  {
+    "regionName": "곡성",
+    "regionCode": "11F20602"
+  },
+  {
+    "regionName": "순천",
+    "regionCode": "11F20603"
+  },
+  {
+    "regionName": "흑산도",
+    "regionCode": "11F20701"
+  },
+  {
+    "regionName": "목포",
+    "regionCode": "21F20801"
+  },
+  {
+    "regionName": "영암",
+    "regionCode": "21F20802"
+  },
+  {
+    "regionName": "신안",
+    "regionCode": "21F20803"
+  },
+  {
+    "regionName": "무안",
+    "regionCode": "21F20804"
+  },
+  {
+    "regionName": "성산",
+    "regionCode": "11G00101"
+  },
+  {
+    "regionName": "제주",
+    "regionCode": "11G00201"
+  },
+  {
+    "regionName": "성판악",
+    "regionCode": "11G00302"
+  },
+  {
+    "regionName": "서귀포",
+    "regionCode": "11G00401"
+  },
+  {
+    "regionName": "고산",
+    "regionCode": "11G00501"
+  },
+  {
+    "regionName": "이어도",
+    "regionCode": "11G00601"
+  },
+  {
+    "regionName": "추자도",
+    "regionCode": "11G00800"
+  },
+  {
+    "regionName": "울진",
+    "regionCode": "11H10101"
+  },
+  {
+    "regionName": "영덕",
+    "regionCode": "11H10102"
+  },
+  {
+    "regionName": "포항",
+    "regionCode": "11H10201"
+  },
+  {
+    "regionName": "경주",
+    "regionCode": "11H10202"
+  },
+  {
+    "regionName": "문경",
+    "regionCode": "11H10301"
+  },
+  {
+    "regionName": "상주",
+    "regionCode": "11H10302"
+  },
+  {
+    "regionName": "예천",
+    "regionCode": "11H10303"
+  },
+  {
+    "regionName": "영주",
+    "regionCode": "11H10401"
+  },
+  {
+    "regionName": "봉화",
+    "regionCode": "11H10402"
+  },
+  {
+    "regionName": "영양",
+    "regionCode": "11H10403"
+  },
+  {
+    "regionName": "안동",
+    "regionCode": "11H10501"
+  },
+  {
+    "regionName": "의성",
+    "regionCode": "11H10502"
+  },
+  {
+    "regionName": "청송",
+    "regionCode": "11H10503"
+  },
+  {
+    "regionName": "김천",
+    "regionCode": "11H10601"
+  },
+  {
+    "regionName": "구미",
+    "regionCode": "11H10602"
+  },
+  {
+    "regionName": "군위",
+    "regionCode": "11H10707"
+  },
+  {
+    "regionName": "고령",
+    "regionCode": "11H10604"
+  },
+  {
+    "regionName": "성주",
+    "regionCode": "11H10605"
+  },
+  {
+    "regionName": "대구",
+    "regionCode": "11H10701"
+  },
+  {
+    "regionName": "영천",
+    "regionCode": "11H10702"
+  },
+  {
+    "regionName": "경산",
+    "regionCode": "11H10703"
+  },
+  {
+    "regionName": "청도",
+    "regionCode": "11H10704"
+  },
+  {
+    "regionName": "칠곡",
+    "regionCode": "11H10705"
+  },
+  {
+    "regionName": "울산",
+    "regionCode": "11H20101"
+  },
+  {
+    "regionName": "양산",
+    "regionCode": "11H20102"
+  },
+  {
+    "regionName": "부산",
+    "regionCode": "11H20201"
+  },
+  {
+    "regionName": "창원",
+    "regionCode": "11H20301"
+  },
+  {
+    "regionName": "김해",
+    "regionCode": "11H20304"
+  },
+  {
+    "regionName": "통영",
+    "regionCode": "11H20401"
+  },
+  {
+    "regionName": "사천",
+    "regionCode": "11H20402"
+  },
+  {
+    "regionName": "거제",
+    "regionCode": "11H20403"
+  },
+  {
+    "regionName": "고성",
+    "regionCode": "11H20404"
+  },
+  {
+    "regionName": "남해",
+    "regionCode": "11H20405"
+  },
+  {
+    "regionName": "함양",
+    "regionCode": "11H20501"
+  },
+  {
+    "regionName": "거창",
+    "regionCode": "11H20502"
+  },
+  {
+    "regionName": "합천",
+    "regionCode": "11H20503"
+  },
+  {
+    "regionName": "밀양",
+    "regionCode": "11H20601"
+  },
+  {
+    "regionName": "의령",
+    "regionCode": "11H20602"
+  },
+  {
+    "regionName": "함안",
+    "regionCode": "11H20603"
+  },
+  {
+    "regionName": "창녕",
+    "regionCode": "11H20604"
+  },
+  {
+    "regionName": "진주",
+    "regionCode": "11H20701"
+  },
+  {
+    "regionName": "산청",
+    "regionCode": "11H20703"
+  },
+  {
+    "regionName": "하동",
+    "regionCode": "11H20704"
+  },
+  {
+    "regionName": "사리원",
+    "regionCode": "11I10001"
+  },
+  {
+    "regionName": "신계",
+    "regionCode": "11I10002"
+  },
+  {
+    "regionName": "해주",
+    "regionCode": "11I20001"
+  },
+  {
+    "regionName": "개성",
+    "regionCode": "11I20002"
+  },
+  {
+    "regionName": "장연(용연)",
+    "regionCode": "11I20003"
+  },
+  {
+    "regionName": "신의주",
+    "regionCode": "11J10001"
+  },
+  {
+    "regionName": "삭주(수풍)",
+    "regionCode": "11J10002"
+  },
+  {
+    "regionName": "구성",
+    "regionCode": "11J10003"
+  },
+  {
+    "regionName": "자성(중강)",
+    "regionCode": "11J10004"
+  },
+  {
+    "regionName": "강계",
+    "regionCode": "11J10005"
+  },
+  {
+    "regionName": "희천",
+    "regionCode": "11J10006"
+  },
+  {
+    "regionName": "평양",
+    "regionCode": "11J20001"
+  },
+  {
+    "regionName": "진남포(남포)",
+    "regionCode": "11J20002"
+  },
+  {
+    "regionName": "안주",
+    "regionCode": "11J20004"
+  },
+  {
+    "regionName": "양덕",
+    "regionCode": "11J20005"
+  },
+  {
+    "regionName": "청진",
+    "regionCode": "11K10001"
+  },
+  {
+    "regionName": "웅기(선봉)",
+    "regionCode": "11K10002"
+  },
+  {
+    "regionName": "성진(김책)",
+    "regionCode": "11K10003"
+  },
+  {
+    "regionName": "무산(삼지연)",
+    "regionCode": "11K10004"
+  },
+  {
+    "regionName": "함흥",
+    "regionCode": "11K20001"
+  },
+  {
+    "regionName": "장진",
+    "regionCode": "11K20002"
+  },
+  {
+    "regionName": "북청(신포)",
+    "regionCode": "11K20003"
+  },
+  {
+    "regionName": "혜산",
+    "regionCode": "11K20004"
+  },
+  {
+    "regionName": "풍산",
+    "regionCode": "11K20005"
+  },
+  {
+    "regionName": "원산",
+    "regionCode": "11L10001"
+  },
+  {
+    "regionName": "고성(장전)",
+    "regionCode": "11L10002"
+  },
+  {
+    "regionName": "평강",
+    "regionCode": "11L10003"
+  }
+]
