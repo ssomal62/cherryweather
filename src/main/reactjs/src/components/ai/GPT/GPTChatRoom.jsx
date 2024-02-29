@@ -15,8 +15,11 @@ import {useFetchImage} from "../../../recoil/hooks/UseFetchImage";
 import {useFetchUserInfo, userInfoState} from "../../../recoil/hooks/UseFetchUserInfo";
 import {useStartChat} from "../../../recoil/hooks/UseStartChat";
 import {useImageCreation} from "../../../recoil/hooks/useImageCreation";
-import "./GptChatRoomStyle.css";
-import GPTChatHeader from "./GPTChatHeader";
+import "./css/GptChatRoomStyle.css";
+// import {IsLoginAtom} from "../../../recoil/LoginAtom";
+import MessageInput from "./MessageInput";
+import ChatRoomTop from "./ChatRoomTop";
+import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import {IsLoginAtom} from "../../../recoil/LoginAtom";
 
 
@@ -38,50 +41,60 @@ const GPTChatRoom = () => {
     const userInfo = useRecoilValue(userInfoState);
     const messagesEndRef = useRef(null); // 메시지 스크롤을 자동으로 내릴 Ref
 
+    const isLogin = useRecoilValue(IsLoginAtom);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+
     useEffect(() => {
         fetchUserInfo();
         initializeState();
     }, []);
 
-    console.log(userInfo.email)
-    console.log(userInfo.gender)
-    console.log(userInfo)
+    // console.log(userInfo.email)
+    // console.log(userInfo.gender)
+    // console.log(userInfo)
+
+    useEffect(() => {
+        setIsModalOpen(!isLogin);
+    }, [isLogin]);
 
     // useState로 버튼 클릭 상태 관리
     const [isStarted, setIsStarted] = useState(false);
 
     // 시작하기 버튼 클릭 핸들러
     const handleStartClick = async () => {
-        setIsStarted(true); // 버튼 클릭 상태를 true로 변경
-        setIsLoading(true); // 데이터 가져오는 동안 로딩 상태 활성화
-        const response = await chatRestart();
-        setIsLoading(false); // 데이터 가져온 후 로딩 상태 비활성화
+        if (!isLogin) {
+            setIsModalOpen(true);
+        } else {
+            try {
+                setIsLoading(true); // 데이터 가져오는 동안 로딩 상태 활성화
+                setIsStarted(true); // 버튼 클릭 상태를 true로 변경
+                const response = await chatRestart();
+                setIsLoading(false); // 데이터 가져온 후 로딩 상태 비활성화
+            } catch (error) {
+                console.error("대화 시작 시 에러 발생", error);
+            }
+        }
     };
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if (userInput.trim() === "") return;
         try {
-            // 사용자가 입력한 정보를 화면에 표시하고 리코일에 저장
-            setUserMessages(prevState => [...prevState, userInput]);
-            console.log("setUserMessages : " + setUserMessages);
             setUserInput(""); // 입력 필드 초기화
+            setUserMessages(prevState => [...prevState, userInput]);
 
-            // // 채팅 리스트에 사용자 입력 추가 후 화면 재출력
-            // 사용자 입력을 채팅 리스트에 객체 형태로 추가하는 부분 수정
             setChatList(prevChatList => [
                 ...prevChatList,
                 { content: userInput, isSpecialMessage: false } // 사용자 입력도 객체 형태로 추가
             ]);
-            console.log("채팅 리스트 요청 --- 요청시 :  " + chatList)
             messagesEndRef.current.scrollIntoView({behavior: "smooth"});
             setIsLoading(true); // 데이터 가져오는 동안 로딩 상태 활성화
 
-            // 채팅 메시지를 백엔드로 전송하고 응답을 받아옴
             const response = await fetchChatMessages(userInput);
             setIsLoading(false); // 데이터 가져온 후 로딩 상태 비활성화
 
-            // // 서버 응답을 채팅 리스트에 추가 후 화면 재출력
             console.log("채팅 리스트 요청 --- 요청 후  :  " + chatList)
             messagesEndRef.current.scrollIntoView({behavior: "smooth"});
         } catch (error) {
@@ -89,19 +102,17 @@ const GPTChatRoom = () => {
         }
     };
 
-    //시작하기 버튼 클릭시 데이터 가져오기 시작
     useEffect(() => {
         if (isStarted) { // 시작하기 버튼 클릭 시만 fetchData 함수 실행
+            setIsLoading(true);
             const fetchData = async () => {
                 try {
-                    setIsLoading(true);
                     await fetchChatMessages(userInput);
                     setIsLoading(false);
                 } catch (error) {
                     console.error("채팅 메시지를 불러오는데 실패했습니다.", error);
                 }
             };
-
             fetchData();
         }
     }, [isStarted]); // isStarted 상태 변경 시 useEffect 실행
@@ -114,12 +125,12 @@ const GPTChatRoom = () => {
     }, [chatList]); // chatList가 변경될 때마다 메시지 스크롤을 마지막 채팅으로 이동
 
     // 스피너 위치 확인용
-    useEffect(() => {
-        setIsLoading(true); // 스피너 표시
-        return () => {
-            setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
-        };
-    }, []); // 컴포넌트가 마운트될 때만 실행
+    // useEffect(() => {
+    //     setIsLoading(true); // 스피너 표시
+    //     return () => {
+    //         setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
+    //     };
+    // }, []); // 컴포넌트가 마운트될 때만 실행
 
     //이미지 생성되면 이미지 페이지로 전환
     useEffect(() => {
@@ -140,44 +151,19 @@ const GPTChatRoom = () => {
         setChatList([]); // 채팅 리스트 상태 초기화
     };
 
-
-
-
     return (
-        // <Layout>
-
             <div className="container-fluid">
                             <div className="chat_section_g">
-                                <div style={{width: "100%"}}>
-                                    <div style={{display: 'flex', alignItems: 'center', marginBottom: '20px'}}>
-                                        <img
-                                            src='https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/cherry.svg'
-                                            alt=""
-                                            style={{width: '200px', height: '200px'}}
-                                        />
-                                        <div className='cherry' style={{marginLeft: '20px'}}>
-                                            <div><strong>이름: </strong>체리</div>
-                                            <div><strong>나이: </strong>20살</div>
-                                            <div><strong>취미: </strong>코딩 공부</div>
-                                            <div><strong>특이사항: <br/></strong>패션 컨설턴트?</div>
-                                        </div>
-                                    </div>
-                                    <div className="chat-message_g received-message_g">
-                                        <strong>체리<br/></strong>
-                                        <p>안녕하세요, 저는 🍒체리입니다! 요즘엔 좀 심심해서 패션 컨설턴트 일을 잠깐 맡고 있어요.
-                                            여러분의 오늘을 더욱 빛내줄 옷차림을 추천해드릴 수 있어요.
-                                            어떤 스타일을 선호하시나요? 함께 이야기 해볼까요?😊 </p>
-                                    </div>
-                                </div>
+                                <ChatRoomTop />
                                 {/*시작하기 버튼 렌더링 조건과 위치 조정*/}
                                 {
                                     !isStarted && (
                                         <Button className='startButton' color="danger" variant="bordered"
-                                                onClick={handleStartClick}>
+                                                onClick={handleStartClick}
+                                        >
                                             대화 시작
                                         </Button>
                                     )
-
                                 }
 
                                 {chatList.map((message, index) => (
@@ -190,7 +176,7 @@ const GPTChatRoom = () => {
                                                 </>
                                             ) : (
                                                 <>
-                                                    <strong>유저<br/></strong>
+                                                    <strong>나<br/></strong>
                                                 </>
                                             )}
                                             <p>{message.content}</p>
@@ -208,36 +194,19 @@ const GPTChatRoom = () => {
                                     </div>
                                 ))}
                             </div>
-
-
                             {isLoading && (
-                                <Spinner className="spinnerChat" size="sm" color="danger" labelColor="danger"/>
+                                <Spinner className="spinnerChat" size="sm" color="danger" label="생각중" labelColor="danger"/>
                             )}
-                            {/* 메시지 입력 및 전송 UI */}
-                            <div
-                                className="type_msg_g"
-                                // style={{position: 'fixed', bottom: '50px', width: '100%'}}
-                            >
-                                <div className="input_msg_write_g">
-                                    <form onSubmit={handleSendMessage}>
-                                        <input
-                                            type="text"
-                                            className="write_msg_g"
-                                            placeholder="메세지를 입력하세요."
-                                            value={userInput}
-                                            onChange={(e) => setUserInput(e.target.value)}
-                                            disabled={!isStarted}
-                                        />
-                                        {/* 시작하기 버튼 클릭 전에는 Send 버튼 숨김 */}
-                                        {isStarted && (
-                                            <button type="submit" className="msg_send_btn_g">Send</button>
-                                        )}
-                                    </form>
-                                </div>
+                            <div className="inputContainer">
+                                <MessageInput
+                                    userInput={userInput}
+                                    setUserInput={setUserInput}
+                                    handleSendMessage={handleSendMessage}
+                                    isStarted={isStarted}
+                                />
                             </div>
+                            <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
             </div>
-
-        // </Layout>
     );
 };
 

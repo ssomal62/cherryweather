@@ -4,6 +4,7 @@ import styled from "styled-components"
 import {buketURLState, useFetchImageList} from "../../../recoil/hooks/UseFetchImageList";
 import ImageListItem from "./ImageListItem";
 import {deleteState} from "../../../recoil/hooks/UseDeleteImage";
+import {IsLoginAtom} from "../../../recoil/LoginAtom";
 
 const ImageList = () => {
 
@@ -17,6 +18,7 @@ const ImageList = () => {
             fetchList();
         }
     }, [fetchList, isDeleted]);
+
 
     return (
         <div>
