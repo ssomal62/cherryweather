@@ -2,9 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import {Card, CardBody, Chip, Image} from "@nextui-org/react";
 import {Swiper, SwiperSlide} from "swiper/react";
-import { MdOutlineNavigateNext } from "react-icons/md";
 import {useLocation, useNavigate} from "react-router-dom";
-import { CgScrollH } from "react-icons/cg";
+import {CgScrollH} from "react-icons/cg";
 
 const MyClub = ({joinedClubs}) => {
 
