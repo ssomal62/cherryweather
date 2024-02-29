@@ -2,9 +2,10 @@ package com.example.demo.chat.entity;
 
 import com.example.demo.account.entity.Account;
 import com.example.demo.club.entity.Club;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,33 +13,41 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Getter
+@Data
 @Table(name = "chat")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
-    private int chatId;
-    // 계정 id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACCOUNT_ID")
-    @JsonBackReference // 순환 참조 방지
-    private Account accountid;
+    private long chatId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "raccountid")
-    @JsonBackReference // 순환 참조 방지
-    private Account raccountid;
+    @JsonIgnore
+    @JoinColumn(name = "accountId")
+    private Account account;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "clubId")
-    @JsonBackReference // 순환 참조 방지
-    private Club clubid;
+    private Club club;
+
+    @Column
+    private Long raccountId;
+
     // 채팅방
     @Column
     private String chatRoom;
 
+    @Column
+    private String chatName;
+
+    public Long getAccountId() {
+        return account.getAccountId();
+    }
 }
 // 본인 사진
 //    @Column

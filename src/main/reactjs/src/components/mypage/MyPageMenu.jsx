@@ -6,7 +6,8 @@ import { FiMapPin } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { IoAirplaneOutline } from "react-icons/io5";
 import { TbJacket } from "react-icons/tb";
-
+import { BsChatDots } from "react-icons/bs";
+import Adminchat from "../chat/Adminchat";
 const MyPageMenu = () => {
   const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ const MyPageMenu = () => {
           </Wapper>
         </MenuWapper>
       </MenuBtn>
-      <MenuBtn onClick={()=>navigate("/imageList")}>
+      <MenuBtn onClick={() => navigate("/imageList")}>
         <MenuWapper>
           <Wapper>
             <TbJacket style={{ ...styles.icon }} />
@@ -56,6 +57,17 @@ const MyPageMenu = () => {
           </Wapper>
         </MenuWapper>
       </MenuBtn>
+      <MenuBtn>
+        <MenuWapper>
+          <Wapper>
+            <BsChatDots style={{ ...styles.icon }} />
+            <Adminchat />
+          </Wapper>
+          <Wapper>
+            <MdKeyboardArrowRight style={{ ...styles.icon }} />
+          </Wapper>
+        </MenuWapper>
+      </MenuBtn>
     </>
   );
 };
@@ -68,7 +80,6 @@ const styles = {
     height: 24,
   },
 };
-
 
 export const Title = styled.span`
   margin-left: 16px;

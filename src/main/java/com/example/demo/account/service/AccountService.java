@@ -24,4 +24,7 @@ public interface AccountService {
 
     void changePassword(final @AuthenticationPrincipal AccountDetails accountDetails, final String newPassword);
 
+    ResponseEntity<UserInfoDto> getUserInfoByEmail(String email);
+
+    UserInfoDto getUserInfoByAccountId(Long accountId);
 }

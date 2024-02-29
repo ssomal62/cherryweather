@@ -30,11 +30,14 @@ import Chat from "../pages/chat/Chat";
 import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
+// import ClubSearch from "../pages/club/ClubSearch";
 import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
 
 import NaverCallBack from "../pages/auth/NaverCallBack";
 import Club from "../pages/club/Club";
 import Search from "../pages/search/Search";
+import ClubChat from "../components/chat/ClubChat";
+import AddEvent from "../components/event/AddEvent";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -126,11 +129,17 @@ const Router = () => {
           <Route path="/imageList" element={<AI_imageList />} />
           <Route path="/weatherDetail" element={<WeatherDetail />} />
 
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/chat/room/:chatRoom/" element={<ChatRoom />} />
-          <Route path="/chat/admin" element={<Adminchat />} />
+          {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
+          {/* {isLogin && <Route path="/club" element={<Club />} />} */}
 
+          {/* 로그인 상태가 true여야 접근할 수 있는 페이지 */}
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/room/:chatRoom/:clubId" element={<ChatRoom />} />
+          <Route path="/chat/admin" element={<Adminchat />} />
+          <Route path="/chat/club" element={<ClubChat />} />
+          {/* {isLogin && <Route path="/club" element={<Club />} />} */}
           <Route path="/event" element={<Event />} />
+          <Route path="/event-add" element={<AddEvent />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

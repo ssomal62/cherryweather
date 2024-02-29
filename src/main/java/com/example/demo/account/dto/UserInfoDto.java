@@ -25,7 +25,7 @@ public class UserInfoDto {
 
 
     // 생성자를 통해 모든 필드를 초기화합니다.
-    public UserInfoDto(Account account, List<String> interests, List<ActivityAreaInfo> activityAreas,boolean agreementGetNotified){
+    public UserInfoDto(Account account, List<String> interests, List<ActivityAreaInfo> activityAreas, Boolean agreementGetNotified){
         this.accountId = account.getAccountId();
         this.name = account.getName();
         this.email = account.getEmail();
@@ -44,6 +44,8 @@ public class UserInfoDto {
                 .collect(Collectors.toList());
         this.agreementGetNotified = agreementGetNotified;
     }
+
+
 
     @Value
     @AllArgsConstructor
