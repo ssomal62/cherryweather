@@ -67,7 +67,7 @@ const DropDownNotification = () => {
     }
   }, [weatherData, isOpen]); // weatherData만 의존성 배열에 추가
 
-  // 알림 삭제 및 상세 페이지로 이동 함수
+  // 알림 삭제 및 상세 페이지로 이동 함수(클럽)
   const deleteAlarmAndNavigate = async (alarmId, targetId) => {
     try {
       console.log("알람아이디" + alarmId);
@@ -81,6 +81,22 @@ const DropDownNotification = () => {
       setAlarmList(updatedAlarms);
       // 상세 페이지로 nav
       navigate(`/club-details/${targetId}`);
+    } catch (error) {
+      console.error("알림 삭제 실패:", error);
+    }
+  };
+
+  const deleteAlarmAndNavigateToAdminChatRoom = async (alarmId, targetId) => {
+    try {
+      await instance.delete(`/alarm/${alarmId}`);
+      // 삭제 후 알림 목록에서 해당 알림을 제거하고 상태를 업데이트
+      const updatedAlarms = alramList.filter(
+        (alarm) => alarm.alarmId !== alarmId
+      );
+      setAlarmList(updatedAlarms);
+
+      // 채팅방 상세 페이지로 이동
+      navigate(`/chat/room/${targetId}`);
     } catch (error) {
       console.error("알림 삭제 실패:", error);
     }
@@ -106,7 +122,22 @@ const DropDownNotification = () => {
         {currentAlarms.map((item, index) => (
           <DropdownItem
             key={index}
-            onClick={() => deleteAlarmAndNavigate(item.alarmId, item.targetId)}
+            onClick={() => {
+              // 알림 유형에 따라 적절한 함수 호출
+              switch (item.type) {
+                case "CLUB":
+                  deleteAlarmAndNavigate(item.alarmId, item.targetId); // 클럽 알림일 경우
+                  break;
+                case "ADMINCHAT":
+                  deleteAlarmAndNavigateToAdminChatRoom(
+                    item.alarmId,
+                    item.targetId
+                  ); // 관리자 채팅방 알림일 경우
+                  break;
+                // 여기에 더 많은 유형의 알림 처리를 추가할 수 있습니다.
+                default:
+              }
+            }}
           >
             {item.description}
           </DropdownItem>
@@ -115,7 +146,22 @@ const DropDownNotification = () => {
         {pastAlarms.map((item, index) => (
           <DropdownItem
             key={index}
-            onClick={() => deleteAlarmAndNavigate(item.alarmId, item.targetId)}
+            onClick={() => {
+              // 알림 유형에 따라 적절한 함수 호출
+              switch (item.type) {
+                case "CLUB":
+                  deleteAlarmAndNavigate(item.alarmId, item.targetId); // 클럽 알림일 경우
+                  break;
+                case "ADMINCHAT":
+                  deleteAlarmAndNavigateToAdminChatRoom(
+                    item.alarmId,
+                    item.targetId
+                  ); // 관리자 채팅방 알림일 경우
+                  break;
+                // 여기에 더 많은 유형의 알림 처리를 추가할 수 있습니다.
+                default:
+              }
+            }}
           >
             {item.description}
           </DropdownItem>
