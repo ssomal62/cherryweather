@@ -14,8 +14,9 @@ import 'swiper/css/autoplay';
 import SwiperCore from "swiper";
 import {Autoplay, Navigation, Pagination} from "swiper/modules";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
+import MainTop from "./MainTop";
 
-const MainItem = ({isLogin, setActiveSlide }) => {
+const MainItem = ({index, isLogin, setActiveSlide }) => {
     const navigate = useNavigate();
 
     SwiperCore.use([Navigation]);
@@ -82,6 +83,7 @@ const MainItem = ({isLogin, setActiveSlide }) => {
         >
             {slidesData.map((slide, index) => (
                 <SwiperSlide key={index}>
+                    <MainTop index={index} />
                     <div className="slide-content max-w-[700px] w-full" >
                         <Card isFooterBlurred className="w-full h-[400px]">
                             <Image
@@ -93,6 +95,7 @@ const MainItem = ({isLogin, setActiveSlide }) => {
                                 width="100%"
                                 height="100%"
                                 alt={slide.title}
+                                onClick={() => handleNavigate(slide.navigateTo)}
                             />
                             <CardFooter className="absolute bg-white/80 bottom-0 z-10  border-default-600 ">
                                 <div className="flex flex-grow gap-2 items-center">

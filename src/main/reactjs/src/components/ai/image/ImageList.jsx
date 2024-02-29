@@ -4,7 +4,6 @@ import styled from "styled-components"
 import {buketURLState, useFetchImageList} from "../../../recoil/hooks/UseFetchImageList";
 import ImageListItem from "./ImageListItem";
 import {deleteState} from "../../../recoil/hooks/UseDeleteImage";
-import {IsLoginAtom} from "../../../recoil/LoginAtom";
 
 const ImageList = () => {
 
@@ -21,7 +20,7 @@ const ImageList = () => {
 
 
     return (
-        <div>
+        <div style={{marginBottom:"5em"}}>
         {imageList.map((list)=>(
                 <CardListItemWrapper key={list.aiImageId}>
                     <ImageListItem list={list} />

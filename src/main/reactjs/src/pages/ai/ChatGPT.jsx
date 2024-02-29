@@ -8,7 +8,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 const ChatGpt = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from || '/';
+    const from = location.state?.from || '/ai';
 
     const handleBack = () => {
         navigate(from);
