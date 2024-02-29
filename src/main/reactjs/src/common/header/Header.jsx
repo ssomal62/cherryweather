@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {IoOptionsOutline, IoSearchOutline} from "react-icons/io5";
-import {Navbar, NavbarContent} from "@nextui-org/react";
+import {Navbar, NavbarContent,} from "@nextui-org/react";
 import BrandMenu from "./BrandMenu";
 import AvatarMenu from "./AvatarMenu";
 import {useRecoilValue, useSetRecoilState} from "recoil";
@@ -42,12 +42,13 @@ export default function Header() {
     }
   }, []);
 
-  const handleSearchClick = () => {
-    setSearchState([]);
-    localStorage.removeItem("searchResult");
-    localStorage.removeItem("searchTriggered");
-    navigate("/search", {state: {from: location.pathname}});
-  };
+    const handleSearchClick = () => {
+        setSearchState([]);
+        sessionStorage.removeItem('searchResult');
+        sessionStorage.removeItem('searchTriggered');
+        sessionStorage.removeItem('scrollPosition');
+        navigate('/search', {state: {from: location.pathname}});
+    }
 
   const makeNotiTest = () => {
     // 함수 내용은 기존 WebNotificationTest 컴포넌트의 makeNotiTest 함수를 참고하여 이동시켜주세요.

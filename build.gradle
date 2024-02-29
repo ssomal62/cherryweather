@@ -210,5 +210,3 @@ tasks.register('copyOasToSwagger', Copy) {
 	into 'src/main/resources/static/swagger-ui/'
 	dependsOn 'openapi3'
 }
-
-
