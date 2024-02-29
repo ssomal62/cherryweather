@@ -1,3 +1,5 @@
+
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
@@ -124,9 +126,9 @@ sourceSets {
   }
 }
 */
-//
+
 processResources {
-//	dependsOn "copyReactFile"
+	dependsOn "copyReactFile"
 	dependsOn "copyPrivate"
 }
 
@@ -205,8 +207,4 @@ tasks.register('copyOasToSwagger', Copy) {
 	from "$buildDir/api-spec/openapi3.yaml"
 	into 'src/main/resources/static/swagger-ui/'
 	dependsOn 'openapi3'
-}
-
-tasks.withType(JavaCompile) {
-	options.compilerArgs << "-Xlint:unchecked"
 }
