@@ -4,6 +4,7 @@ import {Card, CardBody, Chip, Image} from "@nextui-org/react";
 import {Swiper, SwiperSlide} from "swiper/react";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import {useLocation, useNavigate} from "react-router-dom";
+import { CgScrollH } from "react-icons/cg";
 
 const MyClub = ({joinedClubs}) => {
 
@@ -26,8 +27,8 @@ const MyClub = ({joinedClubs}) => {
                         <div className="justify-start gap-1">
                     <Chip size="sm" color="danger" variant="bordered" className="mb-2">가입한 클럽</Chip>
                         </div>
-                        <div className="justify-end ml-auto">
-                            <MdOutlineNavigateNext style={{width:24, height:24, color :'#F31260'}}/>
+                        <div className="justify-end ml-auto mr-2">
+                            <CgScrollH style={{width:24, height:24, color :'#F31260'}}/>
                         </div>
                     </div>
                     <Swiper
@@ -42,8 +43,8 @@ const MyClub = ({joinedClubs}) => {
                                         src={clubProfile(joinedClub.clubSummary.code)}
                                         alt="Club Profile"
                                         radius="lg"
-                                        style={{width: '5em', height: '5em', border: '1px solid #d7d7d7'}}
-                                        onClick={() => handlePageChange(joinedClub.clubId)}
+                                        style={{width: '5em', height: '5em', border: '1px solid #d7d7d7',cursor:'pointer'}}
+                                        onClick={() => handlePageChange(joinedClub.clubSummary.clubId)}
                                     />
                                 </div>
                                 <div className="flex justify-center items-center">

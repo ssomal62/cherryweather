@@ -17,24 +17,22 @@ const Mypage = () => {
 
     const navigate = useNavigate();
 
-
-    const {loading: loadingJoinedMembership} = useClubData({
-        state      : likedClubListState,
-        dynamicPath: "/liked",
-    })
-
-    const {loading: loadingLikedClubList} = useMembershipData({
+    const {loading: loadingJoinedMembership} = useMembershipData({
         state      : joinedMembershipState,
         dynamicPath: "/my-memberships",
+    })
+
+    const {loading: loadingLikedClubList} = useClubData({
+        state      : likedClubListState,
+        dynamicPath: "/liked",
     })
 
     const joinedClubs = useRecoilValue(joinedMembershipState).summaryList;
     const likedClubs = useRecoilValue(likedClubListState);
 
-    console.log()
+    console.log("라이크확인", likedClubs)
 
     const loading = loadingJoinedMembership || loadingLikedClubList;
-
 
     if (loading) {
         return (

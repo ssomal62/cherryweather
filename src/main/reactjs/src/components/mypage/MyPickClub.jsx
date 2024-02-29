@@ -2,9 +2,8 @@ import React from 'react';
 import styled from "styled-components";
 import {useLocation, useNavigate} from "react-router-dom";
 import {Card, CardBody, Chip, Image} from "@nextui-org/react";
-import {MdOutlineNavigateNext} from "react-icons/md";
 import {Swiper, SwiperSlide} from "swiper/react";
-
+import {CgScrollH} from "react-icons/cg";
 
 const MyPickClub = ({likedClubs}) => {
     const navigate = useNavigate();
@@ -26,8 +25,8 @@ const MyPickClub = ({likedClubs}) => {
                         <div className="justify-start gap-1">
                             <Chip size="sm" color="danger" variant="bordered" className="mb-2">좋아요 클럽</Chip>
                         </div>
-                        <div className="justify-end ml-auto">
-                            <MdOutlineNavigateNext style={{width:24, height:24, color :'#F31260'}}/>
+                        <div className="justify-end ml-auto mr-2">
+                            <CgScrollH style={{width:24, height:24, color :'#F31260'}}/>
                         </div>
                     </div>
                     <Swiper
@@ -41,7 +40,7 @@ const MyPickClub = ({likedClubs}) => {
                                         src={clubProfile(likedClub.clubSummary.code)}
                                         alt="Club Profile"
                                         radius="lg"
-                                        style={{width: '5em', height: '5em', border: '1px solid #d7d7d7'}}
+                                        style={{width: '5em', height: '5em', border: '1px solid #d7d7d7', cursor:'pointer'}}
                                         onClick={() => handlePageChange(likedClub.clubSummary.clubId)}
                                     />
                                 </div>
