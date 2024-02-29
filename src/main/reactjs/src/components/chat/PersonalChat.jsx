@@ -1,9 +1,6 @@
-import * as ncloudchat from "ncloudchat";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
-import { Cookies } from "react-cookie";
-import { user } from "@nextui-org/react";
 
 function PersonalChat({ userInfo, accountData, nc }) {
   const navi = useNavigate();

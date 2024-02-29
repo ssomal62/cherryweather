@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Avatar,
-  Button,
-} from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Avatar, Button } from "@nextui-org/react";
 import "../../style/ChatUserInfoStyle.css";
 import { instance } from "../../recoil/module/instance";
 import PersonalChat from "./PersonalChat";
@@ -42,7 +35,11 @@ function ChatUserInfo({ selectedMsg, accountData, nc }) {
                 isBordered
                 radius="full"
                 size="md"
-                src={selectedMsg.sender.profile}
+                src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${
+                  userInfo.profileImage === "기본이미지 넣어야함"
+                    ? "default_image.jpg"
+                    : userInfo.profileImage
+                }?type=f&w=600&h=600&ttype=jpg`}
               />
               <div className="flex flex-col gap-1 items-start justify-center">
                 <h4 className="text-small font-semibold leading-none text-default-600">
@@ -54,13 +51,11 @@ function ChatUserInfo({ selectedMsg, accountData, nc }) {
           </CardHeader>
 
           <CardBody className="px-3 py-5 text-small text-default-400">
-            {userInfo.interests}
-            {/* {userInfo.introduce ? (
-                <p>{userInfo.introduce}</p>
-              ) : (
-                <p>자기소개가 없습니다.</p>
-              )  
-              } */}
+            {userInfo.interests.map((interest, index) => (
+              <span key={index} className="interests">
+                {interest}
+              </span>
+            ))}
           </CardBody>
           <Button
             color="danger"

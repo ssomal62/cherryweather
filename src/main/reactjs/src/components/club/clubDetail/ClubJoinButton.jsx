@@ -1,85 +1,84 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {Button} from "@nextui-org/react";
-import {useNavigate} from "react-router-dom";
-import {useRecoilValue} from "recoil";
-import {clubDetailState} from "../../../recoil/hooks/UseClubApi";
-import {useLikeClub} from "../../../recoil/hooks/UseLikeApi";
-import {HeartIcon} from "../../../assets/icon/HeartIcon";
-import {Cookies} from "react-cookie";
-import {instance} from "../../../recoil/module/instance";
-import {IsLoginAtom} from "../../../recoil/LoginAtom";
+import { Button } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { clubDetailState } from "../../../recoil/hooks/UseClubApi";
+import { useLikeClub } from "../../../recoil/hooks/UseLikeApi";
+import { HeartIcon } from "../../../assets/icon/HeartIcon";
+import { Cookies } from "react-cookie";
+import { instance } from "../../../recoil/module/instance";
+import { IsLoginAtom } from "../../../recoil/LoginAtom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import { currentMembershipState } from "../../../recoil/hooks/UseMembershipApi";
 import ClubChat from "../../chat/ClubChat";
 
 const ClubJoinButton = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const isLogin = useRecoilValue(IsLoginAtom);
 
-    const isLogin = useRecoilValue(IsLoginAtom);
+  const { clubDetail, liked: clubLiked } = useRecoilValue(clubDetailState);
 
-    const { clubDetail, liked: clubLiked } = useRecoilValue(clubDetailState);
+  const myMembership = useRecoilValue(currentMembershipState);
 
-    const myMembership = useRecoilValue(currentMembershipState);
+  const myRole =
+    myMembership && myMembership.info ? myMembership.info.role : "default";
 
-    const myRole = myMembership && myMembership.info ? myMembership.info.role : 'default';
+  const [liked, setLiked] = useState(clubLiked);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [role, setRole] = useState("");
 
-    const [liked, setLiked] = useState(clubLiked);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [role, setRole] = useState('');
+  const { toggleLikeClub } = useLikeClub();
 
-    const {toggleLikeClub} = useLikeClub();
+  useEffect(() => {
+    setRole(clubDetail.joinApprovalStatus === "JOIN" ? "MEMBER" : "WAITING");
+    setLiked(clubLiked);
+  }, [clubLiked, clubDetail.joinApprovalStatus]);
 
-    useEffect(() => {
-        setRole(clubDetail.joinApprovalStatus === "JOIN" ? "MEMBER" : "WAITING")
-        setLiked(clubLiked);
-    }, [clubLiked, clubDetail.joinApprovalStatus]);
-
-    const handleLikeClick = () => {
-        if (!isLogin) {
-            setIsModalOpen(true);
-            return;
-        }
-        setLiked(!liked);
-        toggleLikeClub({type: "CLUB", targetId: clubDetail.clubId});
-    };
-
-    const handleJoinClick = () => {
-        if (!isLogin) {
-            setIsModalOpen(true);
-            return;
-        }
-        onSave();
+  const handleLikeClick = () => {
+    if (!isLogin) {
+      setIsModalOpen(true);
+      return;
     }
+    setLiked(!liked);
+    toggleLikeClub({ type: "CLUB", targetId: clubDetail.clubId });
+  };
 
-    const onSave = async () => {
+  const handleJoinClick = () => {
+    if (!isLogin) {
+      setIsModalOpen(true);
+      return;
+    }
+    onSave();
+  };
 
-        const requestData = {
-            clubId: clubDetail.clubId,
-            role  : role
-        };
-
-        console.log("클럽이테일로그 확인" + clubDetail.clubId)
-        const cookie = new Cookies();
-        try {
-            const res = await instance.post('/membership', requestData, {
-                headers: {
-                    Authorization: `Bearer ${cookie.get('accessToken')}`
-                }
-            });
-
-            if (clubDetail.joinApprovalStatus === "JOIN") {
-                navigate('/club-join');
-            }
-            if (clubDetail.joinApprovalStatus === "APPROVAL") {
-                navigate('/club-wait');
-            }
-            console.log('Success:', res);
-        } catch (error) {
-            console.error('Error:', error);
-        }
+  const onSave = async () => {
+    const requestData = {
+      clubId: clubDetail.clubId,
+      role: role,
     };
+
+    console.log("클럽이테일로그 확인" + clubDetail.clubId);
+    const cookie = new Cookies();
+    try {
+      const res = await instance.post("/membership", requestData, {
+        headers: {
+          Authorization: `Bearer ${cookie.get("accessToken")}`,
+        },
+      });
+
+      if (clubDetail.joinApprovalStatus === "JOIN") {
+        navigate("/club-join");
+      }
+      if (clubDetail.joinApprovalStatus === "APPROVAL") {
+        navigate("/club-wait");
+      }
+      console.log("Success:", res);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const joinButtonRender = () => {
     switch (myRole) {
@@ -127,47 +126,50 @@ const ClubJoinButton = () => {
           </Button>
         );
     }
+  };
 
-    return (
-        <>
-            <Footer>
-                <ButtonContainer>
-                    <Button
-                        isIconOnly
-                        className="text-default-900/60 data-[hover]:bg-foreground/10"
-                        radius="full"
-                        variant="light"
-                        onPress={handleLikeClick}
-                    >
-                        <HeartIcon
-                            style={styles.icon}
-                            className={liked ? "[&>path]:stroke-transparent" : ""}
-                            fill={liked ? "currentColor" : "none"}
-                        />
-                    </Button>
-                </ButtonContainer>
+  return (
+    <>
+      <Footer>
+        <ButtonContainer>
+          <Button
+            isIconOnly
+            className="text-default-900/60 data-[hover]:bg-foreground/10"
+            radius="full"
+            variant="light"
+            onPress={handleLikeClick}
+          >
+            <HeartIcon
+              style={styles.icon}
+              className={liked ? "[&>path]:stroke-transparent" : ""}
+              fill={liked ? "currentColor" : "none"}
+            />
+          </Button>
+        </ButtonContainer>
 
-                {joinButtonRender()}
-
-            </Footer>
-            <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-        </>
-    );
+        {joinButtonRender()}
+      </Footer>
+      <LoginVerificationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
+  );
 };
 
 export default ClubJoinButton;
 
 const styles = {
-    icon: {
-        width : 30,
-        height: 30,
-        color : '#F31260',
-    },
-    font: {
-        fontSize  : 18,
-        fontWeight: 600,
-    },
-}
+  icon: {
+    width: 30,
+    height: 30,
+    color: "#F31260",
+  },
+  font: {
+    fontSize: 18,
+    fontWeight: 600,
+  },
+};
 const ButtonContainer = styled.div`
   flex: 0 1 20%;
   display: flex;
@@ -189,5 +191,5 @@ const Footer = styled.div`
   margin: 0 auto;
   z-index: 30;
   background-color: white;
-  box-shadow: 0px -4px 20px -5px rgba(0, 0, 0, 0.1)
+  box-shadow: 0px -4px 20px -5px rgba(0, 0, 0, 0.1);
 `;

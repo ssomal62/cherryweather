@@ -123,6 +123,13 @@ public class AccountController {
         return accountService.getUserInfoByEmail(email);
     }
 
+    // accountId로 user 정보 가져오기
+    @GetMapping("/getfinduserbyid")
+    @ResponseStatus(HttpStatus.OK)
+    public UserInfoDto findAccountByAccountId(@RequestParam Long accountId) {
+        return accountService.getUserInfoByAccountId(accountId);
+    }
+
 
 
 

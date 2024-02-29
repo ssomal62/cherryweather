@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-
 import "../../style/ChatRoomStyle.css";
 import * as ncloudchat from "ncloudchat";
 import { useNavigate, useParams } from "react-router-dom";
-import { Textarea, User, useDisclosure } from "@nextui-org/react";
+import { User, useDisclosure } from "@nextui-org/react";
 import { IoIosArrowBack } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { BsSend } from "react-icons/bs";
+import { BsPaperclip, BsSend } from "react-icons/bs";
 import Layout from "../../common/Layout";
 import { Cookies } from "react-cookie";
 import { instance } from "../../recoil/module/instance";
 import ChatUserInfo from "./ChatUserInfo";
 import ChatUserListModal from "./ChatUserList";
-import { HiOutlinePaperClip } from "react-icons/hi";
 
 const ChatRoom = () => {
   const [ncloud, setNcloud] = useState(null);
@@ -30,7 +28,7 @@ const ChatRoom = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMsg, setSelectedMsg] = useState({});
   const [uploadImage, setUploadImage] = useState(null);
-
+  const [senderProfile, setSenderProfile] = useState({});
   useEffect(() => {
     const initializeChat = async () => {
       const accessToken = cookies.get("accessToken");
@@ -79,32 +77,47 @@ const ChatRoom = () => {
       // 채널 메세지 가져오기
       const fetchedMessages = await fetchChannelMessages(chat, chatRoom);
       setMessages(fetchedMessages);
-
-      // await chat.subscribe(channelId);
-      // await chat.addUsers(channelId, [res2.data.uemail, res3.data.uemail]);
-      // const existingChannelId = channelId;
     };
     initializeChat();
   }, []);
 
+  console.log("channels 채널 정보 : ", channels);
+
   const fetchChannelMessages = async (chat, channelId) => {
     try {
-      // 필터와 정렬 옵션 설정
       const filter = { channel_id: channelId };
       const sort = { created_at: 1 };
       let offset = 0;
-      const per_page = 100; // 한 번에 가져올 대화 개수
+      const per_page = 100;
       let allMessages = [];
+
       while (true) {
         const option = { offset, per_page };
         const channelMessages = await chat.getMessages(filter, sort, option);
-        console.log("channelMessages : " + channelMessages);
         const messagesData = channelMessages.edges ? channelMessages.edges : {};
-        const messages = messagesData.map((edge) => edge.node);
+        const messages = await Promise.all(
+          messagesData.map(async (edge) => {
+            const message = edge.node;
+            // 여기서 각 메시지 발신자의 프로필 정보를 가져옵니다.
+            try {
+              const profileResponse = await instance.get(
+                `/account/getfinduser?email=${message.sender.id}`
+              );
+              // 프로필 이미지 URL을 메시지 객체에 추가합니다.
+              message.sender.profileImage = profileResponse.data.profileImage;
+              setSenderProfile(message.sender.profileImage);
+            } catch (profileError) {
+              console.error("Error fetching sender profile:", profileError);
+              // 프로필 정보를 가져오는데 실패한 경우, 기본 값을 사용할 수 있습니다.
+              message.sender.profileImage = "기본이미지URL";
+            }
+            return message;
+          })
+        );
+
         allMessages = allMessages.concat(messages);
         if (messages.length < per_page) {
-          // 더 이상 가져올 대화 내용이 없으면 반복문 종료
-          break;
+          break; // 더 이상 가져올 대화 내용이 없으면 반복문 종료
         }
         offset += per_page;
       }
@@ -112,6 +125,32 @@ const ChatRoom = () => {
     } catch (error) {
       console.error("Error fetching channel messages:", error);
       return []; // 메시지 목록 불러오기 실패 시 빈 배열 반환
+    }
+  };
+
+  // 00시가 지난 후에 첫 메세지를 보내면 00시 이전 메세지와 00시 이후 메세지 사이에 현재 시간을 알려주는 메세지 삽입
+  const [lastMessageData, setLastMessageData] = useState([]);
+  const compareLastMessageDate = () => {
+    const now = new Date();
+    channels.map((channel) => {
+      const lastMessage = channel.last_message.created_at;
+      const lastMessageDate = new Date(lastMessage);
+      setLastMessageData(lastMessageDate);
+      return null; // Add a return statement here
+    });
+
+    if (lastMessageData && now.getDate() !== lastMessageData.getDate()) {
+      return (
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "10px",
+            marginBottom: "10px",
+          }}
+        >
+          {now.toLocaleDateString()}
+        </div>
+      );
     }
   };
 
@@ -123,37 +162,42 @@ const ChatRoom = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (userInput.trim() !== "") {
-      try {
-        if (!ncloud) {
-          throw new Error("Chat is not initialized");
-        }
-
-        if (uploadImage) {
-          // Send image
-          await ncloud.sendImage(chatRoom, uploadImage);
-          const response = await ncloud.sendMessage(chatRoom, {
-            type: "text",
-            message: userInput,
-          });
-          // setMessages(prevMessages => [...prevMessages, response]);
-        } else {
-          // Send message
-          const response = await ncloud.sendMessage(chatRoom, {
-            type: "text",
-            message: userInput,
-          });
-          // setMessages(prevMessages => [...prevMessages, response]);
-        }
-
-        setUserInput("");
-        setUploadImage(null);
-      } catch (error) {
-        console.error("Error:", error);
+    try {
+      if (!ncloud) {
+        throw new Error("Chat is not initialized");
       }
+
+      // 이미지가 있을 경우
+      if (uploadImage) {
+        console.log("chatRoom : ", chatRoom);
+        const formData = new FormData();
+        formData.append("file", uploadImage);
+        formData.append("chatRoom", chatRoom);
+
+        // 이미지 업로드 API 호출
+        const images = await instance.post("/chat/upload", formData);
+        console.log("images 이미지 : ", images);
+
+        // 이미지 전송 API 호출 (예시, 실제 함수는 환경에 따라 다를 수 있음)
+        const imgres = await ncloud.sendImage(chatRoom, uploadImage);
+      }
+
+      // 메시지가 있고, 이미지가 없을 경우
+      if (userInput.trim() !== "" && !uploadImage) {
+        // 메시지 전송 API 호출
+        const response = await ncloud.sendMessage(chatRoom, {
+          type: "text",
+          message: userInput,
+        });
+      }
+
+      // 입력 필드 초기화
+      setUserInput("");
+      setUploadImage(null);
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
-
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     setUploadImage(file);
@@ -194,15 +238,6 @@ const ChatRoom = () => {
     setSelectedMsg(message);
   };
 
-  useEffect(() => {
-    for (const channel of channels) {
-      if (channel.id === chatRoom) {
-        setChannelName(channel.name);
-        // do something with channelName
-        break;
-      }
-    }
-  }, [channels, chatRoom]);
   // 채팅방 나가기
   useEffect(() => {
     const fetchCurrentChatId = async () => {
@@ -211,10 +246,14 @@ const ChatRoom = () => {
           `/chat/getchatlist?accountId=${accountData.accountId}`
         );
         console.log("현재 채널", response.data);
+        const currentChatName = response.data.find(
+          (chat) => chat.chatRoom === chatRoom
+        )?.chatName;
         const currentChat = response.data.find(
           (chat) => chat.chatRoom === chatRoom
         );
         console.log("currentChat", currentChat);
+        setChannelName(currentChatName);
         setCurrentChannelId(currentChat);
       } catch (error) {
         console.error("Error occurred: ", error);
@@ -280,12 +319,14 @@ const ChatRoom = () => {
 
                 <ChatUserListModal
                   disconnectChat={disconnectChat}
-                  channelName={channelName}
                   isOpen={isOpen}
                   onClose={onClose}
+                  messages={messages}
+                  profileImage={senderProfile}
                 />
-
+                {/*{renderMessages()}*/}
                 {/* 현재 채널의 메시지 표시 */}
+
                 {messages.map &&
                   messages.map((message, index) => (
                     <div
@@ -311,7 +352,12 @@ const ChatRoom = () => {
                               : "received-message"
                           }
                           avatarProps={{
-                            src: "message.sender.profile",
+                            src: `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${
+                              message.sender.profileImage ===
+                              "기본이미지 넣어야함"
+                                ? "default_image.jpg"
+                                : message.sender.profileImage
+                            }?type=f&w=600&h=600&ttype=jpg`,
                           }}
                           style={{ fontSize: "8px", color: "gray" }}
                         />
@@ -328,7 +374,10 @@ const ChatRoom = () => {
                               ? "white"
                               : "black",
                           padding: "5px",
-                          borderRadius: "4px",
+                          borderRadius:
+                            message.attachment_filenames.name !== ""
+                              ? "10px"
+                              : "4px",
                           display: "inline-block",
                           fontSize: "12px",
                         }}
@@ -337,6 +386,17 @@ const ChatRoom = () => {
                           <strong>{message.sender.name}</strong>
                         )}
                         <div>{message.content}</div>
+                        {message.attachment_filenames &&
+                          message.attachment_filenames.url && (
+                            <img
+                              src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/chat/${chatRoom}/${message.attachment_filenames.name}?type=f&w=600&h=600&ttype=jpg`}
+                              style={{
+                                maxWidth: "170px",
+                                borderRadius: "10px",
+                              }}
+                              alt="image"
+                            />
+                          )}
                         <div style={{ fontSize: "10px" }}></div>
                       </div>
                       <div
@@ -359,6 +419,7 @@ const ChatRoom = () => {
                       </div>
                     </div>
                   ))}
+
                 {isModalOpen && (
                   <div>
                     <div className="modal-overlay" onClick={closeModal}></div>
@@ -380,36 +441,46 @@ const ChatRoom = () => {
               >
                 <form
                   onSubmit={handleSubmit}
-                  style={{ display: "flex", alignItems: "center" }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "10px",
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: "8px",
+                    border: "1px solid #eaeaea",
+                  }}
                 >
-                  <Textarea
-                    placeholder="메시지를 입력해주세요."
-                    className="write_msg"
+                  <input
+                    type="file"
+                    id="fileInput"
+                    style={{ display: "none" }}
+                    onChange={handleImageUpload}
+                  />
+                  <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
+                    <BsPaperclip size={20} />
+                  </label>
+                  <input
                     type="text"
-                    variant="underlined"
                     value={userInput}
                     onChange={handleUserInput}
-                    bordered
-                    style={{}} // 메시지 입력란이 남은 공간을 모두 차지하도록 설정
+                    placeholder="메시지를 입력하세요..."
+                    style={{
+                      flexGrow: 2,
+                      padding: "10px",
+                      border: "1px solid #ddd",
+                      borderRadius: "8px",
+                    }}
+                    className="gap-1"
                   />
-                  <div>
-                    <input
-                      type="file"
-                      id="uploadImage"
-                      name="file"
-                      onChange={handleImageUpload}
-                    />
-                    <HiOutlinePaperClip
-                      className="img_send_btn"
-                      style={{
-                        color: "#F31260",
-                        cursor: "pointer",
-                        alignContent: "left",
-                      }}
-                    />
-                  </div>
-                  <button type="submit" className="msg_send_btn">
-                    <BsSend style={{ color: "#F31260" }} />
+                  <button
+                    type="submit"
+                    variant="contained"
+                    css={{ width: "fit-content" }}
+                    size="small"
+                    className="ml-2 mr-2"
+                  >
+                    <BsSend />
                   </button>
                 </form>
               </div>

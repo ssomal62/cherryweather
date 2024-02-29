@@ -292,4 +292,10 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT)); // 계정 정보 재조회
         return ResponseEntity.ok().body(new UserInfoDto(account, null, null, false));
     }
+    @Override
+    public UserInfoDto getUserInfoByAccountId(Long accountId) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT)); // 계정 정보 재조회
+        return new UserInfoDto(account, null, null, false);
+    }
 }

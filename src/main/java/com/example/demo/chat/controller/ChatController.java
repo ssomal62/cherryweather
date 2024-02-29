@@ -7,7 +7,10 @@ import com.example.demo.chat.service.ChatService;
 import com.example.demo.common.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.List;
@@ -66,6 +69,15 @@ public class ChatController {
     @DeleteMapping("/deletechatroom")
     public void deleteChatRoom(@RequestParam int chatId, @RequestParam String chatRoom) {
         chatService.deleteChatRoom(chatId, chatRoom);
+    }
+
+    @PostMapping("/upload")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Void> chatImage(
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam(value = "chatRoom") String chatRoom) {
+        fileService.uploadSingleFile(file,"chat/" + chatRoom);
+        return ResponseEntity.ok().build();
     }
 
 }
