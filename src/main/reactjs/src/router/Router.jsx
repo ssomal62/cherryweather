@@ -37,6 +37,8 @@ import Search from "../pages/search/Search";
 import AddClubSuccess from "../pages/club/AddClubSuccess";
 import FeedEditor from "../pages/feed/FeedEditor";
 import ClubFeedList from "../pages/club/ClubFeedList";
+import ClubChat from "../components/chat/ClubChat";
+import AddEvent from "../components/event/AddEvent";
 
 // 레이즈 라우터 임포트 방법
 // const Login = lazy(() => import("../pages/Login"));
@@ -60,7 +62,7 @@ import ClubFeedList from "../pages/club/ClubFeedList";
 // 같이 사라진다
 
 const Router = () => {
-  const isLogin = useRecoilValue(IsLoginAtom);
+    const isLogin = useRecoilValue(IsLoginAtom);
 
     return (
         <BrowserRouter>
@@ -134,10 +136,12 @@ const Router = () => {
                     <Route path="/weatherDetail" element={<WeatherDetail/>}/>
 
                     <Route path="/chat" element={<Chat/>}/>
-                    <Route path="/chat/room/:chatRoom/" element={<ChatRoom/>}/>
+                    <Route path="/chat/room/:chatRoom/:clubId" element={<ChatRoom/>}/>
                     <Route path="/chat/admin" element={<Adminchat/>}/>
+                    <Route path="/chat/club" element={<ClubChat/>}/>
 
                     <Route path="/event" element={<Event/>}/>
+                    <Route path="/event-add" element={<AddEvent/>}/>
                 </Routes>
             </Suspense>
         </BrowserRouter>

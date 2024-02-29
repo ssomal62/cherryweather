@@ -7,8 +7,8 @@ import {Spinner} from "@nextui-org/react";
 
 const ImagePreview = () => {
     const [isActive, setIsActive] = useState(false);
-    const fetchURL = useFetchImage();
-    const image = useRecoilValue(imageURLState);
+    const fetchURL = useFetchImage(); // 초기값을 불러옴. 현재는 공백상태
+    const image = useRecoilValue(imageURLState); //imageURLState에 저장된 key값을 imgae에 저장한다. 맨 처음에는 공백이다.
     const [isLoading, setIsLoading] = useState(false); // isLoading 상태 추가
 
     useEffect(() => {

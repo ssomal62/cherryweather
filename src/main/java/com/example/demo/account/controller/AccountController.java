@@ -96,7 +96,7 @@ public class AccountController {
     @PostMapping("/change-password")
     @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER')")
     public ResponseEntity<String> changePassword(@AuthenticationPrincipal AccountDetails accountDetails,
-                                            @RequestBody PasswordChangeRequestDto requestDto) {
+                                                 @RequestBody PasswordChangeRequestDto requestDto) {
         // 이전 비밀번호 검증
         accountService.checkPasswordIsCorrect(requestDto.getOldPassword(), accountDetails.getAccount());
         // 새 비밀번호로 변경
@@ -115,4 +115,23 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-}
+
+    // 이메밀로 user 정보 가져오기
+    @GetMapping("/getfinduser")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<UserInfoDto> findAccountByEmail(@RequestParam String email) {
+        return accountService.getUserInfoByEmail(email);
+    }
+
+    // accountId로 user 정보 가져오기
+    @GetMapping("/getfinduserbyid")
+    @ResponseStatus(HttpStatus.OK)
+    public UserInfoDto findAccountByAccountId(@RequestParam Long accountId) {
+        return accountService.getUserInfoByAccountId(accountId);
+    }
+
+
+
+
+
+   }
