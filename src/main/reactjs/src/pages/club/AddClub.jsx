@@ -89,11 +89,12 @@ const AddClub = () => {
           Authorization: `Bearer ${cookie.get("accessToken")}`,
         },
       });
+
       if (file) {
         await onFileUpload();
-
-        console.log("✅[Add Club] Success", res);
       }
+
+      console.log("✅[Add Club] Success", res);
 
       const alarmData = {
         name: null,
@@ -104,7 +105,7 @@ const AddClub = () => {
       };
 
       sendAlarmData(alarmData);
-      navigate("/");
+      navigate(`/add-success/${res.data.clubId}`);
     } catch (error) {
       console.error("Error:", error);
     }

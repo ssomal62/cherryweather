@@ -43,8 +43,9 @@ export default function Header() {
 
     const handleSearchClick = () => {
         setSearchState([]);
-        localStorage.removeItem('searchResult');
-        localStorage.removeItem('searchTriggered');
+        sessionStorage.removeItem('searchResult');
+        sessionStorage.removeItem('searchTriggered');
+        sessionStorage.removeItem('scrollPosition');
         navigate('/search', {state: {from: location.pathname}});
     }
 

@@ -4,7 +4,7 @@ import {IoIosArrowForward} from "react-icons/io";
 import {Spinner, Tab, Tabs} from "@nextui-org/react";
 import EventSearchResult from "./EventSearchResult";
 import ClubSearchResult from "./ClubSearchResult";
-import {searchClubListState, useClubData} from "../../../recoil/hooks/UseClubApi";
+import {searchClubListState, useClubData} from "../../recoil/hooks/UseClubApi";
 import {useRecoilValue} from "recoil";
 
 const SearchResultRefresh = ({requestData}) => {
@@ -33,7 +33,7 @@ const SearchResultRefresh = ({requestData}) => {
 
     const tabs = [
         { id: "club", label: "클럽" },
-        { id: "event", label: "정모" },
+        { id: "event", label: "모임" },
     ];
 
     const renderComponent = () => {
@@ -55,7 +55,7 @@ const SearchResultRefresh = ({requestData}) => {
             <div className="flex items-center justify-between" style={styles.font}>
                 <div className="flex items-center">
                     <IoIosArrowForward className="mr-2"/>
-                    <p className="text-md font-bold"><span style={{color:"#F31260"}}>{JSON.parse(localStorage.getItem('searchResult'))}</span> 검색 결과</p>
+                    <p className="text-md font-bold"><span style={{color:"#F31260"}}>{JSON.parse(sessionStorage.getItem('searchResult'))}</span> 검색 결과</p>
                 </div>
             </div>
 

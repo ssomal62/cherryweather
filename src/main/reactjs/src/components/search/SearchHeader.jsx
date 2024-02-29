@@ -1,11 +1,11 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Input, Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
-import {SearchIcon} from '../../../assets/icon/SearchIcon'
+import {SearchIcon} from '../../assets/icon/SearchIcon'
 import {IoIosClose} from "react-icons/io";
 import weatherPhrases from './WeatherPlaceholder.json'
 import {useSetRecoilState} from "recoil";
-import {searchClubListState} from "../../../recoil/hooks/UseClubApi";
+import {searchClubListState} from "../../recoil/hooks/UseClubApi";
 
 export default function SearchHeader({ handleSearch, setInputValue, inputValue, handleBack, setSearchTriggered}) {
 
@@ -14,14 +14,19 @@ export default function SearchHeader({ handleSearch, setInputValue, inputValue, 
     const handleInputEnter = (e) => {
         if (e.key === 'Enter') {
             setSearchState([]);
-            localStorage.removeItem('searchResult');
-            localStorage.removeItem('searchTriggered');
+            sessionStorage.removeItem('searchResult');
+            sessionStorage.removeItem('searchTriggered');
             handleSearch(inputValue);
             if (inputValue.trim() === '') {
                 setSearchTriggered(false);
             }
         }
     };
+
+    useEffect(() => {
+        setInputValue(inputValue)
+    }, [setInputValue]);
+
 
     const handleClearInput = () => {
         setInputValue('');

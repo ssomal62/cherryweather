@@ -10,11 +10,11 @@ const Community = () => {
   const { selectPage } = useParams();
   const navigate = useNavigate();
 
-  const tabs = [
-    { id: "event", label: "이벤트" },
-    { id: "club", label: "클럽" },
-    { id: "feed", label: "피드" },
-  ];
+    const tabs = [
+        { id: "event", label: "모임" },
+        { id: "club", label: "클럽" },
+        { id: "feed", label: "피드" }
+    ];
 
   const [selected, setSelected] = useState("event");
 
@@ -28,10 +28,13 @@ const Community = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectPage, navigate]);
 
-  const handleTabChange = (value) => {
-    setSelected(value);
-    navigate(`/community/${value}`, { replace: true });
-  };
+    const handleTabChange = (value) => {
+        setSelected(value);
+        navigate(`/community/${value}`, { replace: true });
+        sessionStorage.removeItem('searchResult');
+        sessionStorage.removeItem('searchTriggered');
+        sessionStorage.removeItem('scrollPosition');
+    };
 
   const renderComponent = () => {
     switch (selected) {

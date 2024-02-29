@@ -6,18 +6,20 @@ import styled from "styled-components";
 import {useRecoilValue} from "recoil";
 import MemberVerificationModal from "../../../utils/MemberVerificationModal";
 import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
+import {useNavigate} from "react-router-dom";
 
-const ClubFeed = ({isLogin}) => {
+const ClubFeedSlide = ({isLogin, clubDetail}) => {
 
     const myMembership = useRecoilValue(currentMembershipState);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     const handelMoreClick = () => {
         if (!isLogin || !myMembership || myMembership.info.role === "WAITING") {
             setIsModalOpen(true);
             return;
         }
-        //navigate('/')
+        navigate(`/club-feed/${clubDetail.clubId}`);
     }
     return (
         <Section>
@@ -39,7 +41,7 @@ const ClubFeed = ({isLogin}) => {
     );
 };
 
-export default ClubFeed;
+export default ClubFeedSlide;
 
 const Section = styled.div`
   padding: 5%;
