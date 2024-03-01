@@ -3,7 +3,6 @@ import * as ncloudchat from "ncloudchat";
 import { Tabs, Tab } from "@nextui-org/react";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
-import Layout from "../../common/Layout";
 import ChatRoomListClub from "./ChatRoomListClub";
 import ChatRoomListPersonal from "./ChatRoomListPersonal";
 
@@ -133,7 +132,7 @@ const ChatRoomList = () => {
   };
 
   return (
-    <Layout containerMargin="0" MdOutlinePadding="0">
+    <div>
       <Tabs
         variant="underlined"
         aria-label="Options"
@@ -156,7 +155,7 @@ const ChatRoomList = () => {
       </Tabs>
       {renderComponent()}
       {/* <h2 style={{ fontSize: 20, fontWeight: 400 }}>참여한 채팅</h2> */}
-    </Layout>
+    </div>
   );
 };
 export default ChatRoomList;

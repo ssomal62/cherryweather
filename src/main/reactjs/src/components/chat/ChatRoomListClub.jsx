@@ -8,6 +8,7 @@ function ChatRoomListClub({ channels }) {
   const [loading, setLoading] = useState(true);
   const [clubProfileImg, setClubProfileImg] = useState({});
   console.log("channelName : ", channels);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -21,7 +22,7 @@ function ChatRoomListClub({ channels }) {
   );
   // channels 배열에 있는 lastMessage를 이용해서 마지막 메세지 시간과 현재 시간을 계산해서 몇분전에 보냈는지 계산
   const getLastMessageDuration = (lastMessageDate) => {
-    if (!lastMessageDate) return "No messages";
+    if (!lastMessageDate) return "메세지가 없습니다.";
 
     const now = new Date();
     const lastMessageTime = new Date(lastMessageDate);
@@ -63,6 +64,7 @@ function ChatRoomListClub({ channels }) {
   }, [channels]);
 
   console.log("clubProfileImg : ", clubProfileImg);
+  console.log("channels 채널 : ", channels);
   return (
     <>
       {loading ? (
@@ -72,16 +74,13 @@ function ChatRoomListClub({ channels }) {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-
-            height: "100%",
-            marginBottom: "50px",
+            height: "100vh", // Set the height to 100vh for full viewport height
           }}
         >
           <div
             style={{
               fontSize: "70px",
               textAlign: "center",
-              display: "flex",
               marginBottom: "20px",
             }}
           >
@@ -104,15 +103,13 @@ function ChatRoomListClub({ channels }) {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: "100%",
-            marginBottom: "50px",
+            height: "100vh", // Set the height to 100vh for full viewport height
           }}
         >
           <div
             style={{
               fontSize: "70px",
               textAlign: "center",
-              display: "flex",
               marginBottom: "20px",
             }}
           >
@@ -129,14 +126,14 @@ function ChatRoomListClub({ channels }) {
           </div>
         </div>
       ) : (
-        <>
+        <div style={{ height: "100vh" }}>
           {channels.map((channel, index) => (
             <Link
               key={index}
               to={`/chat/room/${channel.chatRoom}/${channel.clubId}`}
             >
               {channel.clubId && (
-                <div className="channel-list" style={{ marginTop: "20px" }}>
+                <div className="channel-list" style={{ marginBottom: "10px" }}>
                   <Badge className="list-photo">
                     <Avatar
                       radius="md"
@@ -151,9 +148,9 @@ function ChatRoomListClub({ channels }) {
                       style={{ marginLeft: "10px", marginTop: "15px" }}
                       className="flex flex-row"
                     >
-                      <Chip size="sm" className="mr-2" variant="flat">
+                      {/* <Chip size="sm" className="mr-2" variant="flat">
                         클럽
-                      </Chip>
+                      </Chip> */}
                       <span>{channel.chatName}</span>
                     </div>
                   </Badge>
@@ -164,22 +161,25 @@ function ChatRoomListClub({ channels }) {
                       style={{
                         fontSize: "12px",
                         color: "gray",
+                        marginLeft: "65px",
+                        marginTop: "-20px",
                       }}
                     >
-                      {channel.lastMessage &&
-                      channel.lastMessage.content === null
+                      {channel.lastMessage?.content === null
                         ? "파일을 보냈습니다."
-                        : channel.lastMessage.content.length > 20
+                        : channel.lastMessage?.content?.length > 20
                         ? channel.lastMessage.content.substring(0, 20) + "..."
-                        : channel.lastMessage.content}
+                        : channel.lastMessage?.content}
                     </span>
+
                     <span
                       style={{
                         fontSize: "12px",
                         color: "gray",
+                        marginTop: "-40px",
                       }}
                     >
-                      {getLastMessageDuration(channel.lastMessage.created_at)}
+                      {getLastMessageDuration(channel.lastMessage?.created_at)}
                     </span>
                   </div>
                   <Divider />
@@ -187,7 +187,7 @@ function ChatRoomListClub({ channels }) {
               )}
             </Link>
           ))}
-        </>
+        </div>
       )}
     </>
   );
