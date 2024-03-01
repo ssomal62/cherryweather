@@ -79,7 +79,7 @@ const ChatRoom = () => {
       setMessages(fetchedMessages);
     };
     initializeChat();
-  }, []);
+  }, [chatRoom]);
 
   console.log("channels 채널 정보 : ", channels);
 
@@ -125,32 +125,6 @@ const ChatRoom = () => {
     } catch (error) {
       console.error("Error fetching channel messages:", error);
       return []; // 메시지 목록 불러오기 실패 시 빈 배열 반환
-    }
-  };
-
-  // 00시가 지난 후에 첫 메세지를 보내면 00시 이전 메세지와 00시 이후 메세지 사이에 현재 시간을 알려주는 메세지 삽입
-  const [lastMessageData, setLastMessageData] = useState([]);
-  const compareLastMessageDate = () => {
-    const now = new Date();
-    channels.map((channel) => {
-      const lastMessage = channel.last_message.created_at;
-      const lastMessageDate = new Date(lastMessage);
-      setLastMessageData(lastMessageDate);
-      return null; // Add a return statement here
-    });
-
-    if (lastMessageData && now.getDate() !== lastMessageData.getDate()) {
-      return (
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "10px",
-            marginBottom: "10px",
-          }}
-        >
-          {now.toLocaleDateString()}
-        </div>
-      );
     }
   };
 
@@ -279,6 +253,8 @@ const ChatRoom = () => {
     }
   };
 
+  console.log("messages 메세지 정보 : ", messages);
+
   return (
     <Layout
       useHeader={false}
@@ -327,8 +303,9 @@ const ChatRoom = () => {
                 {/*{renderMessages()}*/}
                 {/* 현재 채널의 메시지 표시 */}
 
-                {messages.map &&
-                  messages.map((message, index) => (
+                {messages
+                  .filter((message) => message.channel_id === chatRoom)
+                  .map((message, index) => (
                     <div
                       key={index}
                       style={{
@@ -424,6 +401,7 @@ const ChatRoom = () => {
                   <div>
                     <div className="modal-overlay" onClick={closeModal}></div>
                     <ChatUserInfo
+                      style={{ cursor: "pointer" }}
                       className="modal-overlay"
                       onClick={closeModal}
                       selectedMsg={selectedMsg}
@@ -433,56 +411,57 @@ const ChatRoom = () => {
                   </div>
                 )}
                 <div ref={messagesEndRef} />
-              </div>
-              {/* 메시지 입력 및 전송 UI */}
-              <div
-                className="type_msg"
-                style={{ position: "fixed", bottom: 0, width: "100%" }}
-              >
-                <form
-                  onSubmit={handleSubmit}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    padding: "10px",
-                    backgroundColor: "#f5f5f5",
-                    borderRadius: "8px",
-                    border: "1px solid #eaeaea",
-                  }}
-                >
-                  <input
-                    type="file"
-                    id="fileInput"
-                    style={{ display: "none" }}
-                    onChange={handleImageUpload}
-                  />
-                  <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
-                    <BsPaperclip size={20} />
-                  </label>
-                  <input
-                    type="text"
-                    value={userInput}
-                    onChange={handleUserInput}
-                    placeholder="메시지를 입력하세요..."
+                {/* 메시지 입력 및 전송 UI */}
+
+                <div className="type_msg">
+                  <form
+                    onSubmit={handleSubmit}
                     style={{
-                      flexGrow: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
                       padding: "10px",
-                      border: "1px solid #ddd",
+                      backgroundColor: "#f5f5f5",
                       borderRadius: "8px",
+                      border: "1px solid #eaeaea",
+                      width: "100%",
+                      maxWidth: "600px",
                     }}
-                    className="gap-1"
-                  />
-                  <button
-                    type="submit"
-                    variant="contained"
-                    css={{ width: "fit-content" }}
-                    size="small"
-                    className="ml-2 mr-2"
                   >
-                    <BsSend />
-                  </button>
-                </form>
+                    <input
+                      type="file"
+                      id="fileInput"
+                      style={{ display: "none" }}
+                      onChange={handleImageUpload}
+                    />
+                    <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
+                      <BsPaperclip size={20} />
+                    </label>
+                    <input
+                      type="text"
+                      value={userInput}
+                      onChange={handleUserInput}
+                      placeholder="메시지를 입력하세요..."
+                      style={{
+                        width: "100%",
+                        flexGrow: 2,
+                        padding: "10px",
+                        border: "1px solid #ddd",
+                        borderRadius: "8px",
+                      }}
+                      className="gap-1"
+                    />
+                    <button
+                      type="submit"
+                      variant="contained"
+                      css={{ width: "fit-content" }}
+                      size="small"
+                      className="ml-2 mr-2"
+                    >
+                      <BsSend />
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>

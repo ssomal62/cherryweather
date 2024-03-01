@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { IoAirplaneOutline } from "react-icons/io5";
 import { TbJacket } from "react-icons/tb";
 import { BsChatDots } from "react-icons/bs";
-import Adminchat from "../chat/Adminchat";
 const MyPageMenu = () => {
   const navigate = useNavigate();
 
@@ -57,11 +56,11 @@ const MyPageMenu = () => {
           </Wapper>
         </MenuWapper>
       </MenuBtn>
-      <MenuBtn>
+      <MenuBtn onClick={() => navigate("/chat/admin")}>
         <MenuWapper>
           <Wapper>
             <BsChatDots style={{ ...styles.icon }} />
-            <Adminchat />
+            <Title>관리자 채팅</Title>
           </Wapper>
           <Wapper>
             <MdKeyboardArrowRight style={{ ...styles.icon }} />

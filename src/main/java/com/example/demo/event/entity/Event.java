@@ -37,6 +37,9 @@ public class Event {
     @Column(length = 200)
     private String eventContent;
 
+    @Column(length = 200)
+    private String code;
+
     @Column
     private LocalDate eventEndDate;
 
@@ -69,11 +72,11 @@ public class Event {
     @Column(nullable = false, length = 20)
     private String createdUserId;
 
-    @Column(nullable = false)
-    private LocalDateTime createdDate;
-
     @Column(nullable = false, length = 20)
     private String updatedUserId;
+
+    @Column(nullable = false)
+    private LocalDateTime createdDate;
 
     @Column(nullable = false)
     private LocalDateTime updatedDate;
