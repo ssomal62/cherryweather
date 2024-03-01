@@ -35,18 +35,18 @@ const GeneratedImage = ({image}) => {
         <Card
             isFooterBlurred
             radius="lg"
-            className="border-none"
+            className="border-none "
             onClick={handleClick} // 클릭 이벤트 처리
         >
 
-            <div className="relative w-full h-[600px]" onClick={handleClick}>
-                <div className="absolute z-10 w-full h-full from-slate-800 bg-gradient-to-b to-transparent " ></div>
+            <div className="relative w-full h-[500px]" onClick={handleClick}>
+                <div className="absolute z-10 w-full h-[570px] from-slate-800 bg-gradient-to-b to-transparent " ></div>
 
                 <Image
                     removeWrapper
                     isZoomed
                     alt="Woman listing to music"
-                    className="z-0 w-full object-cover h-[600px] object-middle"
+                    className="z-0 w-full object-cover h-full object-middle mb-20"
                     src={image}
                     width={600}
 
@@ -84,7 +84,7 @@ const GeneratedImage = ({image}) => {
                 </div>
                 <p className="text-tiny text-white/60 uppercase" >Cherry's Pick!</p>
                 <div style={{fontWeight:600}} className="text-white text-opacity-90 font-medium text-2xl drop-shadow shadow-black">
-                     프레피 스타일
+                    스타일 가이드
                 </div>
             </CardBody>
 

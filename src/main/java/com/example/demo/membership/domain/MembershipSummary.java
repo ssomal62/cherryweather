@@ -1,5 +1,6 @@
 package com.example.demo.membership.domain;
 
+import com.example.demo.club.domain.ClubSummary;
 import com.example.demo.membership.enums.ClubRole;
 import com.example.demo.membership.enums.RegisteredStatus;
 import lombok.Builder;
@@ -11,6 +12,7 @@ public record MembershipSummary(
         String userName,
         String userProfile,
         ClubRole role,
-        RegisteredStatus status
+        RegisteredStatus status,
+        ClubSummary clubSummary
 ) {
 }

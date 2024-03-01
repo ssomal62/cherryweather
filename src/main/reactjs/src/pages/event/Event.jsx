@@ -1,26 +1,20 @@
-import React, { useState } from 'react';
-import Layout from '../../common/Layout';
-import { Card, CardFooter, Image, Button } from "@nextui-org/react";
+import React from "react";
+
 const Event = () => {
+  // const [reservation, setReservation] = useState({
+  //     eventName: '',
+  //     date: '',
+  //     time: '07:00',
+  //     note: '',
+  //     notification: '',
+  //     quantity: 1,
+  // });
 
-    // const [reservation, setReservation] = useState({
-    //     eventName: '',
-    //     date: '',
-    //     time: '07:00',
-    //     note: '',
-    //     notification: '',
-    //     quantity: 1,
-    // });
-
-
-    return (
-        <Layout>
-            <div>
-
-            </div>
-
-        </Layout>
-    );
+  return (
+    <div>
+      <div></div>
+    </div>
+  );
 };
 
 export default Event;

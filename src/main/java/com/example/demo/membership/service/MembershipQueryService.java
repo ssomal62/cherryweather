@@ -22,6 +22,7 @@ import java.util.Optional;
 public class MembershipQueryService {
 
     private final MembershipQueryRepository membershipQueryRepository;
+    private final MembershipService membershipService;
     private final ClubService clubService;
     private final AccountService accountService;
 
@@ -40,7 +41,7 @@ public class MembershipQueryService {
         }
 
         List<Membership> membershipList = membershipQueryRepository.findAll(spec);
-        return MembershipListDTO.fromMembership(membershipList);
+        return membershipService.fromMembership(membershipList);
     }
 
     //==============  private method  ==============//

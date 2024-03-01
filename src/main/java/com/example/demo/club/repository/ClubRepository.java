@@ -28,4 +28,5 @@ public interface ClubRepository extends JpaRepository <Club, Long> {
     @Modifying
     @Query("UPDATE Club c SET c.currentGrowthMeter = c.currentGrowthMeter - 100 WHERE c.clubId = :clubId")
     void decreaseCurrentGrowthMeter(long clubId);
+
 }

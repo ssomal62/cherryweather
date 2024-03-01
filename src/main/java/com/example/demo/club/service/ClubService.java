@@ -3,19 +3,19 @@ package com.example.demo.club.service;
 
 import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.club.domain.ClubSummary;
-import com.example.demo.club.dto.ClubDetailDTO;
-import com.example.demo.club.dto.ClubListDTO;
-import com.example.demo.club.dto.CreateClubDTO;
-import com.example.demo.club.dto.UpdateClubDTO;
+import com.example.demo.club.dto.*;
 import com.example.demo.club.entity.Club;
 import com.example.demo.club.event.ClubCreationEvent;
 import com.example.demo.club.exception.BadRequestException;
 import com.example.demo.club.repository.ClubRepository;
 import com.example.demo.club.utils.ClubValidator;
 import com.example.demo.common.exception.NotFoundException;
+import com.example.demo.common.exception.ServiceFailedException;
+import com.example.demo.like.entity.Like;
 import com.example.demo.like.enums.LikeType;
 import com.example.demo.like.service.LikeService;
 import com.example.demo.membership.dto.ClubSignupDTO;
+import com.example.demo.membership.entity.Membership;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -26,9 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.example.demo.club.enums.ClubGrade.GENTLE_BREEZE;
 import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_CLUB;
+import static com.example.demo.common.exception.enums.ExceptionStatus.NO_AUTHORIZATION;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +62,21 @@ public class ClubService {
                 .clubDetail(club)
                 .liked(liked)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<LikeWithClubList> findClubLikesForCurrentUser() {
+        Optional<AccountDetails> accountDetailsOptional = getCurrentAccountDetails();
+        if (accountDetailsOptional.isEmpty()) {
+            throw new ServiceFailedException(NO_AUTHORIZATION);
+        }
+        List<Like> clubLikes = likeService.findAllByAccountAndType(accountDetailsOptional.get(), "CLUB");
+
+        return clubLikes.stream().map(like -> {
+            Club club = this.findClubById(like.getTargetId());
+            ClubSummary summary = this.convertToSummary(club);
+            return new LikeWithClubList(like.getLikeId(), summary);
+        }).toList();
     }
 
     @Transactional
@@ -183,7 +200,7 @@ public class ClubService {
     /**
      * Club 엔티티를 ClubSummary DTO로 변환
      */
-    private ClubSummary convertToSummary(Club club) {
+    public ClubSummary convertToSummary(Club club) {
         return ClubSummary.builder()
                 .clubId(club.getClubId())
                 .name(club.getName())
@@ -243,4 +260,5 @@ public class ClubService {
         }
         return club;
     }
+
 }

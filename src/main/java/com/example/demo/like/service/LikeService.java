@@ -74,6 +74,11 @@ public class LikeService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
+    public List<Like> findAllByAccountAndType(AccountDetails accountDetails, String type) {
+        return likeRepository.findAllByAccountAndType(accountDetails.getAccount(), LikeType.valueOf(type));
+    }
+
     /**
      * 사용자별 좋아요 항목을 유형에 따라 그룹화하여 조회
      */

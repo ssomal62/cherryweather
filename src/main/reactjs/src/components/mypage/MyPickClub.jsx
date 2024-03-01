@@ -1,75 +1,65 @@
 import React from 'react';
 import styled from "styled-components";
-import club1 from "../../assets/images/club/culture/6.jpg";
-import club2 from "../../assets/images/club/culture/7.jpg";
+import {useLocation, useNavigate} from "react-router-dom";
+import {Card, CardBody, Chip, Image} from "@nextui-org/react";
+import {Swiper, SwiperSlide} from "swiper/react";
+import {CgScrollH} from "react-icons/cg";
 
+const MyPickClub = ({likedClubs}) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const handlePageChange = (clubId) => {
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+        navigate(`/club-details/${clubId}`, { state: { from: location.pathname } });
+    }
 
-const MyPickClub = () => {
+    const clubProfile = (code) => {
+        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "default"}.jpg?type=f&w=600&h=600&ttype=jpg`
+    }
+
     return (
         <Container>
-        <Title>찜한 모임</Title>
-        <ClubWapper>
-          <ClubWapperBtn>
-            <ClubItem>
-              <img
-                src={club1}
-                alt="Kakao login"
-                style={{borderRadius: "20%"}}
-              />
-            </ClubItem>
-          </ClubWapperBtn>
-            <ClubWapperBtn>
-                <ClubItem>
-                    <img
-                        src={club2}
-                        alt="Kakao login"
-                        style={{borderRadius: "20%"}}
-                    />
-                </ClubItem>
-            </ClubWapperBtn>
-        </ClubWapper>
-      </Container>
+            <Card>
+                <CardBody className="overflow-x-hidden">
+                    <div className="flex flex-row justify-center items-start">
+                        <div className="justify-start gap-1">
+                            <Chip size="sm" color="danger" variant="bordered" className="mb-2">좋아요 클럽</Chip>
+                        </div>
+                        <div className="justify-end ml-auto mr-2">
+                            <CgScrollH style={{width:24, height:24, color :'#F31260'}}/>
+                        </div>
+                    </div>
+                    <Swiper
+                        spaceBetween={10}
+                        slidesPerView={'auto'}
+                    >
+                        {likedClubs.map((likedClub, index) => (
+                            <SwiperSlide key={index} className="max-w-[5em]">
+                                <div className="flex flex-col ">
+                                    <Image
+                                        src={clubProfile(likedClub.clubSummary.code)}
+                                        alt="Club Profile"
+                                        radius="lg"
+                                        style={{width: '5em', height: '5em', border: '1px solid #d7d7d7', cursor:'pointer'}}
+                                        onClick={() => handlePageChange(likedClub.clubSummary.clubId)}
+                                    />
+                                </div>
+                                <div className="flex justify-center items-center">
+                                    <p className="text-small" style={{color:'gray'}}>{likedClub.clubSummary.name}</p>
+                                </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </CardBody>
+            </Card>
+        </Container>
     );
 };
 
 export default MyPickClub;
 
-const ClubItem = styled.div`
-  overflow-clip-margin: content-box;
-  overflow: clip;
-  height: 48px;
-  aspect-ratio: auto 24 / 24;
-  width: 48px;
-  box-sizing: border-box;
-  border-style: none;
-`;
-
-const ClubWapperBtn = styled.button`
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  -webkit-box-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  align-items: center;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-    margin-right: 8px; /* 버튼 사이의 간격 조절 */
-
-`;
-
-const ClubWapper = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    -webkit-box-pack: justify;
-    justify-content: flex-start; /* 여기를 수정해서 버튼이 바로 옆에 붙게 만듭니다. */
-    margin-top: 8px;
-`;
-
-const Title = styled.h5`
-  margin: 0;
+const Title = styled.div`
+  margin: 0 10px 0 0;
   color: #212224;
   font-size: 0.875rem;
   font-weight: 700;
@@ -78,9 +68,5 @@ const Title = styled.h5`
 `;
 
 const Container = styled.div`
-  margin: 20px 0px 16px;
-  border: 1px solid rgb(228, 229, 237);
-  padding: 16px;
-  border-radius: 8px;
+  padding: 20px;
 `;
-

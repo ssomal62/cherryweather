@@ -4,7 +4,7 @@ import ImagePreview from "../../components/ai/image/ImagePreview";
 
 const ImageGenerator = () => {
     return (
-        <Layout >
+        <Layout useHeader={false}>
             <ImagePreview/>
         </Layout>
     );

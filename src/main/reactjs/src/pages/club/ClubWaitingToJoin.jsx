@@ -76,7 +76,8 @@ const ButtonSection = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 300px;
+  max-width: 600px;
+  width: 100%;
   margin: 10px auto;
 `;
 
