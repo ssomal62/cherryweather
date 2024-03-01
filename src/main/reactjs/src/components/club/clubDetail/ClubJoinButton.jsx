@@ -93,8 +93,10 @@ const ClubJoinButton = () => {
             size="lg"
             radius="lg"
             style={{ marginRight: "2%", height: "70%" }}
+            onClick={() => navigate("/chat/club", { state: { clubDetail } })}
           >
-            <ClubChat club={clubDetail} />
+            <span style={styles.font}>채팅하기</span>
+            {/* <ClubChat club={clubDetail} /> */}
           </Button>
         );
       case "WAITING":

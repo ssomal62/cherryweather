@@ -1,9 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
 
 function PersonalChat({ userInfo, accountData, nc }) {
   const navi = useNavigate();
+
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    // 여기서 setTimeout을 사용하여 일정 시간 후에 버튼을 클릭합니다.
+    const delayTimeInMilliseconds = 1000; // 5초 후에 클릭하려면 5000ms로 설정합니다.
+    setTimeout(() => {
+      buttonRef.current.click();
+    }, delayTimeInMilliseconds);
+  }, []);
 
   useEffect(() => {
     personalChat();
@@ -84,7 +94,13 @@ function PersonalChat({ userInfo, accountData, nc }) {
       disconnectChat();
     };
   }, [nc]);
-  return <div></div>;
-}
 
+  return (
+    <div>
+      <div>
+        <button ref={buttonRef} type="button" onClick={personalChat}></button>
+      </div>
+    </div>
+  );
+}
 export default PersonalChat;
