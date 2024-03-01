@@ -379,7 +379,6 @@ public class TodayWeatherService {
         LocalDateTime now = LocalDateTime.now(korTimeZone);
         LocalDate today = LocalDate.now(korTimeZone);
         String baseDate;
-        System.out.println("h : " + now.getHour());
 
         // 현재 시간에 따라 baseDate 변경 (18시~24시)
         if(now.getHour() < 18) {
@@ -499,7 +498,7 @@ public class TodayWeatherService {
         if(r1.endsWith("특별시") || r1.endsWith("광역시") || r1.endsWith("특별자치시")) {
             simpleRegionName = r1.replaceAll("특별시$", "").replaceAll("광역시$", "").replaceAll("특별자치시$", "");
         } else if(r1.endsWith("도")) {
-            simpleRegionName = r1.replaceAll("시$", "").replaceAll("군$", "");
+            simpleRegionName = r2.replaceAll("([시군]).*$", "$1").replaceAll("시$|군$", "");
         } else {
             simpleRegionName = null;
         }
@@ -508,6 +507,7 @@ public class TodayWeatherService {
 
     /* 도시 이름으로 지역 코드 추출 */
     public String getRegionCode(String regionName) {
+        System.out.println("regionName : " + regionName);
         try {
             ObjectMapper mapper = new ObjectMapper();
             Resource resource = resourceLoader.getResource("classpath:weather/cityCode.json");
