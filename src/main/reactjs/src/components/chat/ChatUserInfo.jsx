@@ -50,12 +50,25 @@ function ChatUserInfo({ selectedMsg, accountData, nc }) {
             </div>
           </CardHeader>
 
-          <CardBody className="px-3 py-5 text-small text-default-400">
-            {userInfo.interests.map((interest, index) => (
-              <span key={index} className="interests">
-                {interest}
-              </span>
-            ))}
+          <CardBody className="text-small text-default-400">
+            <div
+              className="card-body text-small text-default-400"
+              style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
+            >
+              {userInfo.interests.map((interest, index) => (
+                <span
+                  key={index}
+                  className="interests"
+                  style={{
+                    background: "#f0f0f0",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  {interest}
+                </span>
+              ))}
+            </div>
           </CardBody>
           <Button
             color="danger"

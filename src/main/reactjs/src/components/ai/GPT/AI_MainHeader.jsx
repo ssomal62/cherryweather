@@ -6,38 +6,23 @@ import {FiSettings} from "react-icons/fi";
 import {useLocation, useNavigate} from "react-router-dom";
 import {WiNightAltRain} from "react-icons/wi";
 import {useRecoilValue} from "recoil";
-import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
+import {IsLoginAtom} from "../../../recoil/LoginAtom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 
-export default function GPTChatHeader({ isLogin, handleBack}) {
+export default function AI_MainHeader({isLogin, handleBack}) {
 
     const navigate = useNavigate();
-    const myMembership = useRecoilValue(currentMembershipState);
-    const [scrolled, setScrolled] = useState(false);
+    const [scrolled] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-
     const handleConfigurationsClick = () => {
         if (!isLogin) {
             setIsModalOpen(true);
             return;
         }
+
         navigate('/login')
     }
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 80) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     const styles = {
         navBar : {

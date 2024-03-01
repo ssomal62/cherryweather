@@ -15,7 +15,7 @@ export const useImageCreation = (isLoading, setIsLoading) => {
     const handleImageCreateClick = useCallback(async (messageContent) => {
         try {
             // messageContent에 문자열 추가
-            const enhancedMessageContent = `${messageContent} 이 추천을 가이드에 맞게 영어로 번역해줄래?`;
+            const enhancedMessageContent = `${messageContent} 이 추천을 가이드 형식으로 영어로 번역해줄래?`;
 
 
             const requestData = {

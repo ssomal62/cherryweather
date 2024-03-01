@@ -26,6 +26,12 @@
 
 }
 
+.inputContainer{
+  bottom: 0;
+  position: fixed;
+  /*width: 395px;*/
+  width: calc(100% - 40px);
+}
 .input_msg_write_g {
    width: 100%; /* 상위 요소의 너비에 맞춰서 100%로 설정 */
    border-top: 1px solid #cccccc;
@@ -115,7 +121,7 @@
 
 .spinnerChat{
   position: fixed;
-  top: 81%;
+  top: 84%;
   left: 50%;
   transform: translate(-50%, -50%);
 }

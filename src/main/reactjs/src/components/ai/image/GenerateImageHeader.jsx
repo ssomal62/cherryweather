@@ -9,11 +9,11 @@ import {useRecoilValue} from "recoil";
 import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 
-export default function GPTChatHeader({ isLogin, handleBack}) {
+export default function GenerateImageHeader({ isLogin, handleBack}) {
 
     const navigate = useNavigate();
     const myMembership = useRecoilValue(currentMembershipState);
-    const [scrolled, setScrolled] = useState(false);
+    const [scrolled, setScrolled] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
 
@@ -25,19 +25,6 @@ export default function GPTChatHeader({ isLogin, handleBack}) {
         navigate('/login')
     }
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 80) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     const styles = {
         navBar : {
@@ -89,7 +76,7 @@ export default function GPTChatHeader({ isLogin, handleBack}) {
                         <IoArrowBack style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem style={styles.text}>
-                        <p>체리의 의상 다락방</p>
+                        <p>이미지 생성</p>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">

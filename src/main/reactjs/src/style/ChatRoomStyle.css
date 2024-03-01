@@ -36,7 +36,7 @@
 
 .chat_section {
   padding-top: 15px;
-  flex-grow: 1;
+  /* flex-grow: 1; */
   /* 채팅 메시지 영역이 가능한 모든 공간을 차지하도록 설정 */
   overflow-y: auto;
   /* 세로 방향으로만 스크롤 가능하도록 설정 */
@@ -118,22 +118,12 @@
 }
 
 .type_msg {
-  border-top: 1px solid #c4c4c4;
   position: fixed;
   bottom: 0;
-  width: calc(100% - 30px);
+  width: 100%;
   /* 컨테이너의 패딩을 고려하여 너비 조정 */
   background-color: #ffffff;
   /* 입력 영역 배경색 설정 */
-  width: 100%;
-}
-
-.input_msg_write {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-grow: 1;
-  width: 100%; /* 부모 요소의 너비를 모두 차지하도록 설정 */
 }
 
 .msg_send_btn {

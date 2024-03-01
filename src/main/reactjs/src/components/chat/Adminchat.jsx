@@ -1,9 +1,8 @@
 import * as ncloudchat from "ncloudchat";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
-import styled from "styled-components";
 
 function Adminchat() {
   const [accountData, setAccountData] = useState("");
@@ -13,6 +12,16 @@ function Adminchat() {
 
   useEffect(() => {
     unumchk();
+  }, []);
+
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    // 여기서 setTimeout을 사용하여 일정 시간 후에 버튼을 클릭합니다.
+    const delayTimeInMilliseconds = 1000; // 5초 후에 클릭하려면 5000ms로 설정합니다.
+    setTimeout(() => {
+      buttonRef.current.click();
+    }, delayTimeInMilliseconds);
   }, []);
 
   const unumchk = async () => {
@@ -123,20 +132,11 @@ function Adminchat() {
 
   return (
     <div>
-      <Button type="button" onClick={adminChat}>
-        관리자 채팅
-      </Button>
+      <div style={{ textAlign: "center", fontSize: "50px" }}>
+        <button ref={buttonRef} type="button" onClick={adminChat}></button>
+      </div>
     </div>
   );
 }
 
 export default Adminchat;
-
-const Button = styled.button`
-  margin-left: 16px;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 19px;
-  color: #242729;
-`;

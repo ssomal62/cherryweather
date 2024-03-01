@@ -79,53 +79,54 @@ const ClubJoinButton = () => {
         }
     };
 
-    const joinButtonRender = () => {
-        switch (myRole) {
-            case "HOST":
-            case "MEMBER":
-            case "MODERATOR":
-                return (
-                    <Button
-                        fullWidth
-                        color="success"
-                        variant="solid"
-                        size="lg"
-                        radius="lg"
-                        style={{marginRight: "2%", height: "70%"}}
-                    >
-                        <ClubChat club={clubDetail}/>
-                    </Button>
-                );
-            case "WAITING":
-                return (
-                    <Button
-                        fullWidth
-                        color="primary"
-                        variant="solid"
-                        size="lg"
-                        radius="lg"
-                        style={{marginRight: "2%", height: "70%"}}
-                    >
-                        <span style={styles.font}>가입대기중</span>
-                    </Button>
-                );
-            case "":
-            default:
-                return (
-                    <Button
-                        fullWidth
-                        color="danger"
-                        variant="solid"
-                        size="lg"
-                        radius="lg"
-                        style={{marginRight: "2%", height: "70%"}}
-                        onPress={handleJoinClick}
-                    >
-                        <span style={styles.font}>가입하기</span>
-                    </Button>
-                );
-        }
-    };
+  const joinButtonRender = () => {
+    switch (myRole) {
+      case "HOST":
+      case "MEMBER":
+      case "MODERATOR":
+        return (
+          <Button
+            fullWidth
+            color="success"
+            variant="solid"
+            size="lg"
+            radius="lg"
+            style={{ marginRight: "2%", height: "70%" }}
+            onClick={() => navigate("/chat/club", { state: { clubDetail } })}
+          >
+            <span style={styles.font}>채팅하기</span>
+          </Button>
+        );
+      case "WAITING":
+        return (
+          <Button
+            fullWidth
+            color="primary"
+            variant="solid"
+            size="lg"
+            radius="lg"
+            style={{ marginRight: "2%", height: "70%" }}
+          >
+            <span style={styles.font}>가입대기중</span>
+          </Button>
+        );
+      case "":
+      default:
+        return (
+          <Button
+            fullWidth
+            color="danger"
+            variant="solid"
+            size="lg"
+            radius="lg"
+            style={{ marginRight: "2%", height: "70%" }}
+            onPress={handleJoinClick}
+          >
+            <span style={styles.font}>가입하기</span>
+          </Button>
+        );
+    }
+  };
 
     return (
         <>
