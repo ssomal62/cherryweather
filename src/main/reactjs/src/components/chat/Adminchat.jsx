@@ -133,9 +133,7 @@ function Adminchat() {
   return (
     <div>
       <div style={{ textAlign: "center", fontSize: "50px" }}>
-        <button ref={buttonRef} type="button" onClick={adminChat}>
-          관리자와 채팅방으로 이동 중..
-        </button>
+        <button ref={buttonRef} type="button" onClick={adminChat}></button>
       </div>
     </div>
   );

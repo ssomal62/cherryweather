@@ -1,14 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.b99d4412.css",
-    "main.js": "/static/js/main.818473f7.js",
+    "main.css": "/static/css/main.461c1baa.css",
+    "main.js": "/static/js/main.520ee808.js",
     "static/js/787.f22b8f29.chunk.js": "/static/js/787.f22b8f29.chunk.js",
-    "static/media/6.jpg": "/static/media/6.5e0461ae2b72511d3ed0.jpg",
-    "static/media/1.jpg": "/static/media/1.00b934432ac31f816036.jpg",
-    "static/media/3.jpg": "/static/media/3.1f3246fcc9d47fa94f5e.jpg",
-    "static/media/7.jpg": "/static/media/7.e0ab531cae6cf8ae9758.jpg",
-    "static/media/2.jpg": "/static/media/2.5d733adcc7b75abcb58f.jpg",
-    "static/media/4.jpg": "/static/media/4.f20b4e490a17f97e7e19.jpg",
     "static/media/snow_day.jpg": "/static/media/snow_day.fb4b8834cdd5607628bf.jpg",
     "static/media/snow_night.jpg": "/static/media/snow_night.601970bf13d0db8f6923.jpg",
     "static/media/rainy_night.jpg": "/static/media/rainy_night.08eba10bdcf93baf695e.jpg",
@@ -17,17 +11,16 @@
     "static/media/club_profile.jpg": "/static/media/club_profile.5c7bace23ebbe2c2a0d4.jpg",
     "static/media/cloudy_night.jpg": "/static/media/cloudy_night.87b0a895f04a8a1a272b.jpg",
     "static/media/clear_day.jpg": "/static/media/clear_day.fc9f6f25e34e3f168d3e.jpg",
-    "static/media/sample.svg": "/static/media/sample.d07dd424ac0aca3c123d5e83324a9f75.svg",
     "static/media/cloudy_day.jpg": "/static/media/cloudy_day.f2e57720c1372ec953a1.jpg",
     "static/media/sun.png": "/static/media/sun.ace062d11a876cae6c31.png",
     "static/media/umbrellar.png": "/static/media/umbrellar.f2369a08439e3d24b35e.png",
     "index.html": "/index.html",
-    "main.b99d4412.css.map": "/static/css/main.b99d4412.css.map",
-    "main.818473f7.js.map": "/static/js/main.818473f7.js.map",
+    "main.461c1baa.css.map": "/static/css/main.461c1baa.css.map",
+    "main.520ee808.js.map": "/static/js/main.520ee808.js.map",
     "787.f22b8f29.chunk.js.map": "/static/js/787.f22b8f29.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b99d4412.css",
-    "static/js/main.818473f7.js"
+    "static/css/main.461c1baa.css",
+    "static/js/main.520ee808.js"
   ]
 }
