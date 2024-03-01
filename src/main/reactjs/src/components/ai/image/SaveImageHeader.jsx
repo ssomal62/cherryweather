@@ -9,7 +9,7 @@ import {useRecoilValue} from "recoil";
 import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 
-export default function GPTChatHeader({ isLogin, handleBack}) {
+export default function SaveImageHeader({ isLogin, handleBack}) {
 
     const navigate = useNavigate();
     const myMembership = useRecoilValue(currentMembershipState);
@@ -89,7 +89,7 @@ export default function GPTChatHeader({ isLogin, handleBack}) {
                         <IoArrowBack style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem style={styles.text}>
-                        <p>체리의 의상 다락방</p>
+                        <p>체리의 드레스룸</p>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">
