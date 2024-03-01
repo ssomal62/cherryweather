@@ -35,7 +35,6 @@ const AddClubInputNotice = ({notice, setNotice, onSave, onUpdate, isClubId}) => 
                               base : "max-w-full",
                               input: "resize-y min-h-[370px]",
                           }}
-                          autoFocus
                           onChange={(e) => handleNoticeChange(e)}
                 />
             </div>

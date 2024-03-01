@@ -24,7 +24,9 @@ export const currentClubMembershipInfoState = atom({
  */
 export const joinedMembershipState = atom({
     key :'joinedMembershipState',
-    default:[],
+    default:{
+        summaryList:[],
+    },
 })
 
 /**

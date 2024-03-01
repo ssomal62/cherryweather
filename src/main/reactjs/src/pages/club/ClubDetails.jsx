@@ -13,7 +13,7 @@ import ClubDetailsSummary from "../../components/club/clubDetail/ClubDetailsSumm
 import ClubNotice from "../../components/club/clubDetail/ClubNotice";
 import EventSection from "../../components/club/clubDetail/EventSection";
 import MemberSummary from "../../components/club/clubDetail/MemberSummary";
-import ClubFeed from "../../components/club/clubDetail/ClubFeed";
+import ClubFeedSlide from "../../components/club/clubDetail/ClubFeedSlide";
 import ClubCategory from "../../components/club/clubDetail/ClubCategory";
 import ClubName from "../../components/club/clubDetail/ClubName";
 import LoginVerificationModal from "../../utils/LoginVerificationModal";
@@ -101,7 +101,7 @@ const ClubDetails = () => {
                         <EventSection />
                         <ClubNotice clubDetail={clubDetail}/>
                         <MemberSummary isLogin={isLogin}/>
-                        <ClubFeed isLogin={isLogin}/>
+                        <ClubFeedSlide isLogin={isLogin} clubDetail={clubDetail}/>
                     </Content>
 
                     <Image radius='none' alt=""

@@ -1,8 +1,11 @@
 .container-fluid {
   display: flex;
+  top: 0;
+  z-index: 9999;
   flex-direction: column;
   height: 100vh;
   /* 뷰포트 높이를 기준으로 전체 높이 설정 */
+  width: 100%;
 }
 
 .user {
@@ -107,16 +110,6 @@
   width: 60%;
 }
 
-.input_msg_write input {
-  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-  border: medium none;
-  color: #4c4c4c;
-  font-size: 15px;
-  min-height: 48px;
-  width: 100%;
-  padding: 10px;
-}
-
 .write_msg {
   flex-grow: 1;
   /* 입력 필드가 가능한 모든 공간을 차지하도록 설정 */
@@ -130,8 +123,17 @@
   bottom: 0;
   width: calc(100% - 30px);
   /* 컨테이너의 패딩을 고려하여 너비 조정 */
-  background-color: white;
+  background-color: #ffffff;
   /* 입력 영역 배경색 설정 */
+  width: 100%;
+}
+
+.input_msg_write {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+  width: 100%; /* 부모 요소의 너비를 모두 차지하도록 설정 */
 }
 
 .msg_send_btn {
@@ -146,22 +148,27 @@
   width: 33px;
 }
 
-.received-message {
-  background-color: #f2f2f2; /* 짝수 index일 때의 배경색 */
-  float: left; /* 왼쪽 정렬 */
-  margin-right: 10px; /* 우측 여백 */
-  padding: 10px; /* 내부 여백 */
-  border-radius: 10px; /* 테두리 둥글기 */
-  margin-bottom: 25px; /* 수직 간격 */
+.img_send_btn {
+  cursor: pointer;
+  height: 33px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  /* 부모 요소인 .input_msg_write 기준으로 세로 중앙에 위치시키기 위해 top 값을 50%로 설정 */
+  transform: translateY(-50%);
+  width: 20px;
 }
 
 .sent-message {
-  background-color: #dcf8c6; /* 홀수 index일 때의 배경색 */
-  float: right; /* 오른쪽 정렬 */
-  margin-left: 10px; /* 좌측 여백 */
-  padding: 10px; /* 내부 여백 */
-  border-radius: 10px; /* 테두리 둥글기 */
-  margin-bottom: 25px; /* 수직 간격 */
+  float: right;
+  /* 아바타를 오른쪽으로 이동 */
+  margin-left: 10px;
+  /* 아바타와 메시지 사이의 간격 조정 */
+}
+
+.received-message {
+  margin-right: 10px;
+  vertical-align: top;
 }
 
 .chat-nav {

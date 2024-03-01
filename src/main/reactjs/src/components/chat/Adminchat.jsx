@@ -1,10 +1,11 @@
 import * as ncloudchat from "ncloudchat";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
+import styled from "styled-components";
 
-function Adminchat(props) {
+function Adminchat() {
   const [accountData, setAccountData] = useState("");
   const [nc, setNc] = useState("");
   const navi = useNavigate();
@@ -12,16 +13,6 @@ function Adminchat(props) {
 
   useEffect(() => {
     unumchk();
-  }, []);
-
-  const buttonRef = useRef(null);
-
-  useEffect(() => {
-    // 여기서 setTimeout을 사용하여 일정 시간 후에 버튼을 클릭합니다.
-    const delayTimeInMilliseconds = 1000; // 5초 후에 클릭하려면 5000ms로 설정합니다.
-    setTimeout(() => {
-      buttonRef.current.click();
-    }, delayTimeInMilliseconds);
   }, []);
 
   const unumchk = async () => {
@@ -56,39 +47,59 @@ function Adminchat(props) {
       console.log("getChatInfo");
       console.log("accountId: " + accountData.accountId);
       const response = await instance.get(
-        `/chat/getchatinfo?accountid=${accountData.accountId}`
+        `/chat/getonetonechat?accountId=${accountData.accountId}&raccountId=50`
       );
+      console.log("response: ", response);
       return response.data;
     } catch (error) {
       console.error(error);
     }
   };
-
   const adminChat = async () => {
     if (nc) {
       try {
-        const chatroom = await getChatInfo();
+        const chatInfo = await getChatInfo();
+        const chatroom = chatInfo.chatRoom;
         if (chatroom) {
           await nc.disconnect();
-          navi(`/chat/room/${chatroom}`);
+          navi(`/chat/room/${chatroom}/50`);
+          window.location.reload();
         } else {
           // chatroom == null 일 경우
           const newchannel = await nc.createChannel({
             type: "PUBLIC",
-            name: "관리자 채팅방",
+            name: `${accountData.name}님과 관리자의 채팅방`,
           });
           const newChatId = newchannel.id;
-          await instance.post(
-            "/chat/insertchatroom?accountid=" +
+          const res = await instance.post(
+            "/chat/createchatroom?accountId=" +
               accountData.accountId +
               "&chatRoom=" +
-              newChatId
+              newChatId +
+              "&raccountId=" +
+              50 +
+              "&chatName=" +
+              `${newchannel.name}`
           );
+
+          await instance.post(
+            "/chat/createchatroom?accountId=" +
+              50 +
+              "&chatRoom=" +
+              newChatId +
+              "&raccountId=" +
+              accountData.accountId +
+              "&chatName=" +
+              `${newchannel.name}`
+          );
+
+          console.log("res : ", res);
 
           await nc.subscribe(newChatId);
           // 채팅방으로 이동
           await nc.disconnect();
-          navi(`/chat/room/${newChatId}`);
+          navi(`/chat/room/${newChatId}/50`);
+          window.location.reload();
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);
@@ -111,12 +122,21 @@ function Adminchat(props) {
   }, [nc]);
 
   return (
-    <div style={{ textAlign: "center", fontSize: "50px" }}>
-      <button ref={buttonRef} type="button" onClick={adminChat}>
-        관리자와 채팅방으로 이동 중..
-      </button>
+    <div>
+      <Button type="button" onClick={adminChat}>
+        관리자 채팅
+      </Button>
     </div>
   );
 }
 
 export default Adminchat;
+
+const Button = styled.button`
+  margin-left: 16px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: #242729;
+`;
