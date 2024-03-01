@@ -81,7 +81,7 @@ export default SatelliteImageViewer;
 const Container = styled.div`
     width: 100%;
     height: 100%;
-    border: 2px solid blue;
+    //border: 2px solid blue;
     padding: 22px;
 `;
 const SatImage = styled.div`
@@ -90,14 +90,14 @@ const SatImage = styled.div`
 `;
 const Prev = styled.div`
     position: absolute;
-    left: 5%;
+    left: 7%;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
 `;
 const Next = styled.div`
     position: absolute;
-    right: 5%;
+    right: 7%;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
