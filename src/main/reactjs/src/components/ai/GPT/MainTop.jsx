@@ -21,7 +21,7 @@ const MainTop =  React.memo(({ index })  => {
         },
         {
             title: "체리의 꿈꾸는 옷장",
-            description: ["으악 이게뭐야!","꿈꾸는 옷장에서는 어떤 옷이 튀어나올지 아무도 몰라요.","뜬금 없는 옷이 나올 수 있지만 어쩌면..보물 같은 옷이 나올지도 모르는걸요.꿈꾸는 옷장을 열어볼 준비가 되었나요 ? "]
+            description: ["꿈꾸는 옷장에서는 어떤 옷이 튀어나올지 아무도 몰라요.","뜬금 없는 옷이 나올 수 있지만 어쩌면 보물 같은 옷이 나올지도 모르는걸요. 즉석에서 추천 옷차림을 보여줘요!"]
         }
     ];
 
@@ -32,7 +32,7 @@ const MainTop =  React.memo(({ index })  => {
 
     return (
         <div className="main-top-container">
-                <Card key={index} isHoverable isPressable className="w-[450px] m-2 hover:shadow-lg transition" >
+                <Card key={index} isHoverable isPressable className="w-[360px] m-1 hover:shadow-lg transition" >
                     <Card>
                         <h3 className="service-title">{currentDescription.title}</h3>
                         <p className="service-description">

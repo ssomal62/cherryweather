@@ -15,6 +15,8 @@ import SwiperCore from "swiper";
 import {Autoplay, Navigation, Pagination} from "swiper/modules";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import MainTop from "./MainTop";
+import {useRecoilValue} from "recoil";
+import {userInfoState} from "../../../recoil/hooks/UseFetchUserInfo";
 
 const MainItem = ({index, isLogin, setActiveSlide }) => {
     const navigate = useNavigate();
@@ -63,6 +65,8 @@ const MainItem = ({index, isLogin, setActiveSlide }) => {
         }
     };
 
+    const userInfo = useRecoilValue(userInfoState);
+    console.log(userInfo);
 
 
     return  (

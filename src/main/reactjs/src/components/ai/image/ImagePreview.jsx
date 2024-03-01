@@ -4,12 +4,22 @@ import styled from "styled-components"
 import {imageURLState, useFetchImage} from "../../../recoil/hooks/UseFetchImage";
 import GeneratedImage from "./GeneratedImage";
 import {Spinner} from "@nextui-org/react";
+import GenerateImageHeader from "./GenerateImageHeader";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const ImagePreview = () => {
     const [isActive, setIsActive] = useState(false);
     const fetchURL = useFetchImage(); // 초기값을 불러옴. 현재는 공백상태
     const image = useRecoilValue(imageURLState); //imageURLState에 저장된 key값을 imgae에 저장한다. 맨 처음에는 공백이다.
     const [isLoading, setIsLoading] = useState(false); // isLoading 상태 추가
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from || '/';
+
+    const handleBack = () => {
+        navigate(from);
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,6 +31,8 @@ const ImagePreview = () => {
         fetchData();
     }, [fetchURL]);
 
+
+
     return (
         <CenteredContainer>
 
@@ -28,6 +40,7 @@ const ImagePreview = () => {
                 <Spinner size="lg" label="이미지 생성중" color="danger" labelColor="danger" />
             ) : (
                 <CardListItemWrapper>
+                    <GenerateImageHeader handleBack={handleBack} />
                     <GeneratedImage image={image} />
                 </CardListItemWrapper>
             )}

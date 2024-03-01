@@ -7,6 +7,7 @@ import AI_MainHeader from "../../components/ai/GPT/AI_MainHeader";
 import LoginVerificationModal from "../../utils/LoginVerificationModal";
 import {IsLoginAtom} from "../../recoil/LoginAtom";
 import {useRecoilValue} from "recoil";
+import {useFetchUserInfo, userInfoState} from "../../recoil/hooks/UseFetchUserInfo";
 
 const AI_main = () => {
     const isLogin = useRecoilValue(IsLoginAtom);
@@ -37,8 +38,14 @@ const AI_main = () => {
 
         navigate('/login')
     }
+    // const fetchUserInfo = useFetchUserInfo();
+    const userInfo = useRecoilValue(userInfoState);
+    console.log(userInfo);
 
-
+    // useEffect(() => {
+    //     fetchUserInfo();
+    //     console.log(userInfo)
+    // }, []);
 
     // 활성 슬라이드를 추적하는 상태
     const [activeSlide, setActiveSlide] = useState(0);

@@ -6,20 +6,22 @@ import {FiSettings} from "react-icons/fi";
 import {useLocation, useNavigate} from "react-router-dom";
 import {WiNightAltRain} from "react-icons/wi";
 import {useRecoilValue} from "recoil";
-import {IsLoginAtom} from "../../../recoil/LoginAtom";
+import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 
-export default function AI_MainHeader({isLogin, handleBack}) {
+export default function GenerateImageHeader({ isLogin, handleBack}) {
 
     const navigate = useNavigate();
-    const [scrolled] = useState(true);
+    const myMembership = useRecoilValue(currentMembershipState);
+    const [scrolled, setScrolled] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+
     const handleConfigurationsClick = () => {
         if (!isLogin) {
             setIsModalOpen(true);
             return;
         }
-
         navigate('/login')
     }
 
@@ -74,7 +76,7 @@ export default function AI_MainHeader({isLogin, handleBack}) {
                         <IoArrowBack style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem style={styles.text}>
-                        <p>체리의 의상 다락방</p>
+                        <p>이미지 생성</p>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">
