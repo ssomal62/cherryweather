@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import Layout from "../../common/Layout";
-import { Card, CardFooter, Image, Button } from "@nextui-org/react";
+import React from "react";
+
 const Event = () => {
   // const [reservation, setReservation] = useState({
   //     eventName: '',
@@ -12,9 +11,9 @@ const Event = () => {
   // });
 
   return (
-    <Layout>
+    <div>
       <div></div>
-    </Layout>
+    </div>
   );
 };
 

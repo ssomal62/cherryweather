@@ -1,95 +1,67 @@
 import React from "react";
 import styled from "styled-components";
-import club1 from "../../assets/images/club/culture/1.jpg";
-import club2 from "../../assets/images/club/culture/2.jpg";
-import club3 from "../../assets/images/club/culture/3.jpg";
-import club4 from "../../assets/images/club/culture/4.jpg";
+import {Card, CardBody, Chip, Image} from "@nextui-org/react";
+import {Swiper, SwiperSlide} from "swiper/react";
+import {useLocation, useNavigate} from "react-router-dom";
+import {CgScrollH} from "react-icons/cg";
 
-const MyClub = () => {
+const MyClub = ({joinedClubs}) => {
 
-  return (
-    <Container>
-      <Title>가입된 모임</Title>
-      <ClubWapper>
-        <ClubWapperBtn>
-          <ClubItem>
-            <img
-              src={club1}
-              alt="Kakao login"
-              style={{borderRadius: "20%"}}
-            />
-          </ClubItem>
-        </ClubWapperBtn>
-          <ClubWapperBtn>
-              <ClubItem>
-                  <img
-                      src={club2}
-                      alt="Kakao login"
-                      style={{borderRadius: "20%"}}
-                  />
-              </ClubItem>
-          </ClubWapperBtn>
-          <ClubWapperBtn>
-              <ClubItem>
-                  <img
-                      src={club3}
-                      alt="Kakao login"
-                      style={{borderRadius: "20%"}}
-                  />
-              </ClubItem>
-          </ClubWapperBtn>
-          <ClubWapperBtn>
-              <ClubItem>
-                  <img
-                      src={club4}
-                      alt="Kakao login"
-                      style={{borderRadius: "20%"}}
-                  />
-              </ClubItem>
-          </ClubWapperBtn>
-      </ClubWapper>
-    </Container>
-  );
+    const navigate = useNavigate();
+    const location = useLocation();
+    const handlePageChange = (clubId) => {
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+        navigate(`/club-details/${clubId}`, { state: { from: location.pathname } });
+    }
+
+    const clubProfile = (code) => {
+        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "default"}.jpg?type=f&w=600&h=600&ttype=jpg`
+    }
+
+    return (
+        <Container>
+            <Card>
+                <CardBody className="overflow-x-hidden">
+                    <div className="flex flex-row justify-center items-start">
+                        <div className="justify-start gap-1">
+                    <Chip size="sm" color="danger" variant="bordered" className="mb-2">가입한 클럽</Chip>
+                        </div>
+                        <div className="justify-end ml-auto mr-2">
+                            <CgScrollH style={{width:24, height:24, color :'#F31260'}}/>
+                        </div>
+                    </div>
+                    <Swiper
+                        spaceBetween={10}
+                        slidesPerView={'auto'}
+                        // slidesOffsetAfter={50}
+                    >
+                        {joinedClubs.map((joinedClub, index) => (
+                            <SwiperSlide key={index} className="max-w-[5em]">
+                                <div className="flex flex-col ">
+                                    <Image
+                                        src={clubProfile(joinedClub.clubSummary.code)}
+                                        alt="Club Profile"
+                                        radius="lg"
+                                        style={{width: '5em', height: '5em', border: '1px solid #d7d7d7',cursor:'pointer'}}
+                                        onClick={() => handlePageChange(joinedClub.clubSummary.clubId)}
+                                    />
+                                </div>
+                                <div className="flex justify-center items-center">
+                                    <p className="text-small" style={{color:'gray'}}>{joinedClub.clubSummary.name}</p>
+                                </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </CardBody>
+            </Card>
+        </Container>
+    );
 };
 
 export default MyClub;
 
-const ClubItem = styled.div`
-  overflow-clip-margin: content-box;
-  overflow: clip;
-  height: 48px;
-  aspect-ratio: auto 24 / 24;
-  width: 48px;
-  box-sizing: border-box;
-  border-style: none;
-`;
-
-const ClubWapperBtn = styled.button`
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  -webkit-box-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  align-items: center;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-    margin-right: 8px;
-
-`;
-
-const ClubWapper = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    -webkit-box-pack: justify;
-    justify-content: flex-start; 
-    margin-top: 8px;
-`;
-
-const Title = styled.h5`
-  margin: 0;
+const Title = styled.div`
+  margin: 0 10px 0 0;
   color: #212224;
   font-size: 0.875rem;
   font-weight: 700;
@@ -98,8 +70,5 @@ const Title = styled.h5`
 `;
 
 const Container = styled.div`
-  margin: 20px 0px 16px;
-  border: 1px solid rgb(228, 229, 237);
-  padding: 16px;
-  border-radius: 8px;
+  padding: 20px;
 `;

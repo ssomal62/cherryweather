@@ -3,7 +3,7 @@ import {Button} from "@nextui-org/react";
 import {IoIosArrowForward, IoIosClose} from "react-icons/io";
 import { LuAlertCircle } from "react-icons/lu";
 
-const SearchHistory = ({keywords,onRemove,onRemoveAll, setInputValue, handleSearch}) => {
+const SearchHistory = ({keywords,onRemove,onRemoveAll, setInputValue, handleSearch, setSearchTriggered}) => {
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
@@ -14,9 +14,10 @@ const SearchHistory = ({keywords,onRemove,onRemoveAll, setInputValue, handleSear
         setScrollLeft(e.currentTarget.scrollLeft);
     };
 
-    const handelButtonClick = (e) => {
-        handleSearch(e.target.value);
-        setInputValue(e.target.value);
+    const handelButtonClick = (keyword) => {
+        handleSearch(keyword);
+        setInputValue(keyword);
+        setSearchTriggered(true);
     }
 
     const stopDragging = (e) => {
@@ -72,7 +73,7 @@ const SearchHistory = ({keywords,onRemove,onRemoveAll, setInputValue, handleSear
                                 variant="bordered"
                                 endContent={<IoIosClose style={{cursor:'pointer'}} onClick={(e)=> {e.stopPropagation(); onRemove(index);}}/>}
                                 value={item}
-                                onClick={(e) => handelButtonClick(e)}
+                                onClick={() => handelButtonClick(item)}
                             >
                                 {item}
                             </Button>
