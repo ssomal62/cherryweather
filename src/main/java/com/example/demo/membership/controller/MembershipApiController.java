@@ -116,11 +116,10 @@ public class MembershipApiController {
     @DeleteMapping("/{clubId}/{membershipId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteMembership(
-            final @AuthenticationPrincipal AccountDetails accountDetails,
             final @PathVariable(value = "membershipId") long membershipId,
             final @PathVariable(value = "clubId") long clubId
     ) {
-        membershipService.deleteMembership(accountDetails, membershipId, clubId);
+        membershipService.deleteMembership(membershipId, clubId);
         return ResponseEntity.ok().build();
     }
 }

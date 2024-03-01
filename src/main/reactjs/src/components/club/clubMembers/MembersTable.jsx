@@ -8,7 +8,7 @@ import {
     DropdownItem,
     DropdownMenu,
     DropdownTrigger,
-    Input,
+    Input, Spinner,
     Table,
     TableBody,
     TableCell,
@@ -33,6 +33,8 @@ import {Cookies} from "react-cookie";
 import ResultModal from "./ResultModal";
 import {useParams} from "react-router-dom";
 import RemoveMemberModal from "./RemoveMemberModal";
+import Layout from "../../../common/Layout";
+import ClubDetailsHeader from "../clubDetail/ClubDetailsHeader";
 
 const statusColorMap = {
     active  : "success",
@@ -44,23 +46,32 @@ const statusColorMap = {
 export default function MembersTable() {
 
     const {clubId} = useParams();
-
-    const fetchUserInfo = useFetchUserInfo();
     const [refreshKey, setRefreshKey] = useState(0);
 
-    useMembershipData(
-        { state: currentClubMembershipInfoState, dynamicPath:`/${clubId}/memberships`,refreshKey: refreshKey});
-    useMembershipData(
-        { state: currentMembershipState, dynamicPath:`/${clubId}/member`});
+    const {loading: loadingClubMembershipData} =
+        useMembershipData({
+            state      : currentClubMembershipInfoState,
+            dynamicPath: `/${clubId}/memberships`,
+            refreshKey : refreshKey
+        });
 
-    const myMembership = useRecoilValue(currentMembershipState);
-    const users = useRecoilValue(currentClubMembershipInfoState).summaryList;
+    const {loading: loadingMyMembership} =
+        useMembershipData({state: currentMembershipState, dynamicPath: `/${clubId}/member`});
+
+    const loading = loadingMyMembership || loadingClubMembershipData;
+
     const userInfo = useRecoilValue(userInfoState);
 
+    const users = useRecoilValue(currentClubMembershipInfoState).summaryList;
+
+    const myMembership = useRecoilValue(currentMembershipState);
+
+    const fetchUserInfo = useFetchUserInfo();
     useEffect(() => {
         fetchUserInfo();
     }, []);
 
+    // console.log("마이멤버쉽", myMembership)
     const myRole = myMembership?.info?.role || '권한정보가 없습니다.';
 
     const [filterValue, setFilterValue] = useState("");
@@ -168,10 +179,10 @@ export default function MembersTable() {
     const onChange = async () => {
         const requestBody =
             {
-                membershipId : targetMembershipId,
-                membershipStatus : targetStatus,
-                role : changedRole,
-                updatedUserId: userInfo.accountId,
+                membershipId    : targetMembershipId,
+                membershipStatus: targetStatus,
+                role            : changedRole,
+                updatedUserId   : userInfo.accountId,
             };
 
         const cookie = new Cookies();
@@ -193,7 +204,7 @@ export default function MembersTable() {
     const onRemove = async () => {
         const cookie = new Cookies();
         try {
-            const res = await instance.delete(`/membership/${clubId}/${targetMembershipId}`,  {
+            const res = await instance.delete(`/membership/${clubId}/${targetMembershipId}`, {
                 headers: {
                     Authorization: `Bearer ${cookie.get("accessToken")}`,
                 },
@@ -207,6 +218,7 @@ export default function MembersTable() {
             console.error("Error:", error);
         }
     };
+
 
     const topContent = useMemo(() => (
         <div className="flex flex-col gap-4">
@@ -249,6 +261,13 @@ export default function MembersTable() {
             </div>
         </div>
     ), [filterValue, statusFilter, users.length, onSearchChange]);
+    if (loading) {
+        return (
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                <Spinner size="lg" color="danger"/>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -295,8 +314,6 @@ export default function MembersTable() {
                             {/*    </Button>*/}
                             {/*</TableCell>*/}
                             <TableCell>
-
-
                                 {item.role === 'HOST' ?
                                     <Badge content={<PiCrownDuotone/>} color="danger" size="sm">
                                         <Avatar
@@ -348,12 +365,13 @@ export default function MembersTable() {
                                 <div className="relative flex justify-end items-center gap-2">
                                     <Dropdown>
                                         <DropdownTrigger>
-                                            {item.userId === userInfo.accountId ?
-                                                <></>
-                                                :
-                                                <Button isIconOnly size="sm" variant="light">
-                                                    <VerticalDotsIcon className="text-default-300"/>
-                                                </Button>
+                                            {
+                                                item.userId === userInfo.accountId ?
+                                                    <></>
+                                                    :
+                                                    <Button isIconOnly size="sm" variant="light">
+                                                        <VerticalDotsIcon className="text-default-300"/>
+                                                    </Button>
                                             }
                                         </DropdownTrigger>
 
@@ -362,18 +380,24 @@ export default function MembersTable() {
                                                 {item.role === 'WAITING' ? '' : <DropdownItem>1 : 1 채팅</DropdownItem>}
                                                 {
                                                     item.role === 'WAITING' ?
-                                                    <DropdownItem
-                                                        onClick={() => handleApprovalOpenModal({selectUser: item})}
-                                                    >가입 승인</DropdownItem>
-                                                    : ''
+                                                        <DropdownItem
+                                                            onClick={() => handleApprovalOpenModal({selectUser: item})}
+                                                        >가입 승인</DropdownItem>
+                                                        : ''
                                                 }
                                                 <DropdownItem
-                                                    onClick={() => handleChangeRoleOpenModal({isOpen: true, selectUser: item})}
+                                                    onClick={() => handleChangeRoleOpenModal({
+                                                        isOpen    : true,
+                                                        selectUser: item
+                                                    })}
                                                 >
                                                     {item.role !== 'WAITING' ? <>권한 변경</> : ''}
                                                 </DropdownItem>
                                                 <DropdownItem color="danger"
-                                                    onClick={() => handleRemoveOpenModal({isOpen: true, selectUser:item})}
+                                                              onClick={() => handleRemoveOpenModal({
+                                                                  isOpen    : true,
+                                                                  selectUser: item
+                                                              })}
                                                 >
                                                     {item.role === 'WAITING' ? <>승인 거절</> : <>회원 추방</>}
                                                 </DropdownItem>
