@@ -59,116 +59,115 @@ const ClubJoinButton = () => {
       role: role,
     };
 
-    console.log("클럽이테일로그 확인" + clubDetail.clubId);
-    const cookie = new Cookies();
-    try {
-      const res = await instance.post("/membership", requestData, {
-        headers: {
-          Authorization: `Bearer ${cookie.get("accessToken")}`,
-        },
-      });
+        const cookie = new Cookies();
+        try {
+            const res = await instance.post("/membership", requestData, {
+                headers: {
+                    Authorization: `Bearer ${cookie.get("accessToken")}`,
+                },
+            });
 
-      if (clubDetail.joinApprovalStatus === "JOIN") {
-        navigate("/club-join");
-      }
-      if (clubDetail.joinApprovalStatus === "APPROVAL") {
-        navigate("/club-wait");
-      }
-      console.log("Success:", res);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+            if (clubDetail.joinApprovalStatus === "JOIN") {
+                navigate("/club-join");
+            }
+            if (clubDetail.joinApprovalStatus === "APPROVAL") {
+                navigate("/club-wait");
+            }
+            console.log("Success:", res);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
-  const joinButtonRender = () => {
-    switch (myRole) {
-      case "HOST":
-      case "MEMBER":
-      case "MODERATOR":
-        return (
-          <Button
-            fullWidth
-            color="success"
-            variant="solid"
-            size="lg"
-            radius="lg"
-            style={{ marginRight: "2%", height: "70%" }}
-          >
-            <ClubChat club={clubDetail} />
-          </Button>
-        );
-      case "WAITING":
-        return (
-          <Button
-            fullWidth
-            color="primary"
-            variant="solid"
-            size="lg"
-            radius="lg"
-            style={{ marginRight: "2%", height: "70%" }}
-          >
-            <span style={styles.font}>가입대기중</span>
-          </Button>
-        );
-      case "":
-      default:
-        return (
-          <Button
-            fullWidth
-            color="danger"
-            variant="solid"
-            size="lg"
-            radius="lg"
-            style={{ marginRight: "2%", height: "70%" }}
-            onPress={handleJoinClick}
-          >
-            <span style={styles.font}>가입하기</span>
-          </Button>
-        );
-    }
-  };
+    const joinButtonRender = () => {
+        switch (myRole) {
+            case "HOST":
+            case "MEMBER":
+            case "MODERATOR":
+                return (
+                    <Button
+                        fullWidth
+                        color="success"
+                        variant="solid"
+                        size="lg"
+                        radius="lg"
+                        style={{marginRight: "2%", height: "70%"}}
+                    >
+                        <ClubChat club={clubDetail}/>
+                    </Button>
+                );
+            case "WAITING":
+                return (
+                    <Button
+                        fullWidth
+                        color="primary"
+                        variant="solid"
+                        size="lg"
+                        radius="lg"
+                        style={{marginRight: "2%", height: "70%"}}
+                    >
+                        <span style={styles.font}>가입대기중</span>
+                    </Button>
+                );
+            case "":
+            default:
+                return (
+                    <Button
+                        fullWidth
+                        color="danger"
+                        variant="solid"
+                        size="lg"
+                        radius="lg"
+                        style={{marginRight: "2%", height: "70%"}}
+                        onPress={handleJoinClick}
+                    >
+                        <span style={styles.font}>가입하기</span>
+                    </Button>
+                );
+        }
+    };
 
-  return (
-    <>
-      <Footer>
-        <ButtonContainer>
-          <Button
-            isIconOnly
-            className="text-default-900/60 data-[hover]:bg-foreground/10"
-            radius="full"
-            variant="light"
-            onPress={handleLikeClick}
-          >
-            <HeartIcon
-              style={styles.icon}
-              className={liked ? "[&>path]:stroke-transparent" : ""}
-              fill={liked ? "currentColor" : "none"}
+    return (
+        <>
+            <Footer>
+                <ButtonContainer>
+                    <Button
+                        isIconOnly
+                        className="text-default-900/60 data-[hover]:bg-foreground/10"
+                        radius="full"
+                        variant="light"
+                        onPress={handleLikeClick}
+                    >
+                        <HeartIcon
+                            style={styles.icon}
+                            className={liked ? "[&>path]:stroke-transparent" : ""}
+                            fill={liked ? "currentColor" : "none"}
+                        />
+                    </Button>
+                </ButtonContainer>
+
+                {joinButtonRender()}
+            </Footer>
+            <LoginVerificationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
             />
-          </Button>
-        </ButtonContainer>
-
-        {joinButtonRender()}
-      </Footer>
-      <LoginVerificationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-    </>
-  );
+        </>
+    );
 };
 
 export default ClubJoinButton;
 
 const styles = {
-  icon: {
-    width: 30,
-    height: 30,
-    color: "#F31260",
-  },
-  font: {
-    fontSize: 18,
-    fontWeight: 600,
-  },
+    icon: {
+        width : 30,
+        height: 30,
+        color : "#F31260",
+    },
+    font: {
+        fontSize  : 18,
+        fontWeight: 600,
+    },
 };
 const ButtonContainer = styled.div`
   flex: 0 1 20%;

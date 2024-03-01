@@ -100,7 +100,7 @@ const ClubDetails = () => {
                         <ClubDetailsSummary clubDetail={clubDetail}/>
                         <EventSection />
                         <ClubNotice clubDetail={clubDetail}/>
-                        <MemberSummary isLogin={isLogin}/>
+                        <MemberSummary isLogin={isLogin} clubDetail={clubDetail}/>
                         <ClubFeedSlide isLogin={isLogin} clubDetail={clubDetail}/>
                     </Content>
 
@@ -118,7 +118,6 @@ const ClubDetails = () => {
                     </div>
                 </div>
             </ClubDetail>
-
             <ClubJoinButton clubId={clubId}/>
             <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
         </Layout>

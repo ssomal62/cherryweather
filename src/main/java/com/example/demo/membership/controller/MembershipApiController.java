@@ -103,24 +103,24 @@ public class MembershipApiController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> updateMembership(
-            final @AuthenticationPrincipal AccountDetails accountDetails,
             final @Valid @RequestBody UpdateMembership requestDTO
 
     ) {
-        membershipService.updateMembership(accountDetails, requestDTO);
+        membershipService.updateMembership(requestDTO);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 멤버십 삭제
      */
-    @DeleteMapping("/{clubId}")
+    @DeleteMapping("/{clubId}/{membershipId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteMembership(
             final @AuthenticationPrincipal AccountDetails accountDetails,
+            final @PathVariable(value = "membershipId") long membershipId,
             final @PathVariable(value = "clubId") long clubId
     ) {
-        membershipService.deleteMembership(accountDetails, clubId);
+        membershipService.deleteMembership(accountDetails, membershipId, clubId);
         return ResponseEntity.ok().build();
     }
 }

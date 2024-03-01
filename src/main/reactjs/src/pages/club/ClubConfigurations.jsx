@@ -43,7 +43,7 @@ const ClubConfigurations = () => {
                     <>
                         <Section>
                             <Chip size='sm' color='default' variant='faded'> 클럽 활동 </Chip>
-                            <ManageClubMembers/>
+                            <ManageClubMembers clubDetail={clubDetail}/>
                         </Section>
                         <Divider/>
                     </>
