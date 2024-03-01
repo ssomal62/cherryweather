@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
 import {Spinner} from "@nextui-org/react";
 import UseClientIp from "../../recoil/hooks/UseClientIp";
+import styled from "styled-components";
 
 const TodayDetail = () => {
     const clientIp = UseClientIp(); //ip를 백엔드로 전송
@@ -21,17 +22,22 @@ const TodayDetail = () => {
     }
     if (data) {
         return (
-            <div>
-
+            <div style={{padding:'22px'}}>
                 {data && data.map((weeklyData, index) => (
-                    <div key = {index} style={{border:'1px solid green'}}>
-                        예보 날짜 : {weeklyData.fcstDate}<br/>
-                        예보 시간 : {weeklyData.fcstTime}<br/>
-                        날씨 : {weeklyData.weather}<br/>
-                        강수 확율 : {weeklyData.pop}<br/>
-                        최저 온도 : {weeklyData.tmn}<br/>
-                        최고 온도 : {weeklyData.tmx}
-                    </div>
+                    <Weekly key = {index}>
+                        <Date>
+                            {formatDate(weeklyData.fcstDate)}<br/>
+                        </Date>
+                        <Weather>
+                            {weeklyData.weather}<br/>
+                        </Weather>
+                        <RainPro>
+                            {weeklyData.pop}<br/>
+                        </RainPro>
+                        <Temperature>
+                            {weeklyData.tmn} / {weeklyData.tmx}
+                        </Temperature>
+                    </Weekly>
                 ))}
             </div>
         )
@@ -39,10 +45,39 @@ const TodayDetail = () => {
 };
 export default TodayDetail;
 
-const formatTime = (time) => {
-    if (!time) return '';
-    const timeString = time.toString();
-    const hours = timeString.slice(0, 2);
-    const minutes = timeString.slice(2);
-    return `${hours}:${minutes.padStart(2, '0')}`;
+/* 날짜 형식 포멧 */
+const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6, 8);
+    return `${parseInt(month, 10)}/${parseInt(day, 10)}`;
 }
+
+const Weekly = styled.div`
+    border: 1px solid white;
+    position: relative;
+    width: 100%;
+    height: 50px;
+`;
+const Date = styled.div`
+    position: absolute;
+    width: 20%;
+    left: 0%;
+
+`;
+const Weather = styled.div`
+    position: absolute;
+    width: 20%;
+    left: 20%;
+    
+`;
+const RainPro = styled.div`
+    position: absolute;
+    width: 30%;
+    left: 40%;
+`;
+const Temperature = styled.div`
+    position: absolute;
+    width: 30%;
+    left: 70%;
+`;

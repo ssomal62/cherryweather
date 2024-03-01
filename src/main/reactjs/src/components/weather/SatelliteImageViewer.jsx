@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
-import {Button, Image, Spinner} from "@nextui-org/react";
+import {Card, CardHeader, Divider, Image, Spinner} from "@nextui-org/react";
+import styled from "styled-components";
 
 const SatelliteImageViewer = () => {
     const {fetchData, data, loading, error} = UseFetchWeather("/weather/satImg");
@@ -34,32 +35,70 @@ const SatelliteImageViewer = () => {
         });
     }
 
-    if (loading) {
-        return <Spinner label = "Loading..." color = "danger" className = "mt-16"/>
-    }
-
-    if (error) {
-        return <div>error : {error.message}</div>
-    }
-
-    if (data) {
-        return (
-            <div style = {{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <Image
-                    src = {data[currentIndex].satImg}
-                    alt = {`Satellite Image ${currentIndex}`}
-                    width = "100%"
-                    height = "auto"
-                />
-                <div style = {{display: 'flex', marginTop: '20px'}}>
-                    <Button auto flat color = "primary" onClick = {prevImage} style = {{backgroundColor: 'yellow'}}>Previous</Button>
-                    <Button auto flat color = "primary" onClick = {nextImage} style = {{marginLeft: '20px', backgroundColor: 'yellow'}}>Next</Button>
-                </div>
-            </div>
-
-        )
-    }
+    return (
+        <Container>
+            <Card isBlurred className = "bg-black/30 rounded-xl rounded-large shadow-small h-[100%]">
+                {loading && (
+                    <Spinner className = "h-[300px]" label = "Loading..."/>
+                )}
+                {error && (
+                    <div className = "h-[300px]">Error: {error.message}</div>
+                )}
+                {data && (
+                    <div>
+                        <CardHeader>
+                            <div className = "flex flex-col">
+                                <p className = "text-sm text-white">기상 레이더</p>
+                            </div>
+                        </CardHeader>
+                        <Divider className = "bg-white/50 mb-5"/>
+                        <SatImage>
+                            <Prev>
+                                <Image className = "rounded-none" src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/prev.png" onClick = {prevImage}
+                                       alt = "Previous"/>
+                            </Prev>
+                            <Next>
+                                <Image className = "rounded-none" src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/next.png" onClick = {nextImage}
+                                       alt = "Next"/>
+                            </Next>
+                            <Image
+                                src = {data[currentIndex].satImg}
+                                alt = {`Satellite Image ${currentIndex}`}
+                                width = "100%" height = "auto"
+                                style={{zIndex:'1'}}
+                            />
+                        </SatImage>
+                    </div>
+                )}
+            </Card>
+        </Container>
+    )
 
 
 }
 export default SatelliteImageViewer;
+
+const Container = styled.div`
+    width: 100%;
+    height: 100%;
+    border: 2px solid blue;
+    padding: 22px;
+`;
+const SatImage = styled.div`
+    position: relative;
+    padding: 0 20px 20px 20px;
+`;
+const Prev = styled.div`
+    position: absolute;
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+`;
+const Next = styled.div`
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+`;

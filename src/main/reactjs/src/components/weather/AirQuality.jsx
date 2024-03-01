@@ -31,8 +31,8 @@ const AirQuality = () => {
 
     if (data) {
         return (
-            <div style = {{border: '1px solid pink'}}>
-                <Accordion>
+            <div style = {{padding:'22px'}}>
+                <Accordion style={{border:'1px solid white'}}>
                     <AccordionItem key = "1" startContent = {
                         <div>
                             <div>
