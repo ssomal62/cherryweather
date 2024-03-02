@@ -17,9 +17,11 @@ import com.example.demo.common.exception.AuthException;
 import com.example.demo.common.exception.DuplicatedException;
 import com.example.demo.common.exception.NotFoundException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,6 +49,7 @@ public class AccountServiceImpl implements AccountService {
     private final InterestRepository interestRepository;
     private final AgreementRepository agreementRepository;
     private final ActivitiesAreaRepository activitiesAreaRepository;
+    private final ApplicationEventPublisher eventPublisher;
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
@@ -250,6 +253,22 @@ public class AccountServiceImpl implements AccountService {
         String encodedPassword = passwordEncoder.encode(newPassword);
         account.updatePassword(encodedPassword); // 새 비밀번호 인코딩 및 저장
         accountRepository.save(account);
+    }
+
+    /**
+     * email 찾기
+     *
+     * @return
+     */
+    @Override
+    public @Email String findEmail(final FindEmailRequestDto findEmailRequestDto) {
+        String name = findEmailRequestDto.getName();
+        String phone = findEmailRequestDto.getPhoneNumber();
+
+        Account account = accountRepository.findAccountByNameAndPhoneNumber(name, phone)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_ACCOUNT));
+
+        return account.getEmail();
     }
 
     // 이메일 중복 체크
