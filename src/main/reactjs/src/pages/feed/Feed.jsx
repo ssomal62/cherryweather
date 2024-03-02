@@ -25,5 +25,5 @@ const FeedListItemWrapper = styled.div`
 `;
 
 const Section = styled.div`
-    margin: 0 20px;
+    margin: 0;
 `

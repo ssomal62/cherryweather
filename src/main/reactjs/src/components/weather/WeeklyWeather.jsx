@@ -1,48 +1,103 @@
 import React, {useEffect} from 'react';
-import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
-import {Spinner} from "@nextui-org/react";
+import {UseWeatherData, weeklyWeatherState} from "../../recoil/hooks/UseWeatherData";
+import {Card, CardHeader, Divider, Spinner} from "@nextui-org/react";
 import UseClientIp from "../../recoil/hooks/UseClientIp";
+import styled from "styled-components";
+import {useRecoilValue} from "recoil";
 
 const TodayDetail = () => {
     const clientIp = UseClientIp(); //ip를 백엔드로 전송
-    const {fetchData, data, loading, error} = UseFetchWeather(`/weather/weekly?ip=${clientIp}`);
+    const fetchData = UseWeatherData({endpoint:`/weather/weekly?ip=${clientIp}`, state: weeklyWeatherState});
+    const {data, loading, error} = useRecoilValue((weeklyWeatherState))
 
     useEffect(() => {
         if (clientIp) {
             fetchData();
         }
+        console.log("week : ",data); // 출력 확인용
     }, [fetchData, clientIp]);
 
-    if (loading) {
-        return <Spinner label = "Loading..." color = "danger" className = "mt-16"/>
-    }
-    if (error) {
-        return <div>error : {error.message}</div>
-    }
-    if (data) {
-        return (
-            <div>
-
-                {data && data.map((weeklyData, index) => (
-                    <div key = {index} style={{border:'1px solid green'}}>
-                        예보 날짜 : {weeklyData.fcstDate}<br/>
-                        예보 시간 : {weeklyData.fcstTime}<br/>
-                        날씨 : {weeklyData.weather}<br/>
-                        강수 확율 : {weeklyData.pop}<br/>
-                        최저 온도 : {weeklyData.tmn}<br/>
-                        최고 온도 : {weeklyData.tmx}
+    return(
+        <Container>
+            <Card isBlurred className = "bg-black/30 rounded-xl rounded-large shadow-small h-[100%]">
+                {loading && (
+                    <Spinner className = "h-[300px]" label = "Loading..."/>
+                )}
+                {error && (
+                    <div className = "h-[300px]">Error: {error.message}</div>
+                )}
+                {data && (
+                    <div style = {{padding: '22px'}}>
+                        <CardHeader>
+                            <div className = "flex flex-col">
+                                <p className = "text-sm text-white">기상 레이더</p>
+                            </div>
+                        </CardHeader>
+                        <Divider className = "bg-white/50 mb-5"/>
+                        {data && data.map((weeklyData, index) => (
+                            <Weekly key = {index}>
+                                <Date>
+                                    {formatDate(weeklyData.fcstDate)}<br/>
+                                </Date>
+                                <Weather>
+                                    {weeklyData.weather}<br/>
+                                </Weather>
+                                <RainPro>
+                                    {weeklyData.pop}<br/>
+                                </RainPro>
+                                <Temperature>
+                                    {weeklyData.tmn} / {weeklyData.tmx}
+                                </Temperature>
+                            </Weekly>
+                        ))}
                     </div>
-                ))}
-            </div>
-        )
-    }
+                )}
+            </Card>
+        </Container>
+    )
 };
 export default TodayDetail;
 
-const formatTime = (time) => {
-    if (!time) return '';
-    const timeString = time.toString();
-    const hours = timeString.slice(0, 2);
-    const minutes = timeString.slice(2);
-    return `${hours}:${minutes.padStart(2, '0')}`;
+/* 날짜 형식 포멧 */
+const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6, 8);
+    return `${parseInt(month, 10)}/${parseInt(day, 10)}`;
 }
+
+const Container = styled.div`
+    width: 100%;
+    height: 100%;
+    border: 2px solid orangered;
+    padding: 22px;
+`;
+
+const Weekly = styled.div`
+    border: 1px solid white;
+    position: relative;
+    width: 100%;
+    height: 50px;
+`;
+const Date = styled.div`
+    position: absolute;
+    width: 20%;
+    left: 0%;
+
+`;
+const Weather = styled.div`
+    position: absolute;
+    width: 20%;
+    left: 20%;
+    
+`;
+const RainPro = styled.div`
+    position: absolute;
+    width: 30%;
+    left: 40%;
+`;
+const Temperature = styled.div`
+    position: absolute;
+    width: 30%;
+    left: 70%;
+`;

@@ -59,26 +59,25 @@ const ClubJoinButton = () => {
       role: role,
     };
 
-    console.log("클럽이테일로그 확인" + clubDetail.clubId);
-    const cookie = new Cookies();
-    try {
-      const res = await instance.post("/membership", requestData, {
-        headers: {
-          Authorization: `Bearer ${cookie.get("accessToken")}`,
-        },
-      });
+        const cookie = new Cookies();
+        try {
+            const res = await instance.post("/membership", requestData, {
+                headers: {
+                    Authorization: `Bearer ${cookie.get("accessToken")}`,
+                },
+            });
 
-      if (clubDetail.joinApprovalStatus === "JOIN") {
-        navigate("/club-join");
-      }
-      if (clubDetail.joinApprovalStatus === "APPROVAL") {
-        navigate("/club-wait");
-      }
-      console.log("Success:", res);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+            if (clubDetail.joinApprovalStatus === "JOIN") {
+                navigate("/club-join");
+            }
+            if (clubDetail.joinApprovalStatus === "APPROVAL") {
+                navigate("/club-wait");
+            }
+            console.log("Success:", res);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
   const joinButtonRender = () => {
     switch (myRole) {
@@ -96,7 +95,6 @@ const ClubJoinButton = () => {
             onClick={() => navigate("/chat/club", { state: { clubDetail } })}
           >
             <span style={styles.font}>채팅하기</span>
-            {/* <ClubChat club={clubDetail} /> */}
           </Button>
         );
       case "WAITING":
@@ -130,47 +128,47 @@ const ClubJoinButton = () => {
     }
   };
 
-  return (
-    <>
-      <Footer>
-        <ButtonContainer>
-          <Button
-            isIconOnly
-            className="text-default-900/60 data-[hover]:bg-foreground/10"
-            radius="full"
-            variant="light"
-            onPress={handleLikeClick}
-          >
-            <HeartIcon
-              style={styles.icon}
-              className={liked ? "[&>path]:stroke-transparent" : ""}
-              fill={liked ? "currentColor" : "none"}
-            />
-          </Button>
-        </ButtonContainer>
+    return (
+        <>
+            <Footer>
+                <ButtonContainer>
+                    <Button
+                        isIconOnly
+                        className="text-default-900/60 data-[hover]:bg-foreground/10"
+                        radius="full"
+                        variant="light"
+                        onPress={handleLikeClick}
+                    >
+                        <HeartIcon
+                            style={styles.icon}
+                            className={liked ? "[&>path]:stroke-transparent" : ""}
+                            fill={liked ? "currentColor" : "none"}
+                        />
+                    </Button>
+                </ButtonContainer>
 
-        {joinButtonRender()}
-      </Footer>
-      <LoginVerificationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-    </>
-  );
+                {joinButtonRender()}
+            </Footer>
+            <LoginVerificationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
+        </>
+    );
 };
 
 export default ClubJoinButton;
 
 const styles = {
-  icon: {
-    width: 30,
-    height: 30,
-    color: "#F31260",
-  },
-  font: {
-    fontSize: 18,
-    fontWeight: 600,
-  },
+    icon: {
+        width : 30,
+        height: 30,
+        color : "#F31260",
+    },
+    font: {
+        fontSize  : 18,
+        fontWeight: 600,
+    },
 };
 const ButtonContainer = styled.div`
   flex: 0 1 20%;

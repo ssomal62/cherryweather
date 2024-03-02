@@ -8,7 +8,7 @@ import {useRecoilValue} from "recoil";
 import MemberVerificationModal from "../../../utils/MemberVerificationModal";
 import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 
-const MemberSummary = ({isLogin}) => {
+const MemberSummary = ({isLogin, clubDetail}) => {
 
     const myMembership = useRecoilValue(currentMembershipState);
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ const MemberSummary = ({isLogin}) => {
             setIsModalOpen(true);
             return;
         }
-        navigate('/club-members')
+        navigate(`/club-members/${clubDetail.clubId}`)
     }
 
     return (

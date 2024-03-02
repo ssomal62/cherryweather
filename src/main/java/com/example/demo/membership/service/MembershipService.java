@@ -61,17 +61,21 @@ public class MembershipService {
     }
 
     @Transactional
-    public void updateMembership(AccountDetails accountDetails, UpdateMembership requestDTO) {
-        Membership existingMembership  = findMembership(requestDTO.clubId(),accountDetails.getAccount().getEmail());
+    public void updateMembership(UpdateMembership requestDTO) {
+        Membership existingMembership = findMembership(requestDTO.membershipId());
         existingMembership.updateMembership(requestDTO);
         membershipRepository.save(existingMembership);
     }
 
     @Transactional
-    public void deleteMembership(AccountDetails accountDetails, long clubId) {
-        Membership existingMembership  = findMembership(clubId, accountDetails.getAccount().getEmail());
-        membershipRepository.deleteById(existingMembership.getMembershipId());
+    public void deleteMembership(long membershipId, long clubId) {
+        membershipRepository.deleteById(membershipId);
         clubService.decreaseCurrentMembers(clubId);
+    }
+
+    public Membership findMembership(long membershipId) {
+        return membershipRepository.findById(membershipId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBERSHIP));
     }
 
     public Membership findMembership(long clubId, String email) {
@@ -109,6 +113,7 @@ public class MembershipService {
         ClubSummary clubSummary = clubService.convertToSummary(clubService.findClubById(membership.getClub().getClubId()));
 
         return MembershipSummary.builder()
+                .membershipId(membership.getMembershipId())
                 .clubId(membership.getClub().getClubId())
                 .userId(membership.getAccount().getAccountId())
                 .userName(membership.getAccount().getProfileName())

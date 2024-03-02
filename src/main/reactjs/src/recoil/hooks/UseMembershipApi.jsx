@@ -12,7 +12,9 @@ import {Cookies} from "react-cookie";
  */
 export const currentClubMembershipInfoState = atom({
     key :'currentClubMembershipInfoState',
-    default:[],
+    default:{
+        summaryList:[],
+    },
 })
 
 /**
@@ -52,7 +54,7 @@ export const currentMembershipState = atom({
  * @param requestBody HTTP 요청 본문. 기본값은 null.
  * @returns 로딩 상태와 에러 상태를 포함하는 객체.
  */
-export const useMembershipData = ({ method = 'get', state, dynamicPath, requestBody = null}) => {
+export const useMembershipData = ({ method = 'get', state, dynamicPath, requestBody = null, refreshKey}) => {
     const cookie = useMemo(() => new Cookies(), []);
     const setState = useSetRecoilState(state);
     const [loading, setLoading] = useState(false);
@@ -106,7 +108,7 @@ export const useMembershipData = ({ method = 'get', state, dynamicPath, requestB
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, [fetchData, refreshKey]);
 
     return {  loading, error }
 }
