@@ -6,6 +6,7 @@ import GeneratedImage from "./GeneratedImage";
 import {Spinner} from "@nextui-org/react";
 import GenerateImageHeader from "./GenerateImageHeader";
 import {useLocation, useNavigate} from "react-router-dom";
+import {IsLoginAtom} from "../../../recoil/LoginAtom";
 
 const ImagePreview = () => {
     const [isActive, setIsActive] = useState(false);
@@ -16,6 +17,7 @@ const ImagePreview = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from || '/';
+    const isLogin = useRecoilValue(IsLoginAtom);
 
     const handleBack = () => {
         navigate(from);
@@ -37,10 +39,10 @@ const ImagePreview = () => {
         <CenteredContainer>
 
             {isLoading ? (
-                <Spinner size="lg" label="이미지 생성중" color="danger" labelColor="danger" />
+                <Spinner size="lg" label="옷차림 생각중" color="danger" labelColor="danger" />
             ) : (
                 <CardListItemWrapper>
-                    <GenerateImageHeader handleBack={handleBack} />
+                    <GenerateImageHeader isLogin={isLogin} handleBack={handleBack} />
                     <GeneratedImage image={image} />
                 </CardListItemWrapper>
             )}
