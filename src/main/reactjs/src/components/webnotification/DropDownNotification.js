@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { UseFetchWeather } from "../../recoil/hooks/UseFetchWeather";
 import { alramListState, useAlarmData } from "../../recoil/hooks/UseAlramApi";
 import { instance } from "../../recoil/module/instance";
+import { Cookies } from "react-cookie";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
@@ -26,6 +27,8 @@ const DropDownNotification = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [alarmList, setAlarmList] = useRecoilState(alramListState);
+
+  const cookie = new Cookies();
 
   useEffect(() => {
     fetchData();
@@ -86,6 +89,68 @@ const DropDownNotification = () => {
     }
   };
 
+  const handleAlarmClick = async (item) => {
+    // 알림 삭제 로직
+    try {
+      await instance.delete(`/alarm/${item.alarmId}`, {
+        headers: {
+          Authorization: `Bearer ${cookie.get("accessToken")}`,
+        },
+      });
+      // 상태 업데이트로 알림 목록에서 해당 알림 제거
+      setAlarmList(alarmList.filter(alarm => alarm.alarmId !== item.alarmId));
+    } catch (error) {
+      console.error("알림 삭제 실패:", error);
+    }
+
+    // 알림 유형에 따라 적절한 페이지로 이동
+    switch (item.type) {
+      case "CLUB":
+        navigate(`/club-details/${item.targetId}`);
+        break;
+      case "PERSONALCHAT":
+        navigate(`/chat/room/${item.targetId}`);
+        break;
+      case "CLUBJOIN":
+      case "CLUBWAIT":
+        // 클럽 가입 승인 요청 및 대기 알림일 경우 클럽 상세 페이지로 이동
+        navigate(`/club-details/${item.targetId}`);
+        break;
+      default:
+        // 기타 알림 유형 처리
+        break;
+    }
+  };
+
+  // 클럽 가입 승인을 요청할 때 알림을 삭제하고 상세 페이지로 이동하는 함수
+  const deleteAlarmAndNavigateForJoinRequest = async (alarmId, targetId) => {
+    try {
+      await instance.delete(`/alarm/${alarmId}`);
+      const updatedAlarms = alarmList.filter((alarm) => alarm.alarmId !== alarmId);
+      setAlarmList(updatedAlarms);
+
+      // 클럽 가입 요청에 대한 처리 후 적절한 페이지로 이동
+      navigate("/club-join"); // 예시 경로입니다. 실제 경로로 변경하세요.
+    } catch (error) {
+      console.error("알림 삭제 실패:", error);
+    }
+  };
+
+  // 클럽 가입 승인 대기 시 알림을 삭제하고 상세 페이지로 이동하는 함수
+  const deleteAlarmAndNavigateForApprovalWaiting = async (alarmId, targetId) => {
+    try {
+      await instance.delete(`/alarm/${alarmId}`);
+      const updatedAlarms = alarmList.filter((alarm) => alarm.alarmId !== alarmId);
+      setAlarmList(updatedAlarms);
+
+      // 클럽 가입 승인 대기에 대한 처리 후 적절한 페이지로 이동
+      navigate("/club-wait"); // 예시 경로입니다. 실제 경로로 변경하세요.
+    } catch (error) {
+      console.error("알림 삭제 실패:", error);
+    }
+  };
+
+
 
   // 알림 삭제 및 1대1 채팅방으로 이동 함수
   const deleteAlarmAndNavigateToPersonalChatRoom = async (alarmId, targetId) => {
@@ -105,6 +170,8 @@ const DropDownNotification = () => {
   };
 
   console.log(deleteAlarmAndNavigateToPersonalChatRoom);
+
+  // 알림 클럽에 가입할 때 알림 띄우기.
 
   return (
     <Dropdown
@@ -129,6 +196,12 @@ const DropDownNotification = () => {
             onClick={() => {
               // 알림 유형에 따라 적절한 함수 호출
               switch (item.type) {
+                case "CLUBJOIN":
+                  deleteAlarmAndNavigateForJoinRequest(item.alarmId, item.targetId); // 클럽 가입 승인 요청 알림일 경우
+                  break;
+                case "CLUBWAIT":
+                  deleteAlarmAndNavigateForApprovalWaiting(item.alarmId, item.targetId); // 클럽 가입 승인 대기 알림일 경우
+                  break;
                 case "CLUB":
                   deleteAlarmAndNavigate(item.alarmId, item.targetId); // 클럽 알림일 경우
                   break;
@@ -153,6 +226,12 @@ const DropDownNotification = () => {
             onClick={() => {
               // 알림 유형에 따라 적절한 함수 호출
               switch (item.type) {
+                case "CLUBJOIN":
+                  deleteAlarmAndNavigateForJoinRequest(item.alarmId, item.targetId); // 클럽 가입 승인 요청 알림일 경우
+                  break;
+                case "CLUBWAIT":
+                  deleteAlarmAndNavigateForApprovalWaiting(item.alarmId, item.targetId); // 클럽 가입 승인 대기 알림일 경우
+                  break;
                 case "CLUB":
                   deleteAlarmAndNavigate(item.alarmId, item.targetId); // 클럽 알림일 경우
                   break;

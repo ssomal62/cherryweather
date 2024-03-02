@@ -62,7 +62,6 @@ const ClubJoinButton = () => {
       role: role,
     };
 
-    console.log("클럽이테일로그 확인" + clubDetail.clubId);
     const cookie = new Cookies();
     try {
       const res = await instance.post("/membership", requestData, {
@@ -73,32 +72,29 @@ const ClubJoinButton = () => {
 
       // 클럽 가입을 요청한 경우의 알림 데이터
       const joinRequestAlarmData = {
-        targetId: res.data.clubDetail.representativeUserId,
-        type: "CLUBJOIN",
+        targetId: clubDetail?.representativeUserId, // 클럽의 호스트 ID
+        type: clubDetail?.joinApprovalStatus === "JOIN" ? "CLUBJOIN" : "CLUBWAIT",
         importance: 2,
-        description: `${userInfo.name}님이 클럽 가입을 요청하였습니다.`
+        description: clubDetail?.joinApprovalStatus === "JOIN" ?
+          `${userInfo.name}님이 클럽 가입 승인을 요청하였습니다.` :
+          `${userInfo.name}님이 클럽 가입 승인 대기입니다.`
       };
 
+      console.log(clubDetail.clubId);
       console.log("Join request alarm data:", joinRequestAlarmData);
-      sendJoinAlarmData(joinRequestAlarmData);
+      console.log(sendJoinAlarmData);
 
       // 클럽 가입 요청 알림을 보냅니다.
       if (clubDetail.joinApprovalStatus === "JOIN") {
+        await sendJoinAlarmData(joinRequestAlarmData);
+        console.log("여기 호출 11")
         navigate("/club-join");
       }
 
-      // 클럽 가입 승인 대기 상태일 경우의 알림 데이터
-      const joinApprovalAlarmData = {
-        targetId: res.data.clubDetail.representativeUserId,
-        type: "CLUBJOIN",
-        importance: 2,
-        description: `${userInfo.name}님이 클럽 가입 승인을 요청하였습니다.`
-      }
-
-      console.log("Join approval alarm data:", joinApprovalAlarmData)
-      sendJoinAlarmData(joinApprovalAlarmData);
       // 클럽 가입 승인 대기 알림을 보냅니다.
       if (clubDetail.joinApprovalStatus === "APPROVAL") {
+        await sendJoinAlarmData(joinRequestAlarmData);
+        console.log("여기 호출 22")
         navigate("/club-wait");
       }
 
