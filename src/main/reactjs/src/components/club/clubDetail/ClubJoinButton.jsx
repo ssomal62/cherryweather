@@ -86,14 +86,14 @@ const ClubJoinButton = () => {
       console.log(sendJoinAlarmData);
 
       // 클럽 가입 요청 알림을 보냅니다.
-      if (clubDetail.joinApprovalStatus === "JOIN") {
+      if (clubDetail.joinApprovalStatus === "JOIN" && userInfo.accountId !== clubDetail.representativeUserId) {
         await sendJoinAlarmData(joinRequestAlarmData);
         console.log("여기 호출 11")
         navigate("/club-join");
       }
 
       // 클럽 가입 승인 대기 알림을 보냅니다.
-      if (clubDetail.joinApprovalStatus === "APPROVAL") {
+      if (clubDetail.joinApprovalStatus === "APPROVAL" && userInfo.accountId !== clubDetail.representativeUserId) {
         await sendJoinAlarmData(joinRequestAlarmData);
         console.log("여기 호출 22")
         navigate("/club-wait");
@@ -168,47 +168,47 @@ const ClubJoinButton = () => {
     }
   };
 
-    return (
-        <>
-            <Footer>
-                <ButtonContainer>
-                    <Button
-                        isIconOnly
-                        className="text-default-900/60 data-[hover]:bg-foreground/10"
-                        radius="full"
-                        variant="light"
-                        onPress={handleLikeClick}
-                    >
-                        <HeartIcon
-                            style={styles.icon}
-                            className={liked ? "[&>path]:stroke-transparent" : ""}
-                            fill={liked ? "currentColor" : "none"}
-                        />
-                    </Button>
-                </ButtonContainer>
-
-                {joinButtonRender()}
-            </Footer>
-            <LoginVerificationModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+  return (
+    <>
+      <Footer>
+        <ButtonContainer>
+          <Button
+            isIconOnly
+            className="text-default-900/60 data-[hover]:bg-foreground/10"
+            radius="full"
+            variant="light"
+            onPress={handleLikeClick}
+          >
+            <HeartIcon
+              style={styles.icon}
+              className={liked ? "[&>path]:stroke-transparent" : ""}
+              fill={liked ? "currentColor" : "none"}
             />
-        </>
-    );
+          </Button>
+        </ButtonContainer>
+
+        {joinButtonRender()}
+      </Footer>
+      <LoginVerificationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
+  );
 };
 
 export default ClubJoinButton;
 
 const styles = {
-    icon: {
-        width : 30,
-        height: 30,
-        color : "#F31260",
-    },
-    font: {
-        fontSize  : 18,
-        fontWeight: 600,
-    },
+  icon: {
+    width: 30,
+    height: 30,
+    color: "#F31260",
+  },
+  font: {
+    fontSize: 18,
+    fontWeight: 600,
+  },
 };
 const ButtonContainer = styled.div`
   flex: 0 1 20%;

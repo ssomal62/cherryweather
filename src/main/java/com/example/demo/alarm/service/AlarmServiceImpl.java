@@ -22,7 +22,8 @@ public class AlarmServiceImpl {
     // 알람 정보 db 넣기
     @Transactional
     public void createAlarm(AlarmDto alarmDto, AccountDetails accountDetails) {
-        Alarm alarm = Alarm.builder()
+        if(!accountDetails.getAccount().getAccountId().equals(alarmDto.getTargetId())) {
+            Alarm alarm = Alarm.builder()
                 .account(accountDetails.getAccount())
                 .type(alarmDto.getType())
                 .targetId(alarmDto.getTargetId())
@@ -30,6 +31,7 @@ public class AlarmServiceImpl {
                 .description(alarmDto.getDescription())
                 .build();
         alarmRepository.save(alarm);
+        }
     }
 
     // 알람 list 받아오기
