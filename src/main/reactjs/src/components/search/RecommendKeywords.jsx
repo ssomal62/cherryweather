@@ -11,9 +11,7 @@ import Snowy from "../../assets/theme/default/Snowy";
 
 const RecommendKeywords = ({setInputValue, handleSearch}) => {
 
-    // const dailyWeather = useRecoilValue(dailyWeatherState).data;
-
-    const {loading: loading, data: data} = useRecoilValue(dailyWeatherState);
+    const dailyWeather = useRecoilValue(dailyWeatherState).data;
 
     const todayWeather = dailyWeather?.weather;
     const todayWeatherKeywords = recommendKeyword.find(item => item.weather === todayWeather);
@@ -40,11 +38,6 @@ const RecommendKeywords = ({setInputValue, handleSearch}) => {
             default:
                 return <div>없음</div>
         }
-    }
-
-    if(loading) {
-        return <div> 로딩중
-        </div>
     }
 
     return (
