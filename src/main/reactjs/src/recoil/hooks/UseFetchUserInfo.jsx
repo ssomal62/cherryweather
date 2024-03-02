@@ -56,6 +56,7 @@ export const useModifyUserInfo = () => {
 
             const response = await instance.patch('/account/my-info/modify', modifyInfoRequestDto, config);
             console.log('유저 정보 수정 성공', response.data);
+            alert('유저 정보가 수정되었습니다.');
             setUserInfo(response.data);
             navigate("/mypage")
         } catch (error) {

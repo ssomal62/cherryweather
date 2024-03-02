@@ -21,7 +21,7 @@ const AvatarMenu = () => {
   const userInfo = useRecoilValue(userInfoState);
 
   const {profileName, email, profileImage} = userInfo;
-  const imageUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}.jpg?type=f&w=600&h=600&ttype=jpg`;
+  const imageUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600`
 
   // 로그아웃 함수
   const submitLogout = async () => {
@@ -55,7 +55,7 @@ const AvatarMenu = () => {
           isBordered
           as="button"
           className="transition-transform"
-          color="secondary"
+          color="red"
           name="Jason Hughes"
           size="sm"
           src={imageUrl}
