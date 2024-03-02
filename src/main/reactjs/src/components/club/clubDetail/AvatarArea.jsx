@@ -6,17 +6,15 @@ import {currentClubMembershipInfoState} from "../../../recoil/hooks/UseMembershi
 
 const AvatarArea = () => {
 
-    const memberships = useRecoilValue(currentClubMembershipInfoState);
-
-    const safeMemberships = Array.isArray(memberships) ? memberships : [];
+    const memberships = useRecoilValue(currentClubMembershipInfoState).summaryList;
 
     return (
         <AvatarGroup isBordered color='black'  max={6}>
-            {safeMemberships.map((member, index) => (
+            {memberships.map((member, index) => (
                 <Avatar key={member.userId}
                         showFallback
                         aria-label={member.userName}
-                        src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${member.userProfile}.jpg?type=f&w=600&h=600&ttype=jpg`}
+                        src={member.userProfile ? `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${member.userProfile}.jpg?type=f&w=600&h=600&ttype=jpg` : ''}
                         size='lg' radius="lg" />
             ))}
         </AvatarGroup>

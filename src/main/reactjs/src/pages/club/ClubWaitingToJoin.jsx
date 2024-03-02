@@ -53,9 +53,9 @@ const ClubWaitingToJoin = () => {
                         </Button>
                     </ButtonSection>
 
-                    <ButtonSection>
-                        <small className="text-default-500">✅ 유의사항 : 이런 행동은 안돼요!</small>
-                    </ButtonSection>
+                    {/*<ButtonSection>*/}
+                    {/*    <small className="text-default-500">✅ 유의사항 : 이런 행동은 안돼요!</small>*/}
+                    {/*</ButtonSection>*/}
                 </ParentContainer>
             </AnimationRightInWrapper>
         </Layout>

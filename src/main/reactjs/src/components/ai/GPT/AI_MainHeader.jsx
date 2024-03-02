@@ -8,21 +8,39 @@ import {WiNightAltRain} from "react-icons/wi";
 import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../../../recoil/LoginAtom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
+import {BsChatRightDots} from "react-icons/bs";
+import {TbJacket} from "react-icons/tb";
+import {GrGallery} from "react-icons/gr";
 
 export default function AI_MainHeader({isLogin, handleBack}) {
 
     const navigate = useNavigate();
     const [scrolled] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const handleConfigurationsClick = () => {
+
+    const handleChatClick = () => {
         if (!isLogin) {
             setIsModalOpen(true);
             return;
         }
-
-        navigate('/login')
+        navigate('/gpt')
     }
 
+    const handleJacketClick = () => {
+        if (!isLogin) {
+            setIsModalOpen(true);
+            return;
+        }
+        navigate('/image')
+    }
+
+    const handleGalleryClick = () => {
+        if (!isLogin) {
+            setIsModalOpen(true);
+            return;
+        }
+        navigate('/ai')
+    }
 
     const styles = {
         navBar : {
@@ -73,26 +91,36 @@ export default function AI_MainHeader({isLogin, handleBack}) {
                     >
                         <IoArrowBack style={styles.icon}/>
                     </NavbarItem>
-                    <NavbarItem style={styles.text}>
-                        <p>체리의 의상 다락방</p>
+                    <NavbarItem style={styles.text}
+                                onClick={() => navigate('/')}>
+                        <p>옷차림 추천</p>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">
+
                     <NavbarItem
-                        style={styles.iconBox}>
-                        <WiNightAltRain style={styles.icon}/>
+                        style={styles.iconBox}
+                        onClick={handleChatClick}
+                    >
+                        <BsChatRightDots style={styles.icon}/>
+                    </NavbarItem>
+                    <NavbarItem
+                        style={styles.iconBox}
+                        onClick={handleJacketClick}
+                    >
+                        <TbJacket style={styles.icon}/>
+                    </NavbarItem>
+                    <NavbarItem
+                        style={styles.iconBox}
+                        onClick={handleGalleryClick}
+                    >
+                        <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+                        <GrGallery style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem
                         style={styles.iconBox}
                         onClick={() => navigate('/')}>
                         <GoHome style={styles.icon}/>
-                    </NavbarItem>
-                    <NavbarItem
-                        style={styles.iconBox}
-                        onClick={handleConfigurationsClick}
-                    >
-                        <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-                        <FiSettings style={styles.icon}/>
                     </NavbarItem>
                 </NavbarContent>
             </Navbar>

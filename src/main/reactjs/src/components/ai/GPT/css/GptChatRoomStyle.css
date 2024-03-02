@@ -27,9 +27,8 @@
 }
 
 .inputContainer{
-  bottom: 0;
   position: fixed;
-  /*width: 395px;*/
+  bottom: -30px;
   width: calc(100% - 40px);
 }
 .input_msg_write_g {
@@ -52,14 +51,20 @@
 }
 
 .msg_send_btn_g {
-  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* 동그란 모양으로 만듦 */
+  background-color: lightgrey; /* 옅은 회색 배경 */
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  border: none; /* 기본 테두리 제거 */
+  cursor: pointer; /* 마우스 오버시 커서 변경 */
   font-size: 17px;
-  height: 33px;
   position: absolute;
-  right: 2%; /* 오른쪽에서 10% 떨어진 곳에 위치 */
-  top: 50%; /* 상위 요소의 수직 중앙에 위치 */
+  right: -2%; /* 오른쪽에서 10% 떨어진 곳에 위치 */
+  top: 35%; /* 상위 요소의 수직 중앙에 위치 */
   transform: translate(-50%, -50%); /* 자기 크기의 반만큼 위와 왼쪽으로 이동 */
-  width: 33px;
 }
 
 
@@ -121,7 +126,12 @@
 
 .spinnerChat{
   position: fixed;
-  top: 84%;
+  top: 86%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.msg_send_btn_g svg {
+  width: 20px; /* SVG 아이콘을 버튼 크기에 맞게 조정 */
+  height: auto; /* SVG 아이콘 비율 유지 */
 }

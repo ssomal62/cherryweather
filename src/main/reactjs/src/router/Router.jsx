@@ -92,7 +92,7 @@ const Router = () => {
                     </Route>
                     <Route path="/add-success/:clubId" element={<AddClubSuccess/>}/>
                     <Route path="/club-configurations" element={<ClubConfigurations/>}/>
-                    <Route path="/club-members" element={<ClubMembers/>}/>
+                    <Route path="/club-members/:clubId" element={<ClubMembers/>}/>
                     <Route path="/club-join" element={<ClubJoin/>}/>
                     <Route path="/club-wait" element={<ClubWaitingToJoin/>}/>
                     <Route path="/club-feed/:clubId" element={<ClubFeedList/>}/>

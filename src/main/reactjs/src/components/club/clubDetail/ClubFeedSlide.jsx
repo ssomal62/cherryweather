@@ -7,7 +7,7 @@ import {useRecoilValue} from "recoil";
 import MemberVerificationModal from "../../../utils/MemberVerificationModal";
 import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 import {useNavigate} from "react-router-dom";
-
+import { MdOutlineAdd } from "react-icons/md";
 const ClubFeedSlide = ({isLogin, clubDetail}) => {
 
     const myMembership = useRecoilValue(currentMembershipState);
@@ -26,14 +26,25 @@ const ClubFeedSlide = ({isLogin, clubDetail}) => {
             <div className="flex items-center justify-between" style={styles.font}>
                 <div className="flex items-center">
                     <IoIosArrowForward class="mr-2"/>
-                    <p className="text-md font-bold">모임 후기</p>
+                    <p className="text-md font-bold">클럽 피드</p>
                 </div>
-                <Chip
-                    size='sm' variant='flat' color='primary'
-                    style={{cursor: 'pointer'}}
-                    onClick={handelMoreClick}
-                    className="text-md text-tiny item-end">
-                    모두 보기</Chip>
+                <div className="item-end">
+                    <Chip
+                        size='sm' variant='flat' color='success'
+                        style={{cursor:'pointer'}}
+                        startContent={<MdOutlineAdd/>}
+                        className="text-md text-tiny mr-2"
+                        onClick={()=>navigate('/feed-editor')}
+                    >
+                        피드 작성</Chip>
+                    <Chip
+                        size='sm' variant='flat' color='primary'
+                        style={{cursor:'pointer'}}
+                        className="text-md text-tiny "
+                        onClick={handelMoreClick}
+                    >
+                        모두 보기</Chip>
+                </div>
             </div>
             <FeedCards/>
             <MemberVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>

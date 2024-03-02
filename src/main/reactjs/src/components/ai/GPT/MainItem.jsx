@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Card, Button, CardFooter, Image} from '@nextui-org/react';
+import {Card, Button, CardFooter, Image, CardHeader} from '@nextui-org/react';
 import { BiCloset } from "react-icons/bi";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { IoArrowForwardOutline } from "react-icons/io5";
@@ -26,27 +26,27 @@ const MainItem = ({index, isLogin, setActiveSlide }) => {
 
     const slidesData = [
         {
-            title: "체리의 소곤소곤 옷장",
-            description: ["전문 스타일리스트(?) 체리와 함께", "오늘의 옷차림을 골라보세요"],
-            src: "https://kr.object.ncloudstorage.com/cherry-ai-image/youngsh92%40naver.com/42161429843982215070f513e1b-12d2-4e34-9c38-f4730713ccb5.png",
+            title: "옷차림 추천",
+            description: ["매일 아침, 무엇을 입을지 고민되시나요?","체리가 여러분의 스타일을 분석해 개인 맞춤형 패션을 제안해 드려요. 오늘의 코디를 체리와 함께 결정해보세요!"],
+            src: "https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/%EC%B6%94%EC%B2%9C8.png",
             navigateTo: '/gpt'
         },
         {
-            title: "체리의 비밀 옷장",
-            description: ["내가 선택한 옷을 보관하는", "나만의 비밀 옷장이에요!"],
-            src: "https://kr.object.ncloudstorage.com/cherry-ai-image/youngsh92%40naver.com/54619020071927277513d1fcd13-99fb-41e6-ac4f-7e3477010d92.png",
+            title: "찜 추천 불러오기",
+            description: ["꼼꼼히 고른 옷차림, 어디에 저장해두셨나요?","체리의 비밀 옷장에서는 여러분의 모든 스타일을 안전하게 보관해드려요. 언제든지 꺼내보고 싶은 그 옷, 체리가 기억해 드릴게요!"],
+            src: "https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/%EC%B6%94%EC%B2%9C3.png",
             navigateTo: '/imageList'
         },
         {
-            title: "체리의 드레스룸",
-            description: ["체리가 자신있게 추천하는","Made in Cherry의 여러 스타일!"],
-            src: "https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/%EB%93%9C%EB%A0%88%EC%8A%A4%EB%A3%B8.jpg",
+            title: "갤러리 둘러보기",
+            description: ["다양한 스타일이 궁금하시거나 새로운 영감이 필요하세요?","그렇다면 체리의 드레스룸을 방문하세요. 각종 패션 아이템과 스타일을 한눈에 볼 수 있어요. 오늘의 스타일을 찾아보세요!"],
+            src: "https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/%EC%B6%94%EC%B2%9C5.png",
             navigateTo: '/imageList'
         },
         {
-            title: "체리의 꿈꾸는 옷장",
-            description: ["랜덤으로 생성되는 옷차림이에요.","어떤옷이 나올지 체리도 몰라요!"],
-            src: "https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/%EA%BF%88%EA%BE%B8%EB%8A%94%20%EC%98%B7%EC%9E%A5%202.jpg",
+            title: "랜덤 옷차림 추천",
+            description: ["어떤 옷이 튀어나올지 아무도 몰라요.","뜬금 없는 옷이 나올 수 있지만 어쩌면 보물 같은 옷이 나올지도 모르는걸요. 즉석에서 추천 옷차림을 보여줘요!"],
+            src: "https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/%EC%B6%94%EC%B2%9C7.png",
             navigateTo: '/image'
         }
     ];
@@ -88,20 +88,18 @@ const MainItem = ({index, isLogin, setActiveSlide }) => {
             {slidesData.map((slide, index) => (
                 <SwiperSlide key={index}>
                     <MainTop index={index} />
-                    <div className="slide-content max-w-[700px] w-full" >
-                        <Card isFooterBlurred className="w-full h-[400px]">
+                    <div className="slide-content max-w-[600x] w-[95%]" >
+                        <Card isFooterBlurred className="w-full h-[440px]">
                             <Image
                                 removeWrapper
                                 isZoomed
-                                className="z-0 w-full h-full object-cover"
+                                className="z-0 w-full h-[440px] object-cover"
                                 src={slide.src}
                                 objectFit="cover"
-                                width="100%"
-                                height="100%"
                                 alt={slide.title}
                                 onClick={() => handleNavigate(slide.navigateTo)}
                             />
-                            <CardFooter className="absolute bg-white/80 bottom-0 z-10  border-default-600 ">
+                            <CardFooter className="absolute bg-white/80 bottom-0 z-10 border-default-600 ">
                                 <div className="flex flex-grow gap-2 items-center">
                                     <BiCloset size="40px"/>
                                     <div className="flex flex-col">
