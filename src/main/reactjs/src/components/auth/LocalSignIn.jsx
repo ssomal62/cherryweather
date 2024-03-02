@@ -5,15 +5,17 @@ import { Cookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { IsLoginAtom } from "../../recoil/LoginAtom";
-import {Chip, Input} from "@nextui-org/react";
+import {Chip, Divider, Input, useDisclosure} from "@nextui-org/react";
 import styled from "styled-components";
 import weatherImg from "../../assets/images/sun.png";
 import { instance } from "../../recoil/module/instance";
+import FindEmail from "./modal/FindEmail";
 
 
 const LocalSignIn = () => {
     const cookies = new Cookies();
     const navigate = useNavigate();
+    const {isOpen : findEmailIsOpen, onOpen : findEmailOnOpen, onOpenChange:findEmailOnOpenChange} = useDisclosure();
     const [isLogin, setIsLogin] = useRecoilState(IsLoginAtom);
 
       // 로그인 form 데이터
@@ -67,30 +69,15 @@ const LocalSignIn = () => {
         <LoginContainer>
         <LoginInput type="email" label="이메일" name="email" onChange={onChange}/>
         <LoginInput type="Password" label="비밀번호" name="password" onChange={onChange}/>
-        <div className="flex">
-            <Chip
-                variant="shadow"
-                classNames={{
-                    base: "bg-gradient-to-br from-yellow-300 to-red-500 border-small border-white/50 shadow-pink-500/30 mr-2",
-                    content: "drop-shadow shadow-black text-white",
-                }}
-            >
-                이메일 찾기
-            </Chip>
-                <Chip
-                    variant="shadow"
-                    classNames={{
-                        base: "bg-gradient-to-br from-yellow-300 to-red-500 border-small border-white/50 shadow-pink-500/30",
-                        content: "drop-shadow shadow-black text-white",
-                    }}
-                >
-                    비밀번호 찾기
-                </Chip>
-        </div>
-
-        <SunlightButton style={{ marginTop : "20px", width: "90%"}} onClick={()=>submitLogin()}>
+            <div className="flex h-5 items-center space-x-4 text-small">
+                <Chip size="sm" variant="light" className="cursor-pointer" onClick={findEmailOnOpen}>아이디찾기</Chip>
+                <Divider orientation="vertical" className="h-1/2"/>
+                <Chip size="sm" variant="light" className="cursor-pointer">비밀번호찾기</Chip>
+            </div>
+            <SunlightButton style={{marginTop: "20px", width: "90%"}} onClick={()=>submitLogin()}>
           <LoginBtnText>로그인</LoginBtnText>
         </SunlightButton>
+            <FindEmail isOpen={findEmailIsOpen} onOpenChange={findEmailOnOpenChange}/>
         </LoginContainer>
       </Layout>
     );
