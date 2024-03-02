@@ -1,7 +1,12 @@
 import React from 'react';
-import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
+import {Button, Chip, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
+import {useRecoilState} from "recoil";
+import {userInfoState} from "../../recoil/hooks/UseFetchUserInfo";
 
 const InterestModal = ({isOpen,onOpenChange}) => {
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const {interests} = userInfo;
+    console.log(userInfo)
     return (
         <>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -10,30 +15,31 @@ const InterestModal = ({isOpen,onOpenChange}) => {
                         <>
                             <ModalHeader className="flex flex-col gap-1">내 관심사</ModalHeader>
                             <ModalBody>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                    Nullam pulvinar risus non risus hendrerit venenatis.
-                                    Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                                </p>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                    Nullam pulvinar risus non risus hendrerit venenatis.
-                                    Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                                </p>
-                                <p>
-                                    Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                                    dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis.
-                                    Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod.
-                                    Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur
-                                    proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                                </p>
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex flex-row gap-2">
+                                        <div className="flex flex-row flex-wrap gap-2">
+                                            {interests.map((item, index) => (
+                                                <Chip
+                                                    key={index}
+                                                    variant="shadow"
+                                                    classNames={{
+                                                        base: "bg-gradient-to-br from-red-500 to-pink-300 border-small border-white/50 shadow-pink-500/30",
+                                                        content: "drop-shadow shadow-black text-white",
+                                                    }}
+                                                >
+                                                    {item}
+                                                </Chip>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>
-                                    Close
+                                    취소
                                 </Button>
-                                <Button color="primary" onPress={onClose}>
-                                    Action
+                                <Button color="danger" onPress={onClose}>
+                                    관심사 추가 & 수정
                                 </Button>
                             </ModalFooter>
                         </>
