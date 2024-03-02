@@ -13,6 +13,10 @@
     max-width: 600px; /* 최대 너비를 600px로 설정 */
     width: 95%; /* 너비를 화면의 95%로 설정 */
     margin: auto; /* 좌우 중앙 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ensure that the container takes full height of the parent */
 }
 
 
@@ -30,18 +34,18 @@
 
 /* 커스텀 네비게이션 버튼 스타일 */
 .swiper-button-next, .swiper-button-prev {
-    background-color: #8d8d8d; /* 배경색 변경 */
+    /*background-color: #c7c6c6; !* 배경색 변경 *!*/
     border-radius: 50%; /* 원형 모양 */
     width: 3em; /* 너비 조절 */
     height: 3em; /* 높이 조절 */
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff; /* 화살표 색상 변경 */
+    color: #c9c9c9; /* 화살표 색상 변경 */
     font-size: 10px; /* 화살표 크기 조절 */
     border: none; /* 테두리 제거 */
     position: absolute; /* 절대 위치 */
-    top: 20%; /* 상단에서 50% 위치 */
+    top: 9%; /* 상단에서 50% 위치 */
     transform: translateY(-50%); /* Y축 기준 중앙 정렬 */
     z-index: 10; /* 화살표가 카드 위에 나타나도록 함 */
 }
@@ -57,20 +61,6 @@
 }
 
 
-
-
-/* 페이징 불릿 스타일 */
-.swiper-pagination-bullet {
-    background-color: #ffffff;
-    width: 12px;
-    height: 12px;
-    opacity: 1;
-}
-
-.swiper-pagination-bullet-active {
-    background-color: #fff;
-}
-
 /* 페이지 번호 컨테이너 스타일 */
 .page-number-container {
     background-color: #ffffff;
@@ -80,4 +70,40 @@
     position: absolute;
     bottom: 10px;
     right: 10px;
+}
+
+.zoomEffect {
+    transition: transform 0.5s ease-in-out;
+    transform: scale(1.2); /* 이미지를 10% 확대 */
+}
+/*페이징*/
+.custom-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.dot {
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+    background-color: #676767;
+    border-radius: 50%;
+    display: inline-block;
+    /*cursor: pointer;*/
+}
+
+.dot.active {
+    background-color: #ed145f;
+}
+
+
+/* 페이지네이션 버튼의 기본 색상 변경 */
+.swiper-pagination-bullet {
+    background-color: #bbb; /* 원하는 색상으로 변경 */
+}
+
+/* 활성화된 페이지네이션 버튼의 색상 변경 */
+.swiper-pagination-bullet-active {
+    background-color: #717171; /* 원하는 색상으로 변경 */
 }
