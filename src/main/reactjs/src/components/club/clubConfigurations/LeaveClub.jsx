@@ -5,12 +5,13 @@ import {useNavigate} from "react-router-dom";
 import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@nextui-org/react";
 import {Cookies} from "react-cookie";
 
-const LeaveClub = ({message, clubDetail}) => {
+const LeaveClub = ({message, clubDetail, myMembership}) => {
 
     const navigate = useNavigate();
     const [checkModalOpen, setCheckModalOpen] = useState(false);
     const [resultModalOpen, setResultModalOpen] = useState(false);
 
+    console.log("나나", myMembership);
     const handleCheckModal = () => {
         setResultModalOpen(false);
         onLeave();
@@ -22,10 +23,9 @@ const LeaveClub = ({message, clubDetail}) => {
     }
 
     const onLeave = async () => {
-
         const cookie = new Cookies();
         try {
-            const res = await instance.delete(`/membership/${clubDetail.clubId}`, {
+            const res = await instance.delete(`/membership/${clubDetail.clubId}/${myMembership.info.membershipId}`, {
                 headers: {
                     Authorization: `Bearer ${cookie.get('accessToken')}`
                 }
