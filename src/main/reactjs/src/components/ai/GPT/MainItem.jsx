@@ -90,9 +90,6 @@ const MainItem = ({index, isLogin, setActiveSlide }) => {
                     <MainTop index={index} />
                     <div className="slide-content max-w-[600x] w-[95%]" >
                         <Card isFooterBlurred className="w-full h-[440px]">
-                            <CardHeader>
-
-                            </CardHeader>
                             <Image
                                 removeWrapper
                                 isZoomed

@@ -8,8 +8,6 @@ import {HeartFill, useSaveImageState, UseSaveState} from "../../../recoil/hooks/
 import {useRecoilValue} from "recoil";
 import {Spinner} from "@nextui-org/react";
 
-
-
 const GeneratedImage = ({image}) => {
 
     const { toggleSaveImage } = useSaveImageState(); // useSaveImageState 훅을 호출하여 toggleSaveImage 함수를 가져옵니다.
