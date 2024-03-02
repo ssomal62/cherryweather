@@ -125,12 +125,12 @@ const GPTChatRoom = () => {
     }, [chatList]); // chatList가 변경될 때마다 메시지 스크롤을 마지막 채팅으로 이동
 
     // 스피너 위치 확인용
-    // useEffect(() => {
-    //     setIsLoading(true); // 스피너 표시
-    //     return () => {
-    //         setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
-    //     };
-    // }, []); // 컴포넌트가 마운트될 때만 실행
+    useEffect(() => {
+        setIsLoading(true); // 스피너 표시
+        return () => {
+            setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
+        };
+    }, []); // 컴포넌트가 마운트될 때만 실행
 
     //이미지 생성되면 이미지 페이지로 전환
     useEffect(() => {
@@ -199,6 +199,7 @@ const GPTChatRoom = () => {
                             )}
                             <div className="inputContainer">
                                 <MessageInput
+                                    // style = {{display:""}}
                                     userInput={userInput}
                                     setUserInput={setUserInput}
                                     handleSendMessage={handleSendMessage}

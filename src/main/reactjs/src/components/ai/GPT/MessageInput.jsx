@@ -1,5 +1,6 @@
 // MessageInput.jsx
 import React from 'react';
+import {BsSend} from "react-icons/bs";
 
 function MessageInput({ userInput, setUserInput, handleSendMessage, isStarted }) {
     return (
@@ -16,7 +17,7 @@ function MessageInput({ userInput, setUserInput, handleSendMessage, isStarted })
                     />
                     {/* 시작하기 버튼 클릭 전에는 Send 버튼 숨김 */}
                     {isStarted && (
-                        <button type="submit" className="msg_send_btn_g">Send</button>
+                        <button type="submit" className="msg_send_btn_g"><BsSend /></button>
                     )}
                 </form>
             </div>
