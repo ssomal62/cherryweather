@@ -7,6 +7,7 @@ import {useRecoilValue} from "recoil";
 import {IsLoginAtom} from "../../../recoil/LoginAtom";
 import MemberVerificationModal from "../../../utils/MemberVerificationModal";
 import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
+import {MdOutlineAdd} from "react-icons/md";
 
 const EventSection = () => {
 
@@ -31,13 +32,23 @@ const EventSection = () => {
                         <IoIosArrowForward class="mr-2"/>
                         <p className="text-md font-bold">모임 참여해요!</p>
                     </div>
+                    <div className="item-end">
+                    <Chip
+                        size='sm' variant='flat' color='success'
+                        style={{cursor:'pointer'}}
+                        startContent={<MdOutlineAdd/>}
+                        className="text-md text-tiny mr-2"
+                        //onClick={}
+                    >
+                        모임 생성</Chip>
                     <Chip
                         size='sm' variant='flat' color='primary'
                         style={{cursor:'pointer'}}
-                        className="text-md text-tiny item-end"
+                        className="text-md text-tiny "
                         onClick={handelMoreClick}
                     >
                         모두 보기</Chip>
+                    </div>
                 </div>
             </EventTitle>
             <EventList>

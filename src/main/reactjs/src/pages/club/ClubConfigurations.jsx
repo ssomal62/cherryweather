@@ -12,11 +12,13 @@ import LeaveClub from "../../components/club/clubConfigurations/LeaveClub";
 import DeleteClub from "../../components/club/clubConfigurations/DeleteClub";
 import ManageClubMembers from "../../components/club/clubConfigurations/ManageClubMembers";
 import ReportClub from "../../components/club/clubConfigurations/ReportClub";
-import {currentMembershipState} from "../../recoil/hooks/UseMembershipApi";
+import {currentMembershipState, useMembershipData} from "../../recoil/hooks/UseMembershipApi";
 
 const ClubConfigurations = () => {
 
     const clubDetail = useRecoilValue(clubDetailState).clubDetail;
+
+    useMembershipData({ state: currentMembershipState, dynamicPath:`/${clubDetail.clubId}/member`});
     const myMembership = useRecoilValue(currentMembershipState);
     const myRole = myMembership.info.role;
 
@@ -43,7 +45,7 @@ const ClubConfigurations = () => {
                     <>
                         <Section>
                             <Chip size='sm' color='default' variant='faded'> 클럽 활동 </Chip>
-                            <ManageClubMembers/>
+                            <ManageClubMembers clubDetail={clubDetail}/>
                         </Section>
                         <Divider/>
                     </>

@@ -4,8 +4,8 @@ import com.example.demo.membership.enums.ClubRole;
 import com.example.demo.membership.enums.RegisteredStatus;
 
 public record UpdateMembership(
-        long clubId,
-        RegisteredStatus status,
+        Long membershipId,
+        RegisteredStatus membershipStatus,
         ClubRole role,
         Long updatedUserId
 ) {
