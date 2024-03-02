@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
+import styled from "styled-components";
 
 function Adminchat() {
   const [accountData, setAccountData] = useState("");
@@ -82,24 +83,24 @@ function Adminchat() {
           const newChatId = newchannel.id;
           const res = await instance.post(
             "/chat/createchatroom?accountId=" +
-              accountData.accountId +
-              "&chatRoom=" +
-              newChatId +
-              "&raccountId=" +
-              50 +
-              "&chatName=" +
-              `${newchannel.name}`
+            accountData.accountId +
+            "&chatRoom=" +
+            newChatId +
+            "&raccountId=" +
+            50 +
+            "&chatName=" +
+            `${newchannel.name}`
           );
 
           await instance.post(
             "/chat/createchatroom?accountId=" +
-              50 +
-              "&chatRoom=" +
-              newChatId +
-              "&raccountId=" +
-              accountData.accountId +
-              "&chatName=" +
-              `${newchannel.name}`
+            50 +
+            "&chatRoom=" +
+            newChatId +
+            "&raccountId=" +
+            accountData.accountId +
+            "&chatName=" +
+            `${newchannel.name}`
           );
 
           console.log("res : ", res);

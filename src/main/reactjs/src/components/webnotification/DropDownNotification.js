@@ -1,27 +1,27 @@
 // DropDownNotification.js
 
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import {useRecoilState, useRecoilValue} from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   useFetchUserInfo,
   userInfoState,
 } from "../../recoil/hooks/UseFetchUserInfo";
-import {useNavigate} from "react-router-dom";
-import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
-import {alramListState, useAlarmData} from "../../recoil/hooks/UseAlramApi";
-import {instance} from "../../recoil/module/instance";
+import { useNavigate } from "react-router-dom";
+import { UseFetchWeather } from "../../recoil/hooks/UseFetchWeather";
+import { alramListState, useAlarmData } from "../../recoil/hooks/UseAlramApi";
+import { instance } from "../../recoil/module/instance";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
   const userInfoFetch = useFetchUserInfo();
   const navigate = useNavigate(); // useNavigate 훅 사용하기
-  const {fetchData, data: weatherData} = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
+  const { fetchData, data: weatherData } = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -37,7 +37,7 @@ const DropDownNotification = () => {
     setIsOpen(userInfo.agreementGetNotified);
   }, [userInfo.agreementGetNotified]);
 
-  useAlarmData({state: alramListState, dynamicPath: ""});
+  useAlarmData({ state: alramListState, dynamicPath: "" });
   const alramList = useRecoilValue(alramListState);
 
   // 새로운 배열을 만들어서 작업합니다.
@@ -67,7 +67,7 @@ const DropDownNotification = () => {
     }
   }, [weatherData, isOpen]); // weatherData만 의존성 배열에 추가
 
-  // 알림 삭제 및 상세 페이지로 이동 함수(클럽)
+  // 알림 삭제 및 상세 페이지로 이동 함수(클럽 만들 떄)
   const deleteAlarmAndNavigate = async (alarmId, targetId) => {
     try {
       console.log("알람아이디" + alarmId);
@@ -86,21 +86,25 @@ const DropDownNotification = () => {
     }
   };
 
-  const deleteAlarmAndNavigateToAdminChatRoom = async (alarmId, targetId) => {
+
+  // 알림 삭제 및 1대1 채팅방으로 이동 함수
+  const deleteAlarmAndNavigateToPersonalChatRoom = async (alarmId, targetId) => {
     try {
       await instance.delete(`/alarm/${alarmId}`);
       // 삭제 후 알림 목록에서 해당 알림을 제거하고 상태를 업데이트
-      const updatedAlarms = alramList.filter(
+      const updatedAlarms = alarmList.filter(
         (alarm) => alarm.alarmId !== alarmId
       );
       setAlarmList(updatedAlarms);
 
-      // 채팅방 상세 페이지로 이동
+      // 1대1 채팅방 상세 페이지로 이동
       navigate(`/chat/room/${targetId}`);
     } catch (error) {
       console.error("알림 삭제 실패:", error);
     }
   };
+
+  console.log(deleteAlarmAndNavigateToPersonalChatRoom);
 
   return (
     <Dropdown
@@ -128,13 +132,13 @@ const DropDownNotification = () => {
                 case "CLUB":
                   deleteAlarmAndNavigate(item.alarmId, item.targetId); // 클럽 알림일 경우
                   break;
-                case "ADMINCHAT":
-                  deleteAlarmAndNavigateToAdminChatRoom(
+                // 1대1 채팅방의 경우
+                case "PERSONALCHAT":
+                  deleteAlarmAndNavigateToPersonalChatRoom(
                     item.alarmId,
                     item.targetId
-                  ); // 관리자 채팅방 알림일 경우
+                  );
                   break;
-                // 여기에 더 많은 유형의 알림 처리를 추가할 수 있습니다.
                 default:
               }
             }}
@@ -152,13 +156,13 @@ const DropDownNotification = () => {
                 case "CLUB":
                   deleteAlarmAndNavigate(item.alarmId, item.targetId); // 클럽 알림일 경우
                   break;
-                case "ADMINCHAT":
-                  deleteAlarmAndNavigateToAdminChatRoom(
+                // 1대1 채팅방의 경우
+                case "PERSONALCHAT":
+                  deleteAlarmAndNavigateToPersonalChatRoom(
                     item.alarmId,
                     item.targetId
-                  ); // 관리자 채팅방 알림일 경우
+                  );
                   break;
-                // 여기에 더 많은 유형의 알림 처리를 추가할 수 있습니다.
                 default:
               }
             }}

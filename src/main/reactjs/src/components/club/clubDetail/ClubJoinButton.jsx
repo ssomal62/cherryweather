@@ -12,6 +12,7 @@ import { IsLoginAtom } from "../../../recoil/LoginAtom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import { currentMembershipState } from "../../../recoil/hooks/UseMembershipApi";
 import ClubChat from "../../chat/ClubChat";
+import { userInfoState } from "../../../recoil/hooks/UseFetchUserInfo";
 
 const ClubJoinButton = () => {
   const navigate = useNavigate();
@@ -30,6 +31,8 @@ const ClubJoinButton = () => {
   const [role, setRole] = useState("");
 
   const { toggleLikeClub } = useLikeClub();
+
+  const userInfo = useRecoilValue(userInfoState);
 
   useEffect(() => {
     setRole(clubDetail.joinApprovalStatus === "JOIN" ? "MEMBER" : "WAITING");
@@ -68,17 +71,55 @@ const ClubJoinButton = () => {
         },
       });
 
+      // 클럽 가입을 요청한 경우의 알림 데이터
+      const joinRequestAlarmData = {
+        targetId: res.data.clubDetail.representativeUserId,
+        type: "CLUBJOIN",
+        importance: 2,
+        description: `${userInfo.name}님이 클럽 가입을 요청하였습니다.`
+      };
+
+      console.log("Join request alarm data:", joinRequestAlarmData);
+      sendJoinAlarmData(joinRequestAlarmData);
+
+      // 클럽 가입 요청 알림을 보냅니다.
       if (clubDetail.joinApprovalStatus === "JOIN") {
         navigate("/club-join");
       }
+
+      // 클럽 가입 승인 대기 상태일 경우의 알림 데이터
+      const joinApprovalAlarmData = {
+        targetId: res.data.clubDetail.representativeUserId,
+        type: "CLUBJOIN",
+        importance: 2,
+        description: `${userInfo.name}님이 클럽 가입 승인을 요청하였습니다.`
+      }
+
+      console.log("Join approval alarm data:", joinApprovalAlarmData)
+      sendJoinAlarmData(joinApprovalAlarmData);
+      // 클럽 가입 승인 대기 알림을 보냅니다.
       if (clubDetail.joinApprovalStatus === "APPROVAL") {
         navigate("/club-wait");
       }
+
       console.log("Success:", res);
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  const sendJoinAlarmData = async (data) => {
+    const cookie = new Cookies();
+    try {
+      await instance.post("/alarm", data, {
+        headers: {
+          Authorization: `Bearer ${cookie.get("accessToken")}`,
+        },
+      });
+    } catch (error) {
+      console.error("Alarm Data Error:", error);
+    }
+  }
 
   const joinButtonRender = () => {
     switch (myRole) {

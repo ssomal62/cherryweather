@@ -14,9 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "alarm", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id"})
-})
+@Table(name = "alarm")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,7 +30,7 @@ public class Alarm {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-//    @JsonIgnore
+    @JsonIgnore
     private Account account;
 
     @Column
@@ -48,15 +46,11 @@ public class Alarm {
     private String description;
 
     @Column
-    private boolean showAlarm; // 수신 동의 필드 추가
-
+    private Boolean showAlarm; // 수신 동의 필드 추가
 
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
-
-    // showAlarm 필드의 getter
-    private boolean isShowAlarm;
 
     // showAlarm 필드의 setter
     public void  setShowAlarm(boolean showAlarm) {
