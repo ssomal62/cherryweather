@@ -115,7 +115,7 @@ function ChatRoomListPersonal({ channels, ncloud, accountData, messages }) {
             style={{
               fontSize: "70px",
               textAlign: "center",
-              display: "flex",
+              marginBottom: "20px",
             }}
           >
             <BsChatDots />

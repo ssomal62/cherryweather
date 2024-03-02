@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import {
   Button,
@@ -7,6 +7,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  Textarea,
   useDisclosure,
 } from "@nextui-org/react";
 import { Nav, Title, TitleWapper } from "../../pages/user/MyPage";
@@ -19,25 +20,71 @@ import "react-calendar/dist/Calendar.css";
 import { RxCalendar } from "react-icons/rx";
 import { TiStarOutline } from "react-icons/ti";
 import DaumPostcodeEmbed from "react-daum-postcode";
+import Layout from "../../common/Layout";
+import { instance } from "../../recoil/module/instance";
+import { v4 as uuidv4 } from "uuid";
 
-const AddEvent = () => {
+const AddEvent = ({ clubId }) => {
   const navi = useNavigate();
+  const [eventName, setEventName] = useState("");
+  const [eventContent, setEventContent] = useState("");
+  const [eventStart, setEventStart] = useState("");
   const [eventImage, setEventImage] = useState(null);
   const [eventDate, setEventDate] = useState(new Date());
-  const [calendarVisible, setCalendarVisible] = useState(false);
   const [eventLocation, setEventLocation] = useState("");
+  const [eventCapacity, setEventCapacity] = useState("");
+  const [code, setCode] = useState("");
+  // const [eventWeather, setEventWeather] = useState("");
+  const [calendarVisible, setCalendarVisible] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure("");
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
+  const [fileSelected, setFileSelected] = useState(false);
 
-    reader.onload = () => {
-      setEventImage(reader.result);
-    };
+  const fileInputRef = useRef(null);
 
-    if (file) {
-      reader.readAsDataURL(file);
+  useEffect(() => {
+    if (
+      fileSelected &&
+      fileInputRef.current &&
+      fileInputRef.current.files.length > 0
+    ) {
+      const file = fileInputRef.current.files[0];
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        setEventImage(fileReader.result);
+      };
+      fileReader.readAsDataURL(file);
     }
+  }, [fileSelected]); // 파일 선택 상태가 변경될 때마다 useEffect 실행
+
+  const handleFileChange = (e) => {
+    if (e.target.files[0]) {
+      const file = e.target.files[0];
+      const fileReader = new FileReader();
+
+      fileReader.onloadend = () => {
+        // 데이터 URL을 상태에 저장합니다.
+        setEventImage(fileReader.result);
+        // 파일 선택 상태를 true로 설정하여 사용자가 이미지를 변경할 수 있도록 합니다.
+        setFileSelected(true);
+      };
+
+      fileReader.readAsDataURL(file);
+
+      const shortUUID = generateShortUUID();
+      setCode("ep-" + shortUUID);
+
+      // 파일 입력을 초기화합니다. 동일한 파일을 다시 선택할 수 있습니다.
+      fileInputRef.current.value = null;
+    } else {
+      // 파일이 선택되지 않았을 경우, fileSelected를 false로 설정합니다.
+      setFileSelected(false);
+    }
+  };
+
+  const generateShortUUID = () => {
+    const uuid = uuidv4();
+    const uuidWithoutHyphen = uuid.replace(/-/g, "");
+    return uuidWithoutHyphen.substring(0, 7);
   };
 
   const prevStep = () => {
@@ -62,8 +109,29 @@ const AddEvent = () => {
     onOpenChange();
   };
 
+  const createEvent = async () => {
+    try {
+      const config = {
+        clubId: 14,
+        eventSubject: eventName,
+        eventContent: eventContent,
+        code: code,
+        eventEndDate: eventDate,
+        eventTimeStart: eventStart,
+        activitiesArea: eventLocation,
+        eventCapacity: eventCapacity,
+        // eventWeather: eventWeather,
+      };
+
+      const res = await instance.post("/events/create", config);
+      console.log("리스폰스 데이터", res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div>
+    <Layout useHeader={false} useFooter={false} containerPadding="0">
       <Nav>
         <div style={{ flex: "1px" }}>
           <IoArrowBack
@@ -79,10 +147,13 @@ const AddEvent = () => {
       </Nav>
       <div style={{ borderBottom: "1px solid black" }}></div>
       <br />
-      {/* 이미지 업로드 input */}
       <div style={{ marginBottom: "50px" }}>
         {eventImage ? (
-          <img src={eventImage} style={{ width: "100%", maxHeight: "500px" }} />
+          <img
+            src={eventImage}
+            style={{ width: "100%", maxHeight: "200px" }}
+            onClick={() => fileInputRef.current.click()}
+          />
         ) : (
           <label htmlFor="file" style={{ display: "block", width: "100%" }}>
             <div
@@ -96,22 +167,21 @@ const AddEvent = () => {
                 <CiImageOn style={{ fontSize: "120px", display: "block" }} />
               </div>
             </div>
-            <Span
-              style={{
-                marginTop: "10px",
-                textAlign: "center",
-                marginLeft: "55px",
-              }}
-            >
-              정모 대표 이미지를 등록해주세요
-            </Span>
           </label>
         )}
+        <div
+          style={{
+            textAlign: "center",
+          }}
+        >
+          <Span>정모 대표 이미지를 등록해주세요</Span>
+        </div>
         <input
           type="file"
           id="file"
           style={{ display: "none" }}
-          onChange={handleImageUpload}
+          ref={fileInputRef}
+          onChange={handleFileChange}
         />
       </div>
 
@@ -127,12 +197,11 @@ const AddEvent = () => {
           type="text"
           variant="underlined"
           radius="lg"
-          // value={eventName}
-          // onChange={onChange}
-          style={{ fontSize: 20, fontWeight: 600 }}
+          value={eventName}
+          onChange={(e) => setEventName(e.target.value)}
         />
       </div>
-      <div>
+      <div style={{ marginBottom: "10px" }}>
         <Span> 정모 주소를 입력해주세요 </Span>
       </div>
       <div
@@ -141,11 +210,11 @@ const AddEvent = () => {
       >
         <div onClick={openInterestAreaModal}>
           <Input
-            style={{ width: "340px", fontSize: 20, fontWeight: 600 }}
             type="text"
             value={eventLocation}
             startContent={<TiStarOutline style={{ ...styles.icon }} />}
             placeholder="정모 지역"
+            onChange={(e) => setEventLocation(e.target.value)}
           />
         </div>
         <Modal
@@ -192,8 +261,7 @@ const AddEvent = () => {
             month: "short",
             day: "numeric",
           })}
-          // onChange={setEventDate}
-          style={{ fontSize: 20, fontWeight: 600 }}
+          onChange={(e) => setEventDate(e.target.value)}
         />
 
         {calendarVisible && (
@@ -216,19 +284,66 @@ const AddEvent = () => {
           </div>
         )}
       </div>
+      <div>
+        <Span> 정모 시간을 입력해주세요 </Span>
+      </div>
+      <div
+        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+        style={{ marginBottom: "10px" }}
+      >
+        <Input
+          name="eventTimeStart"
+          type="time"
+          variant="underlined"
+          radius="lg"
+          value={eventStart}
+          onChange={(e) => setEventStart(e.target.value)}
+        />
+      </div>
+      <div>
+        <Span> 정모 정원을 입력해주세요 </Span>
+      </div>
+      <div
+        className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
+        style={{ marginBottom: "10px" }}
+      >
+        <Input
+          name="eventTimeStart"
+          type="number"
+          variant="underlined"
+          radius="lg"
+          min={1}
+          max={100}
+          value={eventCapacity}
+          onChange={(e) => setEventCapacity(e.target.value)}
+        />
+      </div>
+      <div>
+        <Span> 정모 내용을 입력해주세요 </Span>
+      </div>
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+        <Textarea
+          name="eventContent"
+          type="text"
+          variant="underlined"
+          value={eventContent}
+          onChange={(e) => setEventContent(e.target.value)}
+        ></Textarea>
+      </div>
+
       <br />
       <br />
       <div className="bottom-0 left-0 right-0">
-        <CreateButton text="생성" />
+        <CreateButton onClick={createEvent} />
       </div>
-    </div>
+    </Layout>
   );
 };
 
 export default AddEvent;
 
 export const Span = styled.span`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
 `;
 export const StyledCalendarWrapper = styled.div`
@@ -250,10 +365,10 @@ export const StyledCalendarWrapper = styled.div`
     }
   }
 `;
-const CreateButton = ({ text }) => {
+const CreateButton = () => {
   return (
     <Button variant="ghost" fullWidth size="lg" color="danger">
-      {text}
+      생성
     </Button>
   );
 };
