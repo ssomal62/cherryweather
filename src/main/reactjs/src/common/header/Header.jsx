@@ -11,7 +11,7 @@ import GoBellDropNotificationIcon from "../../components/webnotification/GoBellD
 import {useFetchUserInfo} from "../../recoil/hooks/UseFetchUserInfo";
 import {searchClubListState} from "../../recoil/hooks/UseClubApi";
 
-export default function Header() {
+export default function Header({opacity}) {
     const isLogin = useRecoilValue(IsLoginAtom);
     const [registration, setRegistration] = useState(null);
     const navigate = useNavigate();
@@ -83,7 +83,7 @@ export default function Header() {
     };
 
     return (
-        <Navbar shouldHideOnScroll style={styles.navBar}>
+        <Navbar shouldHideOnScroll style={styles.navBar(opacity)}>
             <NavbarContent className="sm:flex gap-4" justify="start">
                 <BrandMenu/>
             </NavbarContent>
@@ -131,8 +131,8 @@ const styles = {
         marginRight: 3,
         cursor     : 'pointer',
     },
-    navBar: {
-        backgroundColor: 'rgba(255,255,255,0.7)',
+    navBar:(opacity) =>  ({
+        backgroundColor: opacity? 'rgba(0,0,0,0)': 'rgba(255,255,255,0.7)',
         backdropFilter : 'blur(0px)',
         maxWidth       : '600px',
         width          : '100%',
@@ -141,6 +141,6 @@ const styles = {
         justifyContent : 'center',
         margin         : 'auto',
         transition     : 'background-color 0.3s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease',
-        boxShadow      : '0 20px 20px 0 rgba(0, 0, 0, 0.03)'
-    },
+        boxShadow      : opacity? 'none' : '0 20px 20px 0 rgba(0, 0, 0, 0.03)'
+    }),
 };
