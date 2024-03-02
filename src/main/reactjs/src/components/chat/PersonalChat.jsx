@@ -1,18 +1,9 @@
-import * as ncloudchat from "ncloudchat";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
-import { Cookies } from "react-cookie";
 
-function PersonalChat(props) {
-  const [accountData, setAccountData] = useState("");
-  const [nc, setNc] = useState("");
+function PersonalChat({ userInfo, accountData, nc }) {
   const navi = useNavigate();
-  const cookies = new Cookies();
-
-  useEffect(() => {
-    unumchk();
-  }, []);
 
   const buttonRef = useRef(null);
 
@@ -24,39 +15,16 @@ function PersonalChat(props) {
     }, delayTimeInMilliseconds);
   }, []);
 
-  const unumchk = async () => {
-    try {
-      const accessToken = cookies.get("accessToken");
-      const config = {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      };
-
-      const res = await instance.get("/account/user-info", config);
-      setAccountData(res.data);
-      console.log("res : ", res);
-      const chat = new ncloudchat.Chat();
-      chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");
-      setNc(chat);
-      console.log("nc : ", nc);
-      await chat.connect({
-        id: res.data.email,
-        name: res.data.name,
-        profile: res.data.profileImage,
-        customField: "json",
-      });
-    } catch (error) {
-      console.error("Error occurred: ", error);
-    }
-  };
+  useEffect(() => {
+    personalChat();
+  }, []);
 
   const getChatInfo = async () => {
     try {
       console.log("getChatInfo");
       console.log("accountId: " + accountData.accountId);
       const response = await instance.get(
-        `/chat/getchatinfo?accountid=${accountData.accountId}`
+        `/chat/getonetonechat?accountId=${accountData.accountId}&raccountId=${userInfo.accountId}`
       );
       return response.data;
     } catch (error) {
@@ -64,41 +32,58 @@ function PersonalChat(props) {
     }
   };
 
-  const adminChat = async () => {
+  const personalChat = async () => {
     if (nc) {
       try {
-        const chatroom = await getChatInfo();
+        const chatInfo = await getChatInfo();
+        const chatroom = chatInfo.chatRoom;
         if (chatroom) {
           await nc.disconnect();
-          navi(`/chat/room/${chatroom}`);
+          navi(`/chat/room/${chatroom}/${userInfo.accountId}`);
+          window.location.reload();
         } else {
           // chatroom == null 일 경우
           const newchannel = await nc.createChannel({
             type: "PUBLIC",
-            name: "관리자 채팅방",
+            name: `${userInfo.name}님과의 채팅방`,
           });
           const newChatId = newchannel.id;
-          await instance.post(
-            "/chat/insertchatroom?accountid=" +
+          const res = await instance.post(
+            "/chat/createchatroom?accountId=" +
               accountData.accountId +
               "&chatRoom=" +
-              newChatId
+              newChatId +
+              "&raccountId=" +
+              userInfo.accountId +
+              "&chatName=" +
+              `${newchannel.name}`
+          );
+          await instance.post(
+            "/chat/createchatroom?accountId=" +
+              userInfo.accountId +
+              "&chatRoom=" +
+              newChatId +
+              "&raccountId=" +
+              accountData.accountId +
+              "&chatName=" +
+              `${accountData.name}님과의 채팅방`
           );
 
+          console.log("res : ", res);
           await nc.subscribe(newChatId);
-          // 채팅방으로 이동
           await nc.disconnect();
-          navi(`/chat/room/${newChatId}`);
+          // 채팅방으로 이동
+          navi(`/chat/room/${newChatId}/${userInfo.accountId}`);
+          window.location.reload();
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);
       }
     }
   };
-
   useEffect(() => {
     const disconnectChat = async () => {
-      if (nc) {
+      if (nc && nc !== null) {
         await nc.disconnect();
       }
     };
@@ -111,12 +96,11 @@ function PersonalChat(props) {
   }, [nc]);
 
   return (
-    <div style={{ textAlign: "center", fontSize: "50px" }}>
-      <button ref={buttonRef} type="button" onClick={adminChat}>
-        관리자와 채팅방으로 이동 중..
-      </button>
+    <div>
+      <div>
+        <button ref={buttonRef} type="button" onClick={personalChat}></button>
+      </div>
     </div>
   );
 }
-
 export default PersonalChat;

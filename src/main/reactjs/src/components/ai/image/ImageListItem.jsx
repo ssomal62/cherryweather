@@ -33,6 +33,11 @@ const ImageListItem = ({list}) => {
         }
     }, [isDeleted, setIsDeleted]);
 
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    };
+
     return (
         // <div className="max-w-[600px] gap-2 grid grid-cols-12 grid-rows-2 px-8">
         <>
@@ -55,7 +60,7 @@ const ImageListItem = ({list}) => {
                 <CardFooter
                     className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                     <div>
-                        <p className="text-black text-tiny">{list.createdAt}</p>
+                        <p className="text-black text-tiny">{formatDate(list.createdAt)}</p>
                         <p className="text-tiny text-black/65 uppercase font-bold">Cherry's match</p>
                         {/*<p className="text-black text-tiny">날씨 정보</p>*/}
                     </div>
@@ -68,7 +73,7 @@ const ImageListItem = ({list}) => {
                         right: 'calc(4.5em + 8px)',
                         // display: isDeleted ? 'none' : 'block'
                     }}>
-                        <FcEmptyTrash style={{...styles2.icon}}/>
+                        {/*<FcEmptyTrash style={{...styles2.icon}}/>*/}
                     </div>
                 </CardFooter>
             </Card>

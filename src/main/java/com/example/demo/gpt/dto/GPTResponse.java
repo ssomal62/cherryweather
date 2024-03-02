@@ -1,4 +1,5 @@
 package com.example.demo.gpt.dto;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.util.List;
@@ -6,8 +7,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//@JsonIgnoreProperties(ignoreUnknown = true) // 이 옵션을 추가하여 알려지지 않은 속성을 무시할 수 있습니다.
 public class GPTResponse {
 
+    private String id ;
     private List<Choice> choices;
 
 

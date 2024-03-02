@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Layout from "../../common/Layout";
-import {useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import SoftCurveTop from "../../components/club/clubDetail/SoftCurveTop";
 
 import {Image, Spinner} from "@nextui-org/react";
@@ -13,7 +13,7 @@ import ClubDetailsSummary from "../../components/club/clubDetail/ClubDetailsSumm
 import ClubNotice from "../../components/club/clubDetail/ClubNotice";
 import EventSection from "../../components/club/clubDetail/EventSection";
 import MemberSummary from "../../components/club/clubDetail/MemberSummary";
-import ClubFeed from "../../components/club/clubDetail/ClubFeed";
+import ClubFeedSlide from "../../components/club/clubDetail/ClubFeedSlide";
 import ClubCategory from "../../components/club/clubDetail/ClubCategory";
 import ClubName from "../../components/club/clubDetail/ClubName";
 import LoginVerificationModal from "../../utils/LoginVerificationModal";
@@ -51,6 +51,12 @@ const ClubDetails = () => {
     const clubProfile = (code) => {
         return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "defalut"}.jpg?type=f&w=600&h=600&ttype=jpg`
     }
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from || '/';
+    const handleBack = () => {
+        navigate(from);
+    }
 
     useEffect(() => {
         let lastScrollY = 0;
@@ -75,7 +81,7 @@ const ClubDetails = () => {
     if (loading) {
         return (
             <Layout useHeader={false} useFooter={false} containerMargin="0" containerPadding="0">
-                <ClubDetailsHeader clubDetail={clubDetail} isLogin={isLogin}/>
+                <ClubDetailsHeader clubDetail={clubDetail} isLogin={isLogin} handleBack={handleBack}/>
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
                     <Spinner size="lg" color="danger"/>
                 </div>
@@ -85,7 +91,7 @@ const ClubDetails = () => {
 
     return (
         <Layout useHeader={false} useFooter={false} containerMargin="0" containerPadding="0">
-            <ClubDetailsHeader clubDetail={clubDetail} isLogin={isLogin}/>
+            <ClubDetailsHeader clubDetail={clubDetail} isLogin={isLogin} handleBack={handleBack}/>
             <ClubDetail>
                 <div style={styles.aspectRatio}>
                     <Content>
@@ -95,7 +101,7 @@ const ClubDetails = () => {
                         <EventSection />
                         <ClubNotice clubDetail={clubDetail}/>
                         <MemberSummary isLogin={isLogin}/>
-                        <ClubFeed isLogin={isLogin}/>
+                        <ClubFeedSlide isLogin={isLogin} clubDetail={clubDetail}/>
                     </Content>
 
                     <Image radius='none' alt=""

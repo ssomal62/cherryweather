@@ -71,6 +71,4 @@ public class SatelliteImageService {
             throw new LookupException(JSON_PARSING_FAILED);
         }
     }
-
-
 }

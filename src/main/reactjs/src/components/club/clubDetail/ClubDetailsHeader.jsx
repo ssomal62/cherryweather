@@ -3,23 +3,19 @@ import {Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
 import {GoHome} from "react-icons/go";
 import {FiSettings} from "react-icons/fi";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {WiNightAltRain} from "react-icons/wi";
 import {useRecoilValue} from "recoil";
 import MemberVerificationModal from "../../../utils/MemberVerificationModal";
 import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 
-export default function ClubDetailsHeader({clubDetail, isLogin}) {
+export default function ClubDetailsHeader({clubDetail, isLogin, handleBack}) {
 
     const navigate = useNavigate();
     const myMembership = useRecoilValue(currentMembershipState);
 
     const [scrolled, setScrolled] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleNavigate = () => {
-        navigate('/community/club');
-    };
 
     const handleConfigurationsClick = () => {
         if (!isLogin) {
@@ -93,7 +89,7 @@ export default function ClubDetailsHeader({clubDetail, isLogin}) {
                 <NavbarContent justify="start">
                     <NavbarItem
                         style={styles.iconBox}
-                        onClick={handleNavigate}
+                        onClick={() => handleBack()}
                     >
                         <IoArrowBack style={styles.icon}/>
                     </NavbarItem>

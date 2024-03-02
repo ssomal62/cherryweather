@@ -29,8 +29,13 @@ public class NowWeatherService {
 
     private final ZoneId korTimeZone = ZoneId.of("Asia/Seoul");
 
-    private final String baseDate = LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-    private final String baseTime = LocalTime.now(korTimeZone).format(DateTimeFormatter.ofPattern("HH00"));
+    public String getBaseDate() {
+        return LocalDate.now(korTimeZone).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    }
+
+    public String getBaseTime() {
+        return LocalTime.now(korTimeZone).format(DateTimeFormatter.ofPattern("HH00"));
+    }
 
     public List<NowWeatherReqDto> getNowWeather(String clientIp) {
 
@@ -40,7 +45,7 @@ public class NowWeatherService {
         int nx = (int) geoLocationResDto.getNx();
         int ny = (int) geoLocationResDto.getNy();
 
-        String tempBaseTime = baseTime;
+        String tempBaseTime = getBaseTime();
         ResponseEntity<String> response = null;
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode responseJson = null;
@@ -48,7 +53,7 @@ public class NowWeatherService {
 
         // 예외처리
         for(int i = 0; i < 2; i++) {
-            response = weatherServiceClient.getNowWeatherForecast(functionName, baseDate, tempBaseTime, nx, ny);
+            response = weatherServiceClient.getNowWeatherForecast(functionName, getBaseDate(), tempBaseTime, nx, ny);
             try {
                 responseJson = objectMapper.readTree(response.getBody());
                 resultCode = responseJson.path("response").path("header").path("resultCode").asText();
@@ -146,8 +151,8 @@ public class NowWeatherService {
 
     public List<NowWeatherResDto> formatWeatherData(List<NowWeatherReqDto> weatherDataList, double nx, double ny, String r1, String r2, String r3) {
         NowWeatherResDto.NowWeatherResDtoBuilder builder = NowWeatherResDto.builder()
-                                                                   .baseDate(baseDate)
-                                                                   .baseTime(baseTime)
+                                                                   .baseDate(getBaseDate())
+                                                                   .baseTime(getBaseTime())
                                                                    .nx((int) nx)
                                                                    .ny((int) ny)
                                                                    .r1(r1)

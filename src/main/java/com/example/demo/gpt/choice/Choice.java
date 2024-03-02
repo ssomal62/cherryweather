@@ -15,11 +15,15 @@ public class Choice implements Serializable {
     private Integer index;
     @JsonProperty("finish_reason")
     private String finishReason;
+//    @JsonProperty("logprobs")
+//    private String logprobs;
 
     @Builder
+//    public Choice(String text, Integer index, String finishReason, String logprobs) {
     public Choice(String text, Integer index, String finishReason) {
         this.text = text;
         this.index = index;
         this.finishReason = finishReason;
+//        this.logprobs = logprobs;
     }
 }

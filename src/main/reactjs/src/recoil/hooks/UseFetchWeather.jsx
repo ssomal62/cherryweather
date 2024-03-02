@@ -6,6 +6,9 @@ export const UseFetchWeather = (endpoint) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+  // useEffect(() => {
+
+  // fetchData();
     const fetchData = useCallback(async () => {
         setLoading(true);
         try {
@@ -26,5 +29,5 @@ export const UseFetchWeather = (endpoint) => {
         }
     }, [endpoint]);   //endpoint가 변경될 때마다 훅이 데이터를 다시 가져옴
 
-    return {fetchData, data, loading, error};
+  return {fetchData, data, loading, error};
 };

@@ -1,11 +1,15 @@
 package com.example.demo.gpt.controller;
 
 
-import com.example.demo.gpt.dto.GPTRequest;
+import com.example.demo.gpt.dto.ChatRequest;
 import com.example.demo.gpt.service.GPTService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+
 
 @Slf4j
 @RestController
@@ -16,7 +20,13 @@ public class GPTController {
     private final GPTService gptService;
 
     @PostMapping("/chat")
-    public String chat(@RequestBody GPTRequest request) {
-        return gptService.chat(request);
+    public Mono<String> chat(@Valid @RequestBody ChatRequest requestData) {
+        return gptService.chat(requestData);
+    }
+
+    @GetMapping("/chat")
+    public ResponseEntity<String> startChat() {
+        gptService.startNewChatSession();
+        return ResponseEntity.ok("New chat session started.");
     }
 }

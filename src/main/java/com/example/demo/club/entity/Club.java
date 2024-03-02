@@ -41,6 +41,9 @@ public class Club {
     @Column(length = 3000)
     private String notice;
 
+    @Column(length = 1000)
+    private String tag;
+
     @Column
     private String joinApprovalStatus;
 
@@ -65,7 +68,7 @@ public class Club {
     @Column(length = 20)
     private ClubStatus status;
 
-    @Column(nullable = true)
+    @Column
     private Long representativeUserId;
 
     @Column
@@ -77,10 +80,10 @@ public class Club {
     @Column
     private String activitiesArea;
 
-    @Column(nullable = true)
+    @Column
     private Long createdUserId;
 
-    @Column(nullable = true)
+    @Column
     private Long updatedUserId;
 
     @CreatedDate

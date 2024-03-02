@@ -49,16 +49,15 @@ const AddClubSettingDetails = ({onNext, description, file, setCode, setDescripti
         }
     };
 
-    function getFileExtension(fileName) {
+    const getFileExtension = (fileName) => {
         return fileName.split('.').pop();
     }
 
-    function generateShortUUID() {
+    const generateShortUUID = () => {
         const uuid = uuidv4();
         const uuidWithoutHyphen = uuid.replace(/-/g, '');
         return uuidWithoutHyphen.substring(0, 7);
     }
-
 
     const handleDescriptionChange = (e) => {
         const newDescription = e.target.value;
@@ -88,7 +87,8 @@ const AddClubSettingDetails = ({onNext, description, file, setCode, setDescripti
                             <TbPhoto style={styles.icon}/>
                             <span style={styles.description}>클럽 소개 사진을 넣어주세요</span>
                         </div>
-                    )}
+                    )
+                }
 
                 <Image
                     removeWrapper

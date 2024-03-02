@@ -4,19 +4,20 @@ import {TiLocation} from "react-icons/ti";
 import {IoChatbubbleEllipses} from "react-icons/io5";
 import {BsFillPeopleFill} from "react-icons/bs";
 import {HeartIcon} from "../../../assets/icon/HeartIcon";
-import {useLikeClub} from "../../../recoil/hooks/UseLikedState";
+import {useLikeClub} from "../../../recoil/hooks/UseLikeApi";
 import {IsLoginAtom} from "../../../recoil/LoginAtom";
 import {useRecoilValue} from "recoil";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import categoryDescriptions from "../clubDetail/category.json";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import styled from "styled-components";
 
 
 const CardListItem = ({club}) => {
     const isLogin = useRecoilValue(IsLoginAtom);
 
     const clubProfile = (code) => {
-        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "defalut"}.jpg?type=f&w=600&h=600&ttype=jpg`
+        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "default"}.jpg?type=f&w=600&h=600&ttype=jpg`
     }
 
     const [liked, setLiked] = useState(club.liked);
@@ -25,10 +26,23 @@ const CardListItem = ({club}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         setLiked(club.liked);
     }, [club.liked]);
+
+    const handlePageChange = () => {
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+        navigate(`/club-details/${club.clubId}`, { state: { from: location.pathname } });
+    }
+
+    useEffect(() => {
+        const scrollY = sessionStorage.getItem('scrollPosition');
+        if (scrollY) {
+            window.scrollTo(0, parseInt(scrollY, 10));
+        }
+    }, []);
 
     const handleLikeClick = (event) => {
         event.stopPropagation();
@@ -41,10 +55,7 @@ const CardListItem = ({club}) => {
     };
 
     return (
-        <div
-            style={{cursor: 'pointer'}}
-            onClick={()=> navigate(`/club-details/${club.clubId}`)}
-        >
+        <Section onClick={handlePageChange}>
             <Card
                 isFooterBlurred
                 radius="lg"
@@ -112,14 +123,21 @@ const CardListItem = ({club}) => {
                 </CardFooter>
             </Card>
             <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-        </div>
+        </Section>
     );
 };
 
+
+
+export default CardListItem;
+
+const Section = styled.div`
+cursor: pointer;
+max-width: 600px;
+width: 100%;
+`
 const styles = {
     icon: {
         color: 'white',
     },
 };
-
-export default CardListItem;
