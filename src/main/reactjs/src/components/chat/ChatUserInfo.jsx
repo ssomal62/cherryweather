@@ -35,11 +35,10 @@ function ChatUserInfo({ selectedMsg, accountData, nc }) {
                 isBordered
                 radius="full"
                 size="md"
-                src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${
-                  userInfo.profileImage === "기본이미지 넣어야함"
+                src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${userInfo.profileImage === "기본이미지 넣어야함"
                     ? "default_image.jpg"
                     : userInfo.profileImage
-                }?type=f&w=600&h=600&ttype=jpg`}
+                  }?type=f&w=600&h=600&ttype=jpg`}
               />
               <div className="flex flex-col gap-1 items-start justify-center">
                 <h4 className="text-small font-semibold leading-none text-default-600">

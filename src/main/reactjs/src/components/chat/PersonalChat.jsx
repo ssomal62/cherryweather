@@ -73,22 +73,22 @@ function PersonalChat({ userInfo, accountData, nc }) {
 
           console.log("res : ", res);
           await nc.subscribe(newChatId);
+          const chatPersonalAlarmData = {
+            targetId: userInfo.accountId, // targetId에 새로운 채팅방 Id를 추가
+            type: "PERSONALCHAT",
+            importance: 2,
+            description: `${accountData.name}님과의 1대1 대화방이 생성되었습니다.`,
+          };
+          sendChatAlarmData(chatPersonalAlarmData);
+          console.log("알람 : ", sendChatAlarmData);
           await nc.disconnect();
 
           // 개인 채팅방 생성 알림 전송(주석부분)
           // 채팅방으로 이동
-          navi(`/chat/room/${newChatId}/${userInfo.accountId}`);
-          window.location.reload();
+          // navi(`/chat/room/${newChatId}/${userInfo.accountId}`);
+          // window.location.reload();
 
-          const chatPersonalAlarmData = {
-            name: null,
-            targetId: res.data.newChatId, // targetId에 새로운 채팅방 Id를 추가
-            type: "PERSONALCHAT",
-            importance: 2,
-            description: `${userInfo.name}님과의 1대1 대화방이 생성되었습니다.`,
-          };
-          sendChatAlarmData(chatPersonalAlarmData);
-          console.log(chatPersonalAlarmData);
+
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);
