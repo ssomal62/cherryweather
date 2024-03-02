@@ -13,7 +13,7 @@ import {
   userInfoState,
 } from "../../recoil/hooks/UseFetchUserInfo";
 import {useNavigate} from "react-router-dom";
-import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
+// import {UseFetchWeather} from "../../recoil/hooks/UseWeatherData";
 import {alramListState, useAlarmData} from "../../recoil/hooks/UseAlramApi";
 import {instance} from "../../recoil/module/instance";
 
@@ -21,14 +21,14 @@ const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
   const userInfoFetch = useFetchUserInfo();
   const navigate = useNavigate(); // useNavigate 훅 사용하기
-  const {fetchData, data: weatherData} = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
+  // const {fetchData, data: weatherData} = UseFetchWeather("/weather/daily"); // 날씨 데이터 가져오기
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [alarmList, setAlarmList] = useRecoilState(alramListState);
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
     userInfoFetch();
   }, []);
 
@@ -58,14 +58,14 @@ const DropDownNotification = () => {
     (alram) => new Date(alram.createdAt) <= sixHourAgo
   );
 
-  useEffect(() => {
-    if (weatherData && isOpen) {
-      console.log(
-        `오늘의 날씨: ${weatherData.weather}, 현재 온도: ${weatherData.currentTemp}°C`
-      );
-      // 예: alert(`오늘의 날씨: ${weatherData.weather}, 현재 온도: ${weatherData.currentTemp}°C`);
-    }
-  }, [weatherData, isOpen]); // weatherData만 의존성 배열에 추가
+  // useEffect(() => {
+  //   if (weatherData && isOpen) {
+  //     console.log(
+  //       `오늘의 날씨: ${weatherData.weather}, 현재 온도: ${weatherData.currentTemp}°C`
+  //     );
+  //     // 예: alert(`오늘의 날씨: ${weatherData.weather}, 현재 온도: ${weatherData.currentTemp}°C`);
+  //   }
+  // }, [weatherData, isOpen]); // weatherData만 의존성 배열에 추가
 
   // 알림 삭제 및 상세 페이지로 이동 함수
   const deleteAlarmAndNavigate = async (alarmId, targetId) => {
