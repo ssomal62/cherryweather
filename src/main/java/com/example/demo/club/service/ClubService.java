@@ -188,7 +188,7 @@ public class ClubService {
                 .activitiesArea(requestDTO.activitiesArea())
                 .createdUserId(accountDetails.getAccount().getAccountId())
                 .representativeUserId(accountDetails.getAccount().getAccountId())
-                .currentMembers(1)
+                .currentMembers(0)
                 .maxMembers(GENTLE_BREEZE.getMaxMembers())
                 .currentGrowthMeter(0)
                 .maxGrowthMeter(GENTLE_BREEZE.getMaxGrowthMeter())
