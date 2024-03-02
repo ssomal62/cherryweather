@@ -15,7 +15,6 @@ import com.example.demo.like.entity.Like;
 import com.example.demo.like.enums.LikeType;
 import com.example.demo.like.service.LikeService;
 import com.example.demo.membership.dto.ClubSignupDTO;
-import com.example.demo.membership.entity.Membership;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -26,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.example.demo.club.enums.ClubGrade.GENTLE_BREEZE;
 import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_CLUB;
