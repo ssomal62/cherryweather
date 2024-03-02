@@ -6,28 +6,38 @@ import SatelliteImageViewer from "../../components/weather/SatelliteImageViewer"
 import TodayDetail from "../../components/weather/TodayDetail";
 import AirQuality from "../../components/weather/AirQuality";
 import WeeklyWeather from "../../components/weather/WeeklyWeather";
+import styled from "styled-components";
 
 const WeatherDetail = () => {
     return (
-        <Layout>
-            오늘 날씨
-            <TodayWeather/>
-            시간별 날씨
-            <HourlyWeather/>
-            일출 일몰
-            <TodayDetail/>
-            위성 화면
-            <SatelliteImageViewer/>
-            주간 날씨
-            <WeeklyWeather/>
-            미세먼지
-            <AirQuality/>
-
-            ...
-            ...
-            <div style = {{marginBottom: '100px'}}>123</div>
+        <Layout containerMargin = "0 0 0 0" containerPadding = "0 0 0 0">
+            <Container>
+                {/*<DetailBackground/>*/}
+                <div className="mb-6">
+                    <TodayWeather/>
+                    <HourlyWeather/>
+                    <TodayDetail/>
+                    <SatelliteImageViewer/>
+                    <WeeklyWeather/>
+                    <AirQuality/>
+                </div>
+            </Container>
         </Layout>
     );
 };
 
 export default WeatherDetail;
+
+const Container = styled.div`
+    position: relative;
+`;
+
+const DetailBackground = styled.div`
+    max-width: 600px;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://kr.object.ncloudstorage.com/cherry-weather/weather/sunny-day.png');
+    background-attachment: fixed;
+    background-size: cover;
+    position: absolute;
+`;

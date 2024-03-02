@@ -376,6 +376,18 @@ public class TodayWeatherService {
 
         System.out.println("r1 : " + r1 + " / r2 : " + r2 + " / regionName : " + regionName + " / regionCode : " + regionCode);
 
+        LocalDateTime now = LocalDateTime.now(korTimeZone);
+        LocalDate today = LocalDate.now(korTimeZone);
+        String baseDate;
+
+        // 현재 시간에 따라 baseDate 변경 (18시~24시)
+        if(now.getHour() < 18) {
+            baseDate = getBaseDate();
+        } else {
+            baseDate = today.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        }
+
+
         String functionName_1 = "getMidTa";
         String functionName_2 = "getMidLandFcst";
         ObjectMapper objectMapper = new ObjectMapper();
@@ -384,9 +396,9 @@ public class TodayWeatherService {
         String[] fcstTimes = {"0600", "1800"};
 
         for(String fcstTime : fcstTimes) {
-            ResponseEntity<String> response_1 = weatherServiceClient.getSecondHalfWeatherForecast(functionName_1, getBaseDate(), fcstTime, regionCode);
+            ResponseEntity<String> response_1 = weatherServiceClient.getSecondHalfWeatherForecast(functionName_1, baseDate, fcstTime, regionCode);
             // 중기 기온과 육상 예보의 지역 코드가 다르기 때문에 일단 수도권으로 고정 ( regionCode = 11B00000 )
-            ResponseEntity<String> response_2 = weatherServiceClient.getSecondHalfWeatherForecast(functionName_2, getBaseDate(), fcstTime, "11B00000");
+            ResponseEntity<String> response_2 = weatherServiceClient.getSecondHalfWeatherForecast(functionName_2, baseDate, fcstTime, "11B00000");
             try {
                 responseJson = objectMapper.readTree(response_1.getBody());
                 resultCode = responseJson.path("response").path("header").path("resultCode").asText();
@@ -462,13 +474,13 @@ public class TodayWeatherService {
 
 
                     WeeklyWeatherDto dto = WeeklyWeatherDto.builder()
-                                                 .fcstDate(forecastDateString)
-                                                 .fcstTime("0600")
-                                                 .TMN(item_1.has(tmnField) ? item_1.get(tmnField).asText() : null)
-                                                 .TMX(item_1.has(tmxField) ? item_1.get(tmxField).asText() : null)
-                                                 .weather(item_2.has(wfAmField) ? item_2.get(wfAmField).asText() : null)
-                                                 .POP(item_2.has(rnStAmField) ? item_2.get(rnStAmField).asText() : null)
-                                                 .build();
+                                                   .fcstDate(forecastDateString)
+                                                   .fcstTime("0600")
+                                                   .TMN(item_1.has(tmnField) ? item_1.get(tmnField).asText() : null)
+                                                   .TMX(item_1.has(tmxField) ? item_1.get(tmxField).asText() : null)
+                                                   .weather(item_2.has(wfAmField) ? item_2.get(wfAmField).asText() : null)
+                                                   .POP(item_2.has(rnStAmField) ? item_2.get(rnStAmField).asText() : null)
+                                                   .build();
                     weatherDtoList.add(dto);
                 }
             }
@@ -486,7 +498,7 @@ public class TodayWeatherService {
         if(r1.endsWith("특별시") || r1.endsWith("광역시") || r1.endsWith("특별자치시")) {
             simpleRegionName = r1.replaceAll("특별시$", "").replaceAll("광역시$", "").replaceAll("특별자치시$", "");
         } else if(r1.endsWith("도")) {
-            simpleRegionName = r1.replaceAll("시$", "").replaceAll("군$", "");
+            simpleRegionName = r2.replaceAll("([시군]).*$", "$1").replaceAll("시$|군$", "");
         } else {
             simpleRegionName = null;
         }
@@ -495,6 +507,7 @@ public class TodayWeatherService {
 
     /* 도시 이름으로 지역 코드 추출 */
     public String getRegionCode(String regionName) {
+        System.out.println("regionName : " + regionName);
         try {
             ObjectMapper mapper = new ObjectMapper();
             Resource resource = resourceLoader.getResource("classpath:weather/cityCode.json");
@@ -519,8 +532,8 @@ public class TodayWeatherService {
         List<WeeklyWeatherDto> secondHalfData = getSecondHalfWeeklyWeather(clientIp);
 
         List<WeeklyWeatherDto> weeklyWeatherList = Stream.concat(firstHalfData.stream(), secondHalfData.stream())
-                                                       .sorted(Comparator.comparing(WeeklyWeatherDto::getFcstDate))
-                                                       .collect(Collectors.toList());
+                                                           .sorted(Comparator.comparing(WeeklyWeatherDto::getFcstDate))
+                                                           .collect(Collectors.toList());
         return weeklyWeatherList;
     }
 }
