@@ -33,7 +33,7 @@ const GPTChatRoom = () => {
     const [userInput, setUserInput] = useState(""); // 사용자 입력 상태
     const [isLoading, setIsLoading] = useState(false); // isLoading 상태 추가
     const [isImageState, setImageState] = useRecoilState(imageState); // imageState 상태 추가
-    const fetchImage = useFetchImage(prompt);
+    // const fetchImage = useFetchImage(prompt);
     const chatRestart = useStartChat();
     const { handleImageCreateClick } = useImageCreation(isLoading, setIsLoading);
 
