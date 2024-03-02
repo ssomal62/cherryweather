@@ -1,13 +1,15 @@
 import React, {useEffect} from 'react';
 import {Card, CardHeader, Divider, Spinner} from "@nextui-org/react";
-import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
+import {hourlyWeatherState, UseWeatherData} from "../../recoil/hooks/UseWeatherData";
 import UseClientIp from "../../recoil/hooks/UseClientIp";
 import styled from "styled-components";
 import ReactApexChart from "react-apexcharts";
+import {useRecoilValue} from "recoil";
 
 const HourlyWeather = () => {
     const clientIp = UseClientIp(); //ip를 백엔드로 전송
-    const {fetchData, data, loading, error} = UseFetchWeather(`/weather/hourly?ip=${clientIp}`);
+    const fetchData = UseWeatherData({endpoint:`/weather/hourly?ip=${clientIp}`, state: hourlyWeatherState});
+    const {data, loading, error} = useRecoilValue((hourlyWeatherState))
 
     useEffect(() => {
         if (clientIp) {
@@ -17,16 +19,17 @@ const HourlyWeather = () => {
 
     //차트 데이터 설정
     const chartData = {
-        series : [{
+        series: [{
             name: "기온",
-            data: data ? data.map(hourlyData => {
-                // 날짜와 시간을 ISO 8601 형식으로 변환
-                const dateTimeStr = `${hourlyData.fcstDate.substring(0, 4)}-${hourlyData.fcstDate.substring(4, 6)}-${hourlyData.fcstDate.substring(6, 8)}T${hourlyData.fcstTime.substring(0, 2)}:${hourlyData.fcstTime.substring(2, 4)}:00Z`; // Z를 추가하여 UTC 시간임을 명시
-                // Date 객체 생성 및 Unix Timestamp 변환
-                const timestamp = new Date(dateTimeStr).getTime();
-                // Timestamp와 온도(tmp)를 배열로 반환
-                return [timestamp, parseFloat(hourlyData.tmp)];
-            }) : []
+            data: data && Array.isArray(data) ? data.map(hourlyData => {
+                // 여기서 hourlyData 객체와 필요한 속성이 있는지 확인
+                if (hourlyData && hourlyData.fcstDate && hourlyData.fcstTime) {
+                    const dateTimeStr = `${hourlyData.fcstDate.substring(0, 4)}-${hourlyData.fcstDate.substring(4, 6)}-${hourlyData.fcstDate.substring(6, 8)}T${hourlyData.fcstTime.substring(0, 2)}:${hourlyData.fcstTime.substring(2, 4)}:00Z`;
+                    const timestamp = new Date(dateTimeStr).getTime();
+                    return [timestamp, parseFloat(hourlyData.tmp)];
+                }
+                return [0, 0]; // 혹은 적절한 기본값 반환
+            }).filter(item => item[0] !== 0) : [] // 필터를 추가하여 유효하지 않은 데이터 제거
         }],
         options: {
             chart      : {

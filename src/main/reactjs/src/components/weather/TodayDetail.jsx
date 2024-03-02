@@ -1,13 +1,15 @@
 import React, {useEffect} from 'react';
-import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
+import {dailyWeatherState, UseWeatherData} from "../../recoil/hooks/UseWeatherData";
 import {Card, CardHeader, Divider, Spinner} from "@nextui-org/react";
 import UseClientIp from "../../recoil/hooks/UseClientIp";
 import styled from "styled-components";
+import {useRecoilValue} from "recoil";
 
 
 const TodayDetail = () => {
     const clientIp = UseClientIp(); //ip를 백엔드로 전송
-    const {fetchData, data, loading, error} = UseFetchWeather(`/weather/daily?ip=${clientIp}`);
+    const fetchData = UseWeatherData({endpoint:`/weather/daily?ip=${clientIp}`, state: dailyWeatherState});
+    const {data, loading, error} = useRecoilValue((dailyWeatherState))
 
     let sunrise = "";
     let sunset = "";
@@ -118,30 +120,30 @@ const DetailBundle = styled.div`
 
 const Rain = styled.div`
     position: absolute;
-    width: 48%;
-    height: 48%;
+    width: 47%;
+    height: 47%;
     left: 0;
     top: 0;
 `;
 
 const Sunrise = styled.div`
     position: absolute;
-    width: 48%;
-    height: 48%;
+    width: 47%;
+    height: 47%;
     right: 0;
     top: 0;
 `;
 const Humidity = styled.div`
     position: absolute;
-    width: 48%;
-    height: 48%;
+    width: 47%;
+    height: 47%;
     left: 0;
     bottom: 0;
 `;
 const Wind = styled.div`
     position: absolute;
-    width: 48%;
-    height: 48%;
+    width: 47%;
+    height: 47%;
     right: 0;
     bottom: 0;
 `;

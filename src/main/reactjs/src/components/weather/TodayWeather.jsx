@@ -1,28 +1,17 @@
 import React, {useEffect} from 'react';
 import {Spinner} from "@nextui-org/react";
-import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
+import {dailyWeatherState, UseWeatherData} from "../../recoil/hooks/UseWeatherData";
 // import {useNavigate} from "react-router-dom";
 import UseClientIp from "../../recoil/hooks/UseClientIp";
 import styled from "styled-components";
+import {useRecoilValue} from "recoil";
 
-// //시간 포맷 함수
-// const formatTime = (time) => {
-//     if (!time) return '';
-//     const timeString = time.toString();
-//     const hours = timeString.slice(0, 2);
-//     const minutes = timeString.slice(2);
-//     return `${hours}:${minutes.padStart(2, '0')}`;
-// }
 const TodayWeather = () => {
-
     const clientIp = UseClientIp(); //ip를 백엔드로 전송
-    const {fetchData, data, loading, error} = UseFetchWeather(`/weather/daily?ip=${clientIp}`);
+    const fetchData = UseWeatherData({endpoint:`/weather/daily?ip=${clientIp}`, state: dailyWeatherState});
+    const {data, loading, error} = useRecoilValue((dailyWeatherState))
     // const navigate = useNavigate();
 
-    // // 이동 함수
-    // const handleCardClick = () => {
-    //     navigate('/weatherDetail');
-    // }
 
     useEffect(() => {
         if (clientIp) {
@@ -38,36 +27,6 @@ const TodayWeather = () => {
     //     const sunset = new Date(now.toDateString() + ' ' + data.sunset);
     //     return now >= sunrise && now <= sunset;
     // }
-
-    // //날씨와 시간에 따라 배경 이미지 변경
-    // const getBackgroundImage = () => {
-    //     if (!data) return require('../../assets/images/weather/background/clear_day.jpg'); // data가 없는 경우 기본 이미지 반환
-    //
-    //     const weather = data.weather;
-    //     const timeOfDay = isDaytime() ? 'day' : 'night';
-    //     switch (weather) {
-    //         case "맑음":
-    //             return timeOfDay === 'day' ? require('../../assets/images/weather/background/clear_day.jpg') : require('../../assets/images/weather/background/clear_night.jpg');
-    //         case "흐림":
-    //             return timeOfDay === 'day' ? require('../../assets/images/weather/background/cloudy_day.jpg') : require('../../assets/images/weather/background/cloudy_night.jpg');
-    //         case "비":
-    //             return timeOfDay === 'day' ? require('../../assets/images/weather/background/rainy_day.jpg') : require('../../assets/images/weather/background/rainy_night.jpg');
-    //         case "눈":
-    //             return timeOfDay === 'day' ? require('../../assets/images/weather/background/snow_day.jpg') : require('../../assets/images/weather/background/snow_night.jpg');
-    //         case "비/눈":
-    //             return timeOfDay === 'day' ? require('../../assets/images/weather/background/snow_day.jpg') : require('../../assets/images/weather/background/snow_night.jpg');
-    //         case "소나기":
-    //             return timeOfDay === 'day' ? require('../../assets/images/weather/background/rainy_day.jpg') : require('../../assets/images/weather/background/rainy_night.jpg');
-    //         default:
-    //             return timeOfDay === 'day' ? require('../../assets/images/weather/background/clear_day.jpg') : require('../../assets/images/weather/background/clear_night.jpg');
-    //     }
-    // };
-
-    // backgroundImage 스타일 동적으로 설정
-    // const cardStyle = {
-    //     backgroundImage: `url(${getBackgroundImage()})`
-    // };
-
 
     return (
         <TodayInfo>

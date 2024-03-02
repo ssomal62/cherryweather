@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {UseFetchWeather} from "../../recoil/hooks/UseFetchWeather";
+import {satImgState, UseWeatherData} from "../../recoil/hooks/UseWeatherData";
 import {Card, CardHeader, Divider, Image, Spinner} from "@nextui-org/react";
 import styled from "styled-components";
+import UseClientIp from "../../recoil/hooks/UseClientIp";
+import {useRecoilValue} from "recoil";
 
 const SatelliteImageViewer = () => {
-    const {fetchData, data, loading, error} = UseFetchWeather("/weather/satImg");
+    const fetchData = UseWeatherData({endpoint:`/weather/satImg`, state: satImgState});
+    const {data, loading, error} = useRecoilValue((satImgState))
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
@@ -15,6 +18,7 @@ const SatelliteImageViewer = () => {
     }, [fetchData])
 
     useEffect(() => {
+        // console.log("satImgData : ", data);
         if (data && data.length > 0) {
             setCurrentIndex(data.length - 1);
         }
@@ -22,18 +26,19 @@ const SatelliteImageViewer = () => {
 
     //이전 이미지로 이동
     const prevImage = () => {
-        setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : data.length - 1));
+        if (data && data.length > 0) {
+            setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : data.length - 1));
+        }
     }
     //다음 이미지로 이동
     const nextImage = () => {
-        setCurrentIndex((prevIndex) => {
-            //마지막 이미지 일 경우 이동하지 않는다
-            if (prevIndex >= data.length - 1) {
-                return prevIndex;
-            }
-            return prevIndex + 1;
-        });
+        if (data && data.length > 0) {
+            setCurrentIndex((prevIndex) => (prevIndex >= data.length - 1 ? prevIndex : prevIndex + 1));
+        }
     }
+
+    // data 배열과 currentIndex가 유요한지 확인
+    const isValidDat = data && Array.isArray(data) && data.length > 0 && data[currentIndex] && data[currentIndex].satImg;
 
     return (
         <Container>
@@ -44,7 +49,7 @@ const SatelliteImageViewer = () => {
                 {error && (
                     <div className = "h-[300px]">Error: {error.message}</div>
                 )}
-                {data && (
+                {isValidDat ? (
                     <div>
                         <CardHeader>
                             <div className = "flex flex-col">
@@ -65,11 +70,11 @@ const SatelliteImageViewer = () => {
                                 src = {data[currentIndex].satImg}
                                 alt = {`Satellite Image ${currentIndex}`}
                                 width = "100%" height = "auto"
-                                style={{zIndex:'1'}}
+                                style = {{zIndex: '1'}}
                             />
                         </SatImage>
                     </div>
-                )}
+                ) : null}
             </Card>
         </Container>
     )
@@ -81,7 +86,7 @@ export default SatelliteImageViewer;
 const Container = styled.div`
     width: 100%;
     height: 100%;
-    //border: 2px solid blue;
+    border: 2px solid blue;
     padding: 22px;
 `;
 const SatImage = styled.div`
