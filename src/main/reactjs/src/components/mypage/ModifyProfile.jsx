@@ -24,7 +24,7 @@ const ModifyProfile = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const { profileImage, profileName } = userInfo;
-  const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600&ttype=jpg`;
+  const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600&type=jpg`;
   const fetchUserInfo = useFetchUserInfo();
   const modifyUserInfo = useModifyUserInfo();
   useEffect(() => {

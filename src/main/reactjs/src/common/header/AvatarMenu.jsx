@@ -14,7 +14,7 @@ const AvatarMenu = () => {
     const [isLogin, setIsLogin] = useRecoilState(IsLoginAtom);
     const userInfo = useRecoilValue(userInfoState)
     const { profileName, email, profileImage } = userInfo;
-    const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600&ttype=jpg`;
+    const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600&type=jpg`;
 
     // 로그아웃 함수
     const submitLogout = async () => {
