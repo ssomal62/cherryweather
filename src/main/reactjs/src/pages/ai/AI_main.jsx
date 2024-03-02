@@ -50,12 +50,12 @@ const AI_main = () => {
 
     // 활성 슬라이드를 추적하는 상태
     const [activeSlide, setActiveSlide] = useState(0);
-
+    console.log("슬라이더 정보 : "+activeSlide);
     return (
         <Layout useHeader={false}>
             <AI_MainHeader isLogin={isLogin} handleBack={handleBack}/>
             {/*<MainTop index={activeSlide} />*/}
-            <MainItem isLogin={isLogin} index={activeSlide} setActiveSlide={setActiveSlide}  />
+            <MainItem  index={activeSlide} isLogin={isLogin} setActiveSlide={setActiveSlide}  />
 
         </Layout>
     );
