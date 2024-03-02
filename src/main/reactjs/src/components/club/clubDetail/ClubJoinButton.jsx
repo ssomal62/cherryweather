@@ -70,6 +70,7 @@ const ClubJoinButton = () => {
         },
       });
 
+
       // 클럽 가입을 요청한 경우의 알림 데이터
       const joinRequestAlarmData = {
         targetId: clubDetail?.representativeUserId, // 클럽의 호스트 ID
@@ -167,47 +168,47 @@ const ClubJoinButton = () => {
     }
   };
 
-  return (
-    <>
-      <Footer>
-        <ButtonContainer>
-          <Button
-            isIconOnly
-            className="text-default-900/60 data-[hover]:bg-foreground/10"
-            radius="full"
-            variant="light"
-            onPress={handleLikeClick}
-          >
-            <HeartIcon
-              style={styles.icon}
-              className={liked ? "[&>path]:stroke-transparent" : ""}
-              fill={liked ? "currentColor" : "none"}
-            />
-          </Button>
-        </ButtonContainer>
+    return (
+        <>
+            <Footer>
+                <ButtonContainer>
+                    <Button
+                        isIconOnly
+                        className="text-default-900/60 data-[hover]:bg-foreground/10"
+                        radius="full"
+                        variant="light"
+                        onPress={handleLikeClick}
+                    >
+                        <HeartIcon
+                            style={styles.icon}
+                            className={liked ? "[&>path]:stroke-transparent" : ""}
+                            fill={liked ? "currentColor" : "none"}
+                        />
+                    </Button>
+                </ButtonContainer>
 
-        {joinButtonRender()}
-      </Footer>
-      <LoginVerificationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-    </>
-  );
+                {joinButtonRender()}
+            </Footer>
+            <LoginVerificationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
+        </>
+    );
 };
 
 export default ClubJoinButton;
 
 const styles = {
-  icon: {
-    width: 30,
-    height: 30,
-    color: "#F31260",
-  },
-  font: {
-    fontSize: 18,
-    fontWeight: 600,
-  },
+    icon: {
+        width : 30,
+        height: 30,
+        color : "#F31260",
+    },
+    font: {
+        fontSize  : 18,
+        fontWeight: 600,
+    },
 };
 const ButtonContainer = styled.div`
   flex: 0 1 20%;

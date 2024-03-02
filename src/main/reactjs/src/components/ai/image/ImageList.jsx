@@ -18,8 +18,9 @@ const ImageList = () => {
         }
     }, [fetchList, isDeleted]);
 
+
     return (
-        <div>
+        <div style={{marginBottom:"5em"}}>
         {imageList.map((list)=>(
                 <CardListItemWrapper key={list.aiImageId}>
                     <ImageListItem list={list} />

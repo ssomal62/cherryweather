@@ -53,7 +53,7 @@ export const clubDetailState = atom({
  * @param requestBody HTTP 요청 본문. 기본값은 null.
  * @returns 로딩 상태와 에러 상태를 포함하는 객체.
  */
-export const useClubData = ({method = 'get', state, dynamicPath, requestBody = null}) => {
+export const useClubData = ({method = 'get', state, dynamicPath, requestBody = null, refreshKey}) => {
     const cookie = useMemo(() => new Cookies(), []);
     const setState = useSetRecoilState(state);
     const [loading, setLoading] = useState(false);
@@ -112,7 +112,7 @@ export const useClubData = ({method = 'get', state, dynamicPath, requestBody = n
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, [fetchData, refreshKey]);
 
     return {loading, error};
 };

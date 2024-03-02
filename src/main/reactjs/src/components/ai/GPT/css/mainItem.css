@@ -1,0 +1,83 @@
+.card-container {
+    padding: 20px;
+    background-color: #ffffff; /* Change this to match your desired background */
+}
+.swiper-container {
+    display: flex;
+    justify-content: center; /* 가로 방향 중앙 정렬 */
+    align-items: center; /* 세로 방향 중앙 정렬 */
+    width: 100%; /* 필요하다면 부모 요소의 너비를 100%로 설정 */
+    height: 100%; /* 필요하다면 부모 요소의 높이를 100%로 설정 */
+}
+.slide-content {
+    max-width: 600px; /* 최대 너비를 600px로 설정 */
+    width: 95%; /* 너비를 화면의 95%로 설정 */
+    margin: auto; /* 좌우 중앙 정렬 */
+}
+
+
+.title {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    padding: 20px 0;
+}
+/* 기본 네비게이션 화살표 제거 */
+.swiper-button-next::after, .swiper-button-prev::after {
+    content: ''; /* 기본 화살표 제거 */
+}
+
+/* 커스텀 네비게이션 버튼 스타일 */
+.swiper-button-next, .swiper-button-prev {
+    background-color: #8d8d8d; /* 배경색 변경 */
+    border-radius: 50%; /* 원형 모양 */
+    width: 3em; /* 너비 조절 */
+    height: 3em; /* 높이 조절 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff; /* 화살표 색상 변경 */
+    font-size: 10px; /* 화살표 크기 조절 */
+    border: none; /* 테두리 제거 */
+    position: absolute; /* 절대 위치 */
+    top: 20%; /* 상단에서 50% 위치 */
+    transform: translateY(-50%); /* Y축 기준 중앙 정렬 */
+    z-index: 10; /* 화살표가 카드 위에 나타나도록 함 */
+}
+
+/* 'Next' 버튼 위치 조정 */
+.swiper-button-next {
+    right: 6px; /* 오른쪽에서 10px 위치 */
+}
+
+/* 'Prev' 버튼 위치 조정 */
+.swiper-button-prev {
+    left: 6px; /* 왼쪽에서 10px 위치 */
+}
+
+
+
+
+/* 페이징 불릿 스타일 */
+.swiper-pagination-bullet {
+    background-color: #ffffff;
+    width: 12px;
+    height: 12px;
+    opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #fff;
+}
+
+/* 페이지 번호 컨테이너 스타일 */
+.page-number-container {
+    background-color: #ffffff;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 15px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}

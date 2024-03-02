@@ -145,16 +145,15 @@ const FeedCard = ({data, useParam}) => {
                                     </div>
                                     <div className="ml-5 flex-col justify-center">
                                         <p className="font-bold text-large text-default-800">{club.name}</p>
-                                        <p className="text-default-400 text-small">{club.description}</p>
+                                        {/*<p className="text-default-400 text-small">{club.description}</p>*/}
                                     </div>
                                     <div className="ml-auto mr-3 justify-center">
                                         <Button size="sm" radius="full"
+                                                isIconOnly
                                                 variant="ghost" color="default"
                                                 className="text-default-400"
                                                 onClick={handlePageChange}
-                                                endContent={<GrFormNext/>}>
-                                            클럽 가기
-                                        </Button>
+                                                endContent={<GrFormNext style={{width:20, height:20}}/>}/>
                                     </div>
                                 </div>
                             </CardFooter>
