@@ -2,13 +2,13 @@ import React from 'react';
 import {IoIosArrowForward} from "react-icons/io";
 import {useNavigate} from "react-router-dom";
 
-const ManageClubMembers = () => {
+const ManageClubMembers = ({clubDetail}) => {
 
     const navigate = useNavigate();
 
     return (
         <div className="flex items-center justify-between" style={styles.font}
-             onClick={()=> navigate('/club-members')}>
+             onClick={()=> navigate(`/club-members/${clubDetail.clubId}`)}>
             <div className="flex items-center">
                 <p>클럽 멤버</p>
             </div>

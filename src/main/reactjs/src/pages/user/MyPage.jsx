@@ -30,8 +30,6 @@ const Mypage = () => {
     const joinedClubs = useRecoilValue(joinedMembershipState).summaryList;
     const likedClubs = useRecoilValue(likedClubListState);
 
-    console.log("라이크확인", likedClubs)
-
     const loading = loadingJoinedMembership || loadingLikedClubList;
 
     if (loading) {

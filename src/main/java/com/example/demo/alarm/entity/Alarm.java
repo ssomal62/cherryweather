@@ -53,7 +53,6 @@ public class Alarm {
     @CreatedDate
     private LocalDateTime createdAt;
 
-
     // showAlarm 필드의 setter
     public void  setShowAlarm(boolean showAlarm) {
         this.showAlarm = showAlarm;

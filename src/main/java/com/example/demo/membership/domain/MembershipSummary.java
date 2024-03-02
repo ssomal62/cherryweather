@@ -7,6 +7,7 @@ import lombok.Builder;
 
 @Builder
 public record MembershipSummary(
+        long membershipId,
         long clubId,
         long userId,
         String userName,

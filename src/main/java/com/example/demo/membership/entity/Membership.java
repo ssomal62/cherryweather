@@ -65,7 +65,9 @@ public class Membership {
     private LocalDateTime updatedAt;
 
     public void updateMembership(UpdateMembership requestDTO) {
-        this.status = requestDTO.status();
+        if(requestDTO.membershipStatus() == RegisteredStatus.PENDING) {
+            this.status = RegisteredStatus.ACTIVE;
+        }
         this.role = requestDTO.role();
         this.updatedUserId = requestDTO.updatedUserId();
     }
