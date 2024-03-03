@@ -11,7 +11,7 @@ import { instance } from "../../../recoil/module/instance";
 import { IsLoginAtom } from "../../../recoil/LoginAtom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import { currentMembershipState } from "../../../recoil/hooks/UseMembershipApi";
-import ClubChat from "../../chat/ClubChat";
+import UnableToJoinModal from "./UnableToJoinModal";
 
 const ClubJoinButton = () => {
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ const ClubJoinButton = () => {
 
   const [liked, setLiked] = useState(clubLiked);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUnableJoinModalOpen, setIsUnableJoinModalOpen] = useState(false);
   const [role, setRole] = useState("");
 
   const { toggleLikeClub } = useLikeClub();
@@ -50,6 +51,11 @@ const ClubJoinButton = () => {
       setIsModalOpen(true);
       return;
     }
+      console.log("값확인" + clubDetail?.currentMembers )
+  if(isLogin && (clubDetail?.currentMembers === clubDetail?.maxMembers)) {
+      setIsUnableJoinModalOpen(true);
+      return;
+  }
     onSave();
   };
 
@@ -153,6 +159,7 @@ const ClubJoinButton = () => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
             />
+           <UnableToJoinModal isOpen={isUnableJoinModalOpen} onClose={() => setIsUnableJoinModalOpen(false)}/>
         </>
     );
 };
