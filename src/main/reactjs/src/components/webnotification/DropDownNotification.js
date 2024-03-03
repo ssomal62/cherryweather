@@ -108,6 +108,10 @@ const DropDownNotification = () => {
         // 클럽 가입 승인 요청 및 대기 알림일 경우 클럽 상세 페이지로 이동
         navigate(`/club-details/${item.targetId}`);
         break;
+      case "LIKE":
+        // 좋아요 알림일 경우 클럽 상세 페이지로 이동
+        navigate(`/likes/${item.targetId}`);
+        break;
       default:
         // 기타 알림 유형 처리
         break;
@@ -161,6 +165,23 @@ const DropDownNotification = () => {
     }
   };
 
+  // 알림 삭제 및 좋아요 상세 페이지로 이동 함수
+  const deleteAlarmAndNavigateToLikesPage = async (alarmId, targetId) => {
+    try {
+      await instance.delete(`/alarm/${alarmId}`);
+      // 삭제 후 알림 목록에서 해당 알림을 제거하고 상태를 업데이트
+      const updatedAlarms = alarmList.filter(
+        (alarm) => alarm.alarmId !== alarmId
+      );
+      setAlarmList(updatedAlarms);
+
+      // 좋아요 상세 페이지로 이동
+      navigate(`/likes/${targetId}`);
+    } catch (error) {
+      console.error("알림 삭제 실패:", error);
+    }
+  };
+
   console.log(deleteAlarmAndNavigateToPersonalChatRoom);
 
   // 알림 클럽에 가입할 때 알림 띄우기.
@@ -199,6 +220,9 @@ const DropDownNotification = () => {
                 case "PERSONALCHAT":
                   deleteAlarmAndNavigateToPersonalChatRoom(item.alarmId, item.targetId); // 1대1 채팅방 알림일 경우
                   break;
+                case "LIKES":
+                  deleteAlarmAndNavigateToLikesPage(item.alarmId, item.targetId); // 좋아요 알림일 경우
+                  break;
                 default:
                   // 기타 알림 유형에 대한 추가적인 처리가 필요한 경우 여기에 코드를 추가합니다.
                   break;
@@ -225,6 +249,9 @@ const DropDownNotification = () => {
                   break;
                 case "PERSONALCHAT":
                   deleteAlarmAndNavigateToPersonalChatRoom(item.alarmId, item.targetId); // 1대1 채팅방 알림일 경우
+                  break;
+                case "LIKES":
+                  deleteAlarmAndNavigateToLikesPage(item.alarmId, item.targetId); // 좋아요 알림일 경우
                   break;
                 default:
                   // 기타 알림 유형에 대한 추가적인 처리가 필요한 경우 여기에 코드를 추가합니다.

@@ -29,6 +29,7 @@ const ClubJoinButton = () => {
   const [liked, setLiked] = useState(clubLiked);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [role, setRole] = useState("");
+  const cookie = new Cookies();
 
   const { toggleLikeClub } = useLikeClub();
 
@@ -46,7 +47,31 @@ const ClubJoinButton = () => {
     }
     setLiked(!liked);
     toggleLikeClub({ type: "CLUB", targetId: clubDetail.clubId });
+
+    const likeAlarmData = {
+      targetId: clubDetail?.representativeUserId,
+      type: "LIKE",
+      importance: 1,
+      description: `${userInfo.name}님이 좋아요를 눌렀습니다.`
+    };
+
+    // 알림 데이터를 서버로 전송
+    sendLikeAlarmData(likeAlarmData);
   };
+
+  const sendLikeAlarmData = async (data) => {
+    try {
+      await instance.post("/alarm", data, {
+        headers: {
+          Authorization: `Bearer ${cookie.get("accessToken")}`,
+        },
+      });
+      console.log("좋아요 알림 전송 성공", data);
+    } catch (error) {
+      console.error("좋아요 알림 전송 실패", error);
+    }
+  };
+
 
   const handleJoinClick = () => {
     if (!isLogin) {
@@ -108,11 +133,14 @@ const ClubJoinButton = () => {
   const sendJoinAlarmData = async (data) => {
     const cookie = new Cookies();
     try {
-      await instance.post("/alarm", data, {
-        headers: {
-          Authorization: `Bearer ${cookie.get("accessToken")}`,
-        },
-      });
+      // 데이터 전송 전에 조건을 확인하여 올바른 targetId에게만 알림을 보냅니다.
+      if (data.targetId !== userInfo.accountId) {
+        await instance.post("/alarm", data, {
+          headers: {
+            Authorization: `Bearer ${cookie.get("accessToken")}`,
+          },
+        });
+      }
     } catch (error) {
       console.error("Alarm Data Error:", error);
     }
