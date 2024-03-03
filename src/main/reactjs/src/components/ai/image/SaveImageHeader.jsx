@@ -2,11 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
 import {GoHome} from "react-icons/go";
-import {FiSettings} from "react-icons/fi";
 import {useLocation, useNavigate} from "react-router-dom";
-import {WiNightAltRain} from "react-icons/wi";
-import {useRecoilValue} from "recoil";
-import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import {BsChatRightDots} from "react-icons/bs";
 import {TbJacket} from "react-icons/tb";
@@ -15,7 +11,6 @@ import {GrGallery} from "react-icons/gr";
 export default function SaveImageHeader({ isLogin, handleBack}) {
 
     const navigate = useNavigate();
-    const myMembership = useRecoilValue(currentMembershipState);
     const [scrolled, setScrolled] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
