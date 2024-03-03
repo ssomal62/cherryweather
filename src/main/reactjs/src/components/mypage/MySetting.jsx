@@ -1,14 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {
     Container,
     IconWapper,
     Nav,
+    Title,
+    TitleWapper,
 } from "../../pages/user/MyPage";
 import {IoArrowBack} from "react-icons/io5";
 import {useNavigate} from "react-router-dom";
 import {HiOutlineHome} from "react-icons/hi2";
 import styled from "styled-components";
-import {MdOutlineNavigateNext} from "react-icons/md";
+import {MenuBtn, MenuWapper, Wapper} from "./MyPageMenu";
+import {MdKeyboardArrowRight, MdOutlineNavigateNext} from "react-icons/md";
 import {Divider, Listbox, ListboxItem, Switch, useDisclosure} from "@nextui-org/react";
 import DropMadal from "./DropMadal";
 import {useFetchUserInfo, userInfoState} from "../../recoil/hooks/UseFetchUserInfo";
@@ -39,6 +42,7 @@ const MySetting = () => {
         await sumitAgreementGetNotified(updatedUserInfo); // 수정된 userInfo를 직접 전달
     };
 
+
     const sumitAgreementGetNotified = async (updatedUserInfo) => {
         try {
             const cookies = new Cookies();
@@ -56,6 +60,7 @@ const MySetting = () => {
             console.error("알람 수신 동의 수정 실패", error);
         }
     }
+
     return (
         <>
             <Nav>
@@ -66,12 +71,13 @@ const MySetting = () => {
                     />
                 </div>
                 <div style={styles.title}>사용자 설정</div>
-                <IconWapper onClick={() => navigate("/")} style={{cursor: 'pointer'}}>
+                <IconWapper onClick={() => navigate("/")}>
                     <HomeIcon/>
                 </IconWapper>
             </Nav>
             <Divider style={{maxWidth: '600px', margin: 'auto'}}/>
             <Container style={{marginTop: 20, padding: 20}}>
+
                 <Listbox
                     variant="solid"
                     className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[600px] overflow-visible shadow-small rounded-medium"
@@ -113,7 +119,6 @@ const MySetting = () => {
                             </div>
                         </div>
                     </ListboxItem>
-                    <PasswordUpdateModal isOpen={updateIs} onOpenChange={updateChange}/>
                     <ListboxItem
                         className='h-16'
                         color="default"
@@ -130,8 +135,9 @@ const MySetting = () => {
                             </div>
                         </div>
                     </ListboxItem>
-                    <DropMadal isOpen={dropIs}  onOpenChange={dropChange}/>
                 </Listbox>
+                <DropMadal isOpen={dropIs} onOpenChange={dropChange}/>
+                <PasswordUpdateModal isOpen={updateIs} onOpenChange={updateChange}/>
             </Container>
         </>
     );
@@ -146,6 +152,7 @@ const styles = {
     }
 }
 
+
 const HomeIcon = styled(HiOutlineHome)`
   display: -ms-flexbox;
   display: flex;
@@ -154,3 +161,5 @@ const HomeIcon = styled(HiOutlineHome)`
   width: 24px;
   height: 24px;
 `;
+
+
