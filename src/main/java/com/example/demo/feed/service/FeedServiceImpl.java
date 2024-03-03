@@ -2,21 +2,20 @@ package com.example.demo.feed.service;
 
 
 import com.example.demo.account.dto.AccountDetails;
-import com.example.demo.club.dto.CreateClubDTO;
 import com.example.demo.club.entity.Club;
-import com.example.demo.club.event.ClubCreationEvent;
 import com.example.demo.club.exception.BadRequestException;
 import com.example.demo.club.repository.ClubRepository;
-import com.example.demo.club.utils.ClubValidator;
+import com.example.demo.common.exception.AuthException;
+import com.example.demo.common.exception.NotFoundException;
 import com.example.demo.feed.dto.*;
 import com.example.demo.feed.entity.Feed;
 import com.example.demo.feed.repository.FeedRepository;
 import com.example.demo.feed.utils.FeedValidator;
-import com.example.demo.membership.dto.ClubSignupDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_CLUB;
+import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_POST_OWNER;
 
 @Service
 @RequiredArgsConstructor
@@ -36,143 +38,121 @@ public class FeedServiceImpl implements FeedService {
     // ======================= CRUD OPERATIONS ======================= //
     // Club 관련 CRUD 작업 처리 메서드
 
-    // 모든 Feed 엔티티 조회
+    // 모든 Feed 엔티티 조회 (비공개 포함)
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> findAll() {
         List<Feed> feeds = feedRepository.findAll();
 
-        List<FeedListDTO> feedListDTOs = feeds.stream().map(feed -> {
-            ClubDTO clubDTO = ClubDTO.builder()
-                    .clubId(feed.getClub().getClubId())
-                    .name(feed.getClub().getName())
-                    .code(feed.getClub().getCode())
-                    .description(feed.getClub().getDescription())
-                    .activitiesArea(feed.getClub().getActivitiesArea())
-                    .build();
-
-            FeedDTO feedDTO = FeedDTO.builder()
-                    .feedId(feed.getFeedId())
-                    .userName(feed.getUserName())
-                    .userProfile(feed.getUserProfile())
-                    .content(feed.getContent())
-                    .feedCode(feed.getFeedCode())
-                    .countLiked(feed.getCountLiked())
-                    .liked(feed.isLiked())
-                    .weather(feed.getWeather())
-                    .isPublic(feed.isPublic())
-                    .createdAt(feed.getCreatedAt())
-                    .build();
-
-            return new FeedListDTO(feedDTO, clubDTO);
-        }).collect(Collectors.toList());
+        List<FeedListDTO> feedListDTOs = feeds.stream()
+                .map(this::feedToFeedListDTO)
+                .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
         response.put("list", feedListDTOs);
         return ResponseEntity.ok(response);
     }
 
+    // 공개 Feed 조회
+    @Override
+    public ResponseEntity<Map<String, Object>> findByIsPublicTrue() {
+        List<Feed> feeds = feedRepository.findByIsPublicTrue();
+
+        List<FeedListDTO> feedListDTOs = feeds.stream()
+                .map(this::feedToFeedListDTO)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", feedListDTOs);
+        return ResponseEntity.ok(response);
+    }
+
+    //클럽 ID 피드 조회
+    // FeedServiceImpl 클래스에 메서드 구현
+    @Override
+    @Transactional(readOnly = true)
+    public List<FeedListDTO> findByClubId(Long clubId) {
+        List<Feed> feeds = feedRepository.findByClubId(clubId);
+        return feeds.stream()
+                .map(this::feedToFeedListDTO)
+                .collect(Collectors.toList());
+    }
+
+
+
+
     @Override
     @Transactional
     public FeedListDTO saveFeed(FeedRequestDTO requestDTO) {
         // FeedRequestDTO를 Feed 엔티티로 변환
         Feed feed = validateDTO(convertToEntity(requestDTO));
-
         // 저장된 Feed 엔티티로부터 FeedListDTO 생성 및 반환
         return createFeed(requestDTO);
     }
 
     @Override
-    public void deleteFeed(Long feedId) {
+    public void deleteFeed(final @AuthenticationPrincipal AccountDetails accountDetails,Long feedId) {
         // 먼저 피드가 존재하는지 확인
         if (!feedRepository.existsById(feedId)) {
             throw new EntityNotFoundException("Feed not found with id: " + feedId);
         }
+        //작성자 본인인지 확인
+        Feed existingFeed = findFeedById(feedId);
+        validateUserName(accountDetails.getAccount().getProfileName(),existingFeed.getUserName() );
         // 피드가 존재하면 삭제
         feedRepository.deleteById(feedId);
     }
 
-    @Override
-    public FeedListDTO updateFeed(Long feedId, FeedUpdateDTO requestDTO) {
-        return null;
+    @Transactional
+    public Feed updateFeed(@AuthenticationPrincipal AccountDetails accountDetails, FeedUpdateDTO requestDTO) {
+        Feed existingFeed = findFeedById(requestDTO.feedId());
+        validateUserName(accountDetails.getAccount().getProfileName(),existingFeed.getUserName());
+        existingFeed.updateFeed(requestDTO);
+        feedRepository.save(
+                validateDTO(existingFeed)
+        );
+        return existingFeed;
     }
 
-//    @Transactional
-//    public void updateClub(UpdateClubDTO requestDTO, AccountDetails accountDetails) {
-//        Club existingClub = findClubById(requestDTO.clubId());
-//        existingClub.updateClub(requestDTO, accountDetails);
-//        clubRepository.save(
-//                validateDTO(existingClub)
-//        );
-//    }
-//
-//    @Transactional
-//    public void deleteClub(long clubId) {
-//        clubRepository.deleteById(
-//                findClubById(clubId).getClubId()
-//        );
-//    }
 
-// ===================== TRANSACTIONAL METHODS ==================== //
-// 특정 트랜잭션 관련 로직 관리 메서드
+    /**
+     * 단일 피드 조회 */
+    @Override
+    @Transactional(readOnly = true)
+    public FeedListDTO getFeedById(Long feedId) {
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new EntityNotFoundException("Feed not found with id: " + feedId));
 
-//    @Transactional
-//    public void increaseCurrentMembers(long clubId) {
-//        clubRepository.increaseCurrentMembers(clubId);
-//    }
-//
-//    @Transactional
-//    public void decreaseCurrentMembers(long clubId) {
-//        clubRepository.decreaseCurrentMembers(clubId);
-//    }
-//
-//    @Transactional
-//    public void increaseGrowthMeter(long clubId) {
-//        clubRepository.increaseCurrentGrowthMeter(clubId);
-//    }
-//
-//    @Transactional
-//    public void decreaseGrowthMeter(long clubId) {
-//        clubRepository.decreaseCurrentGrowthMeter(clubId);
-//    }
+        Club club = feed.getClub(); // 피드와 연관된 클럽 정보를 가져옵니다.
 
-// =================== DOMAIN CONVERSION METHODS ================== //
-// DTO와 Entity 간 변환 담당 메서드
+        FeedDTO feedDTO = FeedDTO.builder()
+                .feedId(feed.getFeedId())
+                .userName(feed.getUserName())
+                .userProfile(feed.getUserProfile())
+                .content(feed.getContent())
+                .feedCode(feed.getFeedCode())
+                .countLiked(feed.getCountLiked())
+                .liked(feed.isLiked())
+                .weather(feed.getWeather())
+                .isPublic(feed.isPublic())
+                .createdAt(feed.getCreatedAt())
+                .build();
 
-//    public Club findClubById(final long clubId) {
-//        return clubRepository.findById(clubId)
-//                .orElseThrow(() -> new NotFoundException(NOT_FOUND_CLUB));
-//    }
-//
-//    public ClubListDTO fromFeeds(List<Club> clubs, Optional<AccountDetails> accountDetailsOptional) {
-//        List<ClubSummary> summaries = clubs.stream()
-//                .map(this::convertToSummary)
-//                .map(summary -> accountDetailsOptional
-//                        .map(accountDetails -> convertToLike(summary, accountDetails))
-//                        .orElse(summary))
-//                .toList();
-//
-//        return ClubListDTO.builder()
-//                .summaryList(summaries)
-//                .build();
-//    }
+        ClubDTO clubDTO = ClubDTO.builder()
+                .clubId(club.getClubId())
+                .name(club.getName())
+                .code(club.getCode())
+                .description(club.getDescription())
+                .activitiesArea(club.getActivitiesArea())
+                .build();
 
-// ======================= UTILITY METHODS ======================= //
-// 보조 기능 및 유틸리티 메서드
+        return new FeedListDTO(feedDTO, clubDTO);
+    }
 
-/**
- * 현재 인증된 사용자의 상세 정보를 반환
- * @return 인증된 사용자의 {@link AccountDetails}를 포함하는 {@link Optional}, 인증되지 않은 경우 빈 {@link Optional}.
- */
-//    private Optional<AccountDetails> getCurrentAccountDetails() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        boolean isAuthenticated = authentication != null && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
-//
-//        return isAuthenticated ? Optional.ofNullable((AccountDetails) authentication.getPrincipal()) : Optional.empty();
-//    }
 
-/**
- * 요청 데이터를 기반으로 새로운 Club 엔티티를 생성
+
+    /**
+ * 요청 데이터를 기반으로 새로운 Feed 엔티티를 생성
  *
  */
 @Transactional
@@ -225,50 +205,32 @@ public FeedListDTO  createFeed(FeedRequestDTO requestDTO) {
 }
 
 /**
- * Club 엔티티를 ClubSummary DTO로 변환
+ * 엔티티를  FeedListDTO로 변환
  */
-//    public ClubSummary convertToSummary(Club club) {
-//        return ClubSummary.builder()
-//                .clubId(club.getClubId())
-//                .name(club.getName())
-//                .code(club.getCode())
-//                .description(club.getDescription())
-//                .activitiesArea(club.getActivitiesArea())
-//                .joinApprovalStatus(club.getJoinApprovalStatus())
-//                .currentMembers(club.getCurrentMembers())
-//                .maxMembers(club.getMaxMembers())
-//                .status(club.getStatus())
-//                .tag(club.getTag())
-//                .category(club.getCategory())
-//                .grade(club.getGrade())
-//                .build();
-//    }
+private FeedListDTO feedToFeedListDTO(Feed feed) {
+    ClubDTO clubDTO = ClubDTO.builder()
+            .clubId(feed.getClub().getClubId())
+            .name(feed.getClub().getName())
+            .code(feed.getClub().getCode())
+            .description(feed.getClub().getDescription())
+            .activitiesArea(feed.getClub().getActivitiesArea())
+            .build();
 
-/**
- * ClubSummary 객체에 "좋아요" 상태를 추가
- */
-//    private ClubSummary convertToLike(ClubSummary summary, AccountDetails accountDetails) {
-//        boolean liked = likeService.existsLike(
-//                accountDetails,
-//                LikeType.CLUB,
-//                summary.clubId()
-//        );
-//        return ClubSummary.builder()
-//                .clubId(summary.clubId())
-//                .name(summary.name())
-//                .code(summary.code())
-//                .description(summary.description())
-//                .activitiesArea(summary.activitiesArea())
-//                .joinApprovalStatus(summary.joinApprovalStatus())
-//                .currentMembers(summary.currentMembers())
-//                .maxMembers(summary.maxMembers())
-//                .status(summary.status())
-//                .tag(summary.tag())
-//                .category(summary.category())
-//                .grade(summary.grade())
-//                .liked(liked)
-//                .build();
-//    }
+    FeedDTO feedDTO = FeedDTO.builder()
+            .feedId(feed.getFeedId())
+            .userName(feed.getUserName())
+            .userProfile(feed.getUserProfile())
+            .content(feed.getContent())
+            .feedCode(feed.getFeedCode())
+            .countLiked(feed.getCountLiked())
+            .liked(feed.isLiked())
+            .weather(feed.getWeather())
+            .isPublic(feed.isPublic())
+            .createdAt(feed.getCreatedAt())
+            .build();
+
+    return new FeedListDTO(feedDTO, clubDTO);
+}
 
 /**
  * Club 엔티티의 유효성을 검증
@@ -288,6 +250,18 @@ private Feed validateDTO(Feed feed) {
     return feed;
 }
 
+    public Feed findFeedById(final long feedId) {
+        return feedRepository.findById(feedId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_CLUB));
+    }
+
+    private void validateUserName(String currentUsername, String requestUsername) {
+        if (!currentUsername.equals(requestUsername)) {
+            throw new AuthException(NOT_POST_OWNER);
+        }
+    }
+
+
     private Feed convertToEntity(FeedRequestDTO requestDTO) {
         Club club = clubRepository.findById(requestDTO.clubId())
                 .orElseThrow(() -> new EntityNotFoundException("Club not found with id: " + requestDTO.clubId()));
@@ -302,6 +276,26 @@ private Feed validateDTO(Feed feed) {
                 .countLiked(requestDTO.countLiked())
                 .liked(requestDTO.liked())
                 .club(club) // 연관된 Club 엔티티 설정
+                .build();
+    }
+
+
+    public FeedRequestDTO setUserInfo(FeedRequestDTO requestDTO, AccountDetails accountDetails) {
+        // AccountDetails 객체로부터 사용자 이름과 프로필 이미지 URL을 가져옵니다.
+        String userName = accountDetails.getAccount().getProfileName();
+        String userProfile = accountDetails.getAccount().getProfileImage();
+
+        // Builder 패턴을 사용하여 기존의 requestDTO 내용을 유지하면서 userName과 userProfile만 변경하여 새로운 DTO 객체를 생성합니다.
+        return FeedRequestDTO.builder()
+                .userName(userName)
+                .userProfile(userProfile)
+                .isPublic(requestDTO.isPublic())
+                .weather(requestDTO.weather())
+                .content(requestDTO.content())
+                .feedCode(requestDTO.feedCode())
+                .countLiked(requestDTO.countLiked())
+                .liked(requestDTO.liked())
+                .clubId(requestDTO.clubId())
                 .build();
     }
 }
