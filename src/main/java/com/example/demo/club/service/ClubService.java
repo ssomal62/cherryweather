@@ -2,6 +2,8 @@ package com.example.demo.club.service;
 
 
 import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.account.entity.Account;
+import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.club.domain.ClubSummary;
 import com.example.demo.club.dto.*;
 import com.example.demo.club.entity.Club;
@@ -36,6 +38,7 @@ public class ClubService {
 
     private final ClubRepository clubRepository;
     private final LikeService likeService;
+    private final AccountRepository accountRepository;
     private final ApplicationEventPublisher eventPublisher;
 
     // ======================= CRUD OPERATIONS ======================= //
@@ -44,7 +47,7 @@ public class ClubService {
     @Transactional(readOnly = true)
     public ClubListDTO findAll() {
         Optional<AccountDetails> accountDetailsOptional = getCurrentAccountDetails();
-        List<Club> clubs = clubRepository.findAll();
+        List<Club> clubs = clubRepository.findAllByOrderByCreatedAtDesc();
         return fromClubs(clubs, accountDetailsOptional);
     }
 
@@ -52,12 +55,15 @@ public class ClubService {
     public ClubDetailDTO findDetail(long clubId) {
         Optional<AccountDetails> accountDetailsOptional = getCurrentAccountDetails();
         Club club = findClubById(clubId);
+        Optional<Account> findAccount = accountRepository.findById(club.getRepresentativeUserId());
         boolean liked = accountDetailsOptional
                 .map(accountDetails -> likeService.existsLike(accountDetails, LikeType.CLUB, clubId))
                 .orElse(false);
 
         return ClubDetailDTO.builder()
                 .clubDetail(club)
+                .hostName(findAccount.get().getProfileName())
+                .hostProfile(findAccount.get().getProfileImage())
                 .liked(liked)
                 .build();
     }
@@ -126,13 +132,23 @@ public class ClubService {
     }
 
     @Transactional
-    public void increaseGrowthMeter(long clubId) {
-        clubRepository.increaseCurrentGrowthMeter(clubId);
+    public void increaseGrowthMeter(long clubId, int score) {
+        clubRepository.increaseCurrentGrowthMeter(clubId, score);
     }
 
     @Transactional
-    public void decreaseGrowthMeter(long clubId) {
-        clubRepository.decreaseCurrentGrowthMeter(clubId);
+    public void decreaseGrowthMeter(long clubId, int score) {
+        clubRepository.decreaseCurrentGrowthMeter(clubId, score);
+    }
+
+    @Transactional
+    public void increaseFeedCount(long clubId) {
+        clubRepository.increaseFeedCount(clubId);
+    }
+
+    @Transactional
+    public void decreaseFeedCount(long clubId) {
+        clubRepository.decreaseFeedCount(clubId);
     }
 
     // =================== DOMAIN CONVERSION METHODS ================== //
@@ -181,8 +197,10 @@ public class ClubService {
                 .code(requestDTO.code())
                 .notice(requestDTO.notice())
                 .grade(GENTLE_BREEZE)
+                .tag(requestDTO.tag())
                 .category(requestDTO.category())
                 .subCategory(requestDTO.subCategory())
+                .feedCount(0)
                 .joinApprovalStatus(requestDTO.joinApprovalStatus().toUpperCase())
                 .status(requestDTO.status())
                 .activitiesArea(requestDTO.activitiesArea())
@@ -203,6 +221,7 @@ public class ClubService {
                 .clubId(club.getClubId())
                 .name(club.getName())
                 .code(club.getCode())
+                .feedCount(club.getFeedCount())
                 .description(club.getDescription())
                 .activitiesArea(club.getActivitiesArea())
                 .joinApprovalStatus(club.getJoinApprovalStatus())
@@ -228,6 +247,7 @@ public class ClubService {
                     .clubId(summary.clubId())
                     .name(summary.name())
                     .code(summary.code())
+                    .feedCount(summary.feedCount())
                     .description(summary.description())
                     .activitiesArea(summary.activitiesArea())
                     .joinApprovalStatus(summary.joinApprovalStatus())

@@ -45,6 +45,9 @@ public class Club {
     private String tag;
 
     @Column
+    private Integer feedCount;
+
+    @Column
     private String joinApprovalStatus;
 
     @Enumerated(EnumType.STRING)
@@ -97,6 +100,7 @@ public class Club {
         this.description = requestDTO.description();
         this.category = requestDTO.category();
         this.subCategory = requestDTO.subCategory();
+        this.tag = requestDTO.tag();
         this.code = requestDTO.code();
         this.notice = requestDTO.notice();
         this.status = requestDTO.status();

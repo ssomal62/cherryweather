@@ -31,15 +31,15 @@ const ClubFeedSlide = ({isLogin, clubDetail}) => {
                 <div className="item-end">
                     <Chip
                         size='sm' variant='flat' color='success'
-                        style={{cursor:'pointer'}}
+                        style={{cursor: 'pointer'}}
                         startContent={<MdOutlineAdd/>}
                         className="text-md text-tiny mr-2"
-                        onClick={()=>navigate('/feed-editor')}
+                        onClick={() => navigate('/feed-editor')}
                     >
                         피드 작성</Chip>
                     <Chip
                         size='sm' variant='flat' color='primary'
-                        style={{cursor:'pointer'}}
+                        style={{cursor: 'pointer'}}
                         className="text-md text-tiny "
                         onClick={handelMoreClick}
                     >
@@ -61,7 +61,7 @@ const Section = styled.div`
 `;
 
 const styles = {
-    font       : {
+    font: {
         color       : '#F31260',
         marginBottom: '5%',
     },

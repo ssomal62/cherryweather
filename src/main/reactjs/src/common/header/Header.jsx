@@ -94,7 +94,7 @@ export default function Header({opacity}) {
                 justify="end"
                 style={{position: "relative"}}
             >
-                <IoOptionsOutline style={styles.icon}/>
+                {/*<IoOptionsOutline style={styles.icon}/>*/}
                 <IoSearchOutline style={styles.icon}
                                  onClick={handleSearchClick}
                 />
