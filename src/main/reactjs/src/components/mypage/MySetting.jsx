@@ -1,5 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {Container, IconWapper, Nav,} from "../../pages/user/MyPage";
+import {
+    Container,
+    IconWapper,
+    Nav,
+} from "../../pages/user/MyPage";
 import {IoArrowBack} from "react-icons/io5";
 import {useNavigate} from "react-router-dom";
 import {HiOutlineHome} from "react-icons/hi2";
@@ -16,13 +20,11 @@ import PasswordUpdateModal from "./PasswordUpdateModal";
 const MySetting = () => {
 
     const navigate = useNavigate();
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const fetchUserInfo = useFetchUserInfo();
     const {agreementGetNotified} = userInfo;
-    const {pwIsOpen, onPwOpen, openChange} = useDisclosure();
-    const [onModal, setOnModal] = useState(false)
-    console.log(pwIsOpen)
+    const {isOpen: dropIs, onOpen: dropOn, onOpenChange: dropChange} = useDisclosure();
+    const {isOpen: updateIs, onOpen: updateOn, onOpenChange: updateChange} = useDisclosure();
 
     useEffect(() => {
         // 컴포넌트가 마운트 될 때만 fetchUserInfo를 호출합니다.
@@ -54,11 +56,6 @@ const MySetting = () => {
             console.error("알람 수신 동의 수정 실패", error);
         }
     }
-
-    const closeModal = () => {
-        setOnModal(false);
-    }
-
     return (
         <>
             <Nav>
@@ -69,12 +66,12 @@ const MySetting = () => {
                     />
                 </div>
                 <div style={styles.title}>사용자 설정</div>
-                <IconWapper onClick={() => navigate("/")} style={{cursor:'pointer'}}>
+                <IconWapper onClick={() => navigate("/")} style={{cursor: 'pointer'}}>
                     <HomeIcon/>
                 </IconWapper>
             </Nav>
             <Divider style={{maxWidth: '600px', margin: 'auto'}}/>
-            <Container style={{marginTop: 20, padding:20}}>
+            <Container style={{marginTop: 20, padding: 20}}>
                 <Listbox
                     variant="solid"
                     className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[600px] overflow-visible shadow-small rounded-medium"
@@ -102,7 +99,7 @@ const MySetting = () => {
                     <ListboxItem
                         className='h-16'
                         color="default"
-                        onClick={() => setOnModal(true)}
+                        onClick={updateOn}
                     >
                         <div className="flex flex-row items-start justify-center">
                             <div className="flex flex-row ml-1 gap-1 justify-start">
@@ -116,10 +113,11 @@ const MySetting = () => {
                             </div>
                         </div>
                     </ListboxItem>
+                    <PasswordUpdateModal isOpen={updateIs} onOpenChange={updateChange}/>
                     <ListboxItem
                         className='h-16'
                         color="default"
-                        onClick={onOpen}
+                        onClick={dropOn}
                     >
                         <div className="flex flex-row items-start justify-center">
                             <div className="flex flex-row ml-1 gap-1 justify-start">
@@ -132,21 +130,19 @@ const MySetting = () => {
                             </div>
                         </div>
                     </ListboxItem>
+                    <DropMadal isOpen={dropIs}  onOpenChange={dropChange}/>
                 </Listbox>
             </Container>
-            <PasswordUpdateModal isOpen={onModal} onOpenChange={openChange} close={closeModal}/>
-            <DropMadal isOpen={isOpen} onOpenChange={onOpenChange}/>
         </>
     );
 };
 
 export default MySetting;
 
-
 const styles = {
-    title : {
-        fontSize: '18px',
-        fontWeight:'600',
+    title: {
+        fontSize  : '18px',
+        fontWeight: '600',
     }
 }
 

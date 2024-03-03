@@ -3,6 +3,7 @@ package com.example.demo.account.service;
 import com.example.demo.account.dto.*;
 import com.example.demo.account.entity.Account;
 import com.example.demo.auth.dto.oauth.OAuthAccountInfoDto;
+import jakarta.validation.constraints.Email;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -27,4 +28,6 @@ public interface AccountService {
     ResponseEntity<UserInfoDto> getUserInfoByEmail(String email);
 
     UserInfoDto getUserInfoByAccountId(Long accountId);
+
+    @Email String findEmail(final FindEmailRequestDto findEmailRequestDto);
 }

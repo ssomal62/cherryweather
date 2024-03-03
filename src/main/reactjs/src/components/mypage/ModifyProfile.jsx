@@ -19,13 +19,12 @@ const ModifyProfile = () => {
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const {profileImage, profileName} = userInfo;
-    const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600&ttype=jpg`;
+    const imageUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600`
     const fetchUserInfo = useFetchUserInfo();
     const modifyUserInfo = useModifyUserInfo();
     useEffect(() => {
         fetchUserInfo();
     }, []);
-
 
     console.log(profileName);
 
@@ -36,12 +35,14 @@ const ModifyProfile = () => {
         if (file) {
             console.log(file);
             setUserInfo((prevState) => ({
-                ...prevState, profileImage: file.name, // 응답에 따라 경로 수정 필요
+                ...prevState,
+                profileImage: file.name, // 응답에 따라 경로 수정 필요
             }));
             uploadProfileImage(file);
         }
     };
-    return (<>
+    return (
+        <>
         <Nav>
             <div style={{flex: "1px"}}>
                 <IoArrowBack
@@ -54,14 +55,13 @@ const ModifyProfile = () => {
         </Nav>
         <Divider style={{maxWidth: '600px', margin: 'auto'}}/>
         <Container>
-
             <div>
                 <label
                     htmlFor="file-upload"
                     style={{display: "block", cursor: "pointer"}}
                 >
                     <FileImageWapper>
-                        <ProfileImg src={imagwUrl} alt="profile"/>
+                        <ProfileImg src={imageUrl} alt="profile"/>
                     </FileImageWapper>
                 </label>
                 <input
@@ -77,11 +77,11 @@ const ModifyProfile = () => {
                         type="text"
                         label="닉네임"
                         value={profileName}
-                        onChange={(e) => setUserInfo({...userInfo, profileName: e.target.value})}
+                        onChange={(e) =>
+                            setUserInfo({...userInfo, profileName: e.target.value})}
                     />
                 </div>
             </div>
-
             <div className="flex justify-center items-center w-full mt-5">
                 <Button className="w-2/3" color="danger" onClick={modifyUserInfo}>수정하기</Button>
             </div>

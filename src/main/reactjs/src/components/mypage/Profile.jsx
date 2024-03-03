@@ -9,8 +9,8 @@ import {FaPen} from "react-icons/fa6";
 const Profile = () => {
     const userInfo = useRecoilValue(userInfoState);
     const fetchUserInfo = useFetchUserInfo();
-    const {profileImage, profileName} = userInfo;
-    const imageUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}.jpg?type=f&w=600&h=600&ttype=jpg`;
+    const { profileImage, profileName } = userInfo;
+    const imageUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600`
     useEffect(() => {
         fetchUserInfo();
     }, []);
@@ -52,7 +52,6 @@ const Profile = () => {
 };
 
 export default Profile;
-
 
 export const ImageWapper = styled.div`
   margin: 5% 0 5% 0;

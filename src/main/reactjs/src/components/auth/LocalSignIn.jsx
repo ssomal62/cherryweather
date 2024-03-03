@@ -5,15 +5,17 @@ import { Cookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { IsLoginAtom } from "../../recoil/LoginAtom";
-import {Input} from "@nextui-org/react";
+import {Chip, Divider, Input, useDisclosure} from "@nextui-org/react";
 import styled from "styled-components";
 import weatherImg from "../../assets/images/sun.png";
 import { instance } from "../../recoil/module/instance";
+import FindEmail from "./modal/FindEmail";
 
 
 const LocalSignIn = () => {
     const cookies = new Cookies();
     const navigate = useNavigate();
+    const {isOpen : findEmailIsOpen, onOpen : findEmailOnOpen, onOpenChange:findEmailOnOpenChange} = useDisclosure();
     const [isLogin, setIsLogin] = useRecoilState(IsLoginAtom);
 
       // 로그인 form 데이터
@@ -51,9 +53,6 @@ const LocalSignIn = () => {
         }
     }
 
-
-
-    
     console.log(loginData.email, loginData.password);
     return (
         <Layout>
@@ -70,9 +69,15 @@ const LocalSignIn = () => {
         <LoginContainer>
         <LoginInput type="email" label="이메일" name="email" onChange={onChange}/>
         <LoginInput type="Password" label="비밀번호" name="password" onChange={onChange}/>
-        <SunlightButton style={{ marginTop : "20px", width: "90%"}}>
-          <LoginBtnText onClick={()=>submitLogin()}>로그인</LoginBtnText>
+            <div className="flex h-5 items-center space-x-4 text-small">
+                <Chip size="sm" variant="light" className="cursor-pointer" onClick={findEmailOnOpen}>아이디찾기</Chip>
+                <Divider orientation="vertical" className="h-1/2"/>
+                <Chip size="sm" variant="light" className="cursor-pointer">비밀번호찾기</Chip>
+            </div>
+            <SunlightButton style={{marginTop: "20px", width: "90%"}} onClick={()=>submitLogin()}>
+          <LoginBtnText>로그인</LoginBtnText>
         </SunlightButton>
+            <FindEmail isOpen={findEmailIsOpen} onOpenChange={findEmailOnOpenChange}/>
         </LoginContainer>
       </Layout>
     );
@@ -81,20 +86,22 @@ const LocalSignIn = () => {
 export default LocalSignIn;
 
 const SunlightButton = styled.button`
-  background-color: #FFD700;
-  max-width: 400px;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px; 
-  cursor: pointer;
-  transition: background-color 0.3s ease; 
-  &:hover {
-    background-color: #FFC107;
-  }
-  &:active {
-    background-color: #FFA000;
-  }
+    background-color: #ffd857;
+    max-width: 400px;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #FFC107;
+    }
+
+    &:active {
+        background-color: #FFA000;
+    }
 `;
 
 const LoginInput = styled(Input)`
