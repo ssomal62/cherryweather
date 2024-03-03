@@ -16,11 +16,6 @@ const AI_main = () => {
     const from = location.state?.from || '/';
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    console.log(isLogin);
-
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-    // const isLogin = useRecoilValue(IsLoginAtom);
-
     const handleBack = () => {
         navigate(from);
     }
@@ -28,8 +23,6 @@ const AI_main = () => {
     useEffect(() => {
         setIsModalOpen(!isLogin);
     }, []);
-
-
 
     const handleConfigurationsClick = () => {
         if (!isLogin) {

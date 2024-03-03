@@ -23,10 +23,12 @@ export const useFetchImage = () => {
     return useCallback(async () => {
         // prompt가 undefined, null, 또는 빈 문자열인 경우 처리
         if (!prompt) {
+            console.log("1번 ")
             const newPrompt = "Yes, I can provide a style guide for Casual Street Style. Let's create an informative style guide depicting casual street fashion. The guide features a stylish East Asian woman dressed in a comfortable yet chic ensemble suitable for the cool weather. She is adorned in a cozy oversized knit sweater🧥, distressed denim jeans👖, and stylish sneakers👟. The look is completed with a trendy crossbody bag👜 and oversized sunglasses🕶️ to add a touch of urban flair. This outfit is perfect for a casual day out in the city or a laid-back hangout with friends. How does that sound to you? If you have any specific preferences or would like to see more examples, feel free to let me know! 😊";
             setPrompt(newPrompt); // prompt 상태 업데이트
             await executeImageFetch(newPrompt); // 이미지 패치 실행
         } else {
+            console.log("1번 ")
             await executeImageFetch(prompt); // 이미지 패치 실행
         }
     }, [prompt, setImageURL, setHeart, setPrompt]); // 의존성 배열에 prompt 추가
@@ -54,3 +56,4 @@ export const useFetchImage = () => {
         }
     }
 };
+
