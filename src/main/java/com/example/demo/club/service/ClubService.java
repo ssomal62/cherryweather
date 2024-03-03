@@ -7,6 +7,7 @@ import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.club.domain.ClubSummary;
 import com.example.demo.club.dto.*;
 import com.example.demo.club.entity.Club;
+import com.example.demo.club.enums.ClubGrade;
 import com.example.demo.club.event.ClubCreationEvent;
 import com.example.demo.club.exception.BadRequestException;
 import com.example.demo.club.repository.ClubRepository;
@@ -28,9 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.demo.club.enums.ClubGrade.GENTLE_BREEZE;
-import static com.example.demo.common.exception.enums.ExceptionStatus.NOT_FOUND_CLUB;
-import static com.example.demo.common.exception.enums.ExceptionStatus.NO_AUTHORIZATION;
+import static com.example.demo.club.enums.ClubGrade.*;
+import static com.example.demo.common.exception.enums.ExceptionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -111,6 +111,10 @@ public class ClubService {
         );
     }
 
+    public void updateClub(ClubGrade currenGrade, Club findClub) {
+        findClub.updateClub(currenGrade);
+    }
+
     @Transactional
     public void deleteClub(long clubId) {
         clubRepository.deleteById(
@@ -133,7 +137,36 @@ public class ClubService {
 
     @Transactional
     public void increaseGrowthMeter(long clubId, int score) {
-        clubRepository.increaseCurrentGrowthMeter(clubId, score);
+        Club club = findClubById(clubId);
+        int newScore = club.getCurrentGrowthMeter() + score;
+
+        if(club.getGrade() == ClubGrade.RADIANT_RAINBOW) {
+            throw new ServiceFailedException(INVALID_TYPE_VALUE);
+        }
+
+        if (newScore >= club.getMaxGrowthMeter()) {
+            upgradeClubGrade(club);
+            int remainder = newScore - club.getMaxGrowthMeter();
+            clubRepository.resetCurrentGrowthMeter(clubId);
+            if (remainder > 0) {
+                clubRepository.increaseCurrentGrowthMeter(clubId, remainder);
+            }
+        } else {
+            clubRepository.increaseCurrentGrowthMeter(clubId, score);
+        }
+        clubRepository.save(club);
+    }
+
+    private void upgradeClubGrade(Club club) {
+        switch (club.getGrade()) {
+            case GENTLE_BREEZE -> updateClub(THUNDERSTORM, club);
+            case THUNDERSTORM -> updateClub(SNOWY_WHISPERS, club);
+            case SNOWY_WHISPERS -> updateClub(WARM_SUNLIGHT, club);
+            case WARM_SUNLIGHT -> updateClub(RADIANT_RAINBOW, club);
+            default -> {
+                throw new IllegalArgumentException("Unexpected grade: " + club.getGrade());
+            }
+        }
     }
 
     @Transactional

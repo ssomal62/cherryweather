@@ -23,6 +23,11 @@ public interface ClubRepository extends JpaRepository <Club, Long> {
 
     @Transactional
     @Modifying
+    @Query("UPDATE Club c SET c.currentGrowthMeter = 0 WHERE c.clubId = :clubId")
+    void resetCurrentGrowthMeter(long clubId);
+
+    @Transactional
+    @Modifying
     @Query("UPDATE Club c SET c.currentGrowthMeter = c.currentGrowthMeter + :score WHERE c.clubId = :clubId")
     void increaseCurrentGrowthMeter(long clubId, int score);
 

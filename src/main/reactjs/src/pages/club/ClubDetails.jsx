@@ -24,6 +24,7 @@ import {
     useMembershipData
 } from "../../recoil/hooks/UseMembershipApi";
 import ClubTag from "../../components/club/clubDetail/ClubTag";
+import GrowthMeter from "../../components/club/clubDetail/GrowthMeter";
 
 const ClubDetails = () => {
 
@@ -108,6 +109,7 @@ const ClubDetails = () => {
                         <MemberSummary isLogin={isLogin} clubDetail={clubDetail}/>
                         <ClubFeedSlide isLogin={isLogin} clubDetail={clubDetail}/>
                         <ClubTag clubDetail={clubDetail}/>
+                        <GrowthMeter clubDetail={clubDetail}/>
                     </Content>
 
                     <Image radius='none' alt=""

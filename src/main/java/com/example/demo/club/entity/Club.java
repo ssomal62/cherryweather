@@ -108,4 +108,10 @@ public class Club {
         this.activitiesArea = requestDTO.activitiesArea();
         this.updatedUserId = accountDetails.getAccount().getAccountId();
     }
+
+    public void updateClub(ClubGrade grade) {
+        this.grade = grade;
+        this.maxGrowthMeter = grade.getMaxGrowthMeter();
+        this.maxMembers = grade.getMaxMembers();
+    }
 }
