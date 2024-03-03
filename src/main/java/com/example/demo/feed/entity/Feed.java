@@ -1,7 +1,10 @@
 package com.example.demo.feed.entity;
 
 
+import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.club.dto.UpdateClubDTO;
 import com.example.demo.club.entity.Club;
+import com.example.demo.feed.dto.FeedUpdateDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,10 +44,12 @@ public class Feed {
     @Column(name ="feed_code")
     private String feedCode;
 
-    @Column(name ="count_liked", nullable = false)
+    @Builder.Default
+    @Column(name = "count_liked", nullable = false)
     private String countLiked = "0";
 
-    @Column(name ="liked", nullable = false)
+    @Builder.Default
+    @Column(name = "liked", nullable = false)
     private boolean liked = false;
 
     @Column(name ="weather")
@@ -56,12 +61,11 @@ public class Feed {
     @CreatedDate
     private LocalDateTime createdAt;
 
-//    public void updateMembership(UpdateMembership requestDTO) {
-//        if(requestDTO.membershipStatus() == RegisteredStatus.PENDING) {
-//            this.status = RegisteredStatus.ACTIVE;
-//        }
-//        this.role = requestDTO.role();
-//        this.updatedUserId = requestDTO.updatedUserId();
-//    }
+    public void updateFeed(FeedUpdateDTO requestDTO) {
+            if (content != null) this.content = requestDTO.content();
+            this.feedCode = requestDTO.feedCode();
+            this.weather = requestDTO.weather();
+            this.isPublic = requestDTO.isPublic();
+    }
 
 }

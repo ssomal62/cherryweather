@@ -14,8 +14,8 @@ import TimeLabel from "./TimeLabel";
 const FeedCard = ({data, useParam}) => {
 
     const isLogin = useRecoilValue(IsLoginAtom);
-    const feed = data.feed;
-    const club = data.club;
+    const feed = data.feedDTO;
+    const club = data.clubDTO;
 
     const [isLiked, setIsLiked] = useState(feed.liked);
     const [countLike, setCountLike] = useState(feed.countLiked);

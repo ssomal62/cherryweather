@@ -19,6 +19,36 @@ export const feedDetailState = atom({
 /* -------------------------------------------
     여기서부터 Feed 데이터를 가져오는 커스텀 훅
 --------------------------------------------- */
+export const useFeedPublicList = () => {
+    const setFeedList = useSetRecoilState(feedListState);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        const cookie = new Cookies();
+        const accessToken = cookie.get('accessToken');
+        const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+
+        try {
+            const response = await instance.get('/feeds', { headers }); // '/api/feeds'는 공개 피드를 가져오는 서버의 엔드포인트
+            setFeedList(response.data.list); // 서버 응답에서 list 키의 값을 사용하여 상태 업데이트
+            console.log("Feeds fetched successfully:", response.data.list);
+        } catch (error) {
+            console.error("Error fetching feeds:", error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    }, [setFeedList]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    return { loading, error };
+};
 
 export const useFeedData = ({method = 'get', state, dynamicPath, requestBody = null}) => {
     const cookie = useMemo(() => new Cookies(), []);
@@ -43,7 +73,7 @@ export const useFeedData = ({method = 'get', state, dynamicPath, requestBody = n
                 case 'post':
                     response = await instance.post(url, requestBody, {headers});
                     break;
-                case 'put':
+                case 'patch':
                     response = await instance.put(url, requestBody, {headers});
                     break;
                 case 'delete':
@@ -73,3 +103,4 @@ export const useFeedData = ({method = 'get', state, dynamicPath, requestBody = n
 
     return {loading, error};
 };
+
