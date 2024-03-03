@@ -1,17 +1,10 @@
 import React, {useEffect} from "react";
-import {
-    Container,
-    IconWapper,
-    Nav,
-    Title,
-    TitleWapper,
-} from "../../pages/user/MyPage";
+import {Container, IconWapper, Nav,} from "../../pages/user/MyPage";
 import {IoArrowBack} from "react-icons/io5";
 import {useNavigate} from "react-router-dom";
 import {HiOutlineHome} from "react-icons/hi2";
 import styled from "styled-components";
-import {MenuBtn, MenuWapper, Wapper} from "./MyPageMenu";
-import {MdKeyboardArrowRight, MdOutlineNavigateNext} from "react-icons/md";
+import {MdOutlineNavigateNext} from "react-icons/md";
 import {Divider, Listbox, ListboxItem, Switch, useDisclosure} from "@nextui-org/react";
 import DropMadal from "./DropMadal";
 import {useFetchUserInfo, userInfoState} from "../../recoil/hooks/UseFetchUserInfo";
