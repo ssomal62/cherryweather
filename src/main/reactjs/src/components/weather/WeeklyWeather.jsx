@@ -69,7 +69,6 @@ const formatDate = (dateString) => {
 const Container = styled.div`
     width: 100%;
     height: 100%;
-    border: 2px solid orangered;
     padding: 22px;
 `;
 
@@ -79,23 +78,25 @@ const Weekly = styled.div`
     width: 100%;
     height: 50px;
 `;
+
 const Date = styled.div`
     position: absolute;
     width: 20%;
-    left: 0%;
-
+    left: 0;
 `;
+
 const Weather = styled.div`
     position: absolute;
     width: 20%;
     left: 20%;
-    
 `;
+
 const RainPro = styled.div`
     position: absolute;
     width: 30%;
     left: 40%;
 `;
+
 const Temperature = styled.div`
     position: absolute;
     width: 30%;
