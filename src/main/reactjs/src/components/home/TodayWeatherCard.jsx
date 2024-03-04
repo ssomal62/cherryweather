@@ -7,11 +7,10 @@ import UseClientIp from "../../recoil/hooks/UseClientIp";
 import {dailyWeatherState, UseWeatherData, weeklyWeatherState} from "../../recoil/hooks/UseWeatherData";
 import {useRecoilValue} from "recoil";
 import LoadingCard from "./LoadingCard";
-import FadeInAnimation from "../../utils/animations/FadeInAnimation";
 import FloatingAnimation from "../../utils/animations/FloatingAnimation";
 import {motion} from "framer-motion";
 import {Swiper, SwiperSlide} from "swiper/react";
-import {Button, Spinner, Tab, Tabs} from "@nextui-org/react";
+import {Button, Tab, Tabs} from "@nextui-org/react";
 import {FaHashtag} from "react-icons/fa6";
 
 const TodayWeatherCard = () => {
@@ -47,19 +46,19 @@ const TodayWeatherCard = () => {
         {
             key       : "event",
             label     : "날씨상세",
-            icon      : <IoMdAddCircleOutline style={styles.icon}/>,
+            icon      : <IoMdAddCircleOutline/>,
             navigateTo: "/weatherDetail",
         },
         {
             key       : "event",
             label     : "오늘모임",
-            icon      : <IoMdAddCircleOutline style={styles.icon}/>,
+            icon      : <IoMdAddCircleOutline/>,
             navigateTo: "/community/event",
         },
         {
             key       : "ai",
             label     : "AI코디",
-            icon      : <TbJacket style={styles.icon}/>,
+            icon      : <TbJacket/>,
             navigateTo: "/imageList",
         }
     ];
