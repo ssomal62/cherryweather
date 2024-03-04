@@ -157,6 +157,7 @@ const ClubDetail = styled.div`
   min-height: 600%;
   border: ${bd};
   background-image: linear-gradient(to bottom, #ffffff, #ffffff, #F0F0F0, #ffffff);
+  overflow-x: hidden;
 `;
 
 const styles = {
