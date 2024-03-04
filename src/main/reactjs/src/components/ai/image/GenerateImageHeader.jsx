@@ -40,7 +40,7 @@ export default function GenerateImageHeader({ isLogin, handleBack}) {
             setIsModalOpen(true);
             return;
         }
-        navigate('/ai')
+        navigate('/gallery')
     }
 
 

@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Card, Button, CardFooter, Image, CardHeader} from '@nextui-org/react';
 import {BiCloset} from "react-icons/bi";
 import './css/mainItem.css';
-import {useNavigate} from "react-router-dom"; // Make sure to create this CSS file in your project
+import {useNavigate} from "react-router-dom";
 
 import {Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
@@ -13,9 +13,6 @@ import SwiperCore from "swiper";
 import {Autoplay, Navigation, Pagination} from "swiper/modules";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import MainTop from "./MainTop";
-import {useRecoilValue} from "recoil";
-import {userInfoState} from "../../../recoil/hooks/UseFetchUserInfo";
-import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
 
 const MainItem = ({index, isLogin, setActiveSlide}) => {
     const navigate = useNavigate();
@@ -106,6 +103,7 @@ const MainItem = ({index, isLogin, setActiveSlide}) => {
     return (
         <>
             <Swiper
+                className="swiper-box"
                 onSlideChange={onSlideChange} // onSlideChange 이벤트 핸들러 추가
                 modules={[Navigation, Pagination, Autoplay]}
                 spaceBetween={200}

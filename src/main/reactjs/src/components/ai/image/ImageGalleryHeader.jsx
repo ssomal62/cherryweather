@@ -11,31 +11,18 @@ export default function ImageGalleryHeader({ isLogin, handleBack}) {
 
     const navigate = useNavigate();
     const [scrolled, setScrolled] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
 
     const handleChatClick = () => {
-        if (!isLogin) {
-            setIsModalOpen(true);
-            return;
-        }
         navigate('/gpt')
     }
 
     const handleJacketClick = () => {
-        if (!isLogin) {
-            setIsModalOpen(true);
-            return;
-        }
         navigate('/image')
     }
 
     const handleGalleryClick = () => {
-        if (!isLogin) {
-            setIsModalOpen(true);
-            return;
-        }
-        navigate('/ai')
+        navigate('/gallery')
     }
 
     useEffect(() => {
@@ -103,7 +90,7 @@ export default function ImageGalleryHeader({ isLogin, handleBack}) {
                     </NavbarItem>
                     <NavbarItem style={styles.text}
                                 onClick={() => navigate('/')}>
-                        <p>갤러리</p>
+                        <p>체리의 드레스룸</p>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">
@@ -124,7 +111,6 @@ export default function ImageGalleryHeader({ isLogin, handleBack}) {
                         style={styles.iconBox}
                         onClick={handleGalleryClick}
                     >
-                        <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
                         <TbPhoto   style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem

@@ -37,6 +37,10 @@ import ClubFeedList from "../pages/club/ClubFeedList";
 import ClubChat from "../components/chat/ClubChat";
 import AddEvent from "../components/event/AddEvent";
 import ImageGallery from "../pages/ai/ImageGallery";
+import Casual from "../components/ai/image/Casual";
+import Modern from "../components/ai/image/Modern";
+import Sporty from "../components/ai/image/Sporty";
+import Classic from "../components/ai/image/Classic";
 
 const Router = () => {
 
@@ -107,6 +111,10 @@ const Router = () => {
                     <Route path="/image" element={<AI_image/>}/>
                     <Route path="/imageList" element={<AI_imageList/>}/>
                     <Route path="/gallery" element={<ImageGallery/>}/>
+                    <Route path="/casual" element={<Casual/>} />
+                    <Route path="/modern" element={<Modern />} />
+                    <Route path="/sporty" element={<Sporty />} />
+                    <Route path="/classic" element={<Classic />} />
                     <Route path="/weatherDetail" element={<WeatherDetail/>}/>
 
                     <Route path="/chat" element={<Chat/>}/>

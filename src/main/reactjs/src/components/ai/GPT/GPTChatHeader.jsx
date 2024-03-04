@@ -41,7 +41,7 @@ export default function GPTChatHeader({ isLogin, handleBack}) {
             setIsModalOpen(true);
             return;
         }
-        navigate('/ai')
+        navigate('/gallery')
     }
 
 
