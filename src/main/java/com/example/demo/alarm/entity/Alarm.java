@@ -30,7 +30,7 @@ public class Alarm {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-//    @JsonIgnore
+    @JsonIgnore
     private Account account;
 
     @Column
@@ -46,8 +46,7 @@ public class Alarm {
     private String description;
 
     @Column
-    private boolean showAlarm; // 수신 동의 필드 추가
-
+    private Boolean showAlarm; // 수신 동의 필드 추가
 
     @Column(updatable = false)
     @CreatedDate
