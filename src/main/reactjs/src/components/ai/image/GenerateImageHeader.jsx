@@ -71,8 +71,8 @@ export default function GenerateImageHeader({ isLogin, handleBack}) {
             cursor         : 'pointer',
         },
         icon   : {
-            width     : 24,
-            height    : 25,
+            width     : 20,
+            height    : 21,
             color     : scrolled ? 'black' : 'white',
             transition: 'color 0.3s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease',
         },

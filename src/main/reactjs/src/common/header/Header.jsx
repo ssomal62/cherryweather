@@ -10,36 +10,37 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import GoBellDropNotificationIcon from "../../components/webnotification/GoBellDropNotificationIcon";
 import {useFetchUserInfo} from "../../recoil/hooks/UseFetchUserInfo";
 import {searchClubListState} from "../../recoil/hooks/UseClubApi";
+import {requestNotificationPermissionAndToken} from "../../components/webpush/requestNotificationPermissionAndToken";
 
 export default function Header() {
-    const isLogin = useRecoilValue(IsLoginAtom);
-    const [registration, setRegistration] = useState(null);
-    const navigate = useNavigate();
-    const location = useLocation();
+  const isLogin = useRecoilValue(IsLoginAtom);
+  const [registration, setRegistration] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const fetchUserInfo = useFetchUserInfo();
-    const setSearchState = useSetRecoilState(searchClubListState);
+  const fetchUserInfo = useFetchUserInfo();
+  const setSearchState = useSetRecoilState(searchClubListState);
 
-    useEffect(() => {
-        fetchUserInfo();
-    }, []);
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
-    useEffect(() => {
-        // Service Worker 등록
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker
-                .register("/serviceWorker.js")
-                .then((reg) => {
-                    console.log("Service Worker 등록 성공:", reg);
-                    setRegistration(reg);
-                })
-                .catch((error) => {
-                    console.log("Service Worker 등록 실패:", error);
-                });
-        } else {
-            console.log("Service Worker를 지원하지 않습니다.");
-        }
-    }, []);
+  useEffect(() => {
+    // Service Worker 등록
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/serviceWorker.js")
+        .then((reg) => {
+          console.log("Service Worker 등록 성공:", reg);
+          setRegistration(reg);
+        })
+        .catch((error) => {
+          console.log("Service Worker 등록 실패:", error);
+        });
+    } else {
+      console.log("Service Worker를 지원하지 않습니다.");
+    }
+  }, []);
 
     const handleSearchClick = () => {
         setSearchState([]);
@@ -49,98 +50,93 @@ export default function Header() {
         navigate('/search', {state: {from: location.pathname}});
     }
 
-    const makeNotiTest = () => {
-        // 함수 내용은 기존 WebNotificationTest 컴포넌트의 makeNotiTest 함수를 참고하여 이동시켜주세요.
-        if (isLogin) {
-            if (Notification.permission === "granted") {
-                const options = {
-                    body              : "오늘의 날씨는",
-                    icon              : require("../../assets/images/sun.png"),
-                    requireInteraction: true,
-                };
+  const makeNotiTest = () => {
+    // 함수 내용은 기존 WebNotificationTest 컴포넌트의 makeNotiTest 함수를 참고하여 이동시켜주세요.
+    if (isLogin) {
+      requestNotificationPermissionAndToken().then(() => {
+        // 사용자에게 알림 표시 (알림 권한이 이미 허용된 경우)
+        const options = {
+          body: "오늘의 날씨는 어떠세요?",
+          icon: "/path/to/icon.png", // icon 경로를 정확히 지정해야 함
+          requireInteraction: true,
+        };
 
-                if (registration) {
-                    registration.showNotification("cherryWeather", options);
-                } else {
-                    console.log("Service Worker가 아직 등록되지 않았습니다.");
-                }
-            } else if (Notification.permission === "denied") {
-                console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-                alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-            } else {
-                Notification.requestPermission().then((permission) => {
-                    if (permission === "granted") {
-                        makeNotiTest();
-                    } else {
-                        console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-                        alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-                    }
-                });
-            }
+        const notificationTitle = "오늘의 날씨!"; // 알림 제목
+
+        // 알림 권한이 부여되었는지 확인
+        if (Notification.permission === "granted") {
+          // 서비스 워커 준비 상태 확인
+          navigator.serviceWorker.ready.then((registration) => {
+            // 알림 표시
+            registration.showNotification(notificationTitle, options);
+          });
         } else {
-            alert("로그인이 필요합니다.");
+          console.error(
+            "알림을 표시할 수 없습니다. 권한이 부여되지 않았습니다."
+          );
         }
-    };
+      });
+    }
+  };
 
-    return (
-        <Navbar shouldHideOnScroll style={styles.navBar}>
-            <NavbarContent className="sm:flex gap-4" justify="start">
-                <BrandMenu/>
-            </NavbarContent>
+  return (
+    <Navbar shouldHideOnScroll style={styles.navBar}>
+      <NavbarContent className="sm:flex gap-4" justify="start">
+        <BrandMenu />
+      </NavbarContent>
 
-            <NavbarContent
-                as="div"
-                className="items-center"
-                justify="end"
-                style={{position: "relative"}}
-            >
-                <IoOptionsOutline style={styles.icon}/>
-                <IoSearchOutline style={styles.icon}
-                                 onClick={handleSearchClick}
-                />
+      <NavbarContent
+        as="div"
+        className="items-center"
+        justify="end"
+        style={{position: "relative"}}
+      >
+        <IoOptionsOutline style={styles.icon} />
+        <IoSearchOutline style={styles.icon} onClick={handleSearchClick} />
 
-                <GoBellDropNotificationIcon onClick={makeNotiTest}/>
-                {isLogin ? (
-                    <AvatarMenu/>
-                ) : (
-                    <NavLink to="/login">
-                        <AiOutlineLogin style={styles.icon}/>
-                    </NavLink>
-                )}
-            </NavbarContent>
-        </Navbar>
-    );
+        <GoBellDropNotificationIcon onClick={makeNotiTest} />
+        {isLogin ? (
+          <AvatarMenu />
+        ) : (
+          <NavLink to="/login">
+            <AiOutlineLogin style={styles.icon} />
+          </NavLink>
+        )}
+      </NavbarContent>
+    </Navbar>
+  );
 }
 
 const styles = {
-    block : {
-        backgroundColor: "white",
-        marginRight    : 10,
-        marginTop      : 15,
-        marginBottom   : 15,
-    },
-    nav   : {
-        display       : "flex",
-        justifyContent: "flex-end",
-        alignItems    : "center",
-    },
-    icon  : {
-        width      : 22,
-        height     : 22,
-        color      : "black",
-        marginRight: 3,
-        cursor     : 'pointer',
-    },
-    navBar: {
-        backgroundColor: 'rgba(255,255,255,0.7)',
-        backdropFilter : 'blur(0px)',
-        maxWidth       : '600px',
-        width          : '100%',
-        position       : 'fixed',
-        display        : 'flex',
-        justifyContent : 'center',
-        margin         : 'auto',
-        transition     : 'background-color 0.3s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease',
-        boxShadow      : '0 20px 20px 0 rgba(0, 0, 0, 0.03)'
-    },
+  block: {
+    backgroundColor: "white",
+    marginRight: 10,
+    marginTop: 15,
+    marginBottom: 15,
+  },
+  nav: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  icon: {
+    width: 22,
+    height: 22,
+    color: "black",
+    marginRight: 3,
+    cursor: "pointer",
+  },
+  navBar: {
+    backgroundColor: "rgba(255,255,255,0.7)",
+    backdropFilter: "blur(0px)",
+    maxWidth: "600px",
+    width: "100%",
+    position: "fixed",
+    display: "flex",
+    justifyContent: "center",
+    margin: "auto",
+    transition:
+      "background-color 0.3s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease",
+    boxShadow: "0 20px 20px 0 rgba(0, 0, 0, 0.03)",
+  },
 };

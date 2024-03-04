@@ -2,11 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
 import {GoHome} from "react-icons/go";
-import {FiSettings} from "react-icons/fi";
 import {useLocation, useNavigate} from "react-router-dom";
-import {WiNightAltRain} from "react-icons/wi";
-import {useRecoilValue} from "recoil";
-import {IsLoginAtom} from "../../../recoil/LoginAtom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import {BsChatRightDots} from "react-icons/bs";
 import {TbJacket} from "react-icons/tb";
@@ -68,8 +64,8 @@ export default function AI_MainHeader({isLogin, handleBack}) {
             cursor         : 'pointer',
         },
         icon   : {
-            width     : 24,
-            height    : 25,
+            width     : 20,
+            height    : 21,
             color     : scrolled ? 'black' : 'white',
             transition: 'color 0.3s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease',
         },
@@ -93,7 +89,7 @@ export default function AI_MainHeader({isLogin, handleBack}) {
                     </NavbarItem>
                     <NavbarItem style={styles.text}
                                 onClick={() => navigate('/')}>
-                        <p>옷차림 추천</p>
+                        <p>스타일 상담소</p>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">

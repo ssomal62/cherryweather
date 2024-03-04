@@ -24,7 +24,7 @@ const GoBellDropNotificationIcon = ({onClick}) => {
   }, [isLogin, isOpen]);
 
   // 실제 알림 개수 계산(예시 alramList 사용)
-  const actualNotificationCount = alarmList.length;
+  const actualNotificationCount = alarmList ? alarmList.length : 0;
 
   const handleClick = () => {
     // 아이콘 클릭 핸들러
@@ -47,7 +47,9 @@ const GoBellDropNotificationIcon = ({onClick}) => {
           onClick={handleClick}
         />
         {isLogin &&
-          userInfo.agreementGetNotified && ( // 알림 수신 동의가 true일 때만 표시
+          userInfo &&
+          userInfo.agreementGetNotified &&
+          actualNotificationCount > 0 && ( // 알림 수신 동의가 true일 때만 표시
             <Badge
               content={
                 actualNotificationCount > 99
