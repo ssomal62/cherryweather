@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import CardListItem from "./ClubListItem";
 import styled from "styled-components"
 import {Spinner} from "@nextui-org/react";
@@ -8,9 +8,19 @@ import {clubListState, useClubData} from "../../../recoil/hooks/UseClubApi";
 const ClubList = () => {
 
     const {loading: loadingClubData} = useClubData({ state: clubListState, dynamicPath: ''});
+
+    const [forcedLoading, setForcedLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setForcedLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, []);
+
     const loading = loadingClubData;
     const clubList = useRecoilValue(clubListState);
-    if (loading) {
+    if (loading || forcedLoading) {
         return (
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh'}}>
                 <Spinner size="lg" color="danger"/>

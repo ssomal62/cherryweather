@@ -320,7 +320,7 @@ export default function MembersTable() {
                                             isBordered
                                             radius="md"
                                             color="danger"
-                                            src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${item.userProfile}.jpg?type=f&w=600&h=600&ttype=jpg`
+                                            src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${item.userProfile}?type=f&w=600&h=600&ttype=jpg`
                                                 || defaultAvatar}
                                         /></Badge>
                                     :
@@ -328,7 +328,7 @@ export default function MembersTable() {
                                         radius="md"
                                         showFallback
                                         color="default"
-                                        src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${item.userProfile}.jpg?type=f&w=600&h=600&ttype=jpg`}
+                                        src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${item.userProfile}?type=f&w=600&h=600&ttype=jpg`}
                                     />
                                 }
                             </TableCell>

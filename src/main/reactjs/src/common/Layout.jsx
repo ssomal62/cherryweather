@@ -11,13 +11,14 @@ const Layout = ({
                     useHeader = true,
                     useFooter = true,
                     containerPadding = "13% 0 0 0",
-                    containerMargin = "20px"
+                    containerMargin = "20px",
+                    headerOpacity = false
                 }) => {
     return (
         <>
             <Root>
                 <Main>
-                    {useHeader && <Header/>}
+                    {useHeader && <Header opacity={headerOpacity}/>}
                     <Container margin={containerMargin} padding={containerPadding}>
                         <AnimatePresence>
                             <Wrapper>{children}</Wrapper>

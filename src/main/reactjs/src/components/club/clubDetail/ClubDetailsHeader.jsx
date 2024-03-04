@@ -98,10 +98,10 @@ export default function ClubDetailsHeader({clubDetail, isLogin, handleBack}) {
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">
-                    <NavbarItem
-                        style={styles.iconBox}>
-                        <WiNightAltRain style={styles.icon}/>
-                    </NavbarItem>
+                    {/*<NavbarItem*/}
+                    {/*    style={styles.iconBox}>*/}
+                    {/*    <WiNightAltRain style={styles.icon}/>*/}
+                    {/*</NavbarItem>*/}
                     <NavbarItem
                         style={styles.iconBox}
                         onClick={() => navigate('/')}>

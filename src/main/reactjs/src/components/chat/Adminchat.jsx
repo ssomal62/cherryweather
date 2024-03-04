@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
+import styled from "styled-components";
 
 function Adminchat() {
   const [accountData, setAccountData] = useState("");
@@ -82,24 +83,24 @@ function Adminchat() {
           const newChatId = newchannel.id;
           const res = await instance.post(
             "/chat/createchatroom?accountId=" +
-              accountData.accountId +
-              "&chatRoom=" +
-              newChatId +
-              "&raccountId=" +
-              50 +
-              "&chatName=" +
-              `${newchannel.name}`
+            accountData.accountId +
+            "&chatRoom=" +
+            newChatId +
+            "&raccountId=" +
+            50 +
+            "&chatName=" +
+            `${newchannel.name}`
           );
 
           await instance.post(
             "/chat/createchatroom?accountId=" +
-              50 +
-              "&chatRoom=" +
-              newChatId +
-              "&raccountId=" +
-              accountData.accountId +
-              "&chatName=" +
-              `${newchannel.name}`
+            50 +
+            "&chatRoom=" +
+            newChatId +
+            "&raccountId=" +
+            accountData.accountId +
+            "&chatName=" +
+            `${newchannel.name}`
           );
 
           console.log("res : ", res);
@@ -109,12 +110,30 @@ function Adminchat() {
           await nc.disconnect();
           navi(`/chat/room/${newChatId}/50`);
           window.location.reload();
+
+          // // 관리자 채팅방 생성 알림 전송, 주석처리완료
+          // const chatAdminAlarmData = {
+          //   name : null,
+          //   targetId : "adminChat_" + newChatId,
+          //   type : "ADMINCHAT",
+          //   importance : 2,
+          //   description : `${accountData.name}님과 관리자의 채팅방이 생성되었습니다.`,
+          // };
+          // sendAlarmData(chatAdminAlarmData);
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);
       }
     }
   };
+
+  // const sendAlarmData = async (data) => {
+  //   const accessToken = Cookies.get("accessToken");
+  //   if (!accessToken) {
+  //     console.error("Access token is not available.");
+  //     return;
+  //   }
+  // }
 
   useEffect(() => {
     const disconnectChat = async () => {
@@ -140,3 +159,12 @@ function Adminchat() {
 }
 
 export default Adminchat;
+
+const Button = styled.button`
+  margin-left: 16px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: #242729;
+`;

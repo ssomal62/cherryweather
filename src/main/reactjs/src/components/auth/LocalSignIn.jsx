@@ -23,7 +23,7 @@ const LocalSignIn = () => {
         email: "",
         password: "",
     });
-    
+
     // 데이타를 인풋 밸류로 교체하는 함수
     const onChange = (e) => {
         const { name, value } = e.target;
@@ -64,7 +64,7 @@ const LocalSignIn = () => {
           />
         </IconWapper>
         <LogoWapper>
-          <Title>이메일로 로그인하기</Title>
+            <p style={{fontSize: 25, fontWeight: 800}}>이메일 로그인</p>
         </LogoWapper>
         <LoginContainer>
         <LoginInput type="email" label="이메일" name="email" onChange={onChange}/>
@@ -74,8 +74,8 @@ const LocalSignIn = () => {
                 <Divider orientation="vertical" className="h-1/2"/>
                 <Chip size="sm" variant="light" className="cursor-pointer">비밀번호찾기</Chip>
             </div>
-            <SunlightButton style={{marginTop: "20px", width: "90%"}} onClick={()=>submitLogin()}>
-          <LoginBtnText>로그인</LoginBtnText>
+            <SunlightButton style={{marginTop: "8%"}} onClick={()=>submitLogin()}>
+            <LoginBtnText>로그인</LoginBtnText>
         </SunlightButton>
             <FindEmail isOpen={findEmailIsOpen} onOpenChange={findEmailOnOpenChange}/>
         </LoginContainer>
@@ -86,32 +86,32 @@ const LocalSignIn = () => {
 export default LocalSignIn;
 
 const SunlightButton = styled.button`
-    background-color: #ffd857;
-    max-width: 400px;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  background-color: #F31260;
+  max-width: 350px;
+  width: 100%;
+  color: white;
+  padding: 15px 17px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 
-    &:hover {
-        background-color: #FFC107;
-    }
+  &:hover {
+    background-color: #FF4171;
+  }
 
-    &:active {
-        background-color: #FFA000;
-    }
+  &:active {
+    background-color: #FF4171;
+  }
 `;
 
 const LoginInput = styled(Input)`
 width: 100%;
-max-width: 400px;
+max-width: 350px;
 margin: 0 20px;
-padding: 0px 16px;
 display: -ms-flexbox;
 display: flex;
-border-radius: 24px;
+border-radius: 30px;
 -webkit-box-align: center;
 -ms-flex-align: center;
 align-items: center;

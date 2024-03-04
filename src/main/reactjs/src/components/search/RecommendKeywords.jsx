@@ -2,15 +2,42 @@ import React from 'react';
 import {IoIosArrowForward} from "react-icons/io";
 import {Button} from "@nextui-org/react";
 import recommendKeyword from './WeatherCategoryKeywords.json'
+import {dailyWeatherState} from "../../recoil/hooks/UseWeatherData";
+import {useRecoilValue} from "recoil";
+import Cloudy from "../../assets/theme/default/Cloudy";
+import Sunny from "../../assets/theme/default/Sunny";
+import Rain from "../../assets/theme/default/Rain";
+import Snowy from "../../assets/theme/default/Snowy";
 
 const RecommendKeywords = ({setInputValue, handleSearch}) => {
 
-    const todayWeather = "눈";
+    const dailyWeather = useRecoilValue(dailyWeatherState).data;
+
+    const todayWeather = dailyWeather?.weather;
     const todayWeatherKeywords = recommendKeyword.find(item => item.weather === todayWeather);
 
     const handelButtonClick = (e) => {
         handleSearch(e.target.value);
         setInputValue(e.target.value);
+    }
+
+    const renderWeatherIcon = () => {
+        switch (todayWeather) {
+            case "맑음":
+                return <Sunny fill='#DBDDE8' stroke='#DBDDE8' width='8em'/>
+            case "비":
+                return <Rain fill='#DBDDE8' stroke='#DBDDE8' width='8em'/>
+            case "비/눈":
+                return <Snowy fill='#DBDDE8' stroke='#DBDDE8' width='8em'/>
+            case "눈":
+                return <Snowy fill='#DBDDE8' stroke='#DBDDE8' width='8em'/>
+            case "소나기":
+                return <Rain fill='#DBDDE8' stroke='#DBDDE8' width='8em'/>
+            case "흐림":
+                return <Cloudy fill='#DBDDE8' stroke='#DBDDE8' width='8em'/>
+            default:
+                return <div>없음</div>
+        }
     }
 
     return (
@@ -23,7 +50,14 @@ const RecommendKeywords = ({setInputValue, handleSearch}) => {
                 </div>
             </div>
 
-            <div style={styles.message}> 오늘 날씨는 {todayWeather} ! 이런 클럽은 어떠세요?</div>
+            <div style={styles.message} className="flex flex-col">
+                <div>{renderWeatherIcon(todayWeather)}</div>
+                <div className="flex flex-col">
+                    <div> {dailyWeather?.area} 날씨는 {todayWeather}!</div>
+                    <div>오늘 이런 클럽은 어떠세요?</div>
+                </div>
+            </div>
+
             <div style={{
                 display       : 'flex',
                 justifyContent: 'center',
@@ -39,7 +73,7 @@ const RecommendKeywords = ({setInputValue, handleSearch}) => {
                                     color="success"
                                     variant="flat"
                                     value={keyword.value}
-                                    onClick={(e)=>handelButtonClick(e)}
+                                    onClick={(e) => handelButtonClick(e)}
                                 >
                                     {keyword.display}
                                 </Button>
@@ -60,7 +94,7 @@ const styles = {
     font         : {
         color       : 'black',
         marginBottom: '5%',
-        padding     : '20px',
+        padding     : '10px',
     },
     slideSections: {
         display   : 'flex',
@@ -69,13 +103,14 @@ const styles = {
         position  : 'relative',
         cursor    : 'pointer',
     },
-    message: {
-        display: 'flex',
+    message      : {
+        display       : 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-        width: '100%',
-        margin: '10% 0 20% 0',
+        alignItems    : 'center',
+        // height        : '100%',
+        color : 'gray',
+        width : '100%',
+        margin: '5% 0 5% 0',
     }
 }
 

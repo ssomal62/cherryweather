@@ -14,7 +14,7 @@ const AvatarArea = () => {
                 <Avatar key={member.userId}
                         showFallback
                         aria-label={member.userName}
-                        src={member.userProfile ? `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${member.userProfile}.jpg?type=f&w=600&h=600&ttype=jpg` : ''}
+                        src={member.userProfile ? `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${member.userProfile}?type=f&w=600&h=600&ttype=jpg` : ''}
                         size='lg' radius="lg" />
             ))}
         </AvatarGroup>

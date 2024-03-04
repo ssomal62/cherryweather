@@ -22,7 +22,8 @@ public class AlarmServiceImpl {
     // 알람 정보 db 넣기
     @Transactional
     public void createAlarm(AlarmDto alarmDto, AccountDetails accountDetails) {
-        Alarm alarm = Alarm.builder()
+        if(!accountDetails.getAccount().getAccountId().equals(alarmDto.getTargetId())) {
+            Alarm alarm = Alarm.builder()
                 .account(accountDetails.getAccount())
                 .type(alarmDto.getType())
                 .targetId(alarmDto.getTargetId())
@@ -30,12 +31,13 @@ public class AlarmServiceImpl {
                 .description(alarmDto.getDescription())
                 .build();
         alarmRepository.save(alarm);
+        }
     }
 
     // 알람 list 받아오기
     @Transactional
     public List<AlarmDto> findAlarmListByAccountId(AccountDetails accountDetails) {
-        List<Alarm> alarmList = alarmRepository.findByAccountOrderByCreatedAtDesc(accountDetails.getAccount());
+        List<Alarm> alarmList = alarmRepository.findByAccountOrTargetIdOrderByCreatedAtDesc(accountDetails.getAccount(), accountDetails.getAccount().getAccountId());
         return AlarmDto.toDtoList(alarmList);
     }
 
@@ -45,6 +47,13 @@ public class AlarmServiceImpl {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid alarm ID"));
         alarm.setShowAlarm(isShowAlarm);
         alarmRepository.save(alarm);
+    }
+
+    @Transactional
+    // 특정 accountId와 type에 해당하는 알람 목록 조회
+    public List<AlarmDto> findAlarmListByAccountIdAndType(Long accountId, String type) {
+        List<Alarm> alarmList = alarmRepository.findByAccountIdAndType(accountId, type);
+        return AlarmDto.toDtoList(alarmList);
     }
 
     @Transactional

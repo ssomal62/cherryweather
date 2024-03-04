@@ -7,7 +7,7 @@ const Home = () => {
   useAlarmData({state: alramListState, dynamicPath: ""});
 
   return (
-    <Layout containerMargin="0" containerPadding="0">
+    <Layout containerMargin="0" containerPadding="0" headerOpacity={true}>
         <TodayWeatherCard/>
     </Layout>
   );

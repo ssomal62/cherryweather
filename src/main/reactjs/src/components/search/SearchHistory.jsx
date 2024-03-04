@@ -3,7 +3,7 @@ import {Button} from "@nextui-org/react";
 import {IoIosArrowForward, IoIosClose} from "react-icons/io";
 import { LuAlertCircle } from "react-icons/lu";
 
-const SearchHistory = ({keywords,onRemove,onRemoveAll, setInputValue, handleSearch, setSearchTriggered}) => {
+const SearchHistory = ({keywords, onRemove, onRemoveAll, setInputValue, handleSearch, setSearchTriggered}) => {
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
@@ -79,9 +79,7 @@ const SearchHistory = ({keywords,onRemove,onRemoveAll, setInputValue, handleSear
                             </Button>
                         </div>
                     ))
-                    )
-                        :
-                        (<div style={styles.noData}> <LuAlertCircle/>&nbsp;최근 키워드가 없습니다</div>)
+                    ):(<div style={styles.noData}> <LuAlertCircle/>&nbsp;최근 키워드가 없습니다</div>)
                 }
             </div>
         </section>

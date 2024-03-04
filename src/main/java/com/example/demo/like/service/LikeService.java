@@ -45,7 +45,8 @@ public class LikeService {
                     infoDto.type(),
                     infoDto.targetId());
             if(infoDto.type() == LikeType.CLUB) {
-                event = new ClubGrowthEvent(this, infoDto.targetId(), false, accountDetails);
+                event = new ClubGrowthEvent(this, infoDto.targetId(), false, accountDetails
+                ,300);
                 eventPublisher.publishEvent(event);
             }
         } else {
@@ -53,7 +54,8 @@ public class LikeService {
                     createLike(accountDetails, infoDto)
             );
             if(infoDto.type() == LikeType.CLUB) {
-                event = new ClubGrowthEvent(this, infoDto.targetId(), true, accountDetails);
+                event = new ClubGrowthEvent(this, infoDto.targetId(), true, accountDetails,
+                        300);
                 eventPublisher.publishEvent(event);
             }
         }

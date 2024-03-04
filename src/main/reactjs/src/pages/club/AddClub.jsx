@@ -1,23 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import AddClubSelectCategory from "../../components/club/addClub/AddClubSelectCategory";
 import Layout from "../../common/Layout";
-import {IoArrowBack} from "react-icons/io5";
-import {Progress} from "@nextui-org/react";
+import { IoArrowBack } from "react-icons/io5";
+import { Progress } from "@nextui-org/react";
 import AddClubNameInput from "../../components/club/addClub/AddClubNameInput";
 import AnimationLeftInWrapper from "../../utils/animations/AnimationLeftInWrapper";
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AnimationRightInWrapper from "../../utils/animations/AnimationRightInWrapper";
 import AddClubSettingDetails from "../../components/club/addClub/AddClubSettingDetails";
 import AddClubSelectJoinStatus from "../../components/club/addClub/AddClubSelectJoinStatus";
 import AddClubInputActivitiesArea from "../../components/club/addClub/AddClubInputActivitiesArea";
-import {Cookies} from "react-cookie";
-import {clubDetailState} from "../../recoil/hooks/UseClubApi";
-import {useRecoilValue} from "recoil";
-import {instance} from "../../recoil/module/instance";
+import { Cookies } from "react-cookie";
+import { clubDetailState } from "../../recoil/hooks/UseClubApi";
+import { useRecoilValue } from "recoil";
+import { instance } from "../../recoil/module/instance";
 import AddClubInputNotice from "../../components/club/addClub/AddClubInputNotice";
 
 const AddClub = () => {
-  const {clubId} = useParams();
+  const { clubId } = useParams();
 
   const club = useRecoilValue(clubDetailState).clubDetail;
 
@@ -30,6 +30,7 @@ const AddClub = () => {
     clubId ? club.subCategory : ""
   );
   const [name, setName] = useState(clubId ? club.name : "");
+  const [tag, setTag] = useState(clubId ? club.tag : "");
   const [description, setDescription] = useState(
     clubId ? club.description : ""
   );
@@ -52,10 +53,11 @@ const AddClub = () => {
   const cookie = new Cookies();
 
   const requestData = {
-    ...(clubId && {clubId: clubId}),
+    ...(clubId && { clubId: clubId }),
     name: name,
     description: description,
     code: code,
+    tag: tag,
     notice: notice,
     category: category,
     subCategory: subCategory,
@@ -97,7 +99,6 @@ const AddClub = () => {
       console.log("✅[Add Club] Success", res);
 
       const alarmData = {
-        name: null,
         targetId: res.data.clubId,
         type: "CLUB",
         importance: 1,
@@ -178,6 +179,8 @@ const AddClub = () => {
             setDescription={setDescription}
             setCode={setCode}
             onFileSelect={handlePhotoChange}
+            tag={tag}
+            setTag={setTag}
           />
         );
       case 4:
@@ -214,7 +217,7 @@ const AddClub = () => {
   return (
     <Layout useHeader={false} useFooter={false} containerPadding="0">
       <div onClick={prevStep}>
-        <IoArrowBack style={{width: 30, height: 30, color: "black"}} />
+        <IoArrowBack style={{ width: 30, height: 30, color: "black" }} />
       </div>
 
       <Progress

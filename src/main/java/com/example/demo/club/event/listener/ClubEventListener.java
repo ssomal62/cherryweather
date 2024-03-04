@@ -30,9 +30,9 @@ public class ClubEventListener {
     @EventListener
     public void handleClubGrowthEvent(ClubGrowthEvent event) {
         if (event.isIncrease()) {
-            clubService.increaseGrowthMeter(event.getClubId());
+            clubService.increaseGrowthMeter(event.getClubId(), event.getScore());
         } else {
-            clubService.decreaseGrowthMeter(event.getClubId());
+            clubService.decreaseGrowthMeter(event.getClubId(), event.getScore());
         }
     }
 }
