@@ -5,13 +5,16 @@ import {useRecoilState, useRecoilValue} from "recoil";
 import {Spinner} from "@nextui-org/react";
 import { FcEmptyTrash } from "react-icons/fc";
 import {deleteState, useDeleteImage} from "../../../recoil/hooks/UseDeleteImage";
+import SaveImageModal from "../../../utils/SaveImageModal";
+import DeleteImageModal from "../../../utils/DeleteImageModal";
 
 
 
 const ImageListItem = ({list}) => {
     const [isDeleted, setIsDeleted] = useRecoilState(deleteState);
-    const deleteImage = useDeleteImage(); // 수정된 부분const deleteImage = useDeleteImage(); // 수정된 부분
+    const deleteImage = useDeleteImage();
     const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
         const newWindow = window.open(list.bucketURL, '_blank');
@@ -20,11 +23,8 @@ const ImageListItem = ({list}) => {
         }
     };
     const handleDeleteClick = async () => {
-        try {
+            setIsModalOpen(true); // 모달 열기
             await deleteImage(list.bucketURL);
-        } catch (error){
-            console.error('이미지 삭제에 실패했습니다.', error)
-        }
     };
 
     useEffect(() => {
@@ -77,6 +77,7 @@ const ImageListItem = ({list}) => {
                     </div>
                 </CardFooter>
             </Card>
+            <DeleteImageModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </>
     );
 };

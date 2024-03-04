@@ -62,4 +62,10 @@ public class AI_imageController {
         return aiImageService.getImageBucketURLByAccountID(accountDetails.getAccount().getAccountId());
     }
 
+    //전체 조회  모든 사진
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<AI_image> findAllImages() {
+        return aiImageService.findAllImages();
+    }
 }

@@ -17,4 +17,6 @@ public interface AI_imageService {
     String uploadImage(AccountDetails accountDetails,ImageUploadRequestDto requestDto);
 
     List<AI_image> getImageBucketURLByAccountID(Long accountId);
+
+    List<AI_image> findAllImages();
 }

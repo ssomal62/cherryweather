@@ -4,18 +4,13 @@ import {IoArrowBack} from "react-icons/io5";
 import {GoHome} from "react-icons/go";
 import {FiSettings} from "react-icons/fi";
 import {useLocation, useNavigate} from "react-router-dom";
-import {WiNightAltRain} from "react-icons/wi";
-import {useRecoilValue} from "recoil";
-import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import {BsChatRightDots} from "react-icons/bs";
-import {TbJacket} from "react-icons/tb";
-import {GrGallery} from "react-icons/gr";
+import {TbJacket, TbPhoto} from "react-icons/tb";
 
 export default function SaveImageHeader({ isLogin, handleBack}) {
 
     const navigate = useNavigate();
-    const myMembership = useRecoilValue(currentMembershipState);
     const [scrolled, setScrolled] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -124,14 +119,14 @@ export default function SaveImageHeader({ isLogin, handleBack}) {
                         style={styles.iconBox}
                         onClick={handleJacketClick}
                     >
-                        <TbJacket style={styles.icon}/>
+                        <TbJacket  style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem
                         style={styles.iconBox}
                         onClick={handleGalleryClick}
                     >
                         <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-                        <GrGallery style={styles.icon}/>
+                        <TbPhoto   style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem
                         style={styles.iconBox}

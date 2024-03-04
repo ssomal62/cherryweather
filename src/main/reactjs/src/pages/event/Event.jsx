@@ -1,20 +1,6 @@
-import React from "react";
+import EventList from "../../components/event/EventList";
 
 const Event = () => {
-  // const [reservation, setReservation] = useState({
-  //     eventName: '',
-  //     date: '',
-  //     time: '07:00',
-  //     note: '',
-  //     notification: '',
-  //     quantity: 1,
-  // });
-
-  return (
-    <div>
-      <div></div>
-    </div>
-  );
+  return <EventList />;
 };
-
 export default Event;
