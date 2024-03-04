@@ -28,6 +28,7 @@ const ClubJoinButton = () => {
 
   const [liked, setLiked] = useState(clubLiked);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUnableJoinModalOpen, setIsUnableJoinModalOpen] = useState(false);
   const [role, setRole] = useState("");
   const cookie = new Cookies();
 
@@ -71,7 +72,6 @@ const ClubJoinButton = () => {
       console.error("좋아요 알림 전송 실패", error);
     }
   };
-
 
   const handleJoinClick = () => {
     if (!isLogin) {
