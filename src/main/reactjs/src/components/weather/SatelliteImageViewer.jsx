@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {satImgState, UseWeatherData} from "../../recoil/hooks/UseWeatherData";
 import {Card, CardHeader, Divider, Image, Spinner} from "@nextui-org/react";
 import styled from "styled-components";
-import UseClientIp from "../../recoil/hooks/UseClientIp";
 import {useRecoilValue} from "recoil";
 
 const SatelliteImageViewer = () => {
@@ -42,7 +41,7 @@ const SatelliteImageViewer = () => {
 
     return (
         <Container>
-            <Card isBlurred className = "bg-black/30 rounded-xl rounded-large shadow-small h-[100%]">
+            <Card isBlurred className = "bg-black/30 rounded-xl shadow-small h-[100%]">
                 {loading && (
                     <Spinner className = "h-[300px]" label = "Loading..."/>
                 )}
@@ -86,7 +85,6 @@ export default SatelliteImageViewer;
 const Container = styled.div`
     width: 100%;
     height: 100%;
-    border: 2px solid blue;
     padding: 22px;
 `;
 const SatImage = styled.div`
