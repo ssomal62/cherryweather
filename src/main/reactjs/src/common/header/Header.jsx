@@ -12,35 +12,35 @@ import {useFetchUserInfo} from "../../recoil/hooks/UseFetchUserInfo";
 import {searchClubListState} from "../../recoil/hooks/UseClubApi";
 import {requestNotificationPermissionAndToken} from "../../components/webpush/requestNotificationPermissionAndToken";
 
-export default function Header() {
-  const isLogin = useRecoilValue(IsLoginAtom);
-  const [registration, setRegistration] = useState(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+export default function Header({opacity}) {
+    const isLogin = useRecoilValue(IsLoginAtom);
+    const [registration, setRegistration] = useState(null);
+    const navigate = useNavigate();
+    const location = useLocation();
 
-  const fetchUserInfo = useFetchUserInfo();
-  const setSearchState = useSetRecoilState(searchClubListState);
+    const fetchUserInfo = useFetchUserInfo();
+    const setSearchState = useSetRecoilState(searchClubListState);
 
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
 
-  useEffect(() => {
-    // Service Worker 등록
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/serviceWorker.js")
-        .then((reg) => {
-          console.log("Service Worker 등록 성공:", reg);
-          setRegistration(reg);
-        })
-        .catch((error) => {
-          console.log("Service Worker 등록 실패:", error);
-        });
-    } else {
-      console.log("Service Worker를 지원하지 않습니다.");
-    }
-  }, []);
+    useEffect(() => {
+        // Service Worker 등록
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker
+                .register("/serviceWorker.js")
+                .then((reg) => {
+                    console.log("Service Worker 등록 성공:", reg);
+                    setRegistration(reg);
+                })
+                .catch((error) => {
+                    console.log("Service Worker 등록 실패:", error);
+                });
+        } else {
+            console.log("Service Worker를 지원하지 않습니다.");
+        }
+    }, []);
 
     const handleSearchClick = () => {
         setSearchState([]);
@@ -79,64 +79,65 @@ export default function Header() {
     }
   };
 
-  return (
-    <Navbar shouldHideOnScroll style={styles.navBar}>
-      <NavbarContent className="sm:flex gap-4" justify="start">
-        <BrandMenu />
-      </NavbarContent>
+    return (
+        <Navbar shouldHideOnScroll style={styles.navBar(opacity)}>
+            <NavbarContent className="sm:flex gap-4" justify="start">
+                <BrandMenu/>
+            </NavbarContent>
 
-      <NavbarContent
-        as="div"
-        className="items-center"
-        justify="end"
-        style={{position: "relative"}}
-      >
-        <IoOptionsOutline style={styles.icon} />
-        <IoSearchOutline style={styles.icon} onClick={handleSearchClick} />
+            <NavbarContent
+                as="div"
+                className="items-center"
+                justify="end"
+                style={{position: "relative"}}
+            >
+                {/*<IoOptionsOutline style={styles.icon}/>*/}
+                <IoSearchOutline style={styles.icon}
+                                 onClick={handleSearchClick}
+                />
 
-        <GoBellDropNotificationIcon onClick={makeNotiTest} />
-        {isLogin ? (
-          <AvatarMenu />
-        ) : (
-          <NavLink to="/login">
-            <AiOutlineLogin style={styles.icon} />
-          </NavLink>
-        )}
-      </NavbarContent>
-    </Navbar>
-  );
+                <GoBellDropNotificationIcon onClick={makeNotiTest}/>
+                {isLogin ? (
+                    <AvatarMenu/>
+                ) : (
+                    <NavLink to="/login">
+                        <AiOutlineLogin style={styles.icon}/>
+                    </NavLink>
+                )}
+            </NavbarContent>
+        </Navbar>
+    );
 }
 
 const styles = {
-  block: {
-    backgroundColor: "white",
-    marginRight: 10,
-    marginTop: 15,
-    marginBottom: 15,
-  },
-  nav: {
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
-  icon: {
-    width: 22,
-    height: 22,
-    color: "black",
-    marginRight: 3,
-    cursor: "pointer",
-  },
-  navBar: {
-    backgroundColor: "rgba(255,255,255,0.7)",
-    backdropFilter: "blur(0px)",
-    maxWidth: "600px",
-    width: "100%",
-    position: "fixed",
-    display: "flex",
-    justifyContent: "center",
-    margin: "auto",
-    transition:
-      "background-color 0.3s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease",
-    boxShadow: "0 20px 20px 0 rgba(0, 0, 0, 0.03)",
-  },
+    block : {
+        backgroundColor: "white",
+        marginRight    : 10,
+        marginTop      : 15,
+        marginBottom   : 15,
+    },
+    nav   : {
+        display       : "flex",
+        justifyContent: "flex-end",
+        alignItems    : "center",
+    },
+    icon  : {
+        width      : 22,
+        height     : 22,
+        color      : "black",
+        marginRight: 3,
+        cursor     : 'pointer',
+    },
+    navBar:(opacity) =>  ({
+        backgroundColor: opacity? 'rgba(0,0,0,0)': 'rgba(255,255,255,0.7)',
+        backdropFilter : 'blur(0px)',
+        maxWidth       : '600px',
+        width          : '100%',
+        position       : 'fixed',
+        display        : 'flex',
+        justifyContent : 'center',
+        margin         : 'auto',
+        transition     : 'background-color 0.3s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease',
+        boxShadow      : opacity? 'none' : '0 20px 20px 0 rgba(0, 0, 0, 0.03)'
+    }),
 };

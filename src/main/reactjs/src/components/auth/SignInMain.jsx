@@ -1,23 +1,22 @@
 import React from "react";
-import { Button } from "@nextui-org/react";
+import {Button, Divider} from "@nextui-org/react";
 import styled from "styled-components";
-import weatherLogo from "../../assets/images/brand/cw3.png";
 import weatherImg from "../../assets/images/sun.png";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const SignInMain = () => {
     const navigate = useNavigate();
 
     // 이미지 url
     const kakaoImgUrl =
-      "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/kakao-logo_v2.png";
+        "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/kakao-logo_v2.png";
     const naverImgUrl =
-      "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/naver-logo_v2.png";
-  
+        "https://d2v80xjmx68n4w.cloudfront.net/assets/icon/naver-logo_v2.png";
+
     // 카카오 간편 로그인
     const onKakaoLogin = () => {
-      window.location.href =
-        "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://cherryweather.site/oauth&response_type=code";
+        window.location.href =
+            "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://cherryweather.site/oauth&response_type=code";
         // "https://kauth.kakao.com/oauth/authorize?client_id=b88ca7fa19db1413d2a289f79c168f97&redirect_uri=http://localhost:9002/oauth&response_type=code";
     };
 
@@ -26,46 +25,52 @@ const SignInMain = () => {
     const naverRedirectUri = "http://cherryweather.site/oauth/callback/naver";
 
     const onNaverLogin = () => {
-      window.location.href =
-     `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientId}&state=STATE_STRING&redirect_uri=${naverRedirectUri}&state=1234`
+        window.location.href =
+            `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientId}&state=STATE_STRING&redirect_uri=${naverRedirectUri}&state=1234`
     }
 
-  return (
-    <>
-      <IconWapper>
-        <LogoImg
-          alt=""
-          src={weatherImg}
-          style={{ width: "150px", height: "150px" }}
-        />
-      </IconWapper>
-      <LogoWapper>
-        <LogoImg alt="logo" src={weatherLogo} />
-      </LogoWapper>
-      <LoginContainer>
-        <LoginBtn onClick={onKakaoLogin} style={{ backgroundColor: "#FEE500" }}>
-          <IconImg alt="kakao" src={kakaoImgUrl} />
-          <LoginBtnText>카카오로 로그인하기</LoginBtnText>
-        </LoginBtn>
-        <LoginBtn onClick={onNaverLogin} style={{ backgroundColor: "rgb(30, 200, 0)" }}>
-          <IconImg alt="naver" src={naverImgUrl} />
-          <LoginBtnText>네이버로 로그인하기</LoginBtnText>
-        </LoginBtn>
-        <LoginBtn
-          onClick={() => navigate("/login/local")}
-          style={{ border: "1px solid rgba(0, 0, 0, 0.2)" }}
-        >
-          <IconImg alt="naver" src={weatherImg} />
-          <LoginBtnText>이메일로 로그인하기</LoginBtnText>
-        </LoginBtn>
-        <JoinWapper>
-          <JoinText onClick={()=>navigate("/join")}>회원가입</JoinText>
-          <Hr />
-          <JoinText>문의하기</JoinText>
-        </JoinWapper>
-      </LoginContainer>
-    </>
-  );
+    return (
+        <>
+            <LoginContainer>
+                <LoginMessage>
+                    <div className="flex flex-col pb-[20%]">
+                        <LogoImg
+                            alt="logo"
+                            src={weatherImg}
+                            style={{width: "80px", height: "80px"}}
+                        />
+                        <p style={{fontSize: 35, fontWeight: 800}}>어서오세요</p>
+                        <p style={{fontSize: 20, fontWeight: 400}}>체리웨더와 힘찬 하루의 시작</p>
+                    </div>
+                </LoginMessage>
+                <LoginBtn onClick={onKakaoLogin} style={{backgroundColor: "#FEE500"}}>
+                    <IconImg alt="kakao" src={kakaoImgUrl}/>
+                    <LoginBtnText>카카오로 로그인하기</LoginBtnText>
+                </LoginBtn>
+                <LoginBtn onClick={onNaverLogin} style={{backgroundColor: "rgb(30, 200, 0)"}}>
+                    <IconImg alt="naver" src={naverImgUrl}/>
+                    <LoginBtnText>네이버로 로그인하기</LoginBtnText>
+                </LoginBtn>
+                <div className="flex flex-row justify-center items-center my-4">
+                    <Divider style={{width: '140px'}}/>
+                    <small className="text-stone-400">&nbsp;&nbsp;&nbsp;일반 로그인&nbsp;&nbsp;&nbsp;</small>
+                    <Divider style={{width: '140px'}}/>
+                </div>
+                <LoginBtn
+                    onClick={() => navigate("/login/local")}
+                    style={{backgroundColor: '#F9F9F9', border: '1px solid #DEDEDE'}}
+                >
+                    <IconImg alt="naver" src={weatherImg}/>
+                    <LoginBtnText>이메일로 로그인하기</LoginBtnText>
+                </LoginBtn>
+                <JoinWapper>
+                    <JoinText onClick={() => navigate("/join")} style={{cursor:'pointer'}}>회원가입</JoinText>
+                    <Hr/>
+                    <JoinText>문의하기</JoinText>
+                </JoinWapper>
+            </LoginContainer>
+        </>
+    );
 };
 
 export default SignInMain;
@@ -92,7 +97,7 @@ export const JoinWapper = styled.div`
   justify-content: flex-end;
   flex: 0 0 auto;
   padding-bottom: 32px;
-  margin-top: 10px;
+  margin-top: 5%;
 `;
 
 export const LogoWapper = styled.div`
@@ -128,6 +133,7 @@ export const LogoImg = styled.img`
 export const IconWapper = styled.div`
   display: flex;
   flex: 1 1 auto;
+  margin: 20% 0 0 0;
   padding: 10px;
   align-items: center;
   -webkit-box-pack: center;
@@ -137,12 +143,12 @@ export const IconWapper = styled.div`
 
 export const LoginBtn = styled(Button)`
   width: 100%;
-  max-width: 400px;
-  margin: 0 32px;
-  padding: 12px 16px;
+  max-width: 350px;
+  margin: 1% 230%;
+  padding: 30px 16px;
   display: -ms-flexbox;
   display: flex;
-  border-radius: 24px;
+  border-radius: 30px;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -152,12 +158,29 @@ export const LoginBtn = styled(Button)`
   background-color: transparent;
 `;
 
+export const LoginMessage = styled.div`
+  width: 100%;
+  max-width: 350px;
+  margin: 1% 230%;
+  padding: 12px 16px;
+  display: -ms-flexbox;
+  display: flex;
+  border-radius: 30px;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+`;
+
+
 export const IconImg = styled.img`
   overflow-clip-margin: content-box;
   overflow: clip;
-  height: 24px;
+  height: 30px;
+  width: 30px;
   aspect-ratio: auto 24 / 24;
-  width: 24px;
   box-sizing: border-box;
   border-style: none;
 `;

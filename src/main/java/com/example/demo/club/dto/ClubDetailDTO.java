@@ -7,6 +7,8 @@ import lombok.Builder;
 @Builder
 public record ClubDetailDTO(
         Club clubDetail,
+        String hostName,
+        String hostProfile,
         Boolean liked
 ) {
 

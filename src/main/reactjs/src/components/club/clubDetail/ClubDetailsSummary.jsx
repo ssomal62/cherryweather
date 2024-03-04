@@ -11,7 +11,7 @@ const ClubDetailsSummary = ({clubDetail}) => {
             <TiLocation></TiLocation>
             <span>{clubDetail.activitiesArea}</span>
             <MdOutlineFeed/>
-            <span>15피드</span>
+            <span>{clubDetail.feedCount}&nbsp;피드</span>
             <BsFillPeopleFill/>
             <span>{clubDetail.currentMembers} / {clubDetail.maxMembers}</span>
             <IoChatbubbleEllipses/>

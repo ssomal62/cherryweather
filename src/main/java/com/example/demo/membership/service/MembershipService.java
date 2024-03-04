@@ -5,6 +5,7 @@ import com.example.demo.account.entity.Account;
 import com.example.demo.account.service.AccountService;
 import com.example.demo.club.domain.ClubSummary;
 import com.example.demo.club.entity.Club;
+import com.example.demo.club.event.ClubGrowthEvent;
 import com.example.demo.club.service.ClubService;
 import com.example.demo.common.exception.DuplicatedException;
 import com.example.demo.common.exception.NotFoundException;
@@ -17,6 +18,7 @@ import com.example.demo.membership.entity.Membership;
 import com.example.demo.membership.enums.ClubRole;
 import com.example.demo.membership.repository.MembershipRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,8 @@ public class MembershipService {
     private final MembershipRepository membershipRepository;
     private final ClubService clubService;
     private final AccountService accountService;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public MembershipListDTO findAllMembership() {
@@ -58,6 +62,17 @@ public class MembershipService {
         Membership membership = createMembership(requestDTO, accountDetails);
         membershipRepository.save(membership);
         clubService.increaseCurrentMembers(requestDTO.clubId());
+
+        ClubGrowthEvent event =
+                new ClubGrowthEvent(
+                this,
+                requestDTO.clubId(),
+                true,
+                accountDetails,
+                100
+        );
+
+        eventPublisher.publishEvent(event);
     }
 
     @Transactional

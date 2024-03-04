@@ -23,6 +23,8 @@ import {
     currentMembershipState,
     useMembershipData
 } from "../../recoil/hooks/UseMembershipApi";
+import ClubTag from "../../components/club/clubDetail/ClubTag";
+import GrowthMeter from "../../components/club/clubDetail/GrowthMeter";
 
 const ClubDetails = () => {
 
@@ -40,7 +42,11 @@ const ClubDetails = () => {
 
     const loading = loadingMyMembership || loadingClubData || loadingClubMembershipData;
 
-    const clubDetail = useRecoilValue(clubDetailState).clubDetail;
+    const clubDetailAll= useRecoilValue(clubDetailState);
+
+    const clubDetail = clubDetailAll.clubDetail;
+    const hostName = clubDetailAll.hostName;
+    const hostProfile = clubDetailAll.hostProfile;
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -49,7 +55,7 @@ const ClubDetails = () => {
     const [offsetY, setOffsetY] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const clubProfile = (code) => {
-        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "defalut"}.jpg?type=f&w=600&h=600&ttype=jpg`
+        return `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${code ? code : "default"}.jpg?type=f&w=600&h=600&ttype=jpg`
     }
     const navigate = useNavigate();
     const location = useLocation();
@@ -90,7 +96,7 @@ const ClubDetails = () => {
     }
 
     return (
-        <Layout useHeader={false} useFooter={false} containerMargin="0" containerPadding="0">
+        <Layout useHeader={false} useFooter={false} containerMargin="0 0 100px 0" containerPadding="0 0 100px 0">
             <ClubDetailsHeader clubDetail={clubDetail} isLogin={isLogin} handleBack={handleBack}/>
             <ClubDetail>
                 <div style={styles.aspectRatio}>
@@ -99,9 +105,11 @@ const ClubDetails = () => {
                         <ClubName clubDetail={clubDetail}/>
                         <ClubDetailsSummary clubDetail={clubDetail}/>
                         <EventSection />
-                        <ClubNotice clubDetail={clubDetail}/>
+                        <ClubNotice clubDetail={clubDetail} hostName={hostName} hostProfile={hostProfile}/>
                         <MemberSummary isLogin={isLogin} clubDetail={clubDetail}/>
                         <ClubFeedSlide isLogin={isLogin} clubDetail={clubDetail}/>
+                        <ClubTag clubDetail={clubDetail}/>
+                        <GrowthMeter clubDetail={clubDetail}/>
                     </Content>
 
                     <Image radius='none' alt=""
@@ -133,6 +141,8 @@ const Content = styled.div`
   position: absolute;
   justify-content: center;
   top: 0;
+  height: auto;
+  padding-bottom: 100px;
   margin-top: 69%;
   left: 0;
   max-width: 600px;
@@ -144,8 +154,9 @@ const Content = styled.div`
 
 const ClubDetail = styled.div`
   width: 100%;
-  min-height: 650%;
-  background-image: linear-gradient(to bottom, #ffffff, #ffffff, #CFD8F2, #ffffff);
+  min-height: 600%;
+  border: ${bd};
+  background-image: linear-gradient(to bottom, #ffffff, #ffffff, #F0F0F0, #ffffff);
 `;
 
 const styles = {

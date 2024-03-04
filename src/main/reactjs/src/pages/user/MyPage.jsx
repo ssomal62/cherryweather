@@ -9,7 +9,7 @@ import MyPickClub from '../../components/mypage/MyPickClub';
 import MyPageMenu from '../../components/mypage/MyPageMenu';
 import {useNavigate} from 'react-router-dom';
 import {joinedMembershipState, useMembershipData} from "../../recoil/hooks/UseMembershipApi";
-import {Spinner} from "@nextui-org/react";
+import {Divider, Spinner} from "@nextui-org/react";
 import {useRecoilValue} from "recoil";
 import {likedClubListState, useClubData} from "../../recoil/hooks/UseClubApi";
 
@@ -41,14 +41,22 @@ const Mypage = () => {
     }
 
     return (
-        <>
-            <Nav>
-                <div style={{flex: "1px"}}>
-                    <IoArrowBack style={{width: 30, height: 30, color: 'black'}} onClick={() => navigate("/")}/>
+        <div style={styles.bgColor}>
+            <Nav style={{zIndex:'40', backgroundColor: '#ED145F'}}>
+                <div className="flex flex-col w-full">
+                    <div className='flex flex-row justify-between items-center pt-2 mb-2'>
+                        <div className='justify-start'>
+                            <IoArrowBack style={{width: 30, height: 30, color: 'white'}} onClick={() => navigate("/")}/>
+                        </div>
+                        <div className='justify-center' style={styles.title}>마이페이지</div>
+                        <div className='justify-end'>
+                            <IconWapper onClick={() => navigate("/mypage/setting")}><SettingsIcon style={{color:'white'}}/></IconWapper>
+                        </div>
+                    </div>
+                    <Divider style={{maxWidth: '600px', margin: 'auto'}}/>
                 </div>
-                <TitleWapper><Title>마이페이지</Title></TitleWapper>
-                <IconWapper onClick={() => navigate("/mypage/setting")}><SettingsIcon/></IconWapper>
             </Nav>
+
             <Container>
                 <Profile/>
                 <MyClub joinedClubs={joinedClubs}/>
@@ -56,7 +64,7 @@ const Mypage = () => {
                 <MyPageMenu/>
             </Container>
             <Footer/>
-        </>
+        </div>
     );
 };
 
@@ -101,9 +109,9 @@ export const TitleWapper = styled.div`
 
 export const Nav = styled.div`
   height: 52px;
-  background: #FFFFFF;
   display: -ms-flexbox;
   display: flex;
+  background-color: white;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -117,3 +125,19 @@ export const Nav = styled.div`
   max-width: 600px;
   margin: auto;
 `;
+
+const styles = {
+    title: {
+        fontSize  : '18px',
+        fontWeight: '600',
+        color:'white',
+    },
+    bgColor: {
+        height: '50vh',
+        backgroundColor: '#ED145F',
+        maxWidth:'600px',
+        margin:'auto',
+        borderBottomLeftRadius: '20px',
+        borderBottomRightRadius: '20px',
+    },
+}

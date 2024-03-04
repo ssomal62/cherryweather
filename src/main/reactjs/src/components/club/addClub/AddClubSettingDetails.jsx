@@ -6,7 +6,7 @@ import {v4 as uuidv4} from 'uuid';
 import NextButton from "./NextButton";
 import defaultImage from '../../../assets/images/defalut/club_profile.jpg'
 
-const AddClubSettingDetails = ({onNext, description, file, setCode, setDescription, onFileSelect}) => {
+const AddClubSettingDetails = ({onNext, description, file, setCode, setDescription, onFileSelect, tag, setTag}) => {
 
     const [isNextDisabled, setIsNextDisabled] = useState(true);
     const [preview, setPreview] = useState();
@@ -65,6 +65,11 @@ const AddClubSettingDetails = ({onNext, description, file, setCode, setDescripti
         setIsNextDisabled(newDescription.length < 10);
     };
 
+    const handleTagChange = (e) => {
+        const newTag = e.target.value;
+        setTag(newTag);
+    };
+
     return (
         <>
             <span style={{fontSize: 20, fontWeight: 600}} className="mb-[10px]"> 어떤 클럽인가요?</span>
@@ -107,7 +112,7 @@ const AddClubSettingDetails = ({onNext, description, file, setCode, setDescripti
             <br/>
 
             <Input type='text' startContent={<FaHashtag style={{color: 'gray'}}/>}
-                   variant='bordered' radius='lg' placeholder="태그입력"/>
+                   variant='bordered' radius='lg' value={tag} onChange={handleTagChange} placeholder="예: 자전거, 공원, 산책"/>
 
             <br/><br/><br/><br/>
 

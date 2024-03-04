@@ -30,6 +30,7 @@ const AddClub = () => {
     clubId ? club.subCategory : ""
   );
   const [name, setName] = useState(clubId ? club.name : "");
+  const [tag, setTag] = useState(clubId ? club.tag : "");
   const [description, setDescription] = useState(
     clubId ? club.description : ""
   );
@@ -56,6 +57,7 @@ const AddClub = () => {
     name: name,
     description: description,
     code: code,
+    tag: tag,
     notice: notice,
     category: category,
     subCategory: subCategory,
@@ -177,6 +179,8 @@ const AddClub = () => {
             setDescription={setDescription}
             setCode={setCode}
             onFileSelect={handlePhotoChange}
+            tag={tag}
+            setTag={setTag}
           />
         );
       case 4:

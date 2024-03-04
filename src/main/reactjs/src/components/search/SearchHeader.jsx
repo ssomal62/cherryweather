@@ -4,11 +4,12 @@ import {IoArrowBack} from "react-icons/io5";
 import {SearchIcon} from '../../assets/icon/SearchIcon'
 import {IoIosClose} from "react-icons/io";
 import weatherPhrases from './WeatherPlaceholder.json'
-import {useSetRecoilState} from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import {searchClubListState} from "../../recoil/hooks/UseClubApi";
+import {dailyWeatherState} from "../../recoil/hooks/UseWeatherData";
 
 export default function SearchHeader({ handleSearch, setInputValue, inputValue, handleBack, setSearchTriggered}) {
-
+    const dailyWeather = useRecoilValue(dailyWeatherState).data;
     const handleInputChange = (e) => setInputValue(e.target.value);
     const setSearchState = useSetRecoilState(searchClubListState);
     const handleInputEnter = (e) => {
@@ -27,18 +28,17 @@ export default function SearchHeader({ handleSearch, setInputValue, inputValue, 
         setInputValue(inputValue)
     }, [setInputValue]);
 
-
     const handleClearInput = () => {
         setInputValue('');
         handleSearch('');
         setSearchTriggered(false);
     };
 
-    const todayWeather = "비";
+    const todayWeather = dailyWeather?.weather;
 
-    const todayWeatherActivities = weatherPhrases[todayWeather].activities;
-    const todayWeatherIcon = weatherPhrases[todayWeather].icon;
-    const todayActivity = todayWeatherActivities[Math.floor(Math.random() * todayWeatherActivities.length)];
+    const todayWeatherActivities = weatherPhrases[todayWeather]?.activities;
+    const todayWeatherIcon = weatherPhrases[todayWeather]?.icon;
+    const todayActivity = todayWeatherActivities[Math.floor(Math.random() * todayWeatherActivities?.length)];
     const todayPlaceholder = `     ${todayWeatherIcon} ${todayActivity}`;
 
     return (

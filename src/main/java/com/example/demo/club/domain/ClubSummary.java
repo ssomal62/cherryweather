@@ -13,6 +13,7 @@ public record ClubSummary(
         String code,
         String activitiesArea,
         String joinApprovalStatus,
+        Integer feedCount,
         int currentMembers,
         int maxMembers,
         String tag,
