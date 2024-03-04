@@ -24,7 +24,7 @@ const ClubNotice = ({ clubDetail, hostProfile, hostName }) => {
                         alt="nextui logo"
                         height={40}
                         radius="sm"
-                        src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${hostProfile}.jpg?type=f&w=600&h=600&ttype=jpg`}
+                        src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${hostProfile}?type=f&w=600&h=600&ttype=jpg`}
                         width={40}
                     />
                     <div className="flex flex-col">
