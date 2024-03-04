@@ -2,6 +2,9 @@ package com.example.demo.like.service;
 
 import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.account.entity.Account;
+import com.example.demo.alarm.dto.AlarmDto;
+import com.example.demo.alarm.service.AlarmServiceImpl;
+import com.example.demo.club.entity.Club;
 import com.example.demo.club.event.ClubGrowthEvent;
 import com.example.demo.club.repository.ClubRepository;
 import com.example.demo.club.service.ClubService;
@@ -27,6 +30,11 @@ public class LikeService {
     private final LikeRepository likeRepository;
 
     private final ApplicationEventPublisher eventPublisher;
+
+    private final ClubService clubService;
+
+    private final AlarmServiceImpl alarmService;
+
 
     // ======================= CORE FUNCTIONALITIES ======================= //
 
@@ -58,6 +66,19 @@ public class LikeService {
                 eventPublisher.publishEvent(event);
             }
             //알람 들어 갈 자리
+            String message = accountDetails.getAccount().getProfileName() + "님이 클럽에 좋아요를 눌렀습니다.";
+            Club findClub = clubService.findClubById(infoDto.targetId());
+
+            alarmService.createAlarm(
+                    AlarmDto.builder()
+                            .targetId(findClub.getRepresentativeUserId())
+                            .targetTypeId(findClub.getClubId())
+                            .type("LIKE")
+                            .description(message)
+                            .importance(3)
+                            .build(),
+                    accountDetails
+            );
         }
     }
 
