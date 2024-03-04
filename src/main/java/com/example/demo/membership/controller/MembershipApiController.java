@@ -103,10 +103,11 @@ public class MembershipApiController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> updateMembership(
-            final @Valid @RequestBody UpdateMembership requestDTO
+            final @Valid @RequestBody UpdateMembership requestDTO,
+            final @AuthenticationPrincipal AccountDetails accountDetails
 
     ) {
-        membershipService.updateMembership(requestDTO);
+        membershipService.updateMembership(requestDTO, accountDetails);
         return ResponseEntity.ok().build();
     }
 
