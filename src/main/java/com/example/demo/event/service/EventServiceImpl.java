@@ -10,10 +10,13 @@ import com.example.demo.event.entity.Event;
 import com.example.demo.event.enums.EventStatus;
 import com.example.demo.event.enums.Weather;
 import com.example.demo.event.repository.EventRepository;
+import com.example.demo.event_membership.entity.EventMembership;
+import com.example.demo.event_membership.repository.EventMembershipRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,7 @@ public class EventServiceImpl implements EventService{
     private final EventRepository eventRepository;
     private final AccountRepository accountRepository;
     private final ClubRepository clubRepository;
+    private final EventMembershipRepository eventMembershipRepository;
     @Override
     @Transactional
     public EventViewDTO createEvent(EventCreateDTO eventCreateDTO,
@@ -51,15 +55,22 @@ public class EventServiceImpl implements EventService{
                 .activitiesArea(eventCreateDTO.getActivitiesArea())
                 .eventCountCurrent(1)
                 .eventCapacity(eventCreateDTO.getEventCapacity())
-                .eventStatus(EventStatus.valueOf(eventCreateDTO.getEventStatus().toUpperCase()))
+                .eventStatus(EventStatus.PUBLIC)
                 .eventWeather(Weather.valueOf(eventCreateDTO.getEventWeather().toUpperCase()))
-                .disclosureStatus(eventCreateDTO.getDisclosureStatus())
+                .disclosureStatus(true)
                 .createdUserId(accountDetail.getAccount().getAccountId())
                 .updatedUserId(accountDetail.getAccount().getAccountId())
                 .build();
 
 
         event = eventRepository.save(event);
+        EventMembership eventMembership = EventMembership.builder()
+                .account(account)
+                .event(event)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        eventMembershipRepository.save(eventMembership);
 
         // Convert saved entity to EventViewDTO
         EventViewDTO eventViewDTO = convertToEventViewDTO(event);
@@ -110,6 +121,7 @@ public class EventServiceImpl implements EventService{
                 event.getEventEndDate(),
                 event.getEventTimeStart(),
                 event.getActivitiesArea(),
+                event.getCode(),
                 event.getEventCountCurrent(),
                 event.getEventCapacity(),
                 event.getEventStatus(),

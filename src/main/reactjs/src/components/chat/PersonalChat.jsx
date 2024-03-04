@@ -68,7 +68,6 @@ function PersonalChat({ userInfo, accountData, nc }) {
               "&chatName=" +
               `${accountData.name}님과의 채팅방`
           );
-
           console.log("res : ", res);
           await nc.subscribe(newChatId);
           await nc.disconnect();

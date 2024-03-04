@@ -34,12 +34,16 @@ public class EventMembershipServiceImpl implements EventMembershipService{
             throw new RuntimeException("Account or Event not found");
         }
 
+        Event event = eventOptional.get();
+        event.incrementEventCountCurrent(); // 참가자 수 증가 메서드 호출
+
         EventMembership eventMembership = EventMembership.builder()
                 .account(accountOptional.get())
-                .event(eventOptional.get())
+                .event(event)
                 .createdAt(LocalDateTime.now())
                 .build();
 
         eventMembershipRepository.save(eventMembership);
+        eventRepository.save(event); // 변경된 이벤트 엔티티 저장
     }
 }

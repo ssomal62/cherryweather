@@ -19,6 +19,7 @@ public class EventDetailListDTO {
     private LocalDate eventEndDate;
     private LocalDateTime eventTimeStart;
     private String activitiesArea;
+    private String code;
     private Integer eventCountCurrent;
     private Integer eventCapacity;
     private EventStatus eventStatus;

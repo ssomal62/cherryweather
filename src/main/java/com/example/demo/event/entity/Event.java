@@ -99,7 +99,9 @@ public class Event {
         this.disclosureStatus = disclosureStatus;
 
     }
-
+    public void incrementEventCountCurrent() {
+        this.eventCountCurrent += 1; // 참가자 수 증가
+    }
 
 
 }
