@@ -1,10 +1,11 @@
 import {atom, useSetRecoilState} from "recoil";
-import {useCallback} from "react";
+import {useCallback, useEffect} from "react";
 
 //엔드포인트별 상태 정의
 export const dailyWeatherState = atom({
     key    : "dailyWeatherState",
     default: {data: null, loading: false, error: null},
+    // 세션 저장 기능
 });
 
 export const hourlyWeatherState = atom({
