@@ -9,6 +9,7 @@ public record CreateClubDTO(
         String description,
         String code,
         String notice,
+        String tag,
         ClubCategory category,
         String subCategory,
         ClubStatus status,

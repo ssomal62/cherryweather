@@ -38,7 +38,9 @@ export const clubDetailState = atom({
     key    : 'clubDetailState',
     default: {
         clubDetail: {},
-        liked     : false
+        liked     : false,
+        hostName: '',
+        hostProfile:'',
     },
 })
 
@@ -94,7 +96,9 @@ export const useClubData = ({method = 'get', state, dynamicPath, requestBody = n
             if (state.key === 'clubDetailState') {
                 setState({
                     clubDetail: response.data.clubDetail,
-                    liked     : response.data.liked
+                    liked     : response.data.liked,
+                    hostName: response.data.hostName,
+                    hostProfile:response.data.hostProfile,
                 })
             } else if (state.key === 'likedClubListState') {
                 setState(response.data);

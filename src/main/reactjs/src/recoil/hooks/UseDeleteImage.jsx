@@ -28,12 +28,11 @@ export const useDeleteImage  = () => {
                 });
 
             // HTTP 상태 코드가 200보다 크고 300보다 작으면 성공으로 처리
-            if (response.status >= 200 && response.status < 300) {
-                alert('이미지 삭제가 성공했습니다.');
-                setDeleteURL(true);
-            } else {
-                alert('이미지 삭제에 실패했습니다.');
-            }
+            // if (response.status >= 200 && response.status < 300) {
+            //     setDeleteURL(true);
+            // } else {
+            //     alert('이미지 삭제에 실패했습니다.');
+            // }
         } catch (error) {
             console.error('이미지 url을 불러오는데 실패했습니다.', error);
         }

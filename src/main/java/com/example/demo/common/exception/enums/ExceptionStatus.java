@@ -58,6 +58,7 @@ public enum ExceptionStatus {
     NOT_FOUND_COUPON(404, "등록되지 않은 쿠폰 입니다."),
     NOT_FOUND_FILE(404, "파일이 존재하지 않습니다."),
     NOT_FOUND_CLUB(404, "클럽이 존재하지 않습니다."),
+    NOT_FOUND_FEED(404, "피드가 존재하지 않습니다."),
     NOT_FOUND_MEMBERSHIP(404, "존재하지않는 멤버십 정보입니다."),
     NOT_FOUND_REDIS_KEY(404, "존재하지 않는 REDIS KEY 입니다."),
     NOT_FOUND_ORDERCODE(404, "존재하지 않는 주문 입니다."),

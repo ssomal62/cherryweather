@@ -55,11 +55,11 @@ const ClubConfigurations = () => {
 
                     {
                         (myRole === "MODERATOR" || myRole === "MEMBER") &&
-                        <LeaveClub message="탈퇴하기" clubDetail={clubDetail}/>
+                        <LeaveClub message="탈퇴하기" clubDetail={clubDetail} myMembership={myMembership}/>
                     }
                     {
                         myRole === "WAITING" &&
-                        <LeaveClub message="대기취소" clubDetail={clubDetail}/>
+                        <LeaveClub message="대기취소" clubDetail={clubDetail} myMembership={myMembership}/>
                     }
                     {
                         myRole === "HOST" &&

@@ -18,6 +18,7 @@ import {clubDetailState} from "../../recoil/hooks/UseClubApi";
 const FeedEditor = () => {
 
     const { feedId} = useParams();
+    const { clubId } = useParams();
 
     const feedDetails = {
         //feed 수정은 이런식으로 json 데이터 받아오면 됩니다.
@@ -47,9 +48,10 @@ const FeedEditor = () => {
     const requestData = {
         ...(feedId && {feedId: feedId}),
         weather: weather,
-        code: code,
+        feedCode: code,
         content: content,
         isPublic: isPublic,
+        clubId: clubId,
     };
 
     const fileUrl = (code) => {
@@ -110,7 +112,7 @@ const FeedEditor = () => {
     const onFileUpload = async () => {
         formData.append("file", file);
         try {
-            const resFile = await instance.post("/feed/upload", formData, {
+            const resFile = await instance.post("/feeds/upload", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -123,7 +125,7 @@ const FeedEditor = () => {
 
     const onSave = async () => {
         try {
-            const res = await instance.post("/feed", requestData, {
+            const res = await instance.post("/feeds", requestData, {
                 headers: {
                     Authorization: `Bearer ${cookie.get("accessToken")}`,
                 },

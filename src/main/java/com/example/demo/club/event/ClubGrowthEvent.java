@@ -10,11 +10,13 @@ public class ClubGrowthEvent extends ApplicationEvent {
     private final Long clubId;
     private final boolean isIncrease;
     private final AccountDetails accountDetails;
+    private final int score;
 
-    public ClubGrowthEvent(Object source, Long clubId, boolean isIncrease, AccountDetails accountDetails) {
+    public ClubGrowthEvent(Object source, Long clubId, boolean isIncrease, AccountDetails accountDetails, int score) {
         super(source);
         this.clubId = clubId;
         this.isIncrease = isIncrease;
         this.accountDetails = accountDetails;
+        this.score = score;
     }
 }

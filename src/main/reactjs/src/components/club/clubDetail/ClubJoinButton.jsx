@@ -11,7 +11,7 @@ import { instance } from "../../../recoil/module/instance";
 import { IsLoginAtom } from "../../../recoil/LoginAtom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import { currentMembershipState } from "../../../recoil/hooks/UseMembershipApi";
-import ClubChat from "../../chat/ClubChat";
+import UnableToJoinModal from "./UnableToJoinModal";
 import { userInfoState } from "../../../recoil/hooks/UseFetchUserInfo";
 
 const ClubJoinButton = () => {
@@ -28,6 +28,7 @@ const ClubJoinButton = () => {
 
   const [liked, setLiked] = useState(clubLiked);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUnableJoinModalOpen, setIsUnableJoinModalOpen] = useState(false);
   const [role, setRole] = useState("");
   const cookie = new Cookies();
 
@@ -72,12 +73,16 @@ const ClubJoinButton = () => {
     }
   };
 
-
   const handleJoinClick = () => {
     if (!isLogin) {
       setIsModalOpen(true);
       return;
     }
+      console.log("값확인" + clubDetail?.currentMembers )
+  if(isLogin && (clubDetail?.currentMembers === clubDetail?.maxMembers)) {
+      setIsUnableJoinModalOpen(true);
+      return;
+  }
     onSave();
   };
 
@@ -95,7 +100,6 @@ const ClubJoinButton = () => {
         },
       });
 
-
       // 클럽 가입을 요청한 경우의 알림 데이터
       const joinRequestAlarmData = {
         targetId: clubDetail?.representativeUserId, // 클럽의 호스트 ID
@@ -106,21 +110,15 @@ const ClubJoinButton = () => {
           `${userInfo.name}님이 클럽 가입 승인 대기입니다.`
       };
 
-      console.log(clubDetail.clubId);
-      console.log("Join request alarm data:", joinRequestAlarmData);
-      console.log(sendJoinAlarmData);
-
       // 클럽 가입 요청 알림을 보냅니다.
       if (clubDetail.joinApprovalStatus === "JOIN" && userInfo.accountId !== clubDetail.representativeUserId) {
         await sendJoinAlarmData(joinRequestAlarmData);
-        console.log("여기 호출 11")
         navigate("/club-join");
       }
 
       // 클럽 가입 승인 대기 알림을 보냅니다.
       if (clubDetail.joinApprovalStatus === "APPROVAL" && userInfo.accountId !== clubDetail.representativeUserId) {
         await sendJoinAlarmData(joinRequestAlarmData);
-        console.log("여기 호출 22")
         navigate("/club-wait");
       }
 
@@ -162,7 +160,6 @@ const ClubJoinButton = () => {
             onClick={() => navigate("/chat/club", { state: { clubDetail } })}
           >
             <span style={styles.font}>채팅하기</span>
-            {/* <ClubChat club={clubDetail} /> */}
           </Button>
         );
       case "WAITING":
@@ -215,14 +212,15 @@ const ClubJoinButton = () => {
           </Button>
         </ButtonContainer>
 
-        {joinButtonRender()}
-      </Footer>
-      <LoginVerificationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-    </>
-  );
+                {joinButtonRender()}
+            </Footer>
+            <LoginVerificationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
+           <UnableToJoinModal isOpen={isUnableJoinModalOpen} onClose={() => setIsUnableJoinModalOpen(false)}/>
+        </>
+    );
 };
 
 export default ClubJoinButton;
