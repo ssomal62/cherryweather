@@ -8,7 +8,7 @@ const Profile = () => {
     const userInfo = useRecoilValue(userInfoState);
     const fetchUserInfo = useFetchUserInfo();
     const { profileImage, profileName } = userInfo;
-    const imagwUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}.jpg?type=f&w=600&h=600&ttype=jpg`;
+    const imageUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${profileImage}?type=f&w=600&h=600`
     useEffect(() => {
       fetchUserInfo();
     }, []);
@@ -17,7 +17,7 @@ const Profile = () => {
     return (
       <Container>
             <ImageWapper>
-                <ProfileImg src={imagwUrl} alt="profile" />
+                <ProfileImg src={imageUrl} alt="profile" />
             </ImageWapper>
             <NickName>{profileName}</NickName>
             <Rating>내 온도 <b style={{color:"#F31260"}}>36.5</b></Rating>
@@ -29,9 +29,8 @@ const Profile = () => {
 export default Profile;
 
 const Rating = styled.div`
-margin: 0 0 18px;
+    margin: 0 0 18px;
     color: #4F5558;
-    font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
     font-size: 12px;

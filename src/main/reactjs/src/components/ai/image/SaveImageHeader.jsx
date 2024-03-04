@@ -8,6 +8,9 @@ import {WiNightAltRain} from "react-icons/wi";
 import {useRecoilValue} from "recoil";
 import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
+import {BsChatRightDots} from "react-icons/bs";
+import {TbJacket} from "react-icons/tb";
+import {GrGallery} from "react-icons/gr";
 
 export default function SaveImageHeader({ isLogin, handleBack}) {
 
@@ -17,12 +20,28 @@ export default function SaveImageHeader({ isLogin, handleBack}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
 
-    const handleConfigurationsClick = () => {
+    const handleChatClick = () => {
         if (!isLogin) {
             setIsModalOpen(true);
             return;
         }
-        navigate('/login')
+        navigate('/gpt')
+    }
+
+    const handleJacketClick = () => {
+        if (!isLogin) {
+            setIsModalOpen(true);
+            return;
+        }
+        navigate('/image')
+    }
+
+    const handleGalleryClick = () => {
+        if (!isLogin) {
+            setIsModalOpen(true);
+            return;
+        }
+        navigate('/ai')
     }
 
     useEffect(() => {
@@ -65,8 +84,8 @@ export default function SaveImageHeader({ isLogin, handleBack}) {
             cursor         : 'pointer',
         },
         icon   : {
-            width     : 24,
-            height    : 25,
+            width     : 20,
+            height    : 21,
             color     : scrolled ? 'black' : 'white',
             transition: 'color 0.3s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease',
         },
@@ -88,26 +107,36 @@ export default function SaveImageHeader({ isLogin, handleBack}) {
                     >
                         <IoArrowBack style={styles.icon}/>
                     </NavbarItem>
-                    <NavbarItem style={styles.text}>
-                        <p>체리의 드레스룸</p>
+                    <NavbarItem style={styles.text}
+                                onClick={() => navigate('/')}>
+                        <p>내 옷장</p>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">
+
                     <NavbarItem
-                        style={styles.iconBox}>
-                        <WiNightAltRain style={styles.icon}/>
+                        style={styles.iconBox}
+                        onClick={handleChatClick}
+                    >
+                        <BsChatRightDots style={styles.icon}/>
+                    </NavbarItem>
+                    <NavbarItem
+                        style={styles.iconBox}
+                        onClick={handleJacketClick}
+                    >
+                        <TbJacket style={styles.icon}/>
+                    </NavbarItem>
+                    <NavbarItem
+                        style={styles.iconBox}
+                        onClick={handleGalleryClick}
+                    >
+                        <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+                        <GrGallery style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem
                         style={styles.iconBox}
                         onClick={() => navigate('/')}>
                         <GoHome style={styles.icon}/>
-                    </NavbarItem>
-                    <NavbarItem
-                        style={styles.iconBox}
-                        onClick={handleConfigurationsClick}
-                    >
-                        <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-                        <FiSettings style={styles.icon}/>
                     </NavbarItem>
                 </NavbarContent>
             </Navbar>

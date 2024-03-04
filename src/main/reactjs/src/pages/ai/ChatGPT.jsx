@@ -12,6 +12,7 @@ const ChatGpt = () => {
     const location = useLocation();
     const from = location.state?.from || '/ai';
     const isLogin = useRecoilValue(IsLoginAtom);
+
     const handleBack = () => {
         navigate(from);
     }

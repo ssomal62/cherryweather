@@ -26,5 +26,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<RegisterType> findRegisterTypeByEmail(String email);
 
 
+    Optional<Account> findAccountByNameAndPhoneNumber(String name, String phoneNumber);
 
 }

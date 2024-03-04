@@ -44,16 +44,11 @@ const GPTChatRoom = () => {
     const isLogin = useRecoilValue(IsLoginAtom);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-
     useEffect(() => {
         fetchUserInfo();
         initializeState();
     }, []);
 
-    // console.log(userInfo.email)
-    // console.log(userInfo.gender)
-    // console.log(userInfo)
 
     useEffect(() => {
         setIsModalOpen(!isLogin);
@@ -64,16 +59,29 @@ const GPTChatRoom = () => {
 
     // 시작하기 버튼 클릭 핸들러
     const handleStartClick = async () => {
+
         if (!isLogin) {
             setIsModalOpen(true);
         } else {
             try {
-                setIsLoading(true); // 데이터 가져오는 동안 로딩 상태 활성화
                 setIsStarted(true); // 버튼 클릭 상태를 true로 변경
-                const response = await chatRestart();
-                setIsLoading(false); // 데이터 가져온 후 로딩 상태 비활성화
+                setIsLoading(true); // 데이터 가져오는 동안 로딩 상태 활성화
+                const start = Date.now(); // 현재 시간 기록
+                await chatRestart(); // 비동기 작업 수행
+
+                const duration = Date.now() - start; // 비동기 작업 수행 시간 계산
+                const minLoadingTime = 7000; // 최소 로딩 시간 (예: 4초)
+
+                if (duration < minLoadingTime) {
+                    // 최소 로딩 시간을 충족하지 못한 경우, 남은 시간만큼 지연
+                    setTimeout(() => setIsLoading(false), minLoadingTime - duration);
+                } else {
+                    // 최소 로딩 시간을 이미 충족한 경우, 바로 로딩 상태 비활성화
+                    setIsLoading(false);
+                }
             } catch (error) {
                 console.error("대화 시작 시 에러 발생", error);
+                setIsLoading(false); // 에러 발생 시에도 로딩 상태 비활성화
             }
         }
     };
@@ -124,13 +132,13 @@ const GPTChatRoom = () => {
         }
     }, [chatList]); // chatList가 변경될 때마다 메시지 스크롤을 마지막 채팅으로 이동
 
-    // 스피너 위치 확인용
-    useEffect(() => {
-        setIsLoading(true); // 스피너 표시
-        return () => {
-            setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
-        };
-    }, []); // 컴포넌트가 마운트될 때만 실행
+    // // 스피너 위치 확인용
+    // useEffect(() => {
+    //     setIsLoading(true); // 스피너 표시
+    //     return () => {
+    //         setIsLoading(false); // 컴포넌트가 언마운트되면 스피너 숨기기
+    //     };
+    // }, []); // 컴포넌트가 마운트될 때만 실행
 
     //이미지 생성되면 이미지 페이지로 전환
     useEffect(() => {
