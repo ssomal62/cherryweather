@@ -7,11 +7,13 @@ import {HeartIcon} from "./HeartIcon";
 import {HeartFill, useSaveImageState, UseSaveState} from "../../../recoil/hooks/UseSaveState";
 import {useRecoilValue} from "recoil";
 import {Spinner} from "@nextui-org/react";
+import SaveImageModal from "../../../utils/SaveImageModal";
 
 const GeneratedImage = ({image}) => {
 
     const { toggleSaveImage } = useSaveImageState(); // useSaveImageState 훅을 호출하여 toggleSaveImage 함수를 가져옵니다.
     const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
         const newWindow = window.open(image, '_blank');
@@ -23,13 +25,14 @@ const GeneratedImage = ({image}) => {
         setIsLoading(true); // 저장하기 버튼 클릭 시 로딩 상태 활성화
         await toggleSaveImage(image);
         setIsLoading(false); // 저장 완료 후 로딩 상태 비활성화
+        setIsModalOpen(true); // 모달 열기
     };
 
     // 수정: saveImageStatus 대신 isSaved 값 직접 사용
     const isSaved = useRecoilValue(HeartFill);
     console.log("isSaved="+isSaved);
     return (
-
+<>
         <Card
             isFooterBlurred
             radius="lg"
@@ -112,6 +115,8 @@ const GeneratedImage = ({image}) => {
                 </Button>
             </CardFooter>
         </Card>
+        <SaveImageModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+</>
     );
 };
 

@@ -2,6 +2,7 @@ import {useRecoilState} from 'recoil';
 import { atom } from 'recoil';
 import {Cookies} from "react-cookie";
 import {instance} from "../module/instance";
+import {useState} from "react";
 
 export const UseSaveState = atom({
     key: 'SaveImageState',
@@ -32,11 +33,9 @@ export const useSaveImageState = () => {
                 }, config);
                 if (response.bucketURL !== null) {
                     // 성공적으로 저장된 후에만 saveImage 초기화
-                    alert("저장 완료되었습니다.");
                     setHeart(true);
                 } else {
                     console.error('Save status update failed with status:', response.status);
-                    alert("저장을 실패했습니다.");
                     setHeart(false);
                 }
             } catch (error) {

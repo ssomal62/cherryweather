@@ -1,6 +1,5 @@
 package com.example.demo.ai_image.repository;
 
-import com.example.demo.account.entity.Account;
 import com.example.demo.ai_image.entity.AI_image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
