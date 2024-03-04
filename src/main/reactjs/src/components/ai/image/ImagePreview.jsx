@@ -37,9 +37,8 @@ const ImagePreview = () => {
 
     return (
         <CenteredContainer>
-
             {isLoading ? (
-                <Spinner size="lg" label="옷차림 생각중" color="danger" labelColor="danger" />
+                <Spinner size="lg" label="상상중..!" color="danger" labelColor="danger" />
             ) : (
                 <CardListItemWrapper>
                     <GenerateImageHeader isLogin={isLogin} handleBack={handleBack} />

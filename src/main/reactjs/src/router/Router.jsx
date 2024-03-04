@@ -36,6 +36,7 @@ import FeedEditor from "../pages/feed/FeedEditor";
 import ClubFeedList from "../pages/club/ClubFeedList";
 import ClubChat from "../components/chat/ClubChat";
 import AddEvent from "../components/event/AddEvent";
+import ImageGallery from "../pages/ai/ImageGallery";
 
 const Router = () => {
 
@@ -105,6 +106,7 @@ const Router = () => {
                     <Route path="/gpt" element={<GPT/>}/>
                     <Route path="/image" element={<AI_image/>}/>
                     <Route path="/imageList" element={<AI_imageList/>}/>
+                    <Route path="/gallery" element={<ImageGallery/>}/>
                     <Route path="/weatherDetail" element={<WeatherDetail/>}/>
 
                     <Route path="/chat" element={<Chat/>}/>
