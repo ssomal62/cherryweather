@@ -13,25 +13,21 @@ import java.util.List;
 public class AlarmDto {
 
     Long alarmId;
-    String name;
     Long targetId;
     String type;
     Integer importance;
     LocalDateTime createdAt;
     String description;
-    boolean isShowAlarm;
 
     public static List<AlarmDto> toDtoList(List<Alarm> alarmList) {
         return alarmList.stream().map(alarm ->
                 AlarmDto.builder()
                 .alarmId(alarm.getAlarmId())
-                .name(alarm.getAccount().getName())
                 .description(alarm.getDescription())
                 .type(alarm.getType())
                 .targetId(alarm.getTargetId())
                 .importance(alarm.getImportance())
                 .createdAt(alarm.getCreatedAt())
-                .isShowAlarm(alarm.isShowAlarm())
                 .build()
         ).toList();
     }

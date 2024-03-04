@@ -10,6 +10,7 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import GoBellDropNotificationIcon from "../../components/webnotification/GoBellDropNotificationIcon";
 import {useFetchUserInfo} from "../../recoil/hooks/UseFetchUserInfo";
 import {searchClubListState} from "../../recoil/hooks/UseClubApi";
+import {requestNotificationPermissionAndToken} from "../../components/webpush/requestNotificationPermissionAndToken";
 
 export default function Header({opacity}) {
     const isLogin = useRecoilValue(IsLoginAtom);
@@ -49,38 +50,34 @@ export default function Header({opacity}) {
         navigate('/search', {state: {from: location.pathname}});
     }
 
-    const makeNotiTest = () => {
-        // 함수 내용은 기존 WebNotificationTest 컴포넌트의 makeNotiTest 함수를 참고하여 이동시켜주세요.
-        if (isLogin) {
-            if (Notification.permission === "granted") {
-                const options = {
-                    body              : "오늘의 날씨는",
-                    icon              : require("../../assets/images/sun.png"),
-                    requireInteraction: true,
-                };
+  const makeNotiTest = () => {
+    // 함수 내용은 기존 WebNotificationTest 컴포넌트의 makeNotiTest 함수를 참고하여 이동시켜주세요.
+    if (isLogin) {
+      requestNotificationPermissionAndToken().then(() => {
+        // 사용자에게 알림 표시 (알림 권한이 이미 허용된 경우)
+        const options = {
+          body: "오늘의 날씨는 어떠세요?",
+          icon: "/path/to/icon.png", // icon 경로를 정확히 지정해야 함
+          requireInteraction: true,
+        };
 
-                if (registration) {
-                    registration.showNotification("cherryWeather", options);
-                } else {
-                    console.log("Service Worker가 아직 등록되지 않았습니다.");
-                }
-            } else if (Notification.permission === "denied") {
-                console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-                alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-            } else {
-                Notification.requestPermission().then((permission) => {
-                    if (permission === "granted") {
-                        makeNotiTest();
-                    } else {
-                        console.log("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-                        alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
-                    }
-                });
-            }
+        const notificationTitle = "오늘의 날씨!"; // 알림 제목
+
+        // 알림 권한이 부여되었는지 확인
+        if (Notification.permission === "granted") {
+          // 서비스 워커 준비 상태 확인
+          navigator.serviceWorker.ready.then((registration) => {
+            // 알림 표시
+            registration.showNotification(notificationTitle, options);
+          });
         } else {
-            alert("로그인이 필요합니다.");
+          console.error(
+            "알림을 표시할 수 없습니다. 권한이 부여되지 않았습니다."
+          );
         }
-    };
+      });
+    }
+  };
 
     return (
         <Navbar shouldHideOnScroll style={styles.navBar(opacity)}>

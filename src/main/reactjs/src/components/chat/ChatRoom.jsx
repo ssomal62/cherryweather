@@ -40,8 +40,6 @@ const ChatRoom = () => {
 
       const res = await instance.get("/account/user-info", config);
       setAccountData(res.data);
-      console.log("accountData : ", accountData);
-      console.log("ncloud : " + ncloud);
       const chat = new ncloudchat.Chat();
       await chat.initialize("11af8973-18b8-48c2-86ee-ac1993451e1b");
       setNcloud(chat);
@@ -81,7 +79,6 @@ const ChatRoom = () => {
     initializeChat();
   }, [chatRoom]);
 
-  console.log("channels 채널 정보 : ", channels);
 
   const fetchChannelMessages = async (chat, channelId) => {
     try {
@@ -143,14 +140,13 @@ const ChatRoom = () => {
 
       // 이미지가 있을 경우
       if (uploadImage) {
-        console.log("chatRoom : ", chatRoom);
         const formData = new FormData();
         formData.append("file", uploadImage);
         formData.append("chatRoom", chatRoom);
 
         // 이미지 업로드 API 호출
         const images = await instance.post("/chat/upload", formData);
-        console.log("images 이미지 : ", images);
+
 
         // 이미지 전송 API 호출 (예시, 실제 함수는 환경에 따라 다를 수 있음)
         const imgres = await ncloud.sendImage(chatRoom, uploadImage);
@@ -219,14 +215,12 @@ const ChatRoom = () => {
         const response = await instance.get(
           `/chat/getchatlist?accountId=${accountData.accountId}`
         );
-        console.log("현재 채널", response.data);
         const currentChatName = response.data.find(
           (chat) => chat.chatRoom === chatRoom
         )?.chatName;
         const currentChat = response.data.find(
           (chat) => chat.chatRoom === chatRoom
         );
-        console.log("currentChat", currentChat);
         setChannelName(currentChatName);
         setCurrentChannelId(currentChat);
       } catch (error) {
@@ -253,7 +247,6 @@ const ChatRoom = () => {
     }
   };
 
-  console.log("messages 메세지 정보 : ", messages);
 
   return (
     <Layout
@@ -329,12 +322,11 @@ const ChatRoom = () => {
                               : "received-message"
                           }
                           avatarProps={{
-                            src: `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${
-                              message.sender.profileImage ===
+                            src: `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${message.sender.profileImage ===
                               "기본이미지 넣어야함"
-                                ? "default_image.jpg"
-                                : message.sender.profileImage
-                            }?type=f&w=600&h=600&ttype=jpg`,
+                              ? "default_image.jpg"
+                              : message.sender.profileImage
+                              }?type=f&w=600&h=600&ttype=jpg`,
                           }}
                           style={{ fontSize: "8px", color: "gray" }}
                         />

@@ -1,11 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
+import { Cookies } from "react-cookie";
 
 function PersonalChat({ userInfo, accountData, nc }) {
   const navi = useNavigate();
 
+
   const buttonRef = useRef(null);
+  const cookie = new Cookies();
 
   useEffect(() => {
     // 여기서 setTimeout을 사용하여 일정 시간 후에 버튼을 클릭합니다.
@@ -50,37 +53,71 @@ function PersonalChat({ userInfo, accountData, nc }) {
           const newChatId = newchannel.id;
           const res = await instance.post(
             "/chat/createchatroom?accountId=" +
-              accountData.accountId +
-              "&chatRoom=" +
-              newChatId +
-              "&raccountId=" +
-              userInfo.accountId +
-              "&chatName=" +
-              `${newchannel.name}`
+            accountData.accountId +
+            "&chatRoom=" +
+            newChatId +
+            "&raccountId=" +
+            userInfo.accountId +
+            "&chatName=" +
+            `${newchannel.name}`
           );
           await instance.post(
             "/chat/createchatroom?accountId=" +
-              userInfo.accountId +
-              "&chatRoom=" +
-              newChatId +
-              "&raccountId=" +
-              accountData.accountId +
-              "&chatName=" +
-              `${accountData.name}님과의 채팅방`
+            userInfo.accountId +
+            "&chatRoom=" +
+            newChatId +
+            "&raccountId=" +
+            accountData.accountId +
+            "&chatName=" +
+            `${accountData.name}님과의 채팅방`
           );
 
-          console.log("res : ", res);
+          console.log(accountData.accountId);
+          // console.log("res : ", res);
           await nc.subscribe(newChatId);
-          await nc.disconnect();
+          // 채팅방을 생성한 사람과 대화를 시작한 사람이 다를 경우에만 알림을 보냅니다.
+          if (accountData.accountId !== userInfo.accountId) {
+            const chatPersonalAlarmData = {
+              targetId: userInfo.accountId, // targetId에 새로운 채팅방 Id를 추가
+              type: "PERSONALCHAT",
+              importance: 2,
+              description: `${accountData.name}님과의 1대1 대화방이 생성되었습니다.`,
+            };
+            await sendChatAlarmData(chatPersonalAlarmData);
+            console.log("알람 : ", sendChatAlarmData);
+
+            await nc.disconnect();
+          }
+          // 개인 채팅방 생성 알림 전송(주석부분)
           // 채팅방으로 이동
-          navi(`/chat/room/${newChatId}/${userInfo.accountId}`);
-          window.location.reload();
+          // navi(`/chat/room/${newChatId}/${userInfo.accountId}`);
+          // window.location.reload();
+
+
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);
       }
     }
   };
+
+  const sendChatAlarmData = async (data) => {
+    try {
+      // 데이터 전송 전에 조건을 확인하여 올바른 targetId에게만 알림을 보냅니다.
+      if (data.targetId !== userInfo.accountId) {
+        await instance.post("/alarm", data, {
+          headers: {
+            Authorization: `Bearer ${cookie.get("accessToken")}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Alarm Data Error:", error);
+    }
+  };
+
+
+
   useEffect(() => {
     const disconnectChat = async () => {
       if (nc && nc !== null) {
