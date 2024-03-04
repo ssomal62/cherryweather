@@ -32,18 +32,18 @@ const MainTop =  React.memo(({ index })  => {
 
     return (
         <div className="main-top-container ">
-                <Card key={index} isHoverable isPressable className="w-[80%] m-1 hover:shadow-lg transition" >
+                {/*<Card key={index} isHoverable isPressable className="w-[40%] m-1 hover:shadow-lg transition" >*/}
 
                         <h3 className="service-title w-full">{currentDescription.title}</h3>
-                        <p className="service-description w-full">
-                            {currentDescription.description.map((line, lineIndex) => (
-                            <React.Fragment key={lineIndex}>
-                                <span>{line}</span>
-                                {lineIndex < currentDescription.description.length - 1 && <br />}
-                            </React.Fragment>
-                        ))}</p>
+                        {/*<p className="service-description w-full">*/}
+                        {/*    {currentDescription.description.map((line, lineIndex) => (*/}
+                        {/*    <React.Fragment key={lineIndex}>*/}
+                        {/*        <span>{line}</span>*/}
+                        {/*        {lineIndex < currentDescription.description.length - 1 && <br />}*/}
+                        {/*    </React.Fragment>*/}
+                        {/*))}</p>*/}
 
-                </Card>
+                {/*</Card>*/}
         </div>
     );
 });

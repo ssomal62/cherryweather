@@ -4,17 +4,27 @@ import styled from "styled-components";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import { TbJacket } from "react-icons/tb";
-import { Listbox, ListboxItem } from "@nextui-org/react";
+import {Listbox, ListboxItem, useDisclosure} from "@nextui-org/react";
 import { FiMapPin } from "react-icons/fi";
 import { IoAirplaneOutline } from "react-icons/io5";
 import { AiOutlineMessage } from "react-icons/ai";
+import AreaModal from "./AreaModal";
+import InterestModal from "./InterestModal";
 const MyPageMenu = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const {isOpen : areaIs, onOpen : areaOn, onOpenChange : areaChange} = useDisclosure();
+  const {isOpen : interestIs, onOpen : interestOn, onOpenChange : interestChange} = useDisclosure();
 
   const handleClick = (item) => {
-    sessionStorage.setItem("scrollPosition", window.scrollY);
-    navigate(item.navigateTo, { state: { from: location.pathname } });
+    if (item.key === 'activity-area') {
+      areaOn(); // 모달 열기
+    } else if(item.key === 'interests') {
+      interestOn();
+    }else {
+      sessionStorage.setItem("scrollPosition", window.scrollY);
+      navigate(item.navigateTo, { state: { from: location.pathname } });
+    }
   };
 
   const menu = [
@@ -53,6 +63,7 @@ const MyPageMenu = () => {
   return (
     <div style={{ padding: "20px 20px 50px 20px" }}>
       <Listbox
+          aria-label="Choose an option"
         items={menu}
         variant="solid"
         className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[600px] overflow-visible shadow-small rounded-medium"
@@ -62,6 +73,7 @@ const MyPageMenu = () => {
       >
         {(item) => (
           <ListboxItem
+              textValue={item.label}
             key={item.key}
             color={item.key === "delete" ? "danger" : "default"}
             onClick={() => handleClick(item)}
@@ -79,6 +91,8 @@ const MyPageMenu = () => {
           </ListboxItem>
         )}
       </Listbox>
+      <AreaModal isOpen={areaIs} onOpenChange={areaChange} />
+      <InterestModal isOpen={interestIs} onOpenChange={interestChange} />
     </div>
   );
 };

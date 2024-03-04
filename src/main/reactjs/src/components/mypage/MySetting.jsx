@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   IconWapper,
@@ -23,13 +23,11 @@ import PasswordUpdateModal from "./PasswordUpdateModal";
 const MySetting = () => {
 
   const navigate = useNavigate();
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const fetchUserInfo = useFetchUserInfo();
   const { agreementGetNotified } = userInfo;
-  const {pwIsOpen, onPwOpen, openChange} = useDisclosure();
-  const [onModal, setOnModal] = useState(false)
-  console.log(pwIsOpen)
+  const {isOpen: dropIs, onOpen: dropOn, onOpenChange: dropChange} = useDisclosure();
+  const {isOpen: updateIs, onOpen: updateOn, onOpenChange: updateChange} = useDisclosure();
   
   useEffect(() => {
     // 컴포넌트가 마운트 될 때만 fetchUserInfo를 호출합니다.
@@ -61,10 +59,6 @@ const MySetting = () => {
   } catch (error) {
     console.error("알람 수신 동의 수정 실패", error);
   }
-}
-
-const closeModal = () => {
-  setOnModal(false);
 }
   
   return (
@@ -104,7 +98,7 @@ const closeModal = () => {
             </MenuWapper>
           </MenuBtn>
           
-          <MenuBtn onClick={()=>setOnModal(true)}>
+          <MenuBtn onClick={updateOn}>
             <MenuWapper>
               <Wapper>
                 <Title>비밀번호 변경</Title>
@@ -116,9 +110,9 @@ const closeModal = () => {
               </Wapper>
             </MenuWapper>
           </MenuBtn>
-          <PasswordUpdateModal isOpen={onModal} onOpenChange={openChange} close={closeModal}/>
+          <PasswordUpdateModal isOpen={updateIs} onOpenChange={updateChange}/>
 
-          <MenuBtn onClick={onOpen}>
+          <MenuBtn onClick={dropOn}>
             <MenuWapper>
               <Wapper>
                 <Title>회원 탈퇴</Title>
@@ -130,7 +124,7 @@ const closeModal = () => {
               </Wapper>
             </MenuWapper>
           </MenuBtn>
-          <DropMadal isOpen={isOpen}  onOpenChange={onOpenChange}/>
+          <DropMadal isOpen={dropIs}  onOpenChange={dropChange}/>
         </Container>
 
     </>

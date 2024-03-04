@@ -115,6 +115,12 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/find-email")
+    public ResponseEntity<String> findEmail(@RequestBody FindEmailRequestDto findEmailRequestDto) {
+        String email = accountService.findEmail(findEmailRequestDto);
+        return ResponseEntity.ok(email);
+    }
+
 
     // 이메밀로 user 정보 가져오기
     @GetMapping("/getfinduser")
