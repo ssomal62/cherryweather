@@ -5,8 +5,7 @@ import {GoHome} from "react-icons/go";
 import {useLocation, useNavigate} from "react-router-dom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import {BsChatRightDots} from "react-icons/bs";
-import {TbJacket} from "react-icons/tb";
-import {GrGallery} from "react-icons/gr";
+import {TbJacket ,TbPhoto } from "react-icons/tb";
 
 export default function AI_MainHeader({isLogin, handleBack}) {
 
@@ -104,14 +103,14 @@ export default function AI_MainHeader({isLogin, handleBack}) {
                         style={styles.iconBox}
                         onClick={handleJacketClick}
                     >
-                        <TbJacket style={styles.icon}/>
+                        <TbJacket  style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem
                         style={styles.iconBox}
                         onClick={handleGalleryClick}
                     >
                         <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-                        <GrGallery style={styles.icon}/>
+                        <TbPhoto  style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem
                         style={styles.iconBox}

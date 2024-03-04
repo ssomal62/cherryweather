@@ -36,7 +36,6 @@ export const useSaveImageState = () => {
                     setHeart(true);
                 } else {
                     console.error('Save status update failed with status:', response.status);
-
                     setHeart(false);
                 }
             } catch (error) {
