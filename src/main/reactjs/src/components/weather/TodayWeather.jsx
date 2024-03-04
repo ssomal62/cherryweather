@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {Spinner} from "@nextui-org/react";
 import {dailyWeatherState, UseWeatherData} from "../../recoil/hooks/UseWeatherData";
-// import {useNavigate} from "react-router-dom";
 import UseClientIp from "../../recoil/hooks/UseClientIp";
 import styled from "styled-components";
 import {useRecoilValue} from "recoil";

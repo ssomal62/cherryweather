@@ -18,7 +18,7 @@ const AirQuality = () => {
 
     return (
         <Container>
-            <Card isBlurred className = "bg-black/30 rounded-xl rounded-large shadow-small h-[100%]">
+            <Card isBlurred className = "bg-black/30 rounded-xl shadow-small h-[100%]">
                 {loading && (
                     <Spinner label = "Loading..."/>
                 )}
@@ -97,6 +97,5 @@ export default AirQuality;
 const Container = styled.div`
     width: 100%;
     height: 100%;
-    border: 2px solid yellow;
     padding: 22px;
 `;
