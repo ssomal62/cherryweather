@@ -1,6 +1,7 @@
 package com.example.demo.alarm.entity;
 
 import com.example.demo.account.entity.Account;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
