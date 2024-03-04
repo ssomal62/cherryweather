@@ -1,5 +1,5 @@
-import React, {Suspense} from "react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import React, { Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Home from "../pages/Home";
 
@@ -24,7 +24,6 @@ import MySetting from "../components/mypage/MySetting";
 import ModifyProfile from "../components/mypage/ModifyProfile";
 
 import Chat from "../pages/chat/Chat";
-import Event from "../pages/event/Event";
 import Adminchat from "../components/chat/Adminchat";
 import ChatRoom from "../components/chat/ChatRoom";
 import ClubWaitingToJoin from "../pages/club/ClubWaitingToJoin";
@@ -36,88 +35,90 @@ import FeedEditor from "../pages/feed/FeedEditor";
 import ClubFeedList from "../pages/club/ClubFeedList";
 import ClubChat from "../components/chat/ClubChat";
 import AddEvent from "../components/event/AddEvent";
+import Event from "../pages/event/Event";
 
 const Router = () => {
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<div>로딩중...</div>}>
+        {" "}
+        {/* Suspense : 레이즈 라우터 사용시 컴포넌트가 로드되는 동안 표시하는 화면을 출력*/}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/login"
+            element={
+              <BlockIfLoggedIn>
+                <SignIn />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route path="/login/local" element={<LocalSignIn />} />
+          <Route
+            path="/oauth"
+            element={
+              <BlockIfLoggedIn>
+                <OauthInfo />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route
+            path="/join"
+            element={
+              <BlockIfLoggedIn>
+                <SignUp />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage/setting" element={<MySetting />} />
+          <Route path="/modify/profile" element={<ModifyProfile />} />
+          <Route
+            path="/oauth/callback/naver"
+            element={
+              <BlockIfLoggedIn>
+                <NaverCallBack />
+              </BlockIfLoggedIn>
+            }
+          />
+          <Route path="/community" element={<Community />}>
+            <Route path=":selectPage" element={<Community />} />
+          </Route>
 
-    return (
-        <BrowserRouter>
-            <Suspense fallback={<div>로딩중...</div>}> {/* Suspense : 레이즈 라우터 사용시 컴포넌트가 로드되는 동안 표시하는 화면을 출력*/}
-                <Routes>
-                    <Route path="/" element={<Home/>}/>
-                    <Route
-                        path="/login"
-                        element={
-                            <BlockIfLoggedIn>
-                                <SignIn/>
-                            </BlockIfLoggedIn>
-                        }
-                    />
-                    <Route path="/login/local" element={<LocalSignIn/>}/>
-                    <Route
-                        path="/oauth"
-                        element={
-                            <BlockIfLoggedIn>
-                                <OauthInfo/>
-                            </BlockIfLoggedIn>
-                        }
-                    />
-                    <Route
-                        path="/join"
-                        element={
-                            <BlockIfLoggedIn>
-                                <SignUp/>
-                            </BlockIfLoggedIn>
-                        }
-                    />
-                    <Route path="/mypage" element={<MyPage/>}/>
-                    <Route path="/mypage/setting" element={<MySetting/>}/>
-                    <Route path="/modify/profile" element={<ModifyProfile/>}/>
-                    <Route
-                        path="/oauth/callback/naver"
-                        element={
-                            <BlockIfLoggedIn>
-                                <NaverCallBack/>
-                            </BlockIfLoggedIn>
-                        }
-                    />
-                    <Route path="/community" element={<Community/>}>
-                        <Route path=":selectPage" element={<Community/>}/>
-                    </Route>
+          <Route path="/search" element={<Search />} />
 
-                    <Route path="/search" element={<Search/>}/>
+          <Route path="/club-details/:clubId" element={<ClubDetails />} />
+          <Route path="/club-add" element={<AddClub />}>
+            <Route path=":clubId" element={<AddClub />} />
+          </Route>
+          <Route path="/add-success/:clubId" element={<AddClubSuccess />} />
+          <Route path="/club-configurations" element={<ClubConfigurations />} />
+          <Route path="/club-members/:clubId" element={<ClubMembers />} />
+          <Route path="/club-join" element={<ClubJoin />} />
+          <Route path="/club-wait" element={<ClubWaitingToJoin />} />
+          <Route path="/club-feed/:clubId" element={<ClubFeedList />} />
 
-                    <Route path="/club-details/:clubId" element={<ClubDetails/>}/>
-                    <Route path="/club-add" element={<AddClub/>}>
-                        <Route path=":clubId" element={<AddClub/>}/>
-                    </Route>
-                    <Route path="/add-success/:clubId" element={<AddClubSuccess/>}/>
-                    <Route path="/club-configurations" element={<ClubConfigurations/>}/>
-                    <Route path="/club-members/:clubId" element={<ClubMembers/>}/>
-                    <Route path="/club-join" element={<ClubJoin/>}/>
-                    <Route path="/club-wait" element={<ClubWaitingToJoin/>}/>
-                    <Route path="/club-feed/:clubId" element={<ClubFeedList/>}/>
+          <Route path="/feed-editor" element={<FeedEditor />}>
+            <Route path=":feedId" element={<FeedEditor />} />
+          </Route>
 
-                    <Route path="/feed-editor" element={<FeedEditor/>}>
-                        <Route path=":feedId" element={<FeedEditor/>}/>
-                    </Route>
+          <Route path="/ai" element={<AI_main />} />
+          <Route path="/gpt" element={<GPT />} />
+          <Route path="/image" element={<AI_image />} />
+          <Route path="/imageList" element={<AI_imageList />} />
+          <Route path="/weatherDetail" element={<WeatherDetail />} />
 
-                    <Route path="/ai" element={<AI_main/>}/>
-                    <Route path="/gpt" element={<GPT/>}/>
-                    <Route path="/image" element={<AI_image/>}/>
-                    <Route path="/imageList" element={<AI_imageList/>}/>
-                    <Route path="/weatherDetail" element={<WeatherDetail/>}/>
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/room/:chatRoom/:clubId" element={<ChatRoom />} />
+          <Route path="/chat/admin" element={<Adminchat />} />
+          <Route path="/chat/club" element={<ClubChat />} />
 
-                    <Route path="/chat" element={<Chat/>}/>
-                    <Route path="/chat/room/:chatRoom/:clubId" element={<ChatRoom/>}/>
-                    <Route path="/chat/admin" element={<Adminchat/>}/>
-                    <Route path="/chat/club" element={<ClubChat/>}/>
-
-                    <Route path="/event" element={<Event/>}/>
-                    <Route path="/event-add" element={<AddEvent/>}/>
-                </Routes>
-            </Suspense>
-        </BrowserRouter>
-    );
+          <Route path="/event" element={<Event />} />
+          <Route path="/event-add" element={<AddEvent />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
 };
 
 export default Router;

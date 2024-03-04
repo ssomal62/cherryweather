@@ -112,24 +112,29 @@ const ClubDetails = () => {
                         <GrowthMeter clubDetail={clubDetail}/>
                     </Content>
 
-                    <Image radius='none' alt=""
-                           removeWrapper
-                           style={{
-                               ...styles.img,
-                               transform: `translateY(${offsetY * -0.3}px)`,
-                           }}
-                           className="w-full object-cover object-middle"
-                           src={clubProfile(clubDetail.code)}
-                    />
-                    <div style={styles.top}>
-                        <SoftCurveTop color={'#ffffff'}/>
-                    </div>
-                </div>
-            </ClubDetail>
-            <ClubJoinButton clubId={clubId}/>
-            <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-        </Layout>
-    );
+          <Image
+            radius="none"
+            alt=""
+            removeWrapper
+            style={{
+              ...styles.img,
+              transform: `translateY(${offsetY * -0.3}px)`,
+            }}
+            className="w-full object-cover object-middle"
+            src={clubProfile(clubDetail.code)}
+          />
+          <div style={styles.top}>
+            <SoftCurveTop color={"#ffffff"} />
+          </div>
+        </div>
+      </ClubDetail>
+      <ClubJoinButton clubId={clubId} />
+      <LoginVerificationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </Layout>
+  );
 };
 
 export default ClubDetails;

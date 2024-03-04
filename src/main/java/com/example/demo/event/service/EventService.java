@@ -1,15 +1,16 @@
 package com.example.demo.event.service;
 
-import com.example.demo.event.dto.ResponseDTO;
-import com.example.demo.event.entity.Event;
+import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.event.dto.*;
 
-public class EventService {
+import java.util.List;
 
-    // 이벤트 생성
-    public Event createEvent(ResponseDTO requestDTO) {
-        // 이벤트 생성 로직
+public interface EventService {
+    EventViewDTO createEvent(EventCreateDTO eventCreateDTO, AccountDetails accountDetails);
+    List<EventListDTO> getAllEvents();
+    EventDetailListDTO getEventDetail(Long eventId);
 
+    void deleteEvent(long eventId);
 
-        return new Event();
-    }
+    void updateEvent(EventUpdateDTO updateDTO);
 }
