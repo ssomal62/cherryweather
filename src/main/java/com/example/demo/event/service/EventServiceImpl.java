@@ -101,6 +101,7 @@ public class EventServiceImpl implements EventService{
     public List<EventListDTO> getAllEvents() {
         return eventRepository.findAll().stream()
                 .map(event -> new EventListDTO(
+                        event.getClubId().getClubId(),
                         event.getEventId(),
                         event.getEventSubject(),
                         event.getEventEndDate(),
@@ -115,6 +116,7 @@ public class EventServiceImpl implements EventService{
                 .orElseThrow(() -> new RuntimeException("Event not found with id " + eventId));
 
         return new EventDetailListDTO(
+                event.getClubId().getClubId(),
                 event.getEventId(),
                 event.getEventSubject(),
                 event.getEventContent(),

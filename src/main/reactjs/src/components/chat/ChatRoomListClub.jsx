@@ -1,4 +1,4 @@
-import { Avatar, Badge, Chip, Divider, Spinner } from "@nextui-org/react";
+import { Avatar, Badge, Divider, Spinner } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import { BsChatDots } from "react-icons/bs";
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import { instance } from "../../recoil/module/instance";
 function ChatRoomListClub({ channels }) {
   const [loading, setLoading] = useState(true);
   const [clubProfileImg, setClubProfileImg] = useState({});
-  console.log("channelName : ", channels);
+  console.log("채널 채널 : ", channels);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -45,23 +45,19 @@ function ChatRoomListClub({ channels }) {
   // channels 배열에 있는 clubId를 이용해 프로필 이미지 가져오기
   useEffect(() => {
     const fetchProfileImg = async () => {
-      // clubIds 배열의 각 요소에 대해 개별적으로 API 호출을 수행하는 Promise 배열 생성
-      const promises = channels
-        .map((channel) => channel.clubId)
-        .filter((clubId) => clubId !== null)
-        .map(async (clubId) => {
-          console.log("Fetching club profile for clubId: ", clubId);
-          const response = await instance.get(`/clubs/${clubId}`);
-          return response.data.clubDetail;
-        });
-
-      // 모든 API 호출이 완료될 때까지 기다림
-      const clubProfileImg = await Promise.all(promises);
-      setClubProfileImg(clubProfileImg);
+      let profileImgs = {}; // 클럽 ID를 키로, 프로필 이미지 코드를 값으로 가지는 객체
+      for (const channel of channels) {
+        if (channel.clubId) {
+          const response = await instance.get(`/clubs/${channel.clubId}`);
+          // 클럽 ID를 키로 사용하여 프로필 이미지 코드 저장
+          profileImgs[channel.clubId] = response.data.clubDetail.code;
+        }
+      }
+      setClubProfileImg(profileImgs); // 상태 업데이트
     };
 
     fetchProfileImg();
-  }, [channels]);
+  }, [channels]); // channels 배열이 변경될 때마다 실행
 
   console.log("clubProfileImg : ", clubProfileImg);
   console.log("channels 채널 : ", channels);
@@ -121,9 +117,7 @@ function ChatRoomListClub({ channels }) {
                       radius="md"
                       size="lg"
                       src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/club-profile/${
-                        clubProfileImg.find(
-                          (img) => img.clubId === channel.clubId
-                        )?.code || "default"
+                        clubProfileImg[channel.clubId] || "default"
                       }.jpg?type=f&w=600&h=600&ttype=jpg`}
                     />
                     <div

@@ -16,12 +16,22 @@ const EventSection = ({ clubDetail }) => {
   const myMembership = useRecoilValue(currentMembershipState);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handelMoreClick = () => {
+  // const handelMoreClick = () => {
+  //   if (!isLogin || !myMembership || myMembership.info.role === "WAITING") {
+  //     setIsModalOpen(true);
+  //     return;
+  //   }
+  //   // navigate('/')
+  // };
+
+  const handleCreateEventClick = () => {
+    // 로그인하지 않았거나, 멤버십 정보가 없거나, 멤버십 상태가 대기 중이면 모달을 표시
     if (!isLogin || !myMembership || myMembership.info.role === "WAITING") {
       setIsModalOpen(true);
-      return;
+    } else {
+      // 멤버십 상태가 'MEMBER' 이상이면 모임 생성 페이지로 이동
+      navigator("/event-add", { state: { clubDetail } });
     }
-    // navigate('/')
   };
 
   return (
@@ -40,11 +50,11 @@ const EventSection = ({ clubDetail }) => {
               style={{ cursor: "pointer" }}
               startContent={<MdOutlineAdd />}
               className="text-md text-tiny mr-2"
-              onClick={() => navigator("/event-add", { state: { clubDetail } })}
+              onClick={() => handleCreateEventClick()}
             >
               모임 생성
             </Chip>
-            <Chip
+            {/* <Chip
               size="sm"
               variant="flat"
               color="primary"
@@ -53,12 +63,12 @@ const EventSection = ({ clubDetail }) => {
               onClick={handelMoreClick}
             >
               모두 보기
-            </Chip>
+            </Chip> */}
           </div>
         </div>
       </EventTitle>
       <EventList>
-        <SwiperCardSection />
+        <SwiperCardSection clubDetail={clubDetail} />
       </EventList>
 
       <MemberVerificationModal
