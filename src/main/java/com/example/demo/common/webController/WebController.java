@@ -19,7 +19,8 @@ public class WebController {
             "/chat","/chat/admin","/chat/room/**",
             "/ai", "/gpt", "/image", "/imageList",
             "/weatherDetail", "/community/**",
-            "/oauth/callback/naver","/modify/profile", "/mypage/setting", "/chat/room/:chatRoom/", "/alarm", "/alarm/**"
+            "/oauth/callback/naver","/modify/profile", "/mypage/setting", "/chat/room/:chatRoom/",
+            "/classic" ,"/alarm", "/alarm/**","/sporty" ,"/modern","/casual","/gallery"
     })
 
     public String accountRoute() {
