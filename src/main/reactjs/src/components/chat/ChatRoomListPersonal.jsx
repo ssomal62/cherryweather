@@ -1,4 +1,4 @@
-import { Avatar, Badge, Divider } from "@nextui-org/react";
+import { Avatar, Badge, Divider, Spinner } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import { BsChatDots } from "react-icons/bs";
 import { useEffect, useState } from "react";
@@ -76,30 +76,12 @@ function ChatRoomListPersonal({ channels, ncloud, accountData, messages }) {
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh",
+            height: "80vh",
           }}
         >
-          <div
-            style={{
-              fontSize: "70px",
-              textAlign: "center",
-              marginBottom: "20px",
-            }}
-          >
-            <BsChatDots />
-          </div>
-          <div
-            style={{
-              fontSize: "20px",
-              fontWeight: "600",
-              textAlign: "center",
-            }}
-          >
-            채팅방을 불러오고 있습니다.
-          </div>
+          <Spinner size="lg" color="danger" />
         </div>
       ) : hasNoRaccountIdChannels ? (
         <div
@@ -115,7 +97,7 @@ function ChatRoomListPersonal({ channels, ncloud, accountData, messages }) {
             style={{
               fontSize: "70px",
               textAlign: "center",
-              display: "flex",
+              marginBottom: "20px",
             }}
           >
             <BsChatDots />

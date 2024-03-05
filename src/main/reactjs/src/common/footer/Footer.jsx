@@ -7,6 +7,9 @@ import Sweater from "../../assets/icon/Sweater";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
 import styled from "styled-components";
+import LoginVerificationModal from "../../utils/LoginVerificationModal";
+import {useRecoilValue} from "recoil";
+import {IsLoginAtom} from "../../recoil/LoginAtom";
 
 const bgColorsIcon = ["#3C3C3C", "#3C3C3C", "#3C3C3C", "#3C3C3C", "#3C3C3C"];
 
@@ -17,7 +20,8 @@ const Footer = () => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [borderStyle, setBorderStyle] = useState({});
     const [isMounted, setIsMounted] = useState(false);
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const isLogin = useRecoilValue(IsLoginAtom);
     const menuItems = [
         { Icon: HiOutlineHome, path: '/', index: 0 },
         { Icon: Sweater, path: '/ai', index: 1 },
@@ -73,13 +77,25 @@ const Footer = () => {
     };
 
     const handleItemClick = (index, path) => {
-        setActiveIndex(index);
-        updateBorderStyle(index);
-        setTimeout(() => navigate(path), 350);
-        sessionStorage.removeItem('searchResult');
-        sessionStorage.removeItem('searchTriggered');
-        sessionStorage.removeItem('scrollPosition');
+        if ((index === 2 || index === 4) && !isLogin) {
+            handelCheckLogin();
+        } else {
+
+            setActiveIndex(index);
+            updateBorderStyle(index);
+            setTimeout(() => navigate(path), 350);
+            sessionStorage.removeItem('searchResult');
+            sessionStorage.removeItem('searchTriggered');
+            sessionStorage.removeItem('scrollPosition');
+        }
     };
+
+    const handelCheckLogin = () => {
+        if (!isLogin) {
+            setIsModalOpen(true);
+            return;
+        }
+    }
 
     return (
         <BottomNav>
@@ -105,6 +121,7 @@ const Footer = () => {
                     </svg>
                 </div>
             </div>
+            <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
         </BottomNav>
     );
 };

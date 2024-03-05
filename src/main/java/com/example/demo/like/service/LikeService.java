@@ -35,7 +35,6 @@ public class LikeService {
      */
     @Transactional
     public void toggleLike(AccountDetails accountDetails,  LikeInfo infoDto) {
-
         ClubGrowthEvent event;
         boolean existsLike = existsLike(accountDetails, infoDto.type(), infoDto.targetId());
 
@@ -58,6 +57,7 @@ public class LikeService {
                         300);
                 eventPublisher.publishEvent(event);
             }
+            //알람 들어 갈 자리
         }
     }
 

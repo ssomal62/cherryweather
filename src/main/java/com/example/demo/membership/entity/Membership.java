@@ -41,7 +41,6 @@ public class Membership {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
-    @JsonIgnore
     private Club club;
 
     @Column(name ="role")

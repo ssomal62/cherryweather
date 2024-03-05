@@ -1,4 +1,4 @@
-import { Avatar, Badge, Chip, Divider } from "@nextui-org/react";
+import { Avatar, Badge, Chip, Divider, Spinner } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import { BsChatDots } from "react-icons/bs";
 import { useEffect, useState } from "react";
@@ -71,30 +71,12 @@ function ChatRoomListClub({ channels }) {
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh", // Set the height to 100vh for full viewport height
+            height: "80vh",
           }}
         >
-          <div
-            style={{
-              fontSize: "70px",
-              textAlign: "center",
-              marginBottom: "20px",
-            }}
-          >
-            <BsChatDots />
-          </div>
-          <div
-            style={{
-              fontSize: "20px",
-              fontWeight: "600",
-              textAlign: "center",
-            }}
-          >
-            채팅방을 불러오고 있습니다.
-          </div>
+          <Spinner size="lg" color="danger" />
         </div>
       ) : hasNoClubChannels ? (
         <div

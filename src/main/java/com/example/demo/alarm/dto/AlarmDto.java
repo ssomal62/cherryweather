@@ -14,6 +14,7 @@ public class AlarmDto {
 
     Long alarmId;
     Long targetId;
+    Long targetTypeId;
     String type;
     Integer importance;
     LocalDateTime createdAt;
@@ -22,13 +23,14 @@ public class AlarmDto {
     public static List<AlarmDto> toDtoList(List<Alarm> alarmList) {
         return alarmList.stream().map(alarm ->
                 AlarmDto.builder()
-                .alarmId(alarm.getAlarmId())
-                .description(alarm.getDescription())
-                .type(alarm.getType())
-                .targetId(alarm.getTargetId())
-                .importance(alarm.getImportance())
-                .createdAt(alarm.getCreatedAt())
-                .build()
+                        .alarmId(alarm.getAlarmId())
+                        .description(alarm.getDescription())
+                        .type(alarm.getType())
+                        .targetTypeId(alarm.getTargetTypeId())
+                        .targetId(alarm.getTargetId())
+                        .importance(alarm.getImportance())
+                        .createdAt(alarm.getCreatedAt())
+                        .build()
         ).toList();
     }
 }

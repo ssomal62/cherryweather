@@ -112,24 +112,29 @@ const ClubDetails = () => {
                         <GrowthMeter clubDetail={clubDetail}/>
                     </Content>
 
-                    <Image radius='none' alt=""
-                           removeWrapper
-                           style={{
-                               ...styles.img,
-                               transform: `translateY(${offsetY * -0.3}px)`,
-                           }}
-                           className="w-full object-cover object-middle"
-                           src={clubProfile(clubDetail.code)}
-                    />
-                    <div style={styles.top}>
-                        <SoftCurveTop color={'#ffffff'}/>
-                    </div>
-                </div>
-            </ClubDetail>
-            <ClubJoinButton clubId={clubId}/>
-            <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-        </Layout>
-    );
+          <Image
+            radius="none"
+            alt=""
+            removeWrapper
+            style={{
+              ...styles.img,
+              transform: `translateY(${offsetY * -0.3}px)`,
+            }}
+            className="w-full object-cover object-middle"
+            src={clubProfile(clubDetail.code)}
+          />
+          <div style={styles.top}>
+            <SoftCurveTop color={"#ffffff"} />
+          </div>
+        </div>
+      </ClubDetail>
+      <ClubJoinButton clubId={clubId} />
+      <LoginVerificationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </Layout>
+  );
 };
 
 export default ClubDetails;
@@ -157,6 +162,7 @@ const ClubDetail = styled.div`
   min-height: 600%;
   border: ${bd};
   background-image: linear-gradient(to bottom, #ffffff, #ffffff, #F0F0F0, #ffffff);
+  overflow-x: hidden;
 `;
 
 const styles = {
