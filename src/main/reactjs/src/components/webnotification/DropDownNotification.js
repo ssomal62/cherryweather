@@ -18,6 +18,7 @@ import {useNavigate} from "react-router-dom";
 import {alramListState, useAlarmData} from "../../recoil/hooks/UseAlramApi";
 import {instance} from "../../recoil/module/instance";
 import Cookies from "universal-cookie";
+import clubDetails from "../../pages/club/ClubDetails";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
@@ -106,7 +107,7 @@ const DropDownNotification = () => {
       case "CLUBJOIN":
       case "CLUBWAIT":
         // 클럽 가입 승인 요청 및 대기 알림일 경우 클럽 상세 페이지로 이동
-        navigate(`/club-details/${item.targetId}`);
+        navigate(`/club-members/${item.targetId}`);
         break;
       case "LIKE":
         // 좋아요 알림일 경우 클럽 상세 페이지로 이동
@@ -119,7 +120,7 @@ const DropDownNotification = () => {
   };
 
   // 클럽 가입 승인을 요청할 때 알림을 삭제하고 상세 페이지로 이동하는 함수
-  const deleteAlarmAndNavigateForJoinRequest = async (alarmId, targetId) => {
+  const deleteAlarmAndNavigateForJoinRequest = async (alarmId, typeId) => {
     try {
       await instance.delete(`/alarm/${alarmId}`);
       const updatedAlarms = alarmList.filter(
@@ -128,17 +129,15 @@ const DropDownNotification = () => {
       setAlarmList(updatedAlarms);
 
       // 클럽 가입 요청에 대한 처리 후 적절한 페이지로 이동
-      navigate("/club-join"); // 예시 경로입니다. 실제 경로로 변경하세요.
+      navigate(`/club-members/${typeId}`); // 예시 경로입니다. 실제 경로로 변경하세요.
     } catch (error) {
       console.error("알림 삭제 실패:", error);
     }
   };
 
   // 클럽 가입 승인 대기 시 알림을 삭제하고 상세 페이지로 이동하는 함수
-  const deleteAlarmAndNavigateForApprovalWaiting = async (
-    alarmId,
-    targetId
-  ) => {
+  const deleteAlarmAndNavigateForApprovalWaiting
+      = async (alarmId, typeId) => {
     try {
       await instance.delete(`/alarm/${alarmId}`);
       const updatedAlarms = alarmList.filter(
@@ -147,7 +146,7 @@ const DropDownNotification = () => {
       setAlarmList(updatedAlarms);
 
       // 클럽 가입 승인 대기에 대한 처리 후 적절한 페이지로 이동
-      navigate("/club-wait"); // 예시 경로입니다. 실제 경로로 변경하세요.
+      navigate(`/club-members/${typeId}`); // 예시 경로입니다. 실제 경로로 변경하세요.
     } catch (error) {
       console.error("알림 삭제 실패:", error);
     }
@@ -223,13 +222,13 @@ const DropDownNotification = () => {
                 case "CLUBJOIN":
                   deleteAlarmAndNavigateForJoinRequest(
                     item.alarmId,
-                    item.targetId
+                    item.typeId
                   ); // 클럽 가입 승인 요청 알림일 경우
                   break;
                 case "CLUBWAIT":
                   deleteAlarmAndNavigateForApprovalWaiting(
                     item.alarmId,
-                    item.targetId
+                    item.typeId
                   ); // 클럽 가입 승인 대기 알림일 경우
                   break;
                 case "CLUB":
@@ -265,17 +264,18 @@ const DropDownNotification = () => {
           <DropdownItem
             key={index}
             onClick={() => {
+              console.log("아이템 확인", item);
               switch (item.type) {
                 case "CLUBJOIN":
                   deleteAlarmAndNavigateForJoinRequest(
                     item.alarmId,
-                    item.targetId
+                    item.typeId
                   ); // 클럽 가입 승인 요청 알림일 경우
                   break;
                 case "CLUBWAIT":
                   deleteAlarmAndNavigateForApprovalWaiting(
                     item.alarmId,
-                    item.targetId
+                    item.typeId
                   ); // 클럽 가입 승인 대기 알림일 경우
                   break;
                 case "CLUB":

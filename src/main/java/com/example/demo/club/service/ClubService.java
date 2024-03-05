@@ -157,6 +157,7 @@ public class ClubService {
         } else {
             clubRepository.increaseCurrentGrowthMeter(clubId, score);
         }
+
         clubRepository.save(club);
     }
 

@@ -104,10 +104,11 @@ const ClubJoinButton = () => {
       const joinRequestAlarmData = {
         targetId: clubDetail?.representativeUserId, // 클럽의 호스트 ID
         type: clubDetail?.joinApprovalStatus === "JOIN" ? "CLUBJOIN" : "CLUBWAIT",
+        typeId : clubDetail.clubId,
         importance: 2,
         description: clubDetail?.joinApprovalStatus === "JOIN" ?
-          `${userInfo.name}님이 클럽 가입 승인을 요청하였습니다.` :
-          `${userInfo.name}님이 클럽 가입 승인 대기입니다.`
+          `${userInfo.name}님이 내 클럽에 가입했습니다.` :
+          `${userInfo.name}님이 가입을 요청합니다.`
       };
 
       // 클럽 가입 요청 알림을 보냅니다.

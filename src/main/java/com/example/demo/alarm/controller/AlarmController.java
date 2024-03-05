@@ -27,15 +27,9 @@ public class AlarmController {
         return ResponseEntity.ok().build();
     }
 
-    // 4시 이후 다시 살려서 작업하기
-//    @GetMapping
-//    public List<AlarmDto> findAlarmDtoList(@AuthenticationPrincipal AccountDetails accountDetails) {
-//        return alarmService.findAlarmListByAccountId(accountDetails);
-//    }
-
     @GetMapping
-    public List<AlarmDto> findAlarmListByAccountId(@AuthenticationPrincipal AccountDetails accountDetails) {
-        return alarmService.findByAccountOrderByCreatedAtDesc(accountDetails);
+    public List<AlarmDto> findAlarmDtoList(@AuthenticationPrincipal AccountDetails accountDetails) {
+        return alarmService.findByTargetIdOrderByCreatedAtDesc(accountDetails);
     }
 
     // 사용자 알림 수신 동의 업데이트 하는 부분

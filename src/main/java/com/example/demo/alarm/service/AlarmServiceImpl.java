@@ -24,9 +24,9 @@ public class AlarmServiceImpl {
     public void createAlarm(AlarmDto alarmDto, AccountDetails accountDetails) {
         Alarm alarm = Alarm.builder()
                 .account(accountDetails.getAccount())
-                .type(alarmDto.getType())
                 .targetId(alarmDto.getTargetId())
-//                .targetTypeId(alarmDto.getTargetTypeId())
+                .type(alarmDto.getType())
+                .typeId(alarmDto.getTypeId())
                 .importance(alarmDto.getImportance())
                 .description(alarmDto.getDescription())
                 .build();
@@ -40,7 +40,14 @@ public class AlarmServiceImpl {
 //        return AlarmDto.toDtoList(alarmList);
 //    }
 
-    // 알람 list 받아오기(전체)
+    // 알람 list 받아오기(타겟만)
+    @Transactional
+    public List<AlarmDto> findByTargetIdOrderByCreatedAtDesc(AccountDetails accountDetails) {
+        List<Alarm> alarmList = alarmRepository.findByTargetIdOrderByCreatedAtDesc(accountDetails.getAccount().getAccountId());
+        return AlarmDto.toDtoList(alarmList);
+    }
+
+    // 알람 list 받아오기(아이디도)
     @Transactional
     public List<AlarmDto> findByAccountOrderByCreatedAtDesc(AccountDetails accountDetails) {
         List<Alarm> alarmList = alarmRepository.findByAccountOrderByCreatedAtDesc(accountDetails.getAccount());
@@ -69,4 +76,3 @@ public class AlarmServiceImpl {
     }
 
 }
-
