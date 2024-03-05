@@ -86,6 +86,13 @@ public class ClubService {
         }).toList();
     }
 
+    @Transactional(readOnly = true)
+    public ClubListDTO findAllByMyId() {
+        Optional<AccountDetails> accountDetailsOptional = getCurrentAccountDetails();
+        List<Club> clubs = clubRepository.findByRepresentativeUserIdOrderByCreatedAtDesc(accountDetailsOptional.get().getAccount().getAccountId());
+        return fromClubs(clubs, accountDetailsOptional);
+    }
+
     @Transactional
     public Club saveClub(CreateClubDTO requestDTO, AccountDetails accountDetails) {
         Club saveClub = clubRepository.save(
@@ -323,5 +330,6 @@ public class ClubService {
         }
         return club;
     }
+
 
 }
