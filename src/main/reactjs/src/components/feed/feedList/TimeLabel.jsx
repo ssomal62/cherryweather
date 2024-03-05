@@ -2,6 +2,9 @@ import React from 'react';
 
 class TimeLabel extends React.Component {
     calculateTimeDiff(createdAt, current = new Date()) {
+
+        console.log("생성날짜 확인", createdAt)
+        // createdAt 파라미터를 ISO 8601 형식으로 파싱합니다. 마이크로초 단위는 무시합니다.
         const createdAtDate = new Date(createdAt);
         const currentTime = current;
         const diffInMs = currentTime - createdAtDate;
@@ -11,14 +14,10 @@ class TimeLabel extends React.Component {
         const diffInWeeks = Math.floor(diffInDays / 7);
 
         if (diffInMinutes < 1) return '방금';
-        if (diffInMinutes < 60) return diffInMinutes >= 30 ? '30분 전' : '방금';
-        if (diffInHours < 2) return '1시간 전';
-        if (diffInHours < 3) return '2시간 전';
-        if (diffInHours < 6) return '3시간 전';
-        if (diffInHours < 24) return '6시간 전';
-        if (diffInDays < 2) return '1일 전';
-        if (diffInDays < 7) return '2일 전';
-        if (diffInWeeks < 4) return '일주일 전';
+        if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
+        if (diffInHours < 24) return `${diffInHours}시간 전`;
+        if (diffInDays < 7) return `${diffInDays}일 전`;
+        if (diffInWeeks < 4) return `${diffInWeeks}주 전`;
         return '한달 전';
     }
 

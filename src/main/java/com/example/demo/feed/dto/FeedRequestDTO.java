@@ -10,7 +10,7 @@ public record FeedRequestDTO(
         String content,
         String feedCode,
         String countLiked,
-        boolean liked,
+//        Boolean liked,
         Long clubId
 )
  { }

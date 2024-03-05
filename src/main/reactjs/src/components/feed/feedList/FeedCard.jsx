@@ -14,11 +14,12 @@ import TimeLabel from "./TimeLabel";
 const FeedCard = ({data, useParam}) => {
 
     const isLogin = useRecoilValue(IsLoginAtom);
-    const feed = data.feedDTO;
-    const club = data.clubDTO;
 
-    const [isLiked, setIsLiked] = useState(feed.liked);
-    const [countLike, setCountLike] = useState(feed.countLiked);
+    const feed = data.feed;
+    const club = data.club;
+
+    const [isLiked, setIsLiked] = useState('');
+    const [countLike, setCountLike] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const navigate = useNavigate();
@@ -53,8 +54,8 @@ const FeedCard = ({data, useParam}) => {
         }
         const baseUrl = `https://kr.object.ncloudstorage.com/cherry-weather`;
         const paths = {
-            'user': {path: "user-profile", extension: ".jpg"},
-            'feed': {path: "feed-files", extension: ''},
+            'user': {path: "user-profile", extension: ""},
+            'feed': {path: "feed-files", extension: '.jpg'},
             'club': {path: "club-profile", extension: ".jpg"}
         };
         const typePath = paths[type] || {path: "default", extension: ""};
@@ -92,24 +93,26 @@ const FeedCard = ({data, useParam}) => {
                                 <h4 className="text-small font-semibold leading-none text-default-600">{feed.userName}</h4>
                                 <div
                                     className="flex items-center justify-row text-small tracking-tight text-default-400">
-                                    <TimeLabel createdAt={feed.createAt}/>  / {renderWeatherIcon(feed.weather)}  {feed.weather}
+                                    <TimeLabel createdAt={feed.createdAt}/>
+                                    {renderWeatherIcon(feed.weather)} /
+                                    {feed.weather}
                                 </div>
                             </div>
                         </div>
                         <div className="justify-center items-center">
                             <Button
-                                className={isLiked ? "bg-transparent text-foreground border-default-200" : ""}
+                                //className={isLiked ? "bg-transparent text-foreground border-default-200" : ""}
                                 isIconOnly
                                 variant="light"
                                 color="primary"
-                                onPress={handleLikeClick}
-                                startContent={
-                                    isLiked ?
-                                        <GoHeartFill style={{width: '20px', height: '20px'}}/>
-                                        :
-                                        <GoHeart style={{width: '20px', height: '20px'}}/>
-
-                                }
+                               // onPress={handleLikeClick}
+                               //  startContent={
+                               //      isLiked ?
+                               //          <GoHeartFill style={{width: '20px', height: '20px'}}/>
+                               //          :
+                               //          <GoHeart style={{width: '20px', height: '20px'}}/>
+                               //
+                               //  }
                             />
                             {useParam &&
                                 <Button
@@ -168,7 +171,7 @@ const FeedCard = ({data, useParam}) => {
 
     return (
         <>
-            {renderFeedCard(feed.isPublic)}
+            {renderFeedCard(feed?.isPublic)}
             <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
         </>
     );
