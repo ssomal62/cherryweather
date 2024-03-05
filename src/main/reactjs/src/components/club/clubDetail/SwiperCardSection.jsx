@@ -34,11 +34,10 @@ const SwiperCardSection = ({ clubDetail }) => {
 
   useEffect(() => {
     const getEventDetails = async () => {
-      setLoading(true);
       try {
         // 전체 이벤트 리스트 가져오기
         const clubDetailList = await instance.get(
-          `/events/${clubDetail.clubId}`
+          `/events/${clubDetail?.clubId}`
         );
         console.log("clubDetailList", clubDetailList);
         setEventList(clubDetailList.data);
@@ -50,7 +49,7 @@ const SwiperCardSection = ({ clubDetail }) => {
     };
 
     getEventDetails();
-  }, []);
+  }, [clubDetail]);
 
   // 이벤트 가입
   const joinEvent = async (eventId) => {
