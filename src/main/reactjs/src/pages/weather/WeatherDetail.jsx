@@ -12,14 +12,14 @@ const WeatherDetail = () => {
     return (
         <Layout containerMargin = "0 0 0 0" containerPadding = "0 0 0 0">
             <Container>
-                <Background/>
+                {/*<Background/>*/}
                 <div className = "mb-6">
                     <TodayWeather/>
                     <HourlyWeather/>
-                    <TodayDetail/>
-                    <SatelliteImageViewer/>
                     <WeeklyWeather/>
-                    <AirQuality/>
+                    <SatelliteImageViewer/>
+                    {/*<TodayDetail/>*/}
+                    {/*<AirQuality/>*/}
                 </div>
             </Container>
         </Layout>

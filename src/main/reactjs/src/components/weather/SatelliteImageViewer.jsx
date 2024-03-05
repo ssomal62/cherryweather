@@ -41,7 +41,7 @@ const SatelliteImageViewer = () => {
 
     return (
         <Container>
-            <Card isBlurred className = "bg-black/30 rounded-xl shadow-small h-[100%]">
+            <Card isBlurred>
                 {loading && (
                     <Spinner className = "h-[300px]" label = "Loading..."/>
                 )}
@@ -51,11 +51,8 @@ const SatelliteImageViewer = () => {
                 {isValidDat ? (
                     <div>
                         <CardHeader>
-                            <div className = "flex flex-col">
-                                <p className = "text-sm text-white">기상 레이더</p>
-                            </div>
+                            <p style={{color:'darkgrey', fontSize:'0.6em'}}>위성사진</p>
                         </CardHeader>
-                        <Divider className = "bg-white/50 mb-5"/>
                         <SatImage>
                             <Prev>
                                 <Image className = "rounded-none" src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/prev.png" onClick = {prevImage}
@@ -85,7 +82,8 @@ export default SatelliteImageViewer;
 const Container = styled.div`
     width: 100%;
     height: 100%;
-    padding: 22px;
+    padding: 0 8%;
+    margin-bottom: 80px;
 `;
 const SatImage = styled.div`
     position: relative;

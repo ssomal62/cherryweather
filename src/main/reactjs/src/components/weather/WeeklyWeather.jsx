@@ -1,25 +1,57 @@
 import React, {useEffect} from 'react';
 import {UseWeatherData, weeklyWeatherState} from "../../recoil/hooks/UseWeatherData";
-import {Card, CardHeader, Divider, Spinner} from "@nextui-org/react";
+import {Card, CardBody, CardHeader, Spinner} from "@nextui-org/react";
 import UseClientIp from "../../recoil/hooks/UseClientIp";
 import styled from "styled-components";
 import {useRecoilValue} from "recoil";
 
 const TodayDetail = () => {
     const clientIp = UseClientIp(); //ip를 백엔드로 전송
-    const fetchData = UseWeatherData({endpoint:`/weather/weekly?ip=${clientIp}`, state: weeklyWeatherState});
+    const fetchData = UseWeatherData({endpoint: `/weather/weekly?ip=${clientIp}`, state: weeklyWeatherState});
     const {data, loading, error} = useRecoilValue((weeklyWeatherState))
+
+    function formatTemperature(temp) {
+        return Math.round(temp); // Math.round를 사용하여 가장 가까운 정수로 반올림
+    }
+
+    function getWeatherIconName(weather) {
+        switch (weather) {
+            case '맑음':
+                return 'clear';
+            case '흐림':
+            case '구름많음':
+                return 'cloudy';
+            case '비':
+            case '구름많고 비':
+            case '흐리고 비':
+                return 'rainy';
+            case '비/눈':
+            case '구름많고 비/눈':
+            case '흐리고 비/눈':
+                return 'rainy-snowy';
+            case '눈':
+            case '구름많고 눈':
+            case '흐리고 눈':
+                return 'snowy';
+            case '소나기':
+            case '구름많고 소나기':
+            case '흐리고 소나기':
+                return 'shower';
+            default:
+                return 'clear'; // 기본값 설정
+        }
+    }
 
     useEffect(() => {
         if (clientIp) {
             fetchData();
         }
-        console.log("week : ",data); // 출력 확인용
+        console.log("week : ", data); // 출력 확인용
     }, [fetchData, clientIp]);
 
-    return(
+    return (
         <Container>
-            <Card isBlurred className = "bg-black/30 rounded-xl rounded-large shadow-small h-[100%]">
+            <Card isBlurred>
                 {loading && (
                     <Spinner className = "h-[300px]" label = "Loading..."/>
                 )}
@@ -27,29 +59,36 @@ const TodayDetail = () => {
                     <div className = "h-[300px]">Error: {error.message}</div>
                 )}
                 {data && (
-                    <div style = {{padding: '22px'}}>
+                    <div>
                         <CardHeader>
-                            <div className = "flex flex-col">
-                                <p className = "text-sm text-white">기상 레이더</p>
-                            </div>
+                            <p style = {{color: 'darkgray', fontSize: '0.6em'}}>주간 날씨</p>
                         </CardHeader>
-                        <Divider className = "bg-white/50 mb-5"/>
-                        {data && data.map((weeklyData, index) => (
-                            <Weekly key = {index}>
-                                <Date>
-                                    {formatDate(weeklyData.fcstDate)}<br/>
-                                </Date>
-                                <Weather>
-                                    {weeklyData.weather}<br/>
-                                </Weather>
-                                <RainPro>
-                                    {weeklyData.pop}<br/>
-                                </RainPro>
-                                <Temperature>
-                                    {weeklyData.tmn} / {weeklyData.tmx}
-                                </Temperature>
-                            </Weekly>
-                        ))}
+                        <CardBody>
+                            {data && data.map((weeklyData, index) => (
+                                <Weekly key = {index}>
+                                    <Date>
+                                        {formatDate(weeklyData.fcstDate)}<br/>
+                                    </Date>
+                                    <WeatherIcon>
+                                        <img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(weeklyData.weather)}.svg`}
+                                             alt = {weeklyData.weather} style={{minWidth:'150%'}}/>
+                                    </WeatherIcon>
+                                    <Weather>
+                                        {weeklyData.weather}<br/>
+                                    </Weather>
+                                    <RainIcon>
+                                        <img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/rain.png`}
+                                             alt = {data.weather}/>
+                                    </RainIcon>
+                                    <RainPro>
+                                        {weeklyData.pop}%<br/>
+                                    </RainPro>
+                                    <Temperature>
+                                    <span style = {{color:'hotpink'}}>{formatTemperature(weeklyData.tmx)}℃ </span> / <span style = {{color: 'dodgerblue'}}> {formatTemperature(weeklyData.tmn)}℃</span>
+                                    </Temperature>
+                                </Weekly>
+                            ))}
+                        </CardBody>
                     </div>
                 )}
             </Card>
@@ -69,36 +108,78 @@ const formatDate = (dateString) => {
 const Container = styled.div`
     width: 100%;
     height: 100%;
-    padding: 22px;
+    padding: 8%;
 `;
 
-const Weekly = styled.div`
-    border: 1px solid white;
+const Weekly = styled(Card)`
+    //border: 1px solid lightgrey;
+    //box-shadow: 1px 1px 1px lightgrey;
     position: relative;
     width: 100%;
     height: 50px;
+    display: flex;
+    border-radius: 20px;
+    margin-bottom: 10px;
 `;
 
 const Date = styled.div`
     position: absolute;
+    height: 100%;
     width: 20%;
     left: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 8%;
+    font-size: 0.8em;
+    font-weight: bold;
 `;
-
+const WeatherIcon = styled.div`
+    position: absolute;
+    height: 100%;
+    width: 12%;
+    left: 23%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
 const Weather = styled.div`
     position: absolute;
+    height: 100%;
     width: 20%;
-    left: 20%;
+    left: 35%;
+    display: flex;
+    align-items: center;
+    font-size: 0.8em;
 `;
-
+const RainIcon  = styled.div`
+    position: absolute;
+    height: 100%;
+    width:10%;
+    left: 55%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    padding: 3%;
+    
+    `;
 const RainPro = styled.div`
     position: absolute;
-    width: 30%;
-    left: 40%;
+    height: 100%;
+    width: 7%;
+    left: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size: 0.8em;
 `;
 
 const Temperature = styled.div`
     position: absolute;
-    width: 30%;
-    left: 70%;
+    height: 100%;
+    width: 28%;
+    right:0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
 `;

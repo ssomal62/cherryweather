@@ -291,18 +291,25 @@ const Temp = styled.div`
 `;
 
 const Temperature = styled.span`
-    font-weight: 900;
     font-size: 7em;
-    color: #366296;
+    font-family: 'Days One', sans-serif;
+    background: -webkit-linear-gradient(#0963c8, #3a54c3);
+    background: linear-gradient(#0963c8, #3a54c3);
+    -webkit-background-clip: text;
+    color: transparent;
 `;
 
 const Celsius = styled.span`
     font-weight: 600;
     font-size: 2.5em;
-    color: #366296;
     position: relative;
     margin-top: -1.4em;
     margin-left: 0.2em;
+    font-family: 'Days One', sans-serif;
+    background: -webkit-linear-gradient(#0963c8, #3a54c3);
+    background: linear-gradient(#0963c8, #3a54c3);
+    -webkit-background-clip: text;
+    color: transparent;
 `;
 
 const Weather = styled.div`

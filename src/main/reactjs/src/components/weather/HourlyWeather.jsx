@@ -37,12 +37,13 @@ const HourlyWeather = () => {
                 height : 300,
                 toolbar: {
                     offsetX: -20,    //차트의 왼쪽 여백
+                    show:false
                 },
                 zoom   : {
                     enabled: false
                 }
             },
-            colors     : ['#00FF00'],
+            colors     : ['#F31260'],
             plotOptions: {
                 bar: {
                     horizontal: false,
@@ -65,8 +66,7 @@ const HourlyWeather = () => {
                         return hours + '시';
                     },
                     style    : {
-                        fontSize: '12px',
-                        colors  : '#fff'
+                        fontSize: '9px',
                     }
                 },
             },
@@ -79,8 +79,7 @@ const HourlyWeather = () => {
                 },
                 labels: {
                     style: {
-                        fontSize: '12px',
-                        colors  : '#fff'
+                        fontSize: '9px',
                     }
                 },
             },
@@ -99,7 +98,7 @@ const HourlyWeather = () => {
 
     return (
         <Container>
-            <Card isBlurred className = "bg-black/30 rounded-xl rounded-large shadow-small h-[100%]">
+            <Card isBlurred className = "shadow-small h-[100%]">
                 {loading && (
                     <Spinner className = "h-[300px]" label = "Loading..."/>
                 )}
@@ -109,12 +108,9 @@ const HourlyWeather = () => {
                 {data && (
                     <div>
                         <CardHeader>
-                            <div className = "flex flex-col">
-                                <p className = "text-sm text-white">시간대 날씨</p>
-                            </div>
+                                <p style={{color:'darkgrey', fontSize:'0.6em'}}>시간별 날씨</p>
                         </CardHeader>
-                        <Divider className="bg-white/50 mb-5"/>
-                        <ReactApexChart options = {chartData.options} series = {chartData.series} type = "area" height = {220}/>
+                        <ReactApexChart options = {chartData.options} series = {chartData.series} type = "area" height = {200}/>
                     </div>
                 )}
             </Card>
@@ -125,6 +121,6 @@ const HourlyWeather = () => {
 export default HourlyWeather;
 
 const Container = styled.div`
-    height: 344px;
-    padding: 22px;
+    height: 240px;
+    padding: 0 8%;
 `;
