@@ -1,5 +1,5 @@
 import * as React from "react";
-const SvgSnow2 = ({fill = '#7383A1', stroke='#7383A1', width='13em', height='13em', ...props}) => (
+const SvgSnow2 = ({fill = '#FFFFFF', stroke='#FFFFFF', width='2.3em', height='13em', ...props}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 278.01 315.21"
