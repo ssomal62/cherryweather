@@ -29,7 +29,7 @@ const EventListItem = ({ event }) => {
   return (
     <Card isBlurred className="border-none max-w-[600px]" shadow="sm">
       <CardBody onClick={() => navi(`/club-details/${eventDetail.clubId}`)}>
-        <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 items-center justify-center mb-10">
+        <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 items-center justify-center">
           <div className="relative col-span-6 md:col-span-4">
             <Image
               alt="Album cover"
@@ -42,29 +42,61 @@ const EventListItem = ({ event }) => {
           <div className="flex flex-col col-span-6 md:col-span-8">
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-0 ">
-                <Chip className="font-semibold text-foreground/90">
-                  {eventDetail.eventSubject}{" "}
-                </Chip>
-
-                <Chip className="font-semibold text-foreground/90 mt-2">
-                  {eventDetail.eventContent}
-                </Chip>
-                <Chip className="text-small font-medium mt-2">
-                  <p className="text-small text-foreground/80 flex">
+                <div className="flex items-center">
+                  <Chip
+                    className="mt-2 mr-2 ml-2 font-semibold flex"
+                    variant="flat"
+                  >
+                    정모
+                  </Chip>
+                  <span className="flex mt-2">{eventDetail.eventSubject}</span>
+                </div>
+                <div className="flex items-center">
+                  <Chip
+                    className="mt-2 mr-2 ml-2 font-semibold flex"
+                    variant="flat"
+                  >
+                    내용
+                  </Chip>
+                  <span className="flex mt-2">{eventDetail.eventContent}</span>
+                </div>
+                <div className="flex items-center">
+                  <Chip
+                    className="mt-2 mr-2 ml-2 font-semibold flex"
+                    variant="flat"
+                  >
                     <GoPersonAdd
                       className="mr-2 flex"
-                      style={{ fontSize: 20 }}
+                      style={{ fontSize: 20, textAlign: "center" }}
                     />
+                  </Chip>
+                  <span className="flex mt-2">
                     {eventDetail.eventCountCurrent}/{eventDetail.eventCapacity}
-                  </p>
-                </Chip>
-                <Chip className="text-small font-medium mt-2">
-                  <p className="text-small text-foreground/80 flex">
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <Chip
+                    className="mt-2 mr-2 ml-2 font-semibold flex"
+                    variant="flat"
+                  >
+                    장소
+                  </Chip>
+                  <span className="flex mt-2">
+                    {eventDetail.activitiesArea}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <Chip
+                    className="mt-2 mr-2 ml-2 font-semibold flex"
+                    variant="flat"
+                  >
+                    일시
+                  </Chip>
+                  <span className="flex mt-2">
                     {eventDetail.eventEndDate} /{" "}
                     {formatTime(eventDetail.eventTimeStart)}{" "}
-                    {eventDetail.activitiesArea}
-                  </p>
-                </Chip>
+                  </span>
+                </div>
               </div>
 
               <Image

@@ -18,8 +18,8 @@ import JoinEventModal from "../../../utils/JoinEventModal";
 
 const SwiperCardSection = ({ clubDetail }) => {
   const isLogin = useRecoilValue(IsLoginAtom);
+  const [eventList, setEventList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [eventDetails, setEventDetails] = useState([]);
   const fetchUserInfo = useFetchUserInfo(); // 이렇게 훅을 호출해야 합니다.
   const myMembership = useRecoilValue(currentMembershipState);
   const userInfo = useRecoilValue(userInfoState);
@@ -37,21 +37,11 @@ const SwiperCardSection = ({ clubDetail }) => {
       setLoading(true);
       try {
         // 전체 이벤트 리스트 가져오기
-        const { data: eventList } = await instance.get("/events/list");
-        // 현재 클럽과 일치하는 이벤트만 필터링
-        const filteredEvents = eventList.filter(
-          (event) => event.clubId === clubDetail.clubId
+        const clubDetailList = await instance.get(
+          `/events/${clubDetail.clubId}`
         );
-        console.log("필터링된 이벤트: ", filteredEvents);
-
-        // 필터링된 각 이벤트의 상세 정보 가져오기
-        const detailsPromises = filteredEvents.map((event) =>
-          instance.get(`/events/detail/${event.eventId}`)
-        );
-        const detailsResponses = await Promise.all(detailsPromises);
-        const details = detailsResponses.map((response) => response.data);
-
-        setEventDetails(details);
+        console.log("clubDetailList", clubDetailList);
+        setEventList(clubDetailList.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -60,7 +50,7 @@ const SwiperCardSection = ({ clubDetail }) => {
     };
 
     getEventDetails();
-  }, [clubDetail]);
+  }, []);
 
   // 이벤트 가입
   const joinEvent = async (eventId) => {
@@ -69,6 +59,7 @@ const SwiperCardSection = ({ clubDetail }) => {
 
       if (!isLogin || !myMembership || myMembership.info.role === "WAITING") {
         setIsModalOpen(true);
+        return;
       }
       const response = await instance.post(`/events/memberships/${eventId}`, {
         eventId: eventId,
@@ -117,7 +108,7 @@ const SwiperCardSection = ({ clubDetail }) => {
         onSlideChange={() => console.log("slide change")}
         onSwiper={(swiper) => console.log(swiper)}
       >
-        {eventDetails.map((item, index) => (
+        {eventList?.map((item, index) => (
           <SwiperSlide
             key={index}
             style={{

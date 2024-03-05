@@ -35,6 +35,7 @@ public class Event {
 
     @JoinColumn(name = "ACCOUNT_ID")
     @ManyToOne
+
     private Account accountId;
 
     @Column(length = 20)
