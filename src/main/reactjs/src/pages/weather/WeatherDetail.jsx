@@ -12,6 +12,7 @@ const WeatherDetail = () => {
     return (
         <Layout containerMargin = "0 0 0 0" containerPadding = "0 0 0 0">
             <Container>
+                <Background/>
                 <div className = "mb-6">
                     <TodayWeather/>
                     <HourlyWeather/>
@@ -29,4 +30,15 @@ export default WeatherDetail;
 
 const Container = styled.div`
     position: relative;
+`;
+const Background = styled.div`
+    background-image: url('https://kr.object.ncloudstorage.com/cherry-weather/weather/main/bg.png');
+    background-size: cover;
+    max-width: 600px;
+    width: 100%;
+    height: 740px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: fixed;
+    z-index: -1;
 `;

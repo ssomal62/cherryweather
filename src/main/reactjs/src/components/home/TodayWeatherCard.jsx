@@ -9,20 +9,25 @@ import {useRecoilValue} from "recoil";
 import LoadingCard from "./LoadingCard";
 import FloatingAnimation from "../../utils/animations/FloatingAnimation";
 import {motion} from "framer-motion";
-import {Swiper, SwiperSlide} from "swiper/react";
-import {Button, Tab, Tabs} from "@nextui-org/react";
-import {FaHashtag} from "react-icons/fa6";
+import {Tab, Tabs} from "@nextui-org/react";
+import Clear from "../../assets/weatherIcon/clear.jsx";
+import Cloudy from "../../assets/weatherIcon/cloudy.jsx";
+import Rainy from "../../assets/weatherIcon/rainy.jsx";
+import Snowy from "../../assets/weatherIcon/snowy.jsx";
+import Shower from "../../assets/weatherIcon/shower.jsx";
+import RainySnowy from "../../assets/weatherIcon/rainy-snowy.jsx";
+
 
 const TodayWeatherCard = () => {
 
-        const clientIp = UseClientIp(); //ip를 백엔드로 전송
-        const DailyFetchData = UseWeatherData({endpoint: `/weather/daily?ip=${clientIp}`, state: dailyWeatherState});
-        const HourlyFetchData = UseWeatherData({endpoint: `/weather/hourly?ip=${clientIp}`, state: hourlyWeatherState});
-        const WeeklyFetchData = UseWeatherData({endpoint: `/weather/weekly?ip=${clientIp}`, state: weeklyWeatherState});
-        const {data: dailyData, loading: dailyLoading, error: dailyError} = useRecoilValue((dailyWeatherState))
-        const {data: hourlyData, loading: hourlyLoading, error: hourlyError} = useRecoilValue((hourlyWeatherState))
-        const {data: weeklyData, loading: weeklyLoading, error: weeklyError} = useRecoilValue((weeklyWeatherState))
-        // const navigate = useNavigate();
+    const clientIp = UseClientIp(); //ip를 백엔드로 전송
+    const DailyFetchData = UseWeatherData({endpoint: `/weather/daily?ip=${clientIp}`, state: dailyWeatherState});
+    const HourlyFetchData = UseWeatherData({endpoint: `/weather/hourly?ip=${clientIp}`, state: hourlyWeatherState});
+    const WeeklyFetchData = UseWeatherData({endpoint: `/weather/weekly?ip=${clientIp}`, state: weeklyWeatherState});
+    const {data: dailyData, loading: dailyLoading, error: dailyError} = useRecoilValue((dailyWeatherState))
+    const {data: hourlyData, loading: hourlyLoading, error: hourlyError} = useRecoilValue((hourlyWeatherState))
+    const {data: weeklyData, loading: weeklyLoading, error: weeklyError} = useRecoilValue((weeklyWeatherState))
+    // const navigate = useNavigate();
 
     const [forcedLoading, setForcedLoading] = useState(true);
     const [number, setNumber] = useState('')
@@ -40,13 +45,13 @@ const TodayWeatherCard = () => {
         return () => clearTimeout(timer);
 
     }, [DailyFetchData, WeeklyFetchData, clientIp]);
-        useEffect(() => {
-            if (clientIp) {
-                DailyFetchData();
-                HourlyFetchData();
-                WeeklyFetchData();
-            }
-        }, [DailyFetchData, HourlyFetchData, WeeklyFetchData, clientIp]);
+    useEffect(() => {
+        if (clientIp) {
+            DailyFetchData();
+            HourlyFetchData();
+            WeeklyFetchData();
+        }
+    }, [DailyFetchData, HourlyFetchData, WeeklyFetchData, clientIp]);
 
 
     const navigate = useNavigate();
@@ -156,113 +161,134 @@ const TodayWeatherCard = () => {
         }
 
         return iconName + timeSuffix;
+    }
 
+    const WeatherIcons = {
+        clear     : Clear,
+        cloudy    : Cloudy,
+        rainy     : Rainy,
+        snowy     : Snowy,
+        shower    : Shower,
+        rainySnowy: RainySnowy,
+    }
+
+    function WeatherIcon({weather}) {
+        const iconName = getWeatherIconName(weather); // 날씨 상태에 따른 아이콘 이름을 가져옵니다.
+        const IconComponent = WeatherIcons[iconName]; // 매핑 객체에서 해당 컴포넌트를 찾습니다.
+
+        // 해당 컴포넌트가 있으면 렌더링하고, 없으면 null을 반환합니다.
+        return IconComponent ? <IconComponent/> : null;
     }
 
 
-        return (
-            <Section>
-                {dailyLoading && (
-                    <Spinner className = "h-[100%] w-[100%]" label = "체리가 기상청 터는중..." color = "primary" size = "lg"/>
-                )}
-                {dailyError && (
-                    <div className = "h-[100%] w-[100%]" label = "체리가 기상청 털다가 잡혀감" color = "primary" size = "lg"/>
-                )}
-                {dailyData && (
-                    <Container>
-                        <Area>{dailyData.area} / {dailyData.city}</Area>
-                        <CurrentDate>{formattedDate}</CurrentDate>
-                        <Temp>
-                            <Temperature>{dailyData.currentTemp}</Temperature><Celsius>℃</Celsius>
-                        </Temp>
-                        <Weather>{dailyData.weather}</Weather>
-                        <Icon>
-                            <FloatingAnimation>
-                                <MotionImg src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/clear-day.png" alt = "weather"/>
-                                {/*<MotionImg*/}
-                                {/*    src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/${getWeatherIconWithTime(dailyData.weather, dailyData.sunrise, dailyData.sunset)}.png`}*/}
-                                {/*    alt = "weather"/>*/}
-                            </FloatingAnimation>
-                        </Icon>
-                        {/*<Menu>*/}
-                        {/*    <Swiper*/}
-                        {/*        spaceBetween = {5}*/}
-                        {/*        slidesPerView = {'auto'}*/}
-                        {/*        // slidesOffsetBefore={50}*/}
-                        {/*    >*/}
-                        {/*        {menu.map((item, index) => (*/}
-                        {/*            <SwiperSlide key = {index} className = "max-w-[5.3em] mr-2 ml-2">*/}
-                        {/*                <Button*/}
-                        {/*                    size = "sm"*/}
-                        {/*                    radius = "full"*/}
-                        {/*                    variant = "light"*/}
-                        {/*                    style = {{border: '1px solid #424242'}}*/}
-                        {/*                    className = "bg-white/60"*/}
-                        {/*                    onPress = {() => handleClick(item)}>*/}
-                        {/*                    <div className = "flex flex-row items-center">*/}
-                        {/*                        <FaHashtag/>&nbsp;{item.label}*/}
-                        {/*                    </div>*/}
-                        {/*                </Button>*/}
-                        {/*            </SwiperSlide>*/}
-                        {/*        ))}*/}
-                        {/*    </Swiper>*/}
-                        {/*</Menu>*/}
-                        <Bottom>
-                            <Tabs
-                                aria-label = "Options"
-                                selectedKey = {selected}
-                                onSelectionChange = {setSelected}
-                                variant = "underlined"
-                                color = "primary"
-                                fullWidth
-                            >
-                                <Tab key = "24Hour" title = "24Hour" className = "py-0">
-                                    <ForecastPanel>
-                                        {hourlyData && hourlyData.map((data, index) => (
-                                            <ForecastList key = {index}>
-                                                <ForecastDate>{data.fcstTime.substring(0,2)}시</ForecastDate>
-                                                <ForecastWeather>
-                                                    <img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}
-                                                         alt = {data.weather}/>
-                                                </ForecastWeather>
-                                                <ForecastTemp>
-                                                    <CurrentTemp>{formatTemperature(data.tmp)}℃</CurrentTemp>
-                                                </ForecastTemp>
-                                            </ForecastList>
-                                        ))}
-                                    </ForecastPanel>
-                                </Tab>
-                                <Tab key = "Weekly" title = "Weekly" className = "py-0">
-                                    <ForecastPanel>
-                                        {weeklyData && weeklyData.map((data, index) => (
-                                            <ForecastList key = {index}>
-                                                <ForecastDate>{formatDate(data.fcstDate)}</ForecastDate>
-                                                <ForecastWeather>
-                                                    <img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}
-                                                         alt = {data.weather}/>
-                                                </ForecastWeather>
-                                                <ForecastTemp>
-                                                    <ForecastMinTemp>{formatTemperature(data.tmn)}</ForecastMinTemp>
-                                                    <span style = {{color: '#366296'}}>/</span>
-                                                    <ForecastMaxTemp>{formatTemperature(data.tmx)}</ForecastMaxTemp>
-                                                </ForecastTemp>
-                                            </ForecastList>
-                                        ))}
-                                    </ForecastPanel>
-                                </Tab>
-                            </Tabs>
-                        </Bottom>
-                    </Container>
-                )}
-            </Section>
-        );
-    }
-;
+    const navWeatherDetail = () => {
+        navigate('/weatherDetail'); // '/weatherDetail'로 네비게이션
+    };
+
+
+//         return (
+//             <Section>
+//                 {dailyLoading && (
+//                     <Spinner className = "h-[100%] w-[100%]" label = "체리가 기상청 터는중..." color = "primary" size = "lg"/>
+//                 )}
+//                 {dailyError && (
+//                     <div className = "h-[100%] w-[100%]" label = "체리가 기상청 털다가 잡혀감" color = "primary" size = "lg"/>
+//                 )}
+//                 {dailyData && (
+//                     <Container>
+//                         <Area>{dailyData.area} / {dailyData.city}</Area>
+//                         <CurrentDate>{formattedDate}</CurrentDate>
+//                         <Temp>
+//                             <Temperature>{dailyData.currentTemp}</Temperature><Celsius>℃</Celsius>
+//                         </Temp>
+//                         <Weather>{dailyData.weather}</Weather>
+//                         <Icon>
+//                             <FloatingAnimation>
+//                                 <MotionImg src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/clear-day.png" alt = "weather"/>
+//                                 {/*<MotionImg*/}
+//                                 {/*    src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/${getWeatherIconWithTime(dailyData.weather, dailyData.sunrise, dailyData.sunset)}.png`}*/}
+//                                 {/*    alt = "weather"/>*/}
+//                             </FloatingAnimation>
+//                         </Icon>
+//                         {/*<Menu>*/}
+//                         {/*    <Swiper*/}
+//                         {/*        spaceBetween = {5}*/}
+//                         {/*        slidesPerView = {'auto'}*/}
+//                         {/*        // slidesOffsetBefore={50}*/}
+//                         {/*    >*/}
+//                         {/*        {menu.map((item, index) => (*/}
+//                         {/*            <SwiperSlide key = {index} className = "max-w-[5.3em] mr-2 ml-2">*/}
+//                         {/*                <Button*/}
+//                         {/*                    size = "sm"*/}
+//                         {/*                    radius = "full"*/}
+//                         {/*                    variant = "light"*/}
+//                         {/*                    style = {{border: '1px solid #424242'}}*/}
+//                         {/*                    className = "bg-white/60"*/}
+//                         {/*                    onPress = {() => handleClick(item)}>*/}
+//                         {/*                    <div className = "flex flex-row items-center">*/}
+//                         {/*                        <FaHashtag/>&nbsp;{item.label}*/}
+//                         {/*                    </div>*/}
+//                         {/*                </Button>*/}
+//                         {/*            </SwiperSlide>*/}
+//                         {/*        ))}*/}
+//                         {/*    </Swiper>*/}
+//                         {/*</Menu>*/}
+//                         <Bottom>
+//                             <Tabs
+//                                 aria-label = "Options"
+//                                 selectedKey = {selected}
+//                                 onSelectionChange = {setSelected}
+//                                 variant = "underlined"
+//                                 color = "primary"
+//                                 fullWidth
+//                             >
+//                                 <Tab key = "24Hour" title = "24Hour" className = "py-0">
+//                                     <ForecastPanel>
+//                                         {hourlyData && hourlyData.map((data, index) => (
+//                                             <ForecastList key = {index}>
+//                                                 <ForecastDate>{data.fcstTime.substring(0,2)}시</ForecastDate>
+//                                                 <ForecastWeather>
+//                                                     <img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}
+//                                                          alt = {data.weather}/>
+//                                                 </ForecastWeather>
+//                                                 <ForecastTemp>
+//                                                     <CurrentTemp>{formatTemperature(data.tmp)}℃</CurrentTemp>
+//                                                 </ForecastTemp>
+//                                             </ForecastList>
+//                                         ))}
+//                                     </ForecastPanel>
+//                                 </Tab>
+//                                 <Tab key = "Weekly" title = "Weekly" className = "py-0">
+//                                     <ForecastPanel>
+//                                         {weeklyData && weeklyData.map((data, index) => (
+//                                             <ForecastList key = {index}>
+//                                                 <ForecastDate>{formatDate(data.fcstDate)}</ForecastDate>
+//                                                 <ForecastWeather>
+//                                                     <img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}
+//                                                          alt = {data.weather}/>
+//                                                 </ForecastWeather>
+//                                                 <ForecastTemp>
+//                                                     <ForecastMinTemp>{formatTemperature(data.tmn)}</ForecastMinTemp>
+//                                                     <span style = {{color: '#366296'}}>/</span>
+//                                                     <ForecastMaxTemp>{formatTemperature(data.tmx)}</ForecastMaxTemp>
+//                                                 </ForecastTemp>
+//                                             </ForecastList>
+//                                         ))}
+//                                     </ForecastPanel>
+//                                 </Tab>
+//                             </Tabs>
+//                         </Bottom>
+//                     </Container>
+//                 )}
+//             </Section>
+//         );
+//     }
+// ;
     return (
         <Section>
             {(forcedLoading || dailyLoading) && (
-                <div className="py-[55%] items-center justify-center">
-                    <LoadingCard number={number} setNumber={setNumber}/>
+                <div className = "py-[55%] items-center justify-center">
+                    <LoadingCard number = {number} setNumber = {setNumber}/>
                 </div>
             )}
             {(dailyData && !forcedLoading) && (
@@ -272,36 +298,38 @@ const TodayWeatherCard = () => {
                     <Temp>
                         <Temperature>{dailyData.currentTemp}</Temperature><Celsius>℃</Celsius>
                     </Temp>
-                    <Weather>{dailyData.weather}</Weather>
+                    <Weather>{dailyData.weather}{Clear}</Weather>
                     <Icon>
                         <FloatingAnimation>
                             {/*<MotionImg src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/snowy.png" alt = "weather"/>*/}
-                            <MotionImg src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/${getWeatherIconWithTime(dailyData.weather, dailyData.sunrise, dailyData.sunset)}.png`} alt = "weather"/>
+                            <MotionImg
+                                src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/${getWeatherIconWithTime(dailyData.weather, dailyData.sunrise, dailyData.sunset)}.png`}
+                                alt = "weather" onClick = {navWeatherDetail}/>
                         </FloatingAnimation>
                     </Icon>
-                    <Menu>
-                        <Swiper
-                            spaceBetween = {5}
-                            slidesPerView = {'auto'}
-                            // slidesOffsetBefore={50}
-                        >
-                            {menu.map((item, index) => (
-                                <SwiperSlide key = {index} className = "max-w-[5.3em] mr-2 ml-2">
-                                    <Button
-                                        size = "sm"
-                                        radius = "full"
-                                        variant = "light"
-                                        style = {{border: '1px solid #424242'}}
-                                        className = "bg-white/60"
-                                        onPress = {() => handleClick(item)}>
-                                        <div className = "flex flex-row items-center">
-                                            <FaHashtag/>&nbsp;{item.label}
-                                        </div>
-                                    </Button>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </Menu>
+                    {/*<Menu>*/}
+                    {/*    <Swiper*/}
+                    {/*        spaceBetween = {5}*/}
+                    {/*        slidesPerView = {'auto'}*/}
+                    {/*        // slidesOffsetBefore={50}*/}
+                    {/*    >*/}
+                    {/*        {menu.map((item, index) => (*/}
+                    {/*            <SwiperSlide key = {index} className = "max-w-[5.3em] mr-2 ml-2">*/}
+                    {/*                <Button*/}
+                    {/*                    size = "sm"*/}
+                    {/*                    radius = "full"*/}
+                    {/*                    variant = "light"*/}
+                    {/*                    style = {{border: '1px solid #424242'}}*/}
+                    {/*                    className = "bg-white/60"*/}
+                    {/*                    onPress = {() => handleClick(item)}>*/}
+                    {/*                    <div className = "flex flex-row items-center">*/}
+                    {/*                        <FaHashtag/>&nbsp;{item.label}*/}
+                    {/*                    </div>*/}
+                    {/*                </Button>*/}
+                    {/*            </SwiperSlide>*/}
+                    {/*        ))}*/}
+                    {/*    </Swiper>*/}
+                    {/*</Menu>*/}
                     <Bottom>
                         <Tabs
                             aria-label = "Options"
@@ -311,17 +339,32 @@ const TodayWeatherCard = () => {
                             color = "primary"
                             fullWidth
                         >
-                            <Tab key = "24Hour" title = "24Hour" className = "py-0">
-                                <ForecastPanel>24Hour</ForecastPanel>
-                            </Tab>
-                            <Tab key = "Weekly" title = "Weekly" className = "py-0">
+                            <Tab key = "24Hour" title = "24Hour">
+                                <ForecastPanel>
+                                    {hourlyData && hourlyData.map((data, index) => (
+                                        <ForecastList key = {index}>
+                                            <ForecastDate>{data.fcstTime.substring(0, 2)}시</ForecastDate>
+                                            <ForecastWeather>
+                                                <WeatherIcon weather = {data.weather} style = {{width: "100%"}}/>
+                                                {/*<img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}*/}
+                                                {/*     alt = {data.weather}/>*/}
+                                            </ForecastWeather>
+                                            <ForecastTemp>
+                                                <CurrentTemp>{formatTemperature(data.tmp)}℃</CurrentTemp>
+                                            </ForecastTemp>
+                                        </ForecastList>
+                                    ))}
+                                </ForecastPanel> </Tab>
+                            <Tab key = "Weekly" title = "Weekly">
                                 <ForecastPanel>
                                     {weeklyData && weeklyData.map((data, index) => (
                                         <ForecastList key = {index}>
                                             <ForecastDate>{formatDate(data.fcstDate)}</ForecastDate>
                                             <ForecastWeather>
-                                                <img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}
-                                                     alt = {data.weather}/>
+                                                <WeatherIcon weather = {data.weather} style = {{width: "100%"}}/>
+
+                                                {/*<img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}*/}
+                                                {/*     alt = {data.weather}/>*/}
                                             </ForecastWeather>
                                             <ForecastTemp>
                                                 <ForecastMinTemp>{formatTemperature(data.tmn)}</ForecastMinTemp>
@@ -346,94 +389,79 @@ const TodayWeatherCard = () => {
 export default TodayWeatherCard;
 
 const Section = styled.div`
-  background-image: url('https://kr.object.ncloudstorage.com/cherry-weather/weather/main/bg.png');
-  background-size: cover;
-  max-width: 600px;
-  width: 100%;
-  height: 740px;
+    background-image: url('https://kr.object.ncloudstorage.com/cherry-weather/weather/main/bg.png');
+    background-size: cover;
+    max-width: 600px;
+    width: 100%;
+    height: 740px;
 `;
 
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100vh;
+    position: relative;
+    width: 100%;
+    height: 100vh;
 `;
 
 const Area = styled.div`
-  font-family: Exo;
-  font-weight: 700;
-  font-size: 1.2em;
-  color: #366296;
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  transform: translateX(-50%);
+    font-weight: 700;
+    font-size: 1.2em;
+    color: #366296;
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
 `;
 
 const CurrentDate = styled.div`
-  font-family: Exo;
-  font-weight: 300;
-  font-size: 1em;
-  color: #63666b;
-  position: absolute;
-  top: 20.5%;
-  left: 50%;
-  transform: translateX(-50%);
+    font-weight: 300;
+    font-size: 1em;
+    color: #63666b;
+    position: absolute;
+    top: 20.5%;
+    left: 50%;
+    transform: translateX(-50%);
 `;
 
 const Temp = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 21%;
-  left: 55%;
-  transform: translateX(-50%);
-  z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 21%;
+    left: 55%;
+    transform: translateX(-50%);
+    z-index: 10;
 `;
 
 const Temperature = styled.span`
-  font-family: Exo;
-  font-weight: 900;
-  font-size: 7em;
-  color: #366296;
+    font-weight: 900;
+    font-size: 7em;
+    color: #366296;
 `;
 
 const Celsius = styled.span`
-  font-family: Exo;
-  font-weight: 600;
-  font-size: 2.5em;
-  color: #366296;
-  position: relative;
-  margin-top: -1.4em;
-  margin-left: 0.2em;
+    font-weight: 600;
+    font-size: 2.5em;
+    color: #366296;
+    position: relative;
+    margin-top: -1.4em;
+    margin-left: 0.2em;
 `;
 
 const Weather = styled.div`
-  font-family: Exo;
-  font-weight: bold;
-  font-size: 1em;
-  color: #63666b;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
+    font-weight: bold;
+    font-size: 1em;
+    color: #63666b;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
 `;
 
 const Icon = styled.div`
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
-  width: 70vw;
-  height: 70vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
     position: absolute;
-    top: 25%;
+    top: 26%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
@@ -470,11 +498,15 @@ const Bottom = styled.div`
 
 const ForecastPanel = styled.div`
     min-width: 100%;
-    height: 90%;
-    border: 1px solid red;
+    min-height: 170px;
     display: flex;
+    //position: absolute;
+    //top: 50%;
+    //left: 50%;
+    //transform: translate(-50%, -50%);
     flex-direction: row;
     overflow-x: auto;
+    overflow-y: hidden;
     -ms-overflow-style: none; /* IE와 Edge에서 스크롤 바를 숨김 */
     scrollbar-width: none; /* Firefox에서 스크롤 바를 숨김 */
 
@@ -488,16 +520,15 @@ const ForecastList = styled.div`
     background-color: #c1e1ff;
     border-radius: 50px;
     margin: 2%;
-    height: 90%;
-    min-width: 17%;
+    min-height: 90%;
+    min-width: 63px;
     position: relative;
 `;
 const ForecastDate = styled.div`
     position: absolute;
-    font-family: Exo;
-    font-size: 0.7em;
+    font-size: 0.8em;
     color: #63666b;
-    top: 8%;
+    top: 15%;
     left: 50%;
     transform: translateX(-50%);
 `;
@@ -506,27 +537,29 @@ const ForecastWeather = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    min-width: 120%;
+    min-width: 105%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
 `;
 
 const ForecastTemp = styled.div`
     position: absolute;
-    bottom: 8%;
+    bottom: 15%;
     left: 50%;
     transform: translateX(-50%);
 `;
 const ForecastMinTemp = styled.span`
-    font-family: Exo;
     font-size: 0.8em;
     color: blue;
 `;
 const ForecastMaxTemp = styled.span`
-    font-family: Exo;
     font-size: 0.8em;
     color: red;
 `;
 const CurrentTemp = styled.span`
-    font-family: Exo;
     font-size: 0.8em;
     color: #63666b;
 `;
