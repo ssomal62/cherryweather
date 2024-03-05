@@ -42,18 +42,11 @@ public class AI_imageServiceImp implements AI_imageService {
     private final AI_imageRepository aiImageRepository;
     private final AccountRepository accountRepository;
     private final AccountServiceImpl accountService;
-    String prompt_1 = "An informative style guide showcasing preppy fashion worn by a stylish South Asian woman. She is attired in a fashionable ensemble composed of preppy tops, bottoms, shoes, and accessories. There are additional garments surrounding her which can be exchanged to match her personal style. Every piece of attire is labelled in English, offering a detailed understanding of current chic fashion trends.";
-    String cold_weather = "In chilly temperatures, our fashionista stays cozy yet chic. She opts for a classic cable-knit sweater in rich burgundy, paired with tailored plaid trousers. Knee-high leather boots add a touch of sophistication while keeping her warm. A woolen beret and a matching scarf complete the ensemble, creating a polished winter look.";
-    String cool_weather = "As the mercury rises slightly, our fashion-forward South Asian woman embraces a lighter preppy style. She layers a pastel-colored button-down shirt under a V-neck sweater, paired with slim-fit chinos. Loafer shoes in a complementary hue elevate the outfit. A delicate statement necklace and a wristwatch add subtle touches of glam to the ensemble.";
-    String mild_weather = "In mild temperatures, our stylish icon effortlessly combines comfort and preppy flair. She dons a crisp, short-sleeved polo shirt with high-waisted tailored shorts. White sneakers provide a sporty yet refined touch. A crossbody bag and oversized sunglasses complete the look, offering both practicality and a dash of glamour.";
-    String warm_weather = "As the sun shines brighter, our South Asian trendsetter opts for a sleeveless A-line dress in a playful print. A wide-brimmed hat and espadrille sandals exude summer vibes while maintaining preppy elegance. A thin leather belt cinches the waist for a flattering silhouette. Sunglasses and a stack of bracelets add a final touch of flair. The image showcases additional clothing pieces with English labels, providing a comprehensive range of options for creating a personalized and trendy look.";
-    String hot_weather = "In soaring temperatures, our fashion-savvy woman embraces a preppy look with lightweight fabrics. She chooses a breezy off-the-shoulder top paired with wide-leg culottes. Slip-on canvas sneakers offer both style and comfort. A floppy hat and a woven tote bag complete the ensemble, ensuring she stays cool and chic in the heat. The image surrounding her features an assortment of extra garments, each labeled in English, facilitating the exploration of diverse style combinations that align with individual preferences.";
 
     @Value("${openai.api.key}")
     private String openaiApiKey; // application.properties 또는 application.yml에서 설정한 OpenAI API 키
 
     // OpenAI API 호출 및 응답 처리 로직 구현
-
 
     @Override
     public Object generateImage(AccountDetails accountDetails, generateRequestDto imageDto) {
@@ -110,6 +103,11 @@ public class AI_imageServiceImp implements AI_imageService {
     public List<AI_image> getImageBucketURLByAccountID(Long accountid) {
 
         return aiImageRepository.getSavedUrlByAccountId(accountid);
+    }
+
+    @Override
+    public List<AI_image> findAllImages() {
+        return aiImageRepository.findAll();
     }
 
 

@@ -7,11 +7,13 @@ import {HeartIcon} from "./HeartIcon";
 import {HeartFill, useSaveImageState, UseSaveState} from "../../../recoil/hooks/UseSaveState";
 import {useRecoilValue} from "recoil";
 import {Spinner} from "@nextui-org/react";
+import SaveImageModal from "../../../utils/SaveImageModal";
 
 const GeneratedImage = ({image}) => {
 
     const { toggleSaveImage } = useSaveImageState(); // useSaveImageState 훅을 호출하여 toggleSaveImage 함수를 가져옵니다.
     const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
         const newWindow = window.open(image, '_blank');
@@ -23,13 +25,14 @@ const GeneratedImage = ({image}) => {
         setIsLoading(true); // 저장하기 버튼 클릭 시 로딩 상태 활성화
         await toggleSaveImage(image);
         setIsLoading(false); // 저장 완료 후 로딩 상태 비활성화
+        setIsModalOpen(true); // 모달 열기
     };
 
     // 수정: saveImageStatus 대신 isSaved 값 직접 사용
     const isSaved = useRecoilValue(HeartFill);
     console.log("isSaved="+isSaved);
     return (
-
+<>
         <Card
             isFooterBlurred
             radius="lg"
@@ -53,7 +56,7 @@ const GeneratedImage = ({image}) => {
             {isLoading && ( // isLoading이 true일 때만 스피너 표시
                 <>
                     <br/>
-                    <Spinner size="lg" label="저장중" color="danger" labelColor="danger" className="z-100" />
+                    <Spinner size="lg" label="보관중..!" color="danger" labelColor="danger" className="z-100" />
                     <br/>
                     <br/>
                 </>
@@ -91,27 +94,28 @@ const GeneratedImage = ({image}) => {
                 style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} >
 
                 <TiLocation style={{...styles.icon}}/>
-                <p className="text-tiny text-black">오늘의 온도</p>
+                <p className="text-tiny font-semibold text-black">온도 5°</p>
 
                 <BsFillPeopleFill style={{...styles.icon}}/>
-                <p className="text-tiny text-black">최고 기온 13도 / 최저 기온 6도</p>
+                <p className="text-tiny  font-semibold text-black">최고 13° / 최저 6°</p>
 
                 <IoChatbubbleEllipses style={{...styles.icon}}/>
-                <p className="text-tiny text-black">맑음</p>
+                <p className="text-tiny font-semibold text-black">맑음</p>
 
                 <Button
-                    className="text-tiny text-success font-semibold"
-                    variant="light"
-                    color="success"
-                    radius="lg"
+                    className="text-tiny font-semibold w-[60px] ml-4"
+                    color="danger"
+                    radius="full"
                     size="sm"
                     onClick={handleSaveClick}
                     disabled={isLoading || isSaved} // 로딩 중이거나 이미 저장된 경우 버튼 비활성화
                 >
-                    {isLoading ? "저장 중..." : (isSaved ? "저장 완료" : "저장하기")}
+                    {isLoading ? "저장 중.." : (isSaved ? "저장 완료" : "저장하기")}
                 </Button>
             </CardFooter>
         </Card>
+        <SaveImageModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+</>
     );
 };
 

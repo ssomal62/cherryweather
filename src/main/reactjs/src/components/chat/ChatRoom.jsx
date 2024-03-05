@@ -208,6 +208,7 @@ const ChatRoom = () => {
     setSelectedMsg(message);
   };
 
+  console.log("account 아이디", accountData.accountId);
   // 채팅방 나가기
   useEffect(() => {
     const fetchCurrentChatId = async () => {
@@ -229,7 +230,7 @@ const ChatRoom = () => {
     };
 
     fetchCurrentChatId();
-  }, [accountData.accountId, chatRoom]);
+  }, [chatRoom]);
 
   const disconnectChat = async () => {
     if (currentChannelId) {

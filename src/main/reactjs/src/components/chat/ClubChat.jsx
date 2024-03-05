@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { instance } from "../../recoil/module/instance";
 import { Cookies } from "react-cookie";
 
-function ClubChat({}) {
+function ClubChat() {
   const [accountData, setAccountData] = useState("");
   const [nc, setNc] = useState("");
   const navi = useNavigate();

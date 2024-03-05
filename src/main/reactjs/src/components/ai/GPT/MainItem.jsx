@@ -1,10 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Card, Button, CardFooter, Image, CardHeader} from '@nextui-org/react';
 import {BiCloset} from "react-icons/bi";
-import {IoArrowBackOutline} from "react-icons/io5";
-import {IoArrowForwardOutline} from "react-icons/io5";
 import './css/mainItem.css';
-import {useNavigate} from "react-router-dom"; // Make sure to create this CSS file in your project
+import {useNavigate} from "react-router-dom";
 
 import {Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
@@ -15,9 +13,6 @@ import SwiperCore from "swiper";
 import {Autoplay, Navigation, Pagination} from "swiper/modules";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import MainTop from "./MainTop";
-import {useRecoilValue} from "recoil";
-import {userInfoState} from "../../../recoil/hooks/UseFetchUserInfo";
-import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
 
 const MainItem = ({index, isLogin, setActiveSlide}) => {
     const navigate = useNavigate();
@@ -68,7 +63,7 @@ const MainItem = ({index, isLogin, setActiveSlide}) => {
             subtitle: ["체리가 자신있게 추천하는 Made in Cherry의 여러 스타일!"],
             description: ["다양한 스타일이 궁금하시거나 새로운 영감이 필요하세요?", "그렇다면 체리의 드레스룸을 방문하세요. 각종 패션 아이템과 스타일을 한눈에 볼 수 있어요. 오늘의 스타일을 찾아보세요!"],
             src: "https://kr.object.ncloudstorage.com/cherry-ai-image/cherry_image/%EC%B6%94%EC%B2%9C5.png",
-            navigateTo: '/imageList'
+            navigateTo: '/gallery'
         },
         {
             title: "랜덤 옷차림 추천",
@@ -108,6 +103,7 @@ const MainItem = ({index, isLogin, setActiveSlide}) => {
     return (
         <>
             <Swiper
+                className="swiper-box"
                 onSlideChange={onSlideChange} // onSlideChange 이벤트 핸들러 추가
                 modules={[Navigation, Pagination, Autoplay]}
                 spaceBetween={200}

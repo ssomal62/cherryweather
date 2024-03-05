@@ -25,6 +25,7 @@ import {
 } from "../../recoil/hooks/UseMembershipApi";
 import ClubTag from "../../components/club/clubDetail/ClubTag";
 import GrowthMeter from "../../components/club/clubDetail/GrowthMeter";
+import {feedClubListState, useFeedData} from "../../recoil/hooks/UseFeedApi";
 
 const ClubDetails = () => {
 
@@ -40,9 +41,12 @@ const ClubDetails = () => {
     const {loading: loadingClubData} =
         useClubData({ state: clubDetailState, dynamicPath:`/${clubId}`});
 
-    const loading = loadingMyMembership || loadingClubData || loadingClubMembershipData;
+    const {loading: loadingFeedData} = useFeedData({state: feedClubListState, dynamicPath :  `/club/${clubId}`})
+
+    const loading = loadingMyMembership || loadingClubData || loadingClubMembershipData || loadingFeedData;
 
     const clubDetailAll= useRecoilValue(clubDetailState);
+    const clubFeedData = useRecoilValue(feedClubListState);
 
     const clubDetail = clubDetailAll.clubDetail;
     const hostName = clubDetailAll.hostName;
@@ -107,29 +111,34 @@ const ClubDetails = () => {
                         <EventSection />
                         <ClubNotice clubDetail={clubDetail} hostName={hostName} hostProfile={hostProfile}/>
                         <MemberSummary isLogin={isLogin} clubDetail={clubDetail}/>
-                        <ClubFeedSlide isLogin={isLogin} clubDetail={clubDetail}/>
+                        <ClubFeedSlide isLogin={isLogin} clubFeedData={clubFeedData} clubDetail={clubDetail}/>
                         <ClubTag clubDetail={clubDetail}/>
                         <GrowthMeter clubDetail={clubDetail}/>
                     </Content>
 
-                    <Image radius='none' alt=""
-                           removeWrapper
-                           style={{
-                               ...styles.img,
-                               transform: `translateY(${offsetY * -0.3}px)`,
-                           }}
-                           className="w-full object-cover object-middle"
-                           src={clubProfile(clubDetail.code)}
-                    />
-                    <div style={styles.top}>
-                        <SoftCurveTop color={'#ffffff'}/>
-                    </div>
-                </div>
-            </ClubDetail>
-            <ClubJoinButton clubId={clubId}/>
-            <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-        </Layout>
-    );
+          <Image
+            radius="none"
+            alt=""
+            removeWrapper
+            style={{
+              ...styles.img,
+              transform: `translateY(${offsetY * -0.3}px)`,
+            }}
+            className="w-full object-cover object-middle"
+            src={clubProfile(clubDetail.code)}
+          />
+          <div style={styles.top}>
+            <SoftCurveTop color={"#ffffff"} />
+          </div>
+        </div>
+      </ClubDetail>
+      <ClubJoinButton clubId={clubId} />
+      <LoginVerificationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </Layout>
+  );
 };
 
 export default ClubDetails;
@@ -157,6 +166,7 @@ const ClubDetail = styled.div`
   min-height: 600%;
   border: ${bd};
   background-image: linear-gradient(to bottom, #ffffff, #ffffff, #F0F0F0, #ffffff);
+  overflow-x: hidden;
 `;
 
 const styles = {

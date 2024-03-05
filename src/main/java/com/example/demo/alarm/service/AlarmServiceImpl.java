@@ -22,22 +22,21 @@ public class AlarmServiceImpl {
     // 알람 정보 db 넣기
     @Transactional
     public void createAlarm(AlarmDto alarmDto, AccountDetails accountDetails) {
-        if(!accountDetails.getAccount().getAccountId().equals(alarmDto.getTargetId())) {
-            Alarm alarm = Alarm.builder()
+        Alarm alarm = Alarm.builder()
                 .account(accountDetails.getAccount())
                 .type(alarmDto.getType())
                 .targetId(alarmDto.getTargetId())
+                .targetTypeId(alarmDto.getTargetTypeId())
                 .importance(alarmDto.getImportance())
                 .description(alarmDto.getDescription())
                 .build();
         alarmRepository.save(alarm);
-        }
     }
 
     // 알람 list 받아오기
     @Transactional
     public List<AlarmDto> findAlarmListByAccountId(AccountDetails accountDetails) {
-        List<Alarm> alarmList = alarmRepository.findByAccountOrTargetIdOrderByCreatedAtDesc(accountDetails.getAccount(), accountDetails.getAccount().getAccountId());
+        List<Alarm> alarmList = alarmRepository.findByTargetIdOrderByCreatedAtDesc(accountDetails.getAccount().getAccountId());
         return AlarmDto.toDtoList(alarmList);
     }
 

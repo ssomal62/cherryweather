@@ -72,8 +72,6 @@ function PersonalChat({ userInfo, accountData, nc }) {
             `${accountData.name}님과의 채팅방`
           );
 
-          console.log(accountData.accountId);
-          // console.log("res : ", res);
           await nc.subscribe(newChatId);
           // 채팅방을 생성한 사람과 대화를 시작한 사람이 다를 경우에만 알림을 보냅니다.
           if (accountData.accountId !== userInfo.accountId) {
@@ -90,10 +88,8 @@ function PersonalChat({ userInfo, accountData, nc }) {
           }
           // 개인 채팅방 생성 알림 전송(주석부분)
           // 채팅방으로 이동
-          // navi(`/chat/room/${newChatId}/${userInfo.accountId}`);
-          // window.location.reload();
-
-
+          navi(`/chat/room/${newChatId}/${userInfo.accountId}`);
+          window.location.reload();
         }
       } catch (error) {
         console.error("Error creating and subscribing channel:", error);
