@@ -9,8 +9,7 @@ public interface EventService {
     EventViewDTO createEvent(EventCreateDTO eventCreateDTO, AccountDetails accountDetails);
     List<EventListDTO> getAllEvents();
     EventDetailListDTO getEventDetail(Long eventId);
-
     void deleteEvent(long eventId);
-
     void updateEvent(EventUpdateDTO updateDTO);
+    List<EventDetailListDTO> getAllEventsByClubId(Long clubId);
 }

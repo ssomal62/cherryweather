@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventListDTO {
+    private long clubId;
     private long eventId;
     private String eventSubject;
     private LocalDate eventEndDate;

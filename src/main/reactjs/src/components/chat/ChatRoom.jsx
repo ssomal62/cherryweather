@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "../../style/ChatRoomStyle.css";
 import * as ncloudchat from "ncloudchat";
 import { useNavigate, useParams } from "react-router-dom";
-import { User, useDisclosure } from "@nextui-org/react";
+import { Spinner, User, useDisclosure } from "@nextui-org/react";
 import { IoIosArrowBack } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { BsPaperclip, BsSend } from "react-icons/bs";
@@ -29,6 +29,8 @@ const ChatRoom = () => {
   const [selectedMsg, setSelectedMsg] = useState({});
   const [uploadImage, setUploadImage] = useState(null);
   const [senderProfile, setSenderProfile] = useState({});
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const initializeChat = async () => {
       const accessToken = cookies.get("accessToken");
@@ -77,8 +79,7 @@ const ChatRoom = () => {
       setMessages(fetchedMessages);
     };
     initializeChat();
-  }, [chatRoom]);
-
+  }, []);
 
   const fetchChannelMessages = async (chat, channelId) => {
     try {
@@ -106,7 +107,7 @@ const ChatRoom = () => {
             } catch (profileError) {
               console.error("Error fetching sender profile:", profileError);
               // 프로필 정보를 가져오는데 실패한 경우, 기본 값을 사용할 수 있습니다.
-              message.sender.profileImage = "기본이미지URL";
+              message.sender.profileImage = "default_image.jpg";
             }
             return message;
           })
@@ -125,7 +126,41 @@ const ChatRoom = () => {
     }
   };
 
-  // 메시지 전송
+  console.log("accountData 데이터 ", accountData);
+
+  useEffect(() => {
+    // accountData.accountId가 설정되었을 때만 API 호출을 실행
+    if (accountData.accountId) {
+      const fetchCurrentChatId = async () => {
+        try {
+          setLoading(true);
+          const response = await instance.get(
+            `/chat/getchatlist?accountId=${accountData.accountId}`
+          );
+          console.log("response.data 리스트 데이터", response.data);
+
+          console.log("response.data 리스트 데이터", response.data);
+
+          const currentChat = response.data.find(
+            (chat) => chat.chatRoom === chatRoom
+          );
+          console.log("currentChat", currentChat);
+
+          if (currentChat) {
+            setChannelName(currentChat.chatName);
+            setCurrentChannelId(currentChat);
+          }
+          // 나머지 로직...
+        } catch (error) {
+          console.error("Error occurred: ", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchCurrentChatId();
+    }
+  }, [accountData.accountId]); // accountData.accountId가 변경될 때마다 실행
 
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
@@ -146,7 +181,6 @@ const ChatRoom = () => {
 
         // 이미지 업로드 API 호출
         const images = await instance.post("/chat/upload", formData);
-
 
         // 이미지 전송 API 호출 (예시, 실제 함수는 환경에 따라 다를 수 있음)
         const imgres = await ncloud.sendImage(chatRoom, uploadImage);
@@ -208,30 +242,7 @@ const ChatRoom = () => {
     setSelectedMsg(message);
   };
 
-  console.log("account 아이디", accountData.accountId);
-  // 채팅방 나가기
-  useEffect(() => {
-    const fetchCurrentChatId = async () => {
-      try {
-        const response = await instance.get(
-          `/chat/getchatlist?accountId=${accountData.accountId}`
-        );
-        const currentChatName = response.data.find(
-          (chat) => chat.chatRoom === chatRoom
-        )?.chatName;
-        const currentChat = response.data.find(
-          (chat) => chat.chatRoom === chatRoom
-        );
-        setChannelName(currentChatName);
-        setCurrentChannelId(currentChat);
-      } catch (error) {
-        console.error("Error occurred: ", error);
-      }
-    };
-
-    fetchCurrentChatId();
-  }, [chatRoom]);
-
+  console.log("chat id 아이디 아이디", currentChannelId.chatId);
   const disconnectChat = async () => {
     if (currentChannelId) {
       const message = {
@@ -248,6 +259,20 @@ const ChatRoom = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+        }}
+      >
+        <Spinner size="lg" color="danger" />
+      </div>
+    );
+  }
 
   return (
     <Layout
@@ -323,11 +348,12 @@ const ChatRoom = () => {
                               : "received-message"
                           }
                           avatarProps={{
-                            src: `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${message.sender.profileImage ===
+                            src: `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user-profile/${
+                              message.sender.profileImage ===
                               "기본이미지 넣어야함"
-                              ? "default_image.jpg"
-                              : message.sender.profileImage
-                              }?type=f&w=600&h=600&ttype=jpg`,
+                                ? "default_image.jpg"
+                                : message.sender.profileImage
+                            }?type=f&w=600&h=600&ttype=jpg`,
                           }}
                           style={{ fontSize: "8px", color: "gray" }}
                         />
@@ -349,7 +375,7 @@ const ChatRoom = () => {
                               ? "10px"
                               : "4px",
                           display: "inline-block",
-                          fontSize: "12px",
+                          fontSize: "14px",
                         }}
                       >
                         {message.sender.id === accountData.email ? null : (

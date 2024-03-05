@@ -29,15 +29,16 @@ const FeedEditor = () => {
     }
 
     const club = useRecoilValue(clubDetailState).clubDetail;
+
     const defaultImage = "https://kr.object.ncloudstorage.com/cherry-weather/feed-files/feedSample.gif";
 
-    const [content, setContent] = useState(feedId ? feedDetails.content : '')
-    const [isPublic, setIsPublic] = useState(feedId ? feedDetails.isPublic : true)
-    const [weather, setWeather] = useState(feedId ? feedDetails.weather : '')
-    const [code, setCode] = useState(feedId ? feedDetails.code : '');
+    const [content, setContent] = useState(feedId? feedDetails.content : '')
+    const [isPublic, setIsPublic] = useState(feedId? feedDetails.isPublic : true)
+    const [weather, setWeather] = useState(feedId? feedDetails.weather : '')
+    const [code, setCode] = useState(feedId? feedDetails.code : '');
 
     const [file, setFile] = useState('')
-    const [previewImage, setPreviewImage] = useState();
+    const [preview, setPreview] = useState();
     const [fileSelected, setFileSelected] = useState(false);
 
     const fileInputRef = useRef(null);
@@ -45,35 +46,18 @@ const FeedEditor = () => {
     const formData = new FormData();
     const cookie = new Cookies();
 
-    const requestData = {
-        ...(feedId && {feedId: feedId}),
-        weather: weather,
-        feedCode: code,
-        content: content,
-        isPublic: isPublic,
-        clubId: clubId,
-    };
-
-    const fileUrl = (code) => {
-        if (code === null) {
-            return
-        }
-        return `https://kr.object.ncloudstorage.com/cherry-weather/feed-files/${code}`;
-    }
-
     useEffect(() => {
         if (file) {
             const fileReader = new FileReader();
             fileReader.onloadend = () => {
-                setPreviewImage(fileReader.result);
+                setPreview(fileReader.result);
             };
             fileReader.readAsDataURL(file);
-            setFileSelected(true);
         } else {
-            setPreviewImage(defaultImage);
+            // 파일이 없을 때 기본 이미지로 설정합니다.
+            setPreview(defaultImage);
         }
     }, [file]);
-
     const handleClick = () => {
         fileInputRef.current.click();
     };
@@ -87,10 +71,10 @@ const FeedEditor = () => {
             const file = e.target.files[0];
             const shortUUID = generateShortUUID()
             const extension = getFileExtension(file.name);
-            const newFileName = 'fd-' + shortUUID + extension;
-            const modifiedFile = new File([file], newFileName, {type: file.type});
+            const newFileName = 'fd-'+ shortUUID + '.jpg'; //+ extension; // 새로운 파일 이름
+            const modifiedFile = new File([file], newFileName, { type: file.type });
 
-            setCode('fd-' + shortUUID);
+            setCode('fd-'+ shortUUID);
             handlePhotoChange(modifiedFile);
         }
     };
@@ -124,6 +108,16 @@ const FeedEditor = () => {
     };
 
     const onSave = async () => {
+
+        const requestData = {
+            ...(feedId && {feedId: feedId}),
+            clubId: club.clubId,
+            weather: weather,
+            feedCode: code,
+            content: content,
+            isPublic: isPublic,
+        };
+
         try {
             const res = await instance.post("/feeds", requestData, {
                 headers: {
@@ -192,7 +186,7 @@ const FeedEditor = () => {
                             removeWrapper
                             alt="clubProfilePicture"
                             className="z-0 w-full object-cover h-[220px] object-middle"
-                            src={previewImage}
+                            src={preview}
                             style={{border: '1px solid #E4E4E7', cursor: 'pointer', borderRadius:'20px'}}
                         />
                     ) : (

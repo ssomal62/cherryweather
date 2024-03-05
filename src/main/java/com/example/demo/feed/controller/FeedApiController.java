@@ -1,6 +1,7 @@
 package com.example.demo.feed.controller;
 
 import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.common.service.FileService;
 import com.example.demo.feed.dto.FeedDTO;
 import com.example.demo.feed.dto.FeedListDTO;
 import com.example.demo.feed.dto.FeedRequestDTO;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ import java.util.Map;
 public class FeedApiController {
 
     private final FeedServiceImpl feedService;
+    private final FileService fileService;
 
     // =================== 불러오기 ================== //
     /*단일 피드 불러오기*/
@@ -65,11 +68,9 @@ public class FeedApiController {
     /*피드 저장*/
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<FeedListDTO> createFeed(final @AuthenticationPrincipal AccountDetails accountDetails, @Valid @RequestBody FeedRequestDTO requestDTO) {
-        FeedRequestDTO saveDTO = feedService.setUserInfo(requestDTO,accountDetails);
-        System.out.println("saveDTO = " + saveDTO);
-        FeedListDTO feedListDTO = feedService.saveFeed(saveDTO);
-        return ResponseEntity.ok().body(feedListDTO);
+    public ResponseEntity<Void> createFeed(final @AuthenticationPrincipal AccountDetails accountDetails, @Valid @RequestBody FeedRequestDTO requestDTO) {
+        feedService.saveFeed(accountDetails, requestDTO);
+        return ResponseEntity.ok().build();
     }
 
     /*피드 삭제*/
@@ -86,5 +87,13 @@ public class FeedApiController {
     public ResponseEntity<Feed> updateFeed(final @AuthenticationPrincipal AccountDetails accountDetails, @Valid @RequestBody FeedUpdateDTO requestDTO) {
         Feed updatedFeedListDTO = feedService.updateFeed(accountDetails,requestDTO);
         return ResponseEntity.ok().body(updatedFeedListDTO);
+    }
+
+    @PostMapping("/upload")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Void> createClubProfile(
+            @RequestParam(value = "file") MultipartFile file) {
+        fileService.uploadSingleFile(file,"feed-files");
+        return ResponseEntity.ok().build();
     }
 }

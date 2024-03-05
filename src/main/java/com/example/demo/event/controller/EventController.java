@@ -58,6 +58,12 @@ public class EventController {
         return new ResponseEntity<>(eventDetail, HttpStatus.OK);
     }
 
+    // 특정 이벤트 상세 정보 조회
+    @GetMapping("/{clubId}")
+    public ResponseEntity<List<EventDetailListDTO>> getClubEvent(@PathVariable(value="clubId") Long clubId) {
+        List<EventDetailListDTO> eventDetailList = eventService.getAllEventsByClubId(clubId);
+        return new ResponseEntity<>(eventDetailList, HttpStatus.OK);
+    }
     // 이벤트 삭제
     @DeleteMapping("/delete/{eventId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
