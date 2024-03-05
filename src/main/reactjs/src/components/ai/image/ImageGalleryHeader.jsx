@@ -2,47 +2,42 @@ import React, {useEffect, useState} from "react";
 import {Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import {IoArrowBack} from "react-icons/io5";
 import {GoHome} from "react-icons/go";
-import {FiSettings} from "react-icons/fi";
 import {useLocation, useNavigate} from "react-router-dom";
-import {WiNightAltRain} from "react-icons/wi";
-import {useRecoilValue} from "recoil";
-import {currentMembershipState} from "../../../recoil/hooks/UseMembershipApi";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
 import {BsChatRightDots} from "react-icons/bs";
 import {TbJacket, TbPhoto} from "react-icons/tb";
 
-export default function GenerateImageHeader({ isLogin, handleBack}) {
+export default function ImageGalleryHeader({ isLogin, handleBack}) {
 
     const navigate = useNavigate();
-    const myMembership = useRecoilValue(currentMembershipState);
-    const [scrolled, setScrolled] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
 
 
     const handleChatClick = () => {
-        if (!isLogin) {
-            setIsModalOpen(true);
-            return;
-        }
         navigate('/gpt')
     }
 
     const handleJacketClick = () => {
-        if (!isLogin) {
-            setIsModalOpen(true);
-            return;
-        }
         navigate('/image')
     }
 
     const handleGalleryClick = () => {
-        if (!isLogin) {
-            setIsModalOpen(true);
-            return;
-        }
         navigate('/gallery')
     }
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 80) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const styles = {
         navBar : {
@@ -95,7 +90,7 @@ export default function GenerateImageHeader({ isLogin, handleBack}) {
                     </NavbarItem>
                     <NavbarItem style={styles.text}
                                 onClick={() => navigate('/')}>
-                        <p>이미지 생성</p>
+                        <p>체리의 드레스룸</p>
                     </NavbarItem>
                 </NavbarContent>
                 <NavbarContent className="items-center" justify="end">
@@ -116,8 +111,7 @@ export default function GenerateImageHeader({ isLogin, handleBack}) {
                         style={styles.iconBox}
                         onClick={handleGalleryClick}
                     >
-                        <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
-                        <TbPhoto  style={styles.icon}/>
+                        <TbPhoto   style={styles.icon}/>
                     </NavbarItem>
                     <NavbarItem
                         style={styles.iconBox}

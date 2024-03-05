@@ -1,11 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Card, CardHeader, CardBody, CardFooter, Chip, Image} from "@nextui-org/react";
-import {HeartFill, useSaveImageState, UseSaveState} from "../../../recoil/hooks/UseSaveState";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {Spinner} from "@nextui-org/react";
-import { FcEmptyTrash } from "react-icons/fc";
 import {deleteState, useDeleteImage} from "../../../recoil/hooks/UseDeleteImage";
-import SaveImageModal from "../../../utils/SaveImageModal";
 import DeleteImageModal from "../../../utils/DeleteImageModal";
 
 

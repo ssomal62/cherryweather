@@ -36,7 +36,7 @@ export default function SaveImageHeader({ isLogin, handleBack}) {
             setIsModalOpen(true);
             return;
         }
-        navigate('/ai')
+        navigate('/gallery')
     }
 
     useEffect(() => {
