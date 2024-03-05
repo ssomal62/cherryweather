@@ -26,7 +26,7 @@ public class AlarmDto {
                         .alarmId(alarm.getAlarmId())
                         .description(alarm.getDescription())
                         .type(alarm.getType())
-                        .targetTypeId(alarm.getTargetTypeId())
+//                        .targetTypeId(alarm.getTargetTypeId()) 4시 이후 살리기
                         .targetId(alarm.getTargetId())
                         .importance(alarm.getImportance())
                         .createdAt(alarm.getCreatedAt())

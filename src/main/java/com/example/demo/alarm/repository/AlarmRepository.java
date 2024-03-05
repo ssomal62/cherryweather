@@ -13,6 +13,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     List<Alarm> findByAccountOrderByCreatedAtDesc(Account accountId);
 
+    // 4시 이후 다시 살려서 작업하기
     List<Alarm> findByTargetIdOrderByCreatedAtDesc(long targetId);
 
     // 특정 타입에 맞는 targetId를 조회하는 쿼리

@@ -31,10 +31,6 @@ public class LikeService {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    private final ClubService clubService;
-
-    private final AlarmServiceImpl alarmService;
-
 
     // ======================= CORE FUNCTIONALITIES ======================= //
 
@@ -65,20 +61,6 @@ public class LikeService {
                         300);
                 eventPublisher.publishEvent(event);
             }
-            //알람 들어 갈 자리
-            String message = accountDetails.getAccount().getProfileName() + "님이 클럽에 좋아요를 눌렀습니다.";
-            Club findClub = clubService.findClubById(infoDto.targetId());
-
-            alarmService.createAlarm(
-                    AlarmDto.builder()
-                            .targetId(findClub.getRepresentativeUserId())
-                            .targetTypeId(findClub.getClubId())
-                            .type("LIKE")
-                            .description(message)
-                            .importance(3)
-                            .build(),
-                    accountDetails
-            );
         }
     }
 

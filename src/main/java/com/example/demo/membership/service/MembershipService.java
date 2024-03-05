@@ -96,16 +96,6 @@ public class MembershipService {
         Membership existingMembership = findMembership(requestDTO.membershipId());
         existingMembership.updateMembership(requestDTO);
         membershipRepository.save(existingMembership);
-
-        alarmService.createAlarm(
-                AlarmDto.builder()
-                        .targetId(existingMembership.getAccount().getAccountId())
-                        .targetTypeId(existingMembership.getClub().getClubId())
-                        .type("CLUB")
-                        .description("클럽가입이 승인되었습니다.")
-                        .build(),
-                accountDetails
-        );
     }
 
     @Transactional

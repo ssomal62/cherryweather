@@ -26,13 +26,6 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
 
-    private final AlarmServiceImpl alarmService;
-
-    private final ClubService clubService;
-
-    private final AccountRepository accountRepository;
-
-    private final MembershipRepository membershipRepository;
 
     @Transactional
     public String getChatIdByAccountId(int accountId) {

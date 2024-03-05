@@ -26,7 +26,7 @@ public class AlarmServiceImpl {
                 .account(accountDetails.getAccount())
                 .type(alarmDto.getType())
                 .targetId(alarmDto.getTargetId())
-                .targetTypeId(alarmDto.getTargetTypeId())
+//                .targetTypeId(alarmDto.getTargetTypeId())
                 .importance(alarmDto.getImportance())
                 .description(alarmDto.getDescription())
                 .build();
@@ -34,11 +34,19 @@ public class AlarmServiceImpl {
     }
 
     // 알람 list 받아오기
+//    @Transactional
+//    public List<AlarmDto> findAlarmListByAccountId(AccountDetails accountDetails) {
+//        List<Alarm> alarmList = alarmRepository.findByTargetIdOrderByCreatedAtDesc(accountDetails.getAccount().getAccountId());
+//        return AlarmDto.toDtoList(alarmList);
+//    }
+
+    // 알람 list 받아오기(전체)
     @Transactional
-    public List<AlarmDto> findAlarmListByAccountId(AccountDetails accountDetails) {
-        List<Alarm> alarmList = alarmRepository.findByTargetIdOrderByCreatedAtDesc(accountDetails.getAccount().getAccountId());
+    public List<AlarmDto> findByAccountOrderByCreatedAtDesc(AccountDetails accountDetails) {
+        List<Alarm> alarmList = alarmRepository.findByAccountOrderByCreatedAtDesc(accountDetails.getAccount());
         return AlarmDto.toDtoList(alarmList);
     }
+
 
     @Transactional
     public void updateAlarmVisibility(Long alarmId, boolean isShowAlarm) {
