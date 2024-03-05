@@ -35,11 +35,11 @@ public class SatelliteImageService {
         sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
         String currentDate = sdf.format(new Date());
 
-        System.out.println(currentDate);
+        // System.out.println(currentDate);
 
         String url = String.format("%s?serviceKey=%s&pageNo=1&numOfRows=10&dataType=JSON&sat=G2&data=ir105&area=ko&time=%s", baseUrl, serviceKey, currentDate);
 
-        System.out.println("url : " + url);
+        // System.out.println("url : " + url);
 
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         return parseJsonToDto(response.getBody());
