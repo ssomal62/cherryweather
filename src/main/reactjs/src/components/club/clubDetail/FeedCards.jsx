@@ -21,11 +21,11 @@ const FeedCards = ({clubFeedData}) => {
         if (code === null) {
             return
         }
-        const baseUrl = `https://kr.object.ncloudstorage.com/cherry-weather`;
+        const baseUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV`;
         const paths = {
-            'user': {path: "user-profile", extension: ""},
-            'feed': {path: "feed-files", extension: '.jpg'},
-            'club': {path: "club-profile", extension: ".jpg"}
+            'user': {path: "user-profile", extension: "?type=f&w=600&h=600&ttype=jpg"},
+            'feed': {path: "feed-files", extension: '.jpg?type=f&w=600&h=600&ttype=jpg'},
+            'club': {path: "club-profile", extension: ".jpg?type=f&w=600&h=600&ttype=jpg"}
         };
         const typePath = paths[type] || {path: "default", extension: ""};
         const {path, extension} = typePath;
@@ -39,46 +39,36 @@ const FeedCards = ({clubFeedData}) => {
                 navigation={true}
             >
                 {clubFeedData.map((data, index) => (
-                        <SwiperSlide key={index} style={{display: 'flex', justifyContent:'center'}}>
+                        <SwiperSlide key={index} style={{display: 'flex', justifyContent: 'center'}}>
                             <Card className="py-4 m-4" radius="sm" style={{width: '90%'}}>
-                                <CardHeader className="pb-2 pt-2 px-4 flex flex-col">
-                                    <div className="flex justify-start">
-                                        <Chip color='primary' size='sm' variant='dot' className="text-tiny">
-                                            {formatDateAndWeekday(data.feed.createdAt)}
-                                        </Chip>
-                                    </div>
+                                <CardBody className="pb-2 pt-2 px-4 flex flex-col">
+                                    <Chip color='primary' size='sm' variant='dot' className="text-tiny mb-2">
+                                        {formatDateAndWeekday(data.feed.createdAt)}
+                                    </Chip>
                                     <div className="flex flex-row justify-start items-center">
-                                        <Avatar isBordered radius="full" size="md" src={fileUrl('user', data.feed.userProfile)}/>
+                                        <Avatar isBordered radius="full" size="md"
+                                                src={fileUrl('user', data.feed.userProfile)}/>
                                         <h4 className="text-small font-semibold leading-none text-default-600 ml-2">{data.feed.userName}</h4>
                                     </div>
-                                </CardHeader>
+                                </CardBody>
                                 {
                                     data.feed.feedCode ? (
-                                            <div>
-                                                <CardBody className='flex flex-row items-center'>
-                                                    <Image
-                                                        alt="Card background"
-                                                        className="object-cover rounded-xl mr-2"
-                                                        src={fileUrl('feed', data.feed.feedCode)}
-                                                        style={{width: '100px', height:'100px'}}
-                                                    />
-                                                    <small
-                                                        className="text-default-500 block overflow-hidden"
-                                                        style={{
-                                                            display        : '-webkit-box',
-                                                            WebkitBoxOrient: 'vertical',
-                                                            WebkitLineClamp: 5,
-                                                            overflow       : 'hidden',
-                                                            textOverflow   : 'ellipsis',
-                                                        }}
-                                                    >
-                                                        {data.feed.content}
-                                                    </small>
-                                                </CardBody>
-                                            </div>
+                                            <CardBody>
+                                                <div className='flex flex-row items-start'>
+                                                    <div className="w-[30%] h-[100%] mr-2">
+                                                        <Image
+                                                            alt="feedFile"
+                                                            src={fileUrl('feed', data.feed.feedCode)}
+                                                        />
+                                                    </div>
+                                                    <div className="w-[70%] h-[100%]">
+                                                        <small>{data.feed.content}</small>
+                                                    </div>
+                                                </div>
+                                            </CardBody>
                                         ) :
                                         (
-                                            <CardFooter className="h-[100px] overflow-hidden">
+                                            <CardBody className="h-[100px] overflow-hidden">
                                                 <small
                                                     className="text-default-500 block overflow-hidden"
                                                     style={{
@@ -91,7 +81,7 @@ const FeedCards = ({clubFeedData}) => {
                                                 >
                                                     {data.feed.content}
                                                 </small>
-                                            </CardFooter>)
+                                            </CardBody>)
                                 }
                             </Card>
                         </SwiperSlide>

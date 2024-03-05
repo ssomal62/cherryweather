@@ -1,6 +1,5 @@
 package com.example.demo.feed.repository;
 
-import com.example.demo.club.entity.Club;
 import com.example.demo.feed.entity.Feed;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

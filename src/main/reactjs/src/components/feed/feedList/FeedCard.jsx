@@ -58,15 +58,16 @@ const FeedCard = ({data, useParam}) => {
         // toggleLikeClub({type: "Feed", targetId: feed.feedId});
     };
 
+
     const fileUrl = (type, code) => {
         if (code === null) {
             return
         }
-        const baseUrl = `https://kr.object.ncloudstorage.com/cherry-weather`;
+        const baseUrl = `https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV`;
         const paths = {
-            'user': {path: "user-profile", extension: ""},
-            'feed': {path: "feed-files", extension: '.jpg'},
-            'club': {path: "club-profile", extension: ".jpg"}
+            'user': {path: "user-profile", extension: "?type=f&w=600&h=600&ttype=jpg"},
+            'feed': {path: "feed-files", extension: '.jpg?type=f&w=600&h=600&ttype=jpg'},
+            'club': {path: "club-profile", extension: ".jpg?type=f&w=600&h=600&ttype=jpg"}
         };
         const typePath = paths[type] || {path: "default", extension: ""};
         const {path, extension} = typePath;
@@ -130,7 +131,7 @@ const FeedCard = ({data, useParam}) => {
                                 isIconOnly
                                 variant="light"
                                 color="danger"
-                               onPress={handleLikeClick}
+                                onPress={handleLikeClick}
                                 startContent={
                                     isLiked ?
                                         <GoHeartFill style={{width: '20px', height: '20px'}}/>
@@ -155,7 +156,10 @@ const FeedCard = ({data, useParam}) => {
                     <CardBody>
                         {
                             feed.feedCode &&
-                            <Image alt="" src={fileUrl('feed', feed.feedCode)}/>
+                            <div className="max-w-[600px] max-w-full h-auto flex justify-center">
+                                <Image alt="" src={fileUrl('feed', feed.feedCode)}/>
+                            </div>
+
                         }
                         <div className="flex gap-1">
                             {/*<p className="font-semibold text-default-400 text-small">{countLike}</p>*/}
