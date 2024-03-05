@@ -34,7 +34,7 @@ export default function AI_MainHeader({isLogin, handleBack}) {
             setIsModalOpen(true);
             return;
         }
-        navigate('/ai')
+        navigate('/gallery')
     }
 
     const styles = {

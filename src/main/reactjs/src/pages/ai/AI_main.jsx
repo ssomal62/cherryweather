@@ -47,7 +47,6 @@ const AI_main = () => {
     return (
         <Layout useHeader={false}>
             <AI_MainHeader isLogin={isLogin} handleBack={handleBack}/>
-            {/*<MainTop index={activeSlide} />*/}
             <MainItem  index={activeSlide} isLogin={isLogin} setActiveSlide={setActiveSlide}  />
 
         </Layout>

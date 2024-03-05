@@ -29,7 +29,6 @@ public class Feed {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
-    @JsonIgnore
     private Club club;
 
     @Column(name ="user_name")
@@ -59,6 +58,7 @@ public class Feed {
     private boolean isPublic;
 
     @CreatedDate
+    @Column
     private LocalDateTime createdAt;
 
     public void updateFeed(FeedUpdateDTO requestDTO) {

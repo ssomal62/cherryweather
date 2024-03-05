@@ -4,6 +4,8 @@ package com.example.demo.club.service;
 import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.repository.AccountRepository;
+import com.example.demo.alarm.dto.AlarmDto;
+import com.example.demo.alarm.service.AlarmServiceImpl;
 import com.example.demo.club.domain.ClubSummary;
 import com.example.demo.club.dto.*;
 import com.example.demo.club.entity.Club;
@@ -40,6 +42,7 @@ public class ClubService {
     private final LikeService likeService;
     private final AccountRepository accountRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final AlarmServiceImpl alarmService;
 
     // ======================= CRUD OPERATIONS ======================= //
     // Club 관련 CRUD 작업 처리 메서드
@@ -99,6 +102,15 @@ public class ClubService {
                 );
 
         eventPublisher.publishEvent(event);
+
+        alarmService.createAlarm(
+                AlarmDto.builder()
+                        .targetId(accountDetails.getAccount().getAccountId())
+                        .description("내 클럽이 생성되었습니다.")
+                        .build(),
+                accountDetails
+        );
+
         return saveClub;
     }
 
@@ -140,7 +152,7 @@ public class ClubService {
         Club club = findClubById(clubId);
         int newScore = club.getCurrentGrowthMeter() + score;
 
-        if(club.getGrade() == ClubGrade.RADIANT_RAINBOW) {
+        if (club.getGrade() == ClubGrade.RADIANT_RAINBOW) {
             throw new ServiceFailedException(INVALID_TYPE_VALUE);
         }
 
@@ -210,6 +222,7 @@ public class ClubService {
 
     /**
      * 현재 인증된 사용자의 상세 정보를 반환
+     *
      * @return 인증된 사용자의 {@link AccountDetails}를 포함하는 {@link Optional}, 인증되지 않은 경우 빈 {@link Optional}.
      */
     private Optional<AccountDetails> getCurrentAccountDetails() {
@@ -219,10 +232,9 @@ public class ClubService {
         return isAuthenticated ? Optional.ofNullable((AccountDetails) authentication.getPrincipal()) : Optional.empty();
     }
 
-/**
- * 요청 데이터를 기반으로 새로운 Club 엔티티를 생성
- *
- */
+    /**
+     * 요청 데이터를 기반으로 새로운 Club 엔티티를 생성
+     */
     private Club createClub(CreateClubDTO requestDTO, AccountDetails accountDetails) {
         return Club.builder()
                 .name(requestDTO.name())
@@ -276,22 +288,22 @@ public class ClubService {
                 LikeType.CLUB,
                 summary.clubId()
         );
-            return ClubSummary.builder()
-                    .clubId(summary.clubId())
-                    .name(summary.name())
-                    .code(summary.code())
-                    .feedCount(summary.feedCount())
-                    .description(summary.description())
-                    .activitiesArea(summary.activitiesArea())
-                    .joinApprovalStatus(summary.joinApprovalStatus())
-                    .currentMembers(summary.currentMembers())
-                    .maxMembers(summary.maxMembers())
-                    .status(summary.status())
-                    .tag(summary.tag())
-                    .category(summary.category())
-                    .grade(summary.grade())
-                    .liked(liked)
-                    .build();
+        return ClubSummary.builder()
+                .clubId(summary.clubId())
+                .name(summary.name())
+                .code(summary.code())
+                .feedCount(summary.feedCount())
+                .description(summary.description())
+                .activitiesArea(summary.activitiesArea())
+                .joinApprovalStatus(summary.joinApprovalStatus())
+                .currentMembers(summary.currentMembers())
+                .maxMembers(summary.maxMembers())
+                .status(summary.status())
+                .tag(summary.tag())
+                .category(summary.category())
+                .grade(summary.grade())
+                .liked(liked)
+                .build();
     }
 
     /**

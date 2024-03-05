@@ -51,10 +51,10 @@ const SignInMain = () => {
                     <IconImg alt="naver" src={naverImgUrl}/>
                     <LoginBtnText>네이버로 로그인하기</LoginBtnText>
                 </LoginBtn>
-                <div className="flex flex-row justify-center items-center my-4">
-                    <Divider style={{width: '140px'}}/>
+                <div className="flex flex-row justify-between items-center my-4">
+                    <Divider className='w-[100px]'/>
                     <small className="text-stone-400">&nbsp;&nbsp;&nbsp;일반 로그인&nbsp;&nbsp;&nbsp;</small>
-                    <Divider style={{width: '140px'}}/>
+                    <Divider className='w-[100px]'/>
                 </div>
                 <LoginBtn
                     onClick={() => navigate("/login/local")}
@@ -65,8 +65,8 @@ const SignInMain = () => {
                 </LoginBtn>
                 <JoinWapper>
                     <JoinText onClick={() => navigate("/join")} style={{cursor:'pointer'}}>회원가입</JoinText>
-                    <Hr/>
-                    <JoinText>문의하기</JoinText>
+                    {/*<Hr/>*/}
+                    {/*<JoinText>문의하기</JoinText>*/}
                 </JoinWapper>
             </LoginContainer>
         </>

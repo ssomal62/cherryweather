@@ -13,7 +13,6 @@ import java.util.Map;
 
 public interface FeedService {
     ResponseEntity<Map<String, Object>> findAll();
-    FeedListDTO saveFeed(FeedRequestDTO requestDTO);
 
     void deleteFeed(final @AuthenticationPrincipal AccountDetails accountDetails, Long feedId);
 

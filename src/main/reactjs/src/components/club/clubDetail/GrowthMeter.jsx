@@ -106,7 +106,7 @@ const GrowthMeter = ({clubDetail}) => {
     return (
         <Section>
             <div className="flex flex-col items-center justify-center">
-                <Chip size="lg" variant="shadow" color="primary" className="mb-5">등급</Chip>
+                <Chip size="lg" variant="shadow" color="primary" className="mb-5">클럽 등급</Chip>
 
                 <p style={styles.grade}>{gradeDescriptions[clubDetail.grade]}</p>
                 <p className="text-small text-stone-400">
@@ -161,6 +161,11 @@ const ImageContainer = styled.div`
 
 
   @media (max-width: 320px) {
+    width: 70%;
+    transform: translate(25%, 35%);
+  }
+
+  @media (max-width: 360px) {
     width: 70%;
     transform: translate(25%, 35%);
   }

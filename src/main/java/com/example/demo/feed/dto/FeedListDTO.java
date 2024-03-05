@@ -5,8 +5,8 @@ import lombok.Builder;
 @Builder
 public record FeedListDTO (
 
-        FeedDTO feedDTO,
-        ClubDTO clubDTO
+        FeedDTO feed,
+        ClubDTO club
 
 )
 {}
