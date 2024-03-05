@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Layout from "../../common/Layout";
 import { Nav, TitleWapper } from "../../pages/user/MyPage";
 import { IoArrowBack } from "react-icons/io5";
@@ -41,7 +41,7 @@ const AddEvent = () => {
   const location = useLocation();
 
   const { clubDetail } = location?.state || {};
-
+  console.log("clubDetail 클럽디테일", clubDetail);
   const navi = useNavigate();
   const [eventData, setEventData] = useState({
     clubId: clubDetail.clubId,
@@ -145,7 +145,6 @@ const AddEvent = () => {
     try {
       const accessToken = cookie.get("accessToken");
       const fileName = preview ? eventData.code + ".jpg" : null;
-
       const response = await instance.post("/events/create", eventData, {
         headers: {
           "Content-Type": "application/json",
@@ -166,7 +165,7 @@ const AddEvent = () => {
       }
 
       alert("이벤트가 성공적으로 생성되었습니다.");
-      navi(`/club-details/${clubDetail.clubId}`); // 이벤트 상세 페이지로 리다이렉션
+      navi(`/club-details/${clubDetail.clubId}`); // 클럽 상세 페이지로 리다이렉션
     } catch (error) {
       console.error("이벤트 생성 실패:", error);
       alert("이벤트 생성에 실패했습니다.");

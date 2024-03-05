@@ -61,7 +61,6 @@ const ChatRoomList = () => {
         return dateB - dateA; // 내림차순 정렬
       });
       setChannels(sortedChannels);
-      console.log("channels : ", channels);
     } catch (error) {
       console.error("Error occurred: ", error);
     }
@@ -101,7 +100,7 @@ const ChatRoomList = () => {
       return null;
     }
   };
-
+  console.log("메세지 메세지 : ", messages);
   const tabs = [
     { id: "club", label: "클럽" },
     { id: "personal", label: "개인" },
