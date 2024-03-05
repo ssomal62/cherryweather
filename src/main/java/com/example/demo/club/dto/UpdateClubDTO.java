@@ -15,6 +15,7 @@ public record UpdateClubDTO(
         String code,
         String notice,
         String tag,
+        String lastChatTime,
         ClubCategory category,
         String subCategory,
         ClubStatus status,

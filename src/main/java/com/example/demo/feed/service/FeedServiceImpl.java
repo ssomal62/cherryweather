@@ -91,6 +91,7 @@ public class FeedServiceImpl implements FeedService {
                 .club(findClub)
                 .build()
         );
+        clubService.increaseFeedCount(requestDTO.clubId());
     }
 
     @Override

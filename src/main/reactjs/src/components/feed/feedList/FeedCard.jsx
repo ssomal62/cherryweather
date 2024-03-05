@@ -1,7 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {Avatar, Button, Card, CardBody, CardFooter, CardHeader, Divider, Image} from "@nextui-org/react";
 import {GoHeart, GoHeartFill} from "react-icons/go";
-import {WiCloud, WiDaySunny, WiDust, WiNightAltSnowWind, WiRain, WiSandstorm} from "react-icons/wi";
+import {
+    WiCloud,
+    WiCloudy,
+    WiDaySunny, WiDayWindy,
+    WiDust,
+    WiFog, WiLightning,
+    WiNightAltSnowWind, WiNightSnowThunderstorm,
+    WiRain,
+    WiSandstorm, WiShowers, WiSnow,
+    WiThunderstorm
+} from "react-icons/wi";
 import {GrFormNext} from "react-icons/gr";
 import {useLocation, useNavigate} from "react-router-dom";
 import LoginVerificationModal from "../../../utils/LoginVerificationModal";
@@ -66,18 +76,28 @@ const FeedCard = ({data, useParam}) => {
     const renderWeatherIcon = (feedWeather) => {
         switch (feedWeather) {
             case '흐림':
-                return <WiCloud/>;
-            case '비"':
-                return <WiRain/>;
-            case '안개"':
-                return <WiDust/>;
-            case '눈"':
-                return <WiNightAltSnowWind/>;
-            case '바람"':
+                return <WiCloudy style={styles.icon}/>;
+            case '비':
+                return <WiRain style={styles.icon}/>;
+            case '천둥':
+                return <WiThunderstorm style={styles.icon}/>;
+            case '안개':
+                return <WiFog style={styles.icon}/>;
+            case '선선':
+                return <WiDayWindy style={styles.icon}/>;
+            case '눈폭풍':
+                return  <WiNightSnowThunderstorm style={styles.icon}/>;
+            case '번개':
+                return <WiLightning style={styles.icon}/>;
+            case '소나기':
+                return <WiShowers style={styles.icon}/>;
+            case '눈':
+                return <WiSnow style={styles.icon}/>;
+            case '바람':
                 return <WiSandstorm/>;
             case '맑음':
             default:
-                <WiDaySunny/>;
+                return <WiDaySunny style={styles.icon}/>;
         }
     };
 
@@ -94,31 +114,36 @@ const FeedCard = ({data, useParam}) => {
                                 <div
                                     className="flex items-center justify-row text-small tracking-tight text-default-400">
                                     <TimeLabel createdAt={feed.createdAt}/>
-                                    {renderWeatherIcon(feed.weather)} /
-                                    {feed.weather}
                                 </div>
                             </div>
                         </div>
-                        <div className="justify-center items-center">
+                        <div className="flex flex-row justify-center items-center">
                             <Button
-                                //className={isLiked ? "bg-transparent text-foreground border-default-200" : ""}
+                                isIconOnly
+                                variant='light'
+                                color='primary'
+                                startContent={renderWeatherIcon(feed.weather)}
+                            />
+
+                            <Button
+                                className={isLiked ? "bg-transparent text-foreground border-default-200" : ""}
                                 isIconOnly
                                 variant="light"
-                                color="primary"
-                               // onPress={handleLikeClick}
-                               //  startContent={
-                               //      isLiked ?
-                               //          <GoHeartFill style={{width: '20px', height: '20px'}}/>
-                               //          :
-                               //          <GoHeart style={{width: '20px', height: '20px'}}/>
-                               //
-                               //  }
+                                color="danger"
+                               onPress={handleLikeClick}
+                                startContent={
+                                    isLiked ?
+                                        <GoHeartFill style={{width: '20px', height: '20px'}}/>
+                                        :
+                                        <GoHeart style={{width: '20px', height: '20px'}}/>
+
+                                }
                             />
                             {useParam &&
                                 <Button
                                     isIconOnly
                                     variant='light'
-                                    color="primary"
+                                    color="danger"
                                     endContent={<CgMoreVertical
                                         style={{width: '20px', height: '20px', color: 'gray'}}/>}/>
                             }
@@ -133,8 +158,8 @@ const FeedCard = ({data, useParam}) => {
                             <Image alt="" src={fileUrl('feed', feed.feedCode)}/>
                         }
                         <div className="flex gap-1">
-                            <p className="font-semibold text-default-400 text-small">{countLike}</p>
-                            <p className=" text-default-400 text-small">좋아요</p>
+                            {/*<p className="font-semibold text-default-400 text-small">{countLike}</p>*/}
+                            {/*<p className=" text-default-400 text-small">좋아요</p>*/}
                         </div>
                     </CardBody>
                     {!useParam ? (
@@ -180,3 +205,9 @@ const FeedCard = ({data, useParam}) => {
 export default FeedCard;
 
 
+const styles = {
+    icon: {
+        width : 30,
+        height: 30,
+    }
+}

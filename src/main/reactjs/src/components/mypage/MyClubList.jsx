@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Container, IconWapper, Nav,} from "../../pages/user/MyPage";
 import {IoArrowBack} from "react-icons/io5";
 import {HiOutlineHome} from "react-icons/hi2";
@@ -10,10 +10,12 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {GrFormNext} from "react-icons/gr";
 import {LuAlertCircle} from "react-icons/lu";
 import categoryDescriptions from "../club/clubDetail/category.json";
+import {useFetchUserInfo, userInfoState} from "../../recoil/hooks/UseFetchUserInfo";
 
 const MyClubList = () => {
 
     const {loading: loadingMyClubList} = useClubData({state: myClubListState, dynamicPath: "/myClub"});
+
     const myClubs = useRecoilValue(myClubListState);
     const navigate = useNavigate();
     const location = useLocation();
@@ -58,7 +60,7 @@ const MyClubList = () => {
             </Nav>
             <Divider style={{maxWidth: '600px', margin: 'auto'}}/>
 
-            {myClubs.length === 0 ?
+            {myClubs.length !== 0 ?
                 (<Container style={{marginTop: 20, padding: 20}}>
 
                     <Listbox
@@ -71,7 +73,7 @@ const MyClubList = () => {
                              }}
                     >
                         {
-                            myClubs.map((club, index) => (
+                            myClubs?.map((club, index) => (
                                     <ListboxItem
                                         showDivider={(myClubs.length - 1) === index ? false : true}
                                         key={index}
