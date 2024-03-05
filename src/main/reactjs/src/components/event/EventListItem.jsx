@@ -34,7 +34,6 @@ const EventListItem = ({ event }) => {
             <Image
               alt="Album cover"
               maxHeight="200px"
-              shadow="md"
               src={`https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/event-profile/${eventDetail.code}.jpg?type=f&w=600&h=600&ttype=jpg`}
             />
           </div>
