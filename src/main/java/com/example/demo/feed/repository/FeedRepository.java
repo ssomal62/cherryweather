@@ -14,5 +14,6 @@ public interface FeedRepository extends JpaRepository <Feed, Long> {
     @Query("SELECT f FROM Feed f WHERE f.club.clubId = :clubId ORDER BY f.createdAt desc ")
     List<Feed> findByClubId(@Param("clubId") Long clubId);
 
+    @Query("SELECT f FROM Feed f ORDER BY f.createdAt DESC")
     List<Feed> findAllByOrderByCreatedAtDesc();
 }
