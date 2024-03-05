@@ -212,6 +212,7 @@ const GPTChatRoom = () => {
                                     setUserInput={setUserInput}
                                     handleSendMessage={handleSendMessage}
                                     isStarted={isStarted}
+                                    isLoading={isLoading}
                                 />
                             </div>
                             <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
