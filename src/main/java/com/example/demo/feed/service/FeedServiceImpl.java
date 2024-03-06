@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,12 +45,12 @@ public class FeedServiceImpl implements FeedService {
     public ResponseEntity<Map<String, Object>> findAll() {
         List<Feed> feeds = feedRepository.findAllByOrderByCreatedAtDesc();
 
-        List<FeedListDTO> feedListDTOs = feeds.stream()
+        List<FeedListDTO> feedListDTO = feeds.stream()
                 .map(this::feedToFeedListDTO)
                 .toList();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("list", feedListDTOs);
+        response.put("list", feedListDTO);
         return ResponseEntity.ok(response);
     }
 
@@ -91,6 +92,7 @@ public class FeedServiceImpl implements FeedService {
                 .club(findClub)
                 .build()
         );
+        clubService.increaseFeedCount(requestDTO.clubId());
     }
 
     @Override
@@ -209,6 +211,7 @@ public class FeedServiceImpl implements FeedService {
      * 엔티티를  FeedListDTO로 변환
      */
     private FeedListDTO feedToFeedListDTO(Feed feed) {
+
         ClubDTO clubDTO = ClubDTO.builder()
                 .clubId(feed.getClub().getClubId())
                 .name(feed.getClub().getName())

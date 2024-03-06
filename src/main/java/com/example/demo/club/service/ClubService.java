@@ -42,7 +42,7 @@ public class ClubService {
     private final LikeService likeService;
     private final AccountRepository accountRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final AlarmServiceImpl alarmService;
+//    private final AlarmServiceImpl alarmService;
 
     // ======================= CRUD OPERATIONS ======================= //
     // Club 관련 CRUD 작업 처리 메서드
@@ -86,6 +86,13 @@ public class ClubService {
         }).toList();
     }
 
+    @Transactional(readOnly = true)
+    public ClubListDTO findAllByMyId() {
+        Optional<AccountDetails> accountDetailsOptional = getCurrentAccountDetails();
+        List<Club> clubs = clubRepository.findByRepresentativeUserIdOrderByCreatedAtDesc(accountDetailsOptional.get().getAccount().getAccountId());
+        return fromClubs(clubs, accountDetailsOptional);
+    }
+
     @Transactional
     public Club saveClub(CreateClubDTO requestDTO, AccountDetails accountDetails) {
         Club saveClub = clubRepository.save(
@@ -102,15 +109,6 @@ public class ClubService {
                 );
 
         eventPublisher.publishEvent(event);
-
-        alarmService.createAlarm(
-                AlarmDto.builder()
-                        .targetId(accountDetails.getAccount().getAccountId())
-                        .description("내 클럽이 생성되었습니다.")
-                        .build(),
-                accountDetails
-        );
-
         return saveClub;
     }
 
@@ -166,6 +164,7 @@ public class ClubService {
         } else {
             clubRepository.increaseCurrentGrowthMeter(clubId, score);
         }
+
         clubRepository.save(club);
     }
 
@@ -245,6 +244,7 @@ public class ClubService {
                 .tag(requestDTO.tag())
                 .category(requestDTO.category())
                 .subCategory(requestDTO.subCategory())
+                .lastChatTime("-")
                 .feedCount(0)
                 .joinApprovalStatus(requestDTO.joinApprovalStatus().toUpperCase())
                 .status(requestDTO.status())
@@ -271,6 +271,7 @@ public class ClubService {
                 .activitiesArea(club.getActivitiesArea())
                 .joinApprovalStatus(club.getJoinApprovalStatus())
                 .currentMembers(club.getCurrentMembers())
+                .lastChatTime(club.getLastChatTime())
                 .maxMembers(club.getMaxMembers())
                 .status(club.getStatus())
                 .tag(club.getTag())
@@ -298,6 +299,7 @@ public class ClubService {
                 .joinApprovalStatus(summary.joinApprovalStatus())
                 .currentMembers(summary.currentMembers())
                 .maxMembers(summary.maxMembers())
+                .lastChatTime(summary.lastChatTime())
                 .status(summary.status())
                 .tag(summary.tag())
                 .category(summary.category())
@@ -323,5 +325,6 @@ public class ClubService {
         }
         return club;
     }
+
 
 }

@@ -75,19 +75,19 @@ public class MembershipService {
         );
 
         /////////////알람 서비스///////////////
-        Club findClub = clubService.findClubById(requestDTO.clubId());
-        eventPublisher.publishEvent(event);
-        String nickName = accountDetails.getAccount().getProfileName();
-        String message = findClub.getJoinApprovalStatus().equals("JOIN")
-                ? nickName + "님이 클럽에 가입했습니다."
-                : nickName + "님이 클럽 가입 요청을 했습니다.";
-        alarmService.createAlarm(
-                AlarmDto.builder()
-                        .targetId(findClub.getRepresentativeUserId())
-                        .description(message)
-                        .build(),
-                accountDetails
-        );
+//        Club findClub = clubService.findClubById(requestDTO.clubId());
+//        eventPublisher.publishEvent(event);
+//        String nickName = accountDetails.getAccount().getProfileName();
+//        String message = findClub.getJoinApprovalStatus().equals("JOIN")
+//                ? nickName + "님이 클럽에 가입했습니다."
+//                : nickName + "님이 클럽 가입 요청을 했습니다.";
+//        alarmService.createAlarm(
+//                AlarmDto.builder()
+//                        .targetId(findClub.getRepresentativeUserId())
+//                        .description(message)
+//                        .build(),
+//                accountDetails
+//        );
         ///////////////알람 서비스///////////
     }
 
@@ -96,16 +96,6 @@ public class MembershipService {
         Membership existingMembership = findMembership(requestDTO.membershipId());
         existingMembership.updateMembership(requestDTO);
         membershipRepository.save(existingMembership);
-
-        alarmService.createAlarm(
-                AlarmDto.builder()
-                        .targetId(existingMembership.getAccount().getAccountId())
-                        .targetTypeId(existingMembership.getClub().getClubId())
-                        .type("CLUB")
-                        .description("클럽가입이 승인되었습니다.")
-                        .build(),
-                accountDetails
-        );
     }
 
     @Transactional

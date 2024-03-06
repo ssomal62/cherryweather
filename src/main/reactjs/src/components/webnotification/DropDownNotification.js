@@ -6,6 +6,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  Chip,
 } from "@nextui-org/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -17,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { alramListState, useAlarmData } from "../../recoil/hooks/UseAlramApi";
 import { instance } from "../../recoil/module/instance";
 import Cookies from "universal-cookie";
+import clubDetails from "../../pages/club/ClubDetails";
 
 const DropDownNotification = () => {
   const userInfo = useRecoilValue(userInfoState);
@@ -61,7 +63,6 @@ const DropDownNotification = () => {
     (alram) => new Date(alram.createdAt) <= sixHourAgo
   );
 
-
   // 알림 삭제 및 상세 페이지로 이동 함수(클럽 만들 떄)
   const deleteAlarmAndNavigate = async (alarmId, targetId) => {
     try {
@@ -90,7 +91,7 @@ const DropDownNotification = () => {
         },
       });
       // 상태 업데이트로 알림 목록에서 해당 알림 제거
-      setAlarmList(alarmList.filter(alarm => alarm.alarmId !== item.alarmId));
+      setAlarmList(alarmList.filter((alarm) => alarm.alarmId !== item.alarmId));
     } catch (error) {
       console.error("알림 삭제 실패:", error);
     }
@@ -106,7 +107,7 @@ const DropDownNotification = () => {
       case "CLUBJOIN":
       case "CLUBWAIT":
         // 클럽 가입 승인 요청 및 대기 알림일 경우 클럽 상세 페이지로 이동
-        navigate(`/club-details/${item.targetId}`);
+        navigate(`/club-members/${item.targetId}`);
         break;
       case "LIKE":
         // 좋아요 알림일 경우 클럽 상세 페이지로 이동
@@ -119,37 +120,43 @@ const DropDownNotification = () => {
   };
 
   // 클럽 가입 승인을 요청할 때 알림을 삭제하고 상세 페이지로 이동하는 함수
-  const deleteAlarmAndNavigateForJoinRequest = async (alarmId, targetId) => {
+  const deleteAlarmAndNavigateForJoinRequest = async (alarmId, typeId) => {
     try {
       await instance.delete(`/alarm/${alarmId}`);
-      const updatedAlarms = alarmList.filter((alarm) => alarm.alarmId !== alarmId);
+      const updatedAlarms = alarmList.filter(
+        (alarm) => alarm.alarmId !== alarmId
+      );
       setAlarmList(updatedAlarms);
 
       // 클럽 가입 요청에 대한 처리 후 적절한 페이지로 이동
-      navigate("/club-join"); // 예시 경로입니다. 실제 경로로 변경하세요.
+      navigate(`/club-members/${typeId}`); // 예시 경로입니다. 실제 경로로 변경하세요.
     } catch (error) {
       console.error("알림 삭제 실패:", error);
     }
   };
 
   // 클럽 가입 승인 대기 시 알림을 삭제하고 상세 페이지로 이동하는 함수
-  const deleteAlarmAndNavigateForApprovalWaiting = async (alarmId, targetId) => {
-    try {
-      await instance.delete(`/alarm/${alarmId}`);
-      const updatedAlarms = alarmList.filter((alarm) => alarm.alarmId !== alarmId);
-      setAlarmList(updatedAlarms);
+  const deleteAlarmAndNavigateForApprovalWaiting
+    = async (alarmId, typeId) => {
+      try {
+        await instance.delete(`/alarm/${alarmId}`);
+        const updatedAlarms = alarmList.filter(
+          (alarm) => alarm.alarmId !== alarmId
+        );
+        setAlarmList(updatedAlarms);
 
-      // 클럽 가입 승인 대기에 대한 처리 후 적절한 페이지로 이동
-      navigate("/club-wait"); // 예시 경로입니다. 실제 경로로 변경하세요.
-    } catch (error) {
-      console.error("알림 삭제 실패:", error);
-    }
-  };
-
-
+        // 클럽 가입 승인 대기에 대한 처리 후 적절한 페이지로 이동
+        navigate(`/club-members/${typeId}`); // 예시 경로입니다. 실제 경로로 변경하세요.
+      } catch (error) {
+        console.error("알림 삭제 실패:", error);
+      }
+    };
 
   // 알림 삭제 및 1대1 채팅방으로 이동 함수
-  const deleteAlarmAndNavigateToPersonalChatRoom = async (alarmId, targetId) => {
+  const deleteAlarmAndNavigateToPersonalChatRoom = async (
+    alarmId,
+    targetId
+  ) => {
     try {
       await instance.delete(`/alarm/${alarmId}`);
       // 삭제 후 알림 목록에서 해당 알림을 제거하고 상태를 업데이트
@@ -166,7 +173,7 @@ const DropDownNotification = () => {
   };
 
   // 알림 삭제 및 좋아요 상세 페이지로 이동 함수
-  const deleteAlarmAndNavigateToLikesPage = async (alarmId, targetId) => {
+  const deleteAlarmAndNavigateToLikesPage = async (alarmId, typeId) => {
     try {
       await instance.delete(`/alarm/${alarmId}`);
       // 삭제 후 알림 목록에서 해당 알림을 제거하고 상태를 업데이트
@@ -176,7 +183,7 @@ const DropDownNotification = () => {
       setAlarmList(updatedAlarms);
 
       // 좋아요 상세 페이지로 이동
-      navigate(`/likes/${targetId}`);
+      navigate(`/likes/${typeId}`);
     } catch (error) {
       console.error("알림 삭제 실패:", error);
     }
@@ -202,26 +209,42 @@ const DropDownNotification = () => {
         <span></span>
       </DropdownTrigger>
       <DropdownMenu aria-label="Notifications" color="danger">
-        <DropdownItem>현재 알림</DropdownItem>
+        <DropdownItem>
+          <Chip size="sm" color="primary" variant="flat">
+            현재 알림
+          </Chip>
+        </DropdownItem>{" "}
         {currentAlarms.map((item, index) => (
           <DropdownItem
             key={index}
             onClick={() => {
               switch (item.type) {
                 case "CLUBJOIN":
-                  deleteAlarmAndNavigateForJoinRequest(item.alarmId, item.targetId); // 클럽 가입 승인 요청 알림일 경우
+                  deleteAlarmAndNavigateForJoinRequest(
+                    item.alarmId,
+                    item.typeId
+                  ); // 클럽 가입 승인 요청 알림일 경우
                   break;
                 case "CLUBWAIT":
-                  deleteAlarmAndNavigateForApprovalWaiting(item.alarmId, item.targetId); // 클럽 가입 승인 대기 알림일 경우
+                  deleteAlarmAndNavigateForApprovalWaiting(
+                    item.alarmId,
+                    item.typeId
+                  ); // 클럽 가입 승인 대기 알림일 경우
                   break;
                 case "CLUB":
                   deleteAlarmAndNavigate(item.alarmId, item.targetId); // 클럽 알림일 경우
                   break;
                 case "PERSONALCHAT":
-                  deleteAlarmAndNavigateToPersonalChatRoom(item.alarmId, item.targetId); // 1대1 채팅방 알림일 경우
+                  deleteAlarmAndNavigateToPersonalChatRoom(
+                    item.alarmId,
+                    item.targetId
+                  ); // 1대1 채팅방 알림일 경우
                   break;
-                case "LIKES":
-                  deleteAlarmAndNavigateToLikesPage(item.alarmId, item.targetId); // 좋아요 알림일 경우
+                case "LIKE":
+                  deleteAlarmAndNavigateToLikesPage(
+                    item.alarmId,
+                    item.typeId
+                  ); // 좋아요 알림일 경우
                   break;
                 default:
                   // 기타 알림 유형에 대한 추가적인 처리가 필요한 경우 여기에 코드를 추가합니다.
@@ -232,26 +255,43 @@ const DropDownNotification = () => {
             {item.description}
           </DropdownItem>
         ))}
-        <DropdownItem>지난 알림</DropdownItem>
+        <DropdownItem>
+          <Chip size="sm" color="default" variant="flat">
+            지난 알림
+          </Chip>
+        </DropdownItem>
         {pastAlarms.map((item, index) => (
           <DropdownItem
             key={index}
             onClick={() => {
+              console.log("아이템 확인", item);
               switch (item.type) {
                 case "CLUBJOIN":
-                  deleteAlarmAndNavigateForJoinRequest(item.alarmId, item.targetId); // 클럽 가입 승인 요청 알림일 경우
+                  deleteAlarmAndNavigateForJoinRequest(
+                    item.alarmId,
+                    item.typeId
+                  ); // 클럽 가입 승인 요청 알림일 경우
                   break;
                 case "CLUBWAIT":
-                  deleteAlarmAndNavigateForApprovalWaiting(item.alarmId, item.targetId); // 클럽 가입 승인 대기 알림일 경우
+                  deleteAlarmAndNavigateForApprovalWaiting(
+                    item.alarmId,
+                    item.typeId
+                  ); // 클럽 가입 승인 대기 알림일 경우
                   break;
                 case "CLUB":
                   deleteAlarmAndNavigate(item.alarmId, item.targetId); // 클럽 알림일 경우
                   break;
                 case "PERSONALCHAT":
-                  deleteAlarmAndNavigateToPersonalChatRoom(item.alarmId, item.targetId); // 1대1 채팅방 알림일 경우
+                  deleteAlarmAndNavigateToPersonalChatRoom(
+                    item.alarmId,
+                    item.targetId
+                  ); // 1대1 채팅방 알림일 경우
                   break;
-                case "LIKES":
-                  deleteAlarmAndNavigateToLikesPage(item.alarmId, item.targetId); // 좋아요 알림일 경우
+                case "LIKE":
+                  deleteAlarmAndNavigateToLikesPage(
+                    item.alarmId,
+                    item.typeId
+                  ); // 좋아요 알림일 경우
                   break;
                 default:
                   // 기타 알림 유형에 대한 추가적인 처리가 필요한 경우 여기에 코드를 추가합니다.

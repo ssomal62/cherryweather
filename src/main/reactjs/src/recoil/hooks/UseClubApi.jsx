@@ -16,6 +16,11 @@ export const clubListState = atom({
     default: [],
 });
 
+export const myClubListState = atom({
+    key    : 'myClubListState',
+    default: [],
+});
+
 export const searchClubListState = atom({
     key    : 'searchClubListState',
     default: [],

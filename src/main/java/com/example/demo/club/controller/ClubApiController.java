@@ -38,6 +38,15 @@ public class ClubApiController {
                 .body(clubService.findAll());
     }
 
+    @GetMapping("/myClub")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated() or isAnonymous()")
+    //@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_SELLER') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ClubListDTO> findAllByMyId() {
+        return ResponseEntity.ok()
+                .body(clubService.findAllByMyId());
+    }
+
     /**
      * 사용자의 좋아요 한 클럽 목록
      */

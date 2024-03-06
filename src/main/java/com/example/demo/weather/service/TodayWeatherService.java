@@ -374,7 +374,7 @@ public class TodayWeatherService {
         String regionName = getSimpleRegionName(r1, r2);
         String regionCode = getRegionCode(regionName);
 
-        System.out.println("r1 : " + r1 + " / r2 : " + r2 + " / regionName : " + regionName + " / regionCode : " + regionCode);
+        // System.out.println("r1 : " + r1 + " / r2 : " + r2 + " / regionName : " + regionName + " / regionCode : " + regionCode);
 
         LocalDateTime now = LocalDateTime.now(korTimeZone);
         LocalDate today = LocalDate.now(korTimeZone);
@@ -448,8 +448,8 @@ public class TodayWeatherService {
     }
 
     public List<WeeklyWeatherDto> formatedSecondHalfWeeklyWeather(String response_1, String response_2) {
-        System.out.println("WeeklyWeatherDto - response1 : " + response_1);
-        System.out.println("WeeklyWeatherDto - response2 : " + response_2);
+        // System.out.println("WeeklyWeatherDto - response1 : " + response_1);
+        // System.out.println("WeeklyWeatherDto - response2 : " + response_2);
         ObjectMapper mapper = new ObjectMapper();
         List<WeeklyWeatherDto> weatherDtoList = new ArrayList<>();
 

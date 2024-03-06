@@ -93,7 +93,7 @@ export default LoadingCard;
 
 const styles = {
     font  : {
-        color     : '#8A99B5',
+        color     : '#61729E',
         fontFamily: 'Dongle',
         fontSize  : '1.8em',
     },

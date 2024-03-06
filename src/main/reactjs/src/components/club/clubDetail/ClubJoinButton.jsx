@@ -52,12 +52,18 @@ const ClubJoinButton = () => {
     const likeAlarmData = {
       targetId: clubDetail?.representativeUserId,
       type: "LIKE",
+      typeId: clubDetail?.representativeUserId,
       importance: 1,
       description: `${userInfo.name}님이 좋아요를 눌렀습니다.`
     };
 
     // 알림 데이터를 서버로 전송
     sendLikeAlarmData(likeAlarmData);
+    console.log(clubDetail.clubId);
+    console.log(clubDetail.representativeUserId);
+    console.log(likeAlarmData);
+    console.log(sendLikeAlarmData);
+
   };
 
   const sendLikeAlarmData = async (data) => {
@@ -73,16 +79,18 @@ const ClubJoinButton = () => {
     }
   };
 
+  console.log(sendLikeAlarmData);
+
   const handleJoinClick = () => {
     if (!isLogin) {
       setIsModalOpen(true);
       return;
     }
-      console.log("값확인" + clubDetail?.currentMembers )
-  if(isLogin && (clubDetail?.currentMembers === clubDetail?.maxMembers)) {
+    console.log("값확인" + clubDetail?.currentMembers)
+    if (isLogin && (clubDetail?.currentMembers === clubDetail?.maxMembers)) {
       setIsUnableJoinModalOpen(true);
       return;
-  }
+    }
     onSave();
   };
 
@@ -104,10 +112,11 @@ const ClubJoinButton = () => {
       const joinRequestAlarmData = {
         targetId: clubDetail?.representativeUserId, // 클럽의 호스트 ID
         type: clubDetail?.joinApprovalStatus === "JOIN" ? "CLUBJOIN" : "CLUBWAIT",
+        typeId: clubDetail.clubId,
         importance: 2,
         description: clubDetail?.joinApprovalStatus === "JOIN" ?
-          `${userInfo.name}님이 클럽 가입 승인을 요청하였습니다.` :
-          `${userInfo.name}님이 클럽 가입 승인 대기입니다.`
+          `${userInfo.name}님이 내 클럽에 가입했습니다.` :
+          `${userInfo.name}님이 가입을 요청합니다.`
       };
 
       // 클럽 가입 요청 알림을 보냅니다.
@@ -212,15 +221,15 @@ const ClubJoinButton = () => {
           </Button>
         </ButtonContainer>
 
-                {joinButtonRender()}
-            </Footer>
-            <LoginVerificationModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-            />
-           <UnableToJoinModal isOpen={isUnableJoinModalOpen} onClose={() => setIsUnableJoinModalOpen(false)}/>
-        </>
-    );
+        {joinButtonRender()}
+      </Footer>
+      <LoginVerificationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+      <UnableToJoinModal isOpen={isUnableJoinModalOpen} onClose={() => setIsUnableJoinModalOpen(false)} />
+    </>
+  );
 };
 
 export default ClubJoinButton;

@@ -34,7 +34,7 @@ export default function SearchHeader({ handleSearch, setInputValue, inputValue, 
         setSearchTriggered(false);
     };
 
-    const todayWeather = dailyWeather?.weather;
+    const todayWeather = dailyWeather ? dailyWeather.weather : '맑음';
 
     const todayWeatherActivities = weatherPhrases[todayWeather]?.activities;
     const todayWeatherIcon = weatherPhrases[todayWeather]?.icon;
@@ -71,6 +71,7 @@ const styles = {
         width     : 24,
         height    : 24,
         color     : 'black',
+        cursor:'pointer'
     },
     endIcon   : {
         width     : '20px',
