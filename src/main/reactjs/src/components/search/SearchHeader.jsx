@@ -71,6 +71,7 @@ const styles = {
         width     : 24,
         height    : 24,
         color     : 'black',
+        cursor:'pointer'
     },
     endIcon   : {
         width     : '20px',
