@@ -21,7 +21,8 @@ const AddClubInputActivitiesArea = ({onNext, activitiesArea, setActivitiesArea})
     }, [activitiesArea]);
 
     const complete = (data) => {
-        setActivitiesArea(data.sido + " " + data.sigungu);
+        // console.log("지역데이터 확인", data)
+        setActivitiesArea(data.query + " " + data.sigungu);
         onOpenChange();
         setIsNextDisabled(false);
     }

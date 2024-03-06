@@ -15,7 +15,7 @@ const ClubDetailsSummary = ({clubDetail}) => {
             <BsFillPeopleFill/>
             <span>{clubDetail.currentMembers} / {clubDetail.maxMembers}</span>
             <IoChatbubbleEllipses/>
-            <span>30분 전</span>
+            <span>{clubDetail.lastChatTime} </span>
         </Section>
     );
 };
