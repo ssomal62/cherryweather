@@ -40,10 +40,10 @@ public class Alarm {
     private  Long targetId;
 
     @Column
-    private Long targetTypeId;
+    private String type;
 
     @Column
-    private String type;
+    private Long typeId;
 
     @Column
     private String description;

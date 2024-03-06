@@ -42,7 +42,7 @@ public class ClubService {
     private final LikeService likeService;
     private final AccountRepository accountRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final AlarmServiceImpl alarmService;
+//    private final AlarmServiceImpl alarmService;
 
     // ======================= CRUD OPERATIONS ======================= //
     // Club 관련 CRUD 작업 처리 메서드
@@ -102,15 +102,6 @@ public class ClubService {
                 );
 
         eventPublisher.publishEvent(event);
-
-        alarmService.createAlarm(
-                AlarmDto.builder()
-                        .targetId(accountDetails.getAccount().getAccountId())
-                        .description("내 클럽이 생성되었습니다.")
-                        .build(),
-                accountDetails
-        );
-
         return saveClub;
     }
 
@@ -166,6 +157,7 @@ public class ClubService {
         } else {
             clubRepository.increaseCurrentGrowthMeter(clubId, score);
         }
+
         clubRepository.save(club);
     }
 

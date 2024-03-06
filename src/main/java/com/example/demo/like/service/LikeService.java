@@ -2,6 +2,9 @@ package com.example.demo.like.service;
 
 import com.example.demo.account.dto.AccountDetails;
 import com.example.demo.account.entity.Account;
+import com.example.demo.alarm.dto.AlarmDto;
+import com.example.demo.alarm.service.AlarmServiceImpl;
+import com.example.demo.club.entity.Club;
 import com.example.demo.club.event.ClubGrowthEvent;
 import com.example.demo.club.repository.ClubRepository;
 import com.example.demo.club.service.ClubService;
@@ -27,6 +30,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
 
     private final ApplicationEventPublisher eventPublisher;
+
 
     // ======================= CORE FUNCTIONALITIES ======================= //
 
@@ -57,7 +61,6 @@ public class LikeService {
                         300);
                 eventPublisher.publishEvent(event);
             }
-            //알람 들어 갈 자리
         }
     }
 

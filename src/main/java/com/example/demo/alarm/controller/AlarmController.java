@@ -29,7 +29,7 @@ public class AlarmController {
 
     @GetMapping
     public List<AlarmDto> findAlarmDtoList(@AuthenticationPrincipal AccountDetails accountDetails) {
-        return alarmService.findAlarmListByAccountId(accountDetails);
+        return alarmService.findByTargetIdOrderByCreatedAtDesc(accountDetails);
     }
 
     // 사용자 알림 수신 동의 업데이트 하는 부분
