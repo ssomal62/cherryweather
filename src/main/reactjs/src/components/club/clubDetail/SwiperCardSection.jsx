@@ -75,13 +75,28 @@ const SwiperCardSection = ({ clubDetail }) => {
 
   const formatTime = (dateTime) => {
     const date = new Date(dateTime);
-    return date.toLocaleTimeString("ko-KR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
+    // 기본 형식 설정
+    let options = {
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
 
+    const formattedDate = date.toLocaleString("ko-KR", options);
+
+    // "월"과 "일" 사이, "일"과 "시간" 사이의 공백 정리
+    let result = formattedDate.replace("월 ", "월 ").replace("일 ", "일 ");
+
+    // "시"와 "분" 사이에 warning콜론(:)을 기준으로 분리하고, 필요한 조건에 따라 포맷 조정
+    result = result.replace(/(\d+):(\d+)/, (match, p1, p2) => {
+      // "분"이 "00"일 경우 "시"만 표시하고, 그 외에는 "시 분" 형태로 표시
+      return p2 === "00" ? `${p1}시` : `${p1}시 ${p2}분`;
+    });
+
+    return result;
+  };
   if (loading) {
     return (
       <div
@@ -93,6 +108,21 @@ const SwiperCardSection = ({ clubDetail }) => {
         }}
       >
         <Spinner size="lg" color="danger" />
+      </div>
+    );
+  }
+  if (eventList.length === 0) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "gray",
+        }}
+        className="mt-10"
+      >
+        <p>우리 클럽의 모임이 없어요!!</p>
       </div>
     );
   }
@@ -121,8 +151,7 @@ const SwiperCardSection = ({ clubDetail }) => {
             </div>
             <div className="absolute z-10 item-desc" style={styles.content}>
               <div className="flex items-center gap-2">
-                <LuCalendarCheck /> {item.eventEndDate} :{" "}
-                {formatTime(item.eventTimeStart)}{" "}
+                {formatTime(item.eventTimeStart)}
               </div>
               <div className="flex items-center gap-2">
                 <GoPeople /> {item.eventCountCurrent}/{item.eventCapacity}

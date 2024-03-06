@@ -68,15 +68,15 @@ const BrandMenu = () => {
                 alt="김주영"
                 className="flex-shrink-0"
                 size="md"
-                src={"user.avatar"}
+                src="https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user/%EC%A3%BC%EC%98%81%EC%9D%B4(%EC%9E%A0%EB%A7%8C%EB%B3%B4).jpg?type=f&w=600&h=600&ttype=jpg"
               />
               <div className="flex flex-col">
                 <span className="text-small">김주영</span>
                 <span className="text-tiny text-default-400">
-                  wxy890@gmail.com
+                  zkfltm7777@gmail.com
                 </span>
                 <span className="text-tiny text-default-400">
-                  수고하셨습니다.
+                  여러분들과 함께한 시간 너무 즐거웠어요!
                 </span>
               </div>
             </div>
@@ -91,15 +91,15 @@ const BrandMenu = () => {
                 alt="김요한"
                 className="flex-shrink-0"
                 size="md"
-                src={"user.avatar"}
+                src="https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user/1000000343.jpg?type=f&w=600&h=600&ttype=jpg"
               />
               <div className="flex flex-col">
                 <span className="text-small">김요한</span>
                 <span className="text-tiny text-default-400">
-                  wxy890@gmail.com
+                  rladygks1210@naver.com
                 </span>
                 <span className="text-tiny text-default-400">
-                  수고하셨습니다.
+                  안녕! 그리고 수고했어 모두들!
                 </span>
               </div>
             </div>
@@ -114,15 +114,15 @@ const BrandMenu = () => {
                 alt="박병철"
                 className="flex-shrink-0"
                 size="md"
-                src={"user.avatar"}
+                src="https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user/IMG_7104.jpg?type=f&w=600&h=600&ttype=jpg"
               />
               <div className="flex flex-col">
                 <span className="text-small">박병철</span>
                 <span className="text-tiny text-default-400">
-                  wxy890@gmail.com
+                  bbqcb@naver.com
                 </span>
                 <span className="text-tiny text-default-400">
-                  수고하셨습니다.
+                  수고하셨습니다 즐거웠어요
                 </span>
               </div>
             </div>
@@ -137,15 +137,15 @@ const BrandMenu = () => {
                 alt="신영훈"
                 className="flex-shrink-0"
                 size="md"
-                src={"user.avatar"}
+                src="https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user/image%20(1).png?type=f&w=600&h=600&ttype=jpg"
               />
               <div className="flex flex-col">
                 <span className="text-small">신영훈</span>
                 <span className="text-tiny text-default-400">
-                  wxy890@gmail.com
+                  youngsh92@gmail.com
                 </span>
                 <span className="text-tiny text-default-400">
-                  수고하셨습니다.
+                  체리야 즐거웠어 !
                 </span>
               </div>
             </div>
@@ -160,7 +160,7 @@ const BrandMenu = () => {
                 alt="윤현호"
                 className="flex-shrink-0"
                 size="md"
-                src={"user.avatar"}
+                src="https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user/%EC%9D%B4%EB%A0%A5%EC%84%9C%20%EC%82%AC%EC%A7%84.jpg?type=f&w=600&h=600&ttype=jpg"
               />
               <div className="flex flex-col">
                 <span className="text-small">윤현호</span>
@@ -168,7 +168,7 @@ const BrandMenu = () => {
                   dbsgusgh2004@naver.com
                 </span>
                 <span className="text-tiny text-default-400">
-                  수고하셨습니다.
+                  여러분 수료 축하드립니다. 모두 취뽀 !!
                 </span>
               </div>
             </div>
@@ -184,7 +184,7 @@ const BrandMenu = () => {
                   alt={"이소연"}
                   className="flex-shrink-0"
                   size="md"
-                  src={"user.avatar"}
+                  src="https://ffkv1pqc2354.edge.naverncp.com/p5Rq2SwoqV/user/Screenshot_20230828_134221_Gallery.jpg?type=f&w=600&h=600&ttype=jpg"
                 />
               </Badge>
               <div className="flex flex-col">
@@ -193,7 +193,7 @@ const BrandMenu = () => {
                   wxy890@gmail.com
                 </span>
                 <span className="text-tiny text-default-400">
-                  수고하셨습니다.
+                  OverPowerwhelming
                 </span>
               </div>
             </div>
