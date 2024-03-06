@@ -85,7 +85,7 @@ const TodayWeather = () => {
                             </WeatherData>
                             <WeatherIcon>
                                 <IconDiv>
-                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/${getWeatherIconName(dailyData.weather)}2.png"
+                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/weather.png"
                                          alt = "weather"
                                          style = {{width: '70%'}}/>
                                 </IconDiv>
@@ -102,7 +102,7 @@ const TodayWeather = () => {
                             </WeatherData>
                             <WeatherIcon>
                                 <IconDiv>
-                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/temp2.png" alt = "temp"
+                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/temp.png" alt = "temp"
                                          style = {{width: '70%'}}/>
                                 </IconDiv>
                             </WeatherIcon>
@@ -120,7 +120,7 @@ const TodayWeather = () => {
                             </WeatherData>
                             <WeatherIcon>
                                 <IconDiv>
-                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/maxmin2.png" alt = "maxmin"
+                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/maxmin.png" alt = "maxmin"
                                          style = {{width: '70%'}}/>
                                 </IconDiv>
                             </WeatherIcon>
@@ -139,7 +139,7 @@ const TodayWeather = () => {
                             </WeatherData>
                             <WeatherIcon>
                                 <IconDiv>
-                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/mask2.png" alt = "mask"
+                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/mask.png" alt = "mask"
                                          style = {{width: '70%'}}/>
                                 </IconDiv>
                             </WeatherIcon>
@@ -158,7 +158,7 @@ const TodayWeather = () => {
                             </WeatherData>
                             <WeatherIcon>
                                 <IconDiv>
-                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/rain2.png" alt = "rain"
+                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/rain.png" alt = "rain"
                                          style = {{width: '70%'}}/>
                                 </IconDiv>
                             </WeatherIcon>
@@ -176,7 +176,7 @@ const TodayWeather = () => {
                             </WeatherData>
                             <WeatherIcon>
                                 <IconDiv>
-                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/sunrise2.png" alt = "sunrise"
+                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/sunrise.png" alt = "sunrise"
                                          style = {{width: '70%'}}/>
                                 </IconDiv>
                             </WeatherIcon>
@@ -194,7 +194,7 @@ const TodayWeather = () => {
                             </WeatherData>
                             <WeatherIcon>
                                 <IconDiv>
-                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/humidity2.png" alt = "humidity"
+                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/humidity.png" alt = "humidity"
                                          style = {{width: '70%'}}/>
                                 </IconDiv>
                             </WeatherIcon>
@@ -212,7 +212,7 @@ const TodayWeather = () => {
                             </WeatherData>
                             <WeatherIcon>
                                 <IconDiv>
-                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/wind2.png" alt = "wind"
+                                    <img src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/detail/wind.png" alt = "wind"
                                          style = {{width: '70%'}}/>
                                 </IconDiv>
                             </WeatherIcon>

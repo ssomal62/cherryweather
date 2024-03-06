@@ -35,19 +35,6 @@ const TodayWeatherCard = () => {
     useEffect(() => {
         if (clientIp) {
             DailyFetchData();
-            WeeklyFetchData()
-        }
-
-        const timer = setTimeout(() => {
-            setForcedLoading(false);
-        }, 1000);
-        // 컴포넌트가 언마운트 될 때 타이머를 정리
-        return () => clearTimeout(timer);
-
-    }, [DailyFetchData, WeeklyFetchData, clientIp]);
-    useEffect(() => {
-        if (clientIp) {
-            DailyFetchData();
             HourlyFetchData();
             WeeklyFetchData();
         }
@@ -159,7 +146,6 @@ const TodayWeatherCard = () => {
         return IconComponent ? <IconComponent/> : null;
     }
 
-
     const navWeatherDetail = () => {
         navigate('/weatherDetail'); // '/weatherDetail'로 네비게이션
     };
@@ -181,7 +167,6 @@ const TodayWeatherCard = () => {
                     <Weather>{dailyData.weather}{Clear}</Weather>
                     <Icon>
                         <FloatingAnimation>
-                            {/*<MotionImg src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/snowy.png" alt = "weather"/>*/}
                             <MotionImg
                                 src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/${getWeatherIconWithTime(dailyData.weather, dailyData.sunrise, dailyData.sunset)}.png`}
                                 alt = "weather" onClick = {navWeatherDetail}/>
@@ -203,8 +188,6 @@ const TodayWeatherCard = () => {
                                             <ForecastDate>{data.fcstTime.substring(0, 2)}시</ForecastDate>
                                             <ForecastWeather>
                                                 <WeatherIcon weather = {data.weather} style = {{width: "100%"}}/>
-                                                {/*<img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}*/}
-                                                {/*     alt = {data.weather}/>*/}
                                             </ForecastWeather>
                                             <ForecastTemp>
                                                 <CurrentTemp>{formatTemperature(data.tmp)}℃</CurrentTemp>
@@ -219,9 +202,6 @@ const TodayWeatherCard = () => {
                                             <ForecastDate>{formatDate(data.fcstDate)}</ForecastDate>
                                             <ForecastWeather>
                                                 <WeatherIcon weather = {data.weather} style = {{width: "100%"}}/>
-
-                                                {/*<img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}*/}
-                                                {/*     alt = {data.weather}/>*/}
                                             </ForecastWeather>
                                             <ForecastTemp>
                                                 <ForecastMinTemp>{formatTemperature(data.tmn)}</ForecastMinTemp>
@@ -252,13 +232,11 @@ const Section = styled.div`
     width: 100%;
     height: 740px;
 `;
-
 const Container = styled.div`
     position: relative;
     width: 100%;
     height: 100vh;
 `;
-
 const Area = styled.div`
     font-weight: 700;
     font-size: 1.2em;
@@ -268,7 +246,6 @@ const Area = styled.div`
     left: 50%;
     transform: translateX(-50%);
 `;
-
 const CurrentDate = styled.div`
     font-weight: 300;
     font-size: 1em;
@@ -278,7 +255,6 @@ const CurrentDate = styled.div`
     left: 50%;
     transform: translateX(-50%);
 `;
-
 const Temp = styled.div`
     display: flex;
     align-items: center;
@@ -289,7 +265,6 @@ const Temp = styled.div`
     transform: translateX(-50%);
     z-index: 10;
 `;
-
 const Temperature = styled.span`
     font-size: 7em;
     font-family: 'Days One', sans-serif;
@@ -298,7 +273,6 @@ const Temperature = styled.span`
     -webkit-background-clip: text;
     color: transparent;
 `;
-
 const Celsius = styled.span`
     font-weight: 600;
     font-size: 2.5em;
@@ -311,7 +285,6 @@ const Celsius = styled.span`
     -webkit-background-clip: text;
     color: transparent;
 `;
-
 const Weather = styled.div`
     font-weight: bold;
     font-size: 1em;
@@ -322,7 +295,6 @@ const Weather = styled.div`
     transform: translateX(-50%);
     z-index: 10;
 `;
-
 const Icon = styled.div`
     position: absolute;
     top: 26%;
@@ -335,17 +307,7 @@ const Icon = styled.div`
     align-items: center;
     justify-content: center;
 `;
-
 const MotionImg = motion.img;
-
-// const Menu = styled.div`
-//     position: absolute;
-//     top: 65%;
-//     left: 50%;
-//     transform: translateX(-50%);
-//     z-index: 10;
-// `;
-
 const Bottom = styled.div`
     background-color: white;
     border-radius: 50px 50px 0 0;
@@ -360,15 +322,10 @@ const Bottom = styled.div`
     height: 36%;
     padding: 2% 4% 0 4%;
 `;
-
 const ForecastPanel = styled.div`
     min-width: 100%;
     min-height: 140px;
     display: flex;
-    //position: absolute;
-    //top: 50%;
-    //left: 50%;
-    //transform: translate(-50%, -50%);
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
@@ -409,7 +366,6 @@ const ForecastWeather = styled.div`
     width: auto;
     height: auto;
 `;
-
 const ForecastTemp = styled.div`
     position: absolute;
     bottom: 13%;
