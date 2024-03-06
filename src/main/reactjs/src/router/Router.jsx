@@ -41,6 +41,7 @@ import Casual from "../components/ai/image/Casual";
 import Modern from "../components/ai/image/Modern";
 import Sporty from "../components/ai/image/Sporty";
 import Classic from "../components/ai/image/Classic";
+import MyClubList from "../components/mypage/MyClubList";
 
 const Router = () => {
 
@@ -75,6 +76,7 @@ const Router = () => {
                         }
                     />
                     <Route path="/mypage" element={<MyPage/>}/>
+                    <Route path="/myClub" element={<MyClubList/>}/>
                     <Route path="/mypage/setting" element={<MySetting/>}/>
                     <Route path="/modify/profile" element={<ModifyProfile/>}/>
                     <Route

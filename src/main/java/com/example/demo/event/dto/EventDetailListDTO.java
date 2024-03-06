@@ -3,6 +3,7 @@ package com.example.demo.event.dto;
 import com.example.demo.event.enums.EventStatus;
 import com.example.demo.event.enums.Weather;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,9 +11,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventDetailListDTO {
+    private long clubId;
     private long eventId;
     private String eventSubject;
     private String eventContent;

@@ -363,52 +363,54 @@ export default function MembersTable() {
 
                             <TableCell>
                                 <div className="relative flex justify-end items-center gap-2">
-                                    <Dropdown>
-                                        <DropdownTrigger>
-                                            {
-                                                item.userId === userInfo.accountId ?
-                                                    <></>
-                                                    :
-                                                    <Button isIconOnly size="sm" variant="light">
-                                                        <VerticalDotsIcon className="text-default-300"/>
-                                                    </Button>
-                                            }
-                                        </DropdownTrigger>
-
-                                        {(myRole === "HOST" || myRole === "MODERATOR") ? (
-                                            <DropdownMenu>
-                                                {item.role === 'WAITING' ? '' : <DropdownItem>1 : 1 채팅</DropdownItem>}
+                                    {item.role !== 'HOST' &&
+                                        <Dropdown>
+                                            <DropdownTrigger>
                                                 {
-                                                    item.role === 'WAITING' ?
-                                                        <DropdownItem
-                                                            onClick={() => handleApprovalOpenModal({selectUser: item})}
-                                                        >가입 승인</DropdownItem>
-                                                        : ''
+                                                    item.userId === userInfo.accountId ?
+                                                        <></>
+                                                        :
+                                                        <Button isIconOnly size="sm" variant="light">
+                                                            <VerticalDotsIcon className="text-default-300"/>
+                                                        </Button>
                                                 }
-                                                <DropdownItem
-                                                    onClick={() => handleChangeRoleOpenModal({
-                                                        isOpen    : true,
-                                                        selectUser: item
-                                                    })}
-                                                >
-                                                    {item.role !== 'WAITING' ? <>권한 변경</> : ''}
-                                                </DropdownItem>
-                                                <DropdownItem color="danger"
-                                                              onClick={() => handleRemoveOpenModal({
-                                                                  isOpen    : true,
-                                                                  selectUser: item
-                                                              })}
-                                                >
-                                                    {item.role === 'WAITING' ? <>승인 거절</> : <>회원 추방</>}
-                                                </DropdownItem>
-                                            </DropdownMenu>
-                                        ) : (
-                                            <DropdownMenu>
-                                                <DropdownItem>1 : 1 채팅</DropdownItem>
-                                            </DropdownMenu>)
-                                        }
+                                            </DropdownTrigger>
 
-                                    </Dropdown>
+                                            {(myRole === "HOST" || myRole === "MODERATOR") ? (
+                                                <DropdownMenu>
+                                                    {item.role === 'WAITING' ? '' :
+                                                        <DropdownItem>1 : 1 채팅</DropdownItem>}
+                                                    {
+                                                        item.role === 'WAITING' ?
+                                                            <DropdownItem
+                                                                onClick={() => handleApprovalOpenModal({selectUser: item})}
+                                                            >가입 승인</DropdownItem>
+                                                            : ''
+                                                    }
+                                                    <DropdownItem
+                                                        onClick={() => handleChangeRoleOpenModal({
+                                                            isOpen    : true,
+                                                            selectUser: item
+                                                        })}
+                                                    >
+                                                        {item.role !== 'WAITING' ? <>권한 변경</> : ''}
+                                                    </DropdownItem>
+                                                    <DropdownItem color="danger"
+                                                                  onClick={() => handleRemoveOpenModal({
+                                                                      isOpen    : true,
+                                                                      selectUser: item
+                                                                  })}
+                                                    >
+                                                        {item.role === 'WAITING' ? <>승인 거절</> : <>회원 추방</>}
+                                                    </DropdownItem>
+                                                </DropdownMenu>
+                                            ) : (
+                                                <DropdownMenu>
+                                                    <DropdownItem>1 : 1 채팅</DropdownItem>
+                                                </DropdownMenu>)
+                                            }
+                                        </Dropdown>
+                                    }
                                 </div>
                             </TableCell>
                         </TableRow>

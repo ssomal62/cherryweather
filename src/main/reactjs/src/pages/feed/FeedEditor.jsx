@@ -32,10 +32,10 @@ const FeedEditor = () => {
 
     const defaultImage = "https://kr.object.ncloudstorage.com/cherry-weather/feed-files/feedSample.gif";
 
-    const [content, setContent] = useState(feedId? feedDetails.content : '')
-    const [isPublic, setIsPublic] = useState(feedId? feedDetails.isPublic : true)
-    const [weather, setWeather] = useState(feedId? feedDetails.weather : '')
-    const [code, setCode] = useState(feedId? feedDetails.code : '');
+    const [content, setContent] = useState(feedId ? feedDetails.content : '')
+    const [isPublic, setIsPublic] = useState(feedId ? feedDetails.isPublic : true)
+    const [weather, setWeather] = useState(feedId ? feedDetails.weather : '맑음')
+    const [code, setCode] = useState(feedId ? feedDetails.code : '');
 
     const [file, setFile] = useState('')
     const [preview, setPreview] = useState();
@@ -150,7 +150,7 @@ const FeedEditor = () => {
                     variant="light"
                     className='mb-2'
                 >오늘 날씨는 어땠나요?</Chip>
-                <WeatherRadio weather={weather} setWeather={setWeather} />
+                <WeatherRadio setWeather={setWeather} />
             </Section>
             <Section>
                 <div className="flex w-full flex-col md:flex-nowrap mb-3">
@@ -201,7 +201,6 @@ const FeedEditor = () => {
                                 </>}
                             />
                         </div>
-
                     )
                 }
             </Section>

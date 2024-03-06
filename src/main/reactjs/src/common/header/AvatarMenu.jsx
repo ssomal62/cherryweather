@@ -69,7 +69,7 @@ const AvatarMenu = () => {
         <DropdownItem key="mypage" onClick={() => navigate("/mypage")}>
           마이 페이지
         </DropdownItem>
-        <DropdownItem key="club">내모임</DropdownItem>
+        <DropdownItem key="club" onClick={() => navigate("/myClub")}>내 클럽</DropdownItem>
         {/* <DropdownItem key="analytics">Analytics</DropdownItem>
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem> */}

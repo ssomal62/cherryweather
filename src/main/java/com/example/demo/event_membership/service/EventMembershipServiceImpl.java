@@ -46,4 +46,9 @@ public class EventMembershipServiceImpl implements EventMembershipService{
         eventMembershipRepository.save(eventMembership);
         eventRepository.save(event); // 변경된 이벤트 엔티티 저장
     }
+
+//    @Override
+//    public Object getEventMembers(Long eventId) {
+//        return eventMembershipRepository.findByEventId(eventId);
+//    }
 }

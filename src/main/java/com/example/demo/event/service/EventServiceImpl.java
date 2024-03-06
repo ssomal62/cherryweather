@@ -98,9 +98,33 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
+    public List<EventDetailListDTO> getAllEventsByClubId(Long clubId) {
+        return eventRepository.findByClubId(clubId).stream()
+                .map(event ->
+                        EventDetailListDTO.builder()
+                                .eventId(event.getEventId())
+                                .eventStatus(event.getEventStatus())
+                                .eventContent(event.getEventContent())
+                                .eventSubject(event.getEventSubject())
+                                .eventEndDate(event.getEventEndDate())
+                                .eventTimeStart(event.getEventTimeStart())
+                                .activitiesArea(event.getActivitiesArea())
+                                .code(event.getCode())
+                                .eventCountCurrent(event.getEventCountCurrent())
+                                .eventCapacity(event.getEventCapacity())
+                                .eventWeather(event.getEventWeather())
+                                .disclosureStatus(event.getDisclosureStatus())
+                                .createdDate(event.getCreatedDate())
+                                .updatedDate(event.getUpdatedDate())
+                                .clubId(event.getClubId().getClubId())
+                                .build())
+                .toList();
+    }
+    @Override
     public List<EventListDTO> getAllEvents() {
         return eventRepository.findAll().stream()
                 .map(event -> new EventListDTO(
+                        event.getClubId().getClubId(),
                         event.getEventId(),
                         event.getEventSubject(),
                         event.getEventEndDate(),
@@ -115,6 +139,7 @@ public class EventServiceImpl implements EventService{
                 .orElseThrow(() -> new RuntimeException("Event not found with id " + eventId));
 
         return new EventDetailListDTO(
+                event.getClubId().getClubId(),
                 event.getEventId(),
                 event.getEventSubject(),
                 event.getEventContent(),

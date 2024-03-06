@@ -1,5 +1,8 @@
 package com.example.demo.club.repository;
 
+import com.example.demo.account.dto.AccountDetails;
+import com.example.demo.account.entity.Account;
+import com.example.demo.club.dto.ClubListDTO;
 import com.example.demo.club.entity.Club;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -47,4 +50,5 @@ public interface ClubRepository extends JpaRepository <Club, Long> {
     void decreaseFeedCount(long clubId);
 
     List<Club> findAllByOrderByCreatedAtDesc();
+    List<Club> findByRepresentativeUserIdOrderByCreatedAtDesc(Long hostId);
 }

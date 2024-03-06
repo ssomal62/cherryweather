@@ -3,8 +3,7 @@ import React from 'react';
 class TimeLabel extends React.Component {
     calculateTimeDiff(createdAt, current = new Date()) {
 
-        console.log("생성날짜 확인", createdAt)
-        // createdAt 파라미터를 ISO 8601 형식으로 파싱합니다. 마이크로초 단위는 무시합니다.
+        // console.log("생성날짜 확인", createdAt)
         const createdAtDate = new Date(createdAt);
         const currentTime = current;
         const diffInMs = currentTime - createdAtDate;

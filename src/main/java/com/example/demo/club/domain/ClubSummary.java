@@ -13,6 +13,7 @@ public record ClubSummary(
         String code,
         String activitiesArea,
         String joinApprovalStatus,
+        String lastChatTime,
         Integer feedCount,
         int currentMembers,
         int maxMembers,
