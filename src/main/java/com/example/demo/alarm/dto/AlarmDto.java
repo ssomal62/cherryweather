@@ -16,6 +16,7 @@ public class AlarmDto {
     Long targetId;
     Long targetTypeId;
     String type;
+    Long typeId;
     Integer importance;
     LocalDateTime createdAt;
     String description;
@@ -26,7 +27,7 @@ public class AlarmDto {
                         .alarmId(alarm.getAlarmId())
                         .description(alarm.getDescription())
                         .type(alarm.getType())
-                        .targetTypeId(alarm.getTargetTypeId())
+                        .typeId(alarm.getTypeId())
                         .targetId(alarm.getTargetId())
                         .importance(alarm.getImportance())
                         .createdAt(alarm.getCreatedAt())
