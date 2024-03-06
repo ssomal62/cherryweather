@@ -35,19 +35,6 @@ const TodayWeatherCard = () => {
     useEffect(() => {
         if (clientIp) {
             DailyFetchData();
-            WeeklyFetchData()
-        }
-
-        const timer = setTimeout(() => {
-            setForcedLoading(false);
-        }, 1000);
-        // 컴포넌트가 언마운트 될 때 타이머를 정리
-        return () => clearTimeout(timer);
-
-    }, [DailyFetchData, WeeklyFetchData, clientIp]);
-    useEffect(() => {
-        if (clientIp) {
-            DailyFetchData();
             HourlyFetchData();
             WeeklyFetchData();
         }
@@ -55,27 +42,6 @@ const TodayWeatherCard = () => {
 
 
     const navigate = useNavigate();
-
-    const menu = [
-        {
-            key       : "event",
-            label     : "날씨상세",
-            icon      : <IoMdAddCircleOutline/>,
-            navigateTo: "/weatherDetail",
-        },
-        {
-            key       : "event",
-            label     : "오늘모임",
-            icon      : <IoMdAddCircleOutline/>,
-            navigateTo: "/community/event",
-        },
-        {
-            key       : "ai",
-            label     : "AI코디",
-            icon      : <TbJacket/>,
-            navigateTo: "/imageList",
-        }
-    ];
 
     const handleClick = (item) => {
         navigate(item.navigateTo);
@@ -180,110 +146,10 @@ const TodayWeatherCard = () => {
         return IconComponent ? <IconComponent/> : null;
     }
 
-
     const navWeatherDetail = () => {
         navigate('/weatherDetail'); // '/weatherDetail'로 네비게이션
     };
 
-
-//         return (
-//             <Section>
-//                 {dailyLoading && (
-//                     <Spinner className = "h-[100%] w-[100%]" label = "체리가 기상청 터는중..." color = "primary" size = "lg"/>
-//                 )}
-//                 {dailyError && (
-//                     <div className = "h-[100%] w-[100%]" label = "체리가 기상청 털다가 잡혀감" color = "primary" size = "lg"/>
-//                 )}
-//                 {dailyData && (
-//                     <Container>
-//                         <Area>{dailyData.area} / {dailyData.city}</Area>
-//                         <CurrentDate>{formattedDate}</CurrentDate>
-//                         <Temp>
-//                             <Temperature>{dailyData.currentTemp}</Temperature><Celsius>℃</Celsius>
-//                         </Temp>
-//                         <Weather>{dailyData.weather}</Weather>
-//                         <Icon>
-//                             <FloatingAnimation>
-//                                 <MotionImg src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/clear-day.png" alt = "weather"/>
-//                                 {/*<MotionImg*/}
-//                                 {/*    src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/${getWeatherIconWithTime(dailyData.weather, dailyData.sunrise, dailyData.sunset)}.png`}*/}
-//                                 {/*    alt = "weather"/>*/}
-//                             </FloatingAnimation>
-//                         </Icon>
-//                         {/*<Menu>*/}
-//                         {/*    <Swiper*/}
-//                         {/*        spaceBetween = {5}*/}
-//                         {/*        slidesPerView = {'auto'}*/}
-//                         {/*        // slidesOffsetBefore={50}*/}
-//                         {/*    >*/}
-//                         {/*        {menu.map((item, index) => (*/}
-//                         {/*            <SwiperSlide key = {index} className = "max-w-[5.3em] mr-2 ml-2">*/}
-//                         {/*                <Button*/}
-//                         {/*                    size = "sm"*/}
-//                         {/*                    radius = "full"*/}
-//                         {/*                    variant = "light"*/}
-//                         {/*                    style = {{border: '1px solid #424242'}}*/}
-//                         {/*                    className = "bg-white/60"*/}
-//                         {/*                    onPress = {() => handleClick(item)}>*/}
-//                         {/*                    <div className = "flex flex-row items-center">*/}
-//                         {/*                        <FaHashtag/>&nbsp;{item.label}*/}
-//                         {/*                    </div>*/}
-//                         {/*                </Button>*/}
-//                         {/*            </SwiperSlide>*/}
-//                         {/*        ))}*/}
-//                         {/*    </Swiper>*/}
-//                         {/*</Menu>*/}
-//                         <Bottom>
-//                             <Tabs
-//                                 aria-label = "Options"
-//                                 selectedKey = {selected}
-//                                 onSelectionChange = {setSelected}
-//                                 variant = "underlined"
-//                                 color = "primary"
-//                                 fullWidth
-//                             >
-//                                 <Tab key = "24Hour" title = "24Hour" className = "py-0">
-//                                     <ForecastPanel>
-//                                         {hourlyData && hourlyData.map((data, index) => (
-//                                             <ForecastList key = {index}>
-//                                                 <ForecastDate>{data.fcstTime.substring(0,2)}시</ForecastDate>
-//                                                 <ForecastWeather>
-//                                                     <img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}
-//                                                          alt = {data.weather}/>
-//                                                 </ForecastWeather>
-//                                                 <ForecastTemp>
-//                                                     <CurrentTemp>{formatTemperature(data.tmp)}℃</CurrentTemp>
-//                                                 </ForecastTemp>
-//                                             </ForecastList>
-//                                         ))}
-//                                     </ForecastPanel>
-//                                 </Tab>
-//                                 <Tab key = "Weekly" title = "Weekly" className = "py-0">
-//                                     <ForecastPanel>
-//                                         {weeklyData && weeklyData.map((data, index) => (
-//                                             <ForecastList key = {index}>
-//                                                 <ForecastDate>{formatDate(data.fcstDate)}</ForecastDate>
-//                                                 <ForecastWeather>
-//                                                     <img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}
-//                                                          alt = {data.weather}/>
-//                                                 </ForecastWeather>
-//                                                 <ForecastTemp>
-//                                                     <ForecastMinTemp>{formatTemperature(data.tmn)}</ForecastMinTemp>
-//                                                     <span style = {{color: '#366296'}}>/</span>
-//                                                     <ForecastMaxTemp>{formatTemperature(data.tmx)}</ForecastMaxTemp>
-//                                                 </ForecastTemp>
-//                                             </ForecastList>
-//                                         ))}
-//                                     </ForecastPanel>
-//                                 </Tab>
-//                             </Tabs>
-//                         </Bottom>
-//                     </Container>
-//                 )}
-//             </Section>
-//         );
-//     }
-// ;
     return (
         <Section>
             {(forcedLoading || dailyLoading) && (
@@ -301,35 +167,11 @@ const TodayWeatherCard = () => {
                     <Weather>{dailyData.weather}{Clear}</Weather>
                     <Icon>
                         <FloatingAnimation>
-                            {/*<MotionImg src = "https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/snowy.png" alt = "weather"/>*/}
                             <MotionImg
                                 src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/main/icon/${getWeatherIconWithTime(dailyData.weather, dailyData.sunrise, dailyData.sunset)}.png`}
                                 alt = "weather" onClick = {navWeatherDetail}/>
                         </FloatingAnimation>
                     </Icon>
-                    {/*<Menu>*/}
-                    {/*    <Swiper*/}
-                    {/*        spaceBetween = {5}*/}
-                    {/*        slidesPerView = {'auto'}*/}
-                    {/*        // slidesOffsetBefore={50}*/}
-                    {/*    >*/}
-                    {/*        {menu.map((item, index) => (*/}
-                    {/*            <SwiperSlide key = {index} className = "max-w-[5.3em] mr-2 ml-2">*/}
-                    {/*                <Button*/}
-                    {/*                    size = "sm"*/}
-                    {/*                    radius = "full"*/}
-                    {/*                    variant = "light"*/}
-                    {/*                    style = {{border: '1px solid #424242'}}*/}
-                    {/*                    className = "bg-white/60"*/}
-                    {/*                    onPress = {() => handleClick(item)}>*/}
-                    {/*                    <div className = "flex flex-row items-center">*/}
-                    {/*                        <FaHashtag/>&nbsp;{item.label}*/}
-                    {/*                    </div>*/}
-                    {/*                </Button>*/}
-                    {/*            </SwiperSlide>*/}
-                    {/*        ))}*/}
-                    {/*    </Swiper>*/}
-                    {/*</Menu>*/}
                     <Bottom>
                         <Tabs
                             aria-label = "Options"
@@ -339,15 +181,13 @@ const TodayWeatherCard = () => {
                             color = "primary"
                             fullWidth
                         >
-                            <Tab key = "24Hour" title = "24Hour">
+                            <Tab key = "24Hour" title = "오늘">
                                 <ForecastPanel>
                                     {hourlyData && hourlyData.map((data, index) => (
                                         <ForecastList key = {index}>
                                             <ForecastDate>{data.fcstTime.substring(0, 2)}시</ForecastDate>
                                             <ForecastWeather>
                                                 <WeatherIcon weather = {data.weather} style = {{width: "100%"}}/>
-                                                {/*<img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}*/}
-                                                {/*     alt = {data.weather}/>*/}
                                             </ForecastWeather>
                                             <ForecastTemp>
                                                 <CurrentTemp>{formatTemperature(data.tmp)}℃</CurrentTemp>
@@ -355,16 +195,13 @@ const TodayWeatherCard = () => {
                                         </ForecastList>
                                     ))}
                                 </ForecastPanel> </Tab>
-                            <Tab key = "Weekly" title = "Weekly">
+                            <Tab key = "Weekly" title = "주간">
                                 <ForecastPanel>
                                     {weeklyData && weeklyData.map((data, index) => (
                                         <ForecastList key = {index}>
                                             <ForecastDate>{formatDate(data.fcstDate)}</ForecastDate>
                                             <ForecastWeather>
                                                 <WeatherIcon weather = {data.weather} style = {{width: "100%"}}/>
-
-                                                {/*<img src = {`https://kr.object.ncloudstorage.com/cherry-weather/weather/icon/${getWeatherIconName(data.weather)}.svg`}*/}
-                                                {/*     alt = {data.weather}/>*/}
                                             </ForecastWeather>
                                             <ForecastTemp>
                                                 <ForecastMinTemp>{formatTemperature(data.tmn)}</ForecastMinTemp>
@@ -395,13 +232,11 @@ const Section = styled.div`
     width: 100%;
     height: 740px;
 `;
-
 const Container = styled.div`
     position: relative;
     width: 100%;
     height: 100vh;
 `;
-
 const Area = styled.div`
     font-weight: 700;
     font-size: 1.2em;
@@ -411,7 +246,6 @@ const Area = styled.div`
     left: 50%;
     transform: translateX(-50%);
 `;
-
 const CurrentDate = styled.div`
     font-weight: 300;
     font-size: 1em;
@@ -421,7 +255,6 @@ const CurrentDate = styled.div`
     left: 50%;
     transform: translateX(-50%);
 `;
-
 const Temp = styled.div`
     display: flex;
     align-items: center;
@@ -432,22 +265,26 @@ const Temp = styled.div`
     transform: translateX(-50%);
     z-index: 10;
 `;
-
 const Temperature = styled.span`
-    font-weight: 900;
     font-size: 7em;
-    color: #366296;
+    font-family: 'Days One', sans-serif;
+    background: -webkit-linear-gradient(#0963c8, #3a54c3);
+    background: linear-gradient(#0963c8, #3a54c3);
+    -webkit-background-clip: text;
+    color: transparent;
 `;
-
 const Celsius = styled.span`
     font-weight: 600;
     font-size: 2.5em;
-    color: #366296;
     position: relative;
     margin-top: -1.4em;
     margin-left: 0.2em;
+    font-family: 'Days One', sans-serif;
+    background: -webkit-linear-gradient(#0963c8, #3a54c3);
+    background: linear-gradient(#0963c8, #3a54c3);
+    -webkit-background-clip: text;
+    color: transparent;
 `;
-
 const Weather = styled.div`
     font-weight: bold;
     font-size: 1em;
@@ -458,7 +295,6 @@ const Weather = styled.div`
     transform: translateX(-50%);
     z-index: 10;
 `;
-
 const Icon = styled.div`
     position: absolute;
     top: 26%;
@@ -471,39 +307,25 @@ const Icon = styled.div`
     align-items: center;
     justify-content: center;
 `;
-
 const MotionImg = motion.img;
-
-// const Menu = styled.div`
-//     position: absolute;
-//     top: 65%;
-//     left: 50%;
-//     transform: translateX(-50%);
-//     z-index: 10;
-// `;
-
 const Bottom = styled.div`
-    background-image: url('https://kr.object.ncloudstorage.com/cherry-weather/weather/main/box.png');
-    background-size: cover;
+    background-color: white;
+    border-radius: 50px 50px 0 0;
     max-width: 600px;
     position: absolute;
-    top: 60%;
+    //top: 60%;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
     width: 100%;
-    height: 40%;
+    height: 36%;
     padding: 2% 4% 0 4%;
 `;
-
 const ForecastPanel = styled.div`
     min-width: 100%;
-    min-height: 170px;
+    min-height: 140px;
     display: flex;
-    //position: absolute;
-    //top: 50%;
-    //left: 50%;
-    //transform: translate(-50%, -50%);
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
@@ -527,8 +349,8 @@ const ForecastList = styled.div`
 const ForecastDate = styled.div`
     position: absolute;
     font-size: 0.8em;
-    color: #63666b;
-    top: 15%;
+    color: #366296;
+    top: 13%;
     left: 50%;
     transform: translateX(-50%);
 `;
@@ -544,22 +366,21 @@ const ForecastWeather = styled.div`
     width: auto;
     height: auto;
 `;
-
 const ForecastTemp = styled.div`
     position: absolute;
-    bottom: 15%;
+    bottom: 13%;
     left: 50%;
     transform: translateX(-50%);
 `;
 const ForecastMinTemp = styled.span`
     font-size: 0.8em;
-    color: blue;
+    color: dodgerblue;
 `;
 const ForecastMaxTemp = styled.span`
     font-size: 0.8em;
-    color: red;
+    color: hotpink;
 `;
 const CurrentTemp = styled.span`
     font-size: 0.8em;
-    color: #63666b;
+    color: #366296;
 `;
