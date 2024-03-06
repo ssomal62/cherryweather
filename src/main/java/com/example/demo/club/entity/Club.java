@@ -45,6 +45,9 @@ public class Club {
     private String tag;
 
     @Column
+    private String lastChatTime;
+
+    @Column
     private Integer feedCount;
 
     @Column
@@ -107,6 +110,7 @@ public class Club {
         this.joinApprovalStatus = requestDTO.joinApprovalStatus();
         this.activitiesArea = requestDTO.activitiesArea();
         this.updatedUserId = accountDetails.getAccount().getAccountId();
+        this.lastChatTime = requestDTO.lastChatTime();
     }
 
     public void updateClub(ClubGrade grade) {

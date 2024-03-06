@@ -119,7 +119,7 @@ const CardListItem = ({club}) => {
                     <p className="text-tiny text-white">{club.currentMembers} / {club.maxMembers}</p>
 
                     <IoChatbubbleEllipses style={{...styles.icon}}/>
-                    <p className="text-tiny text-white">30분전</p>
+                    <p className="text-tiny text-white">{club.lastChatTime}</p>
                 </CardFooter>
             </Card>
             <LoginVerificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>

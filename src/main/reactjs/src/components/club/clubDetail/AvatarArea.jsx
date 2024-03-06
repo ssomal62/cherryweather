@@ -10,7 +10,7 @@ const AvatarArea = () => {
 
     return (
         <AvatarGroup isBordered color='black'  max={6}>
-            {memberships.map((member, index) => (
+            {memberships.filter(member => member.status !== 'PENDING').map((member, index) => (
                 <Avatar key={member.userId}
                         showFallback
                         aria-label={member.userName}

@@ -13,13 +13,13 @@ import {
     WiThunderstorm
 } from 'react-icons/wi';
 
-export default function WeatherRadio({weather, setWeather}) {
+export default function WeatherRadio({setWeather}) {
 
-    const [selected, setSelected] = useState(null);
+    const [selected, setSelected] = useState('맑음');
 
-    useEffect(() => {
-        setSelected(weather);
-    }, [weather]);
+    // useEffect(() => {
+    //     setSelected(weather);
+    // }, [weather]);
 
     const handleSelect = (value) => {
         setSelected(selected === value ? null : value);
