@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
-import {IoMdAddCircleOutline} from "react-icons/io";
-import {TbJacket} from "react-icons/tb";
 import {useNavigate} from "react-router-dom";
 import UseClientIp from "../../recoil/hooks/UseClientIp";
 import {dailyWeatherState, hourlyWeatherState, UseWeatherData, weeklyWeatherState} from "../../recoil/hooks/UseWeatherData";
@@ -31,6 +29,20 @@ const TodayWeatherCard = () => {
 
     const [forcedLoading, setForcedLoading] = useState(true);
     const [number, setNumber] = useState('')
+
+    useEffect(() => {
+        if (clientIp) {
+            DailyFetchData();
+            WeeklyFetchData()
+        }
+
+        const timer = setTimeout(() => {
+            setForcedLoading(false);
+        }, 1000);
+        // 컴포넌트가 언마운트 될 때 타이머를 정리
+        return () => clearTimeout(timer);
+
+    }, [DailyFetchData, WeeklyFetchData, clientIp]);
 
     useEffect(() => {
         if (clientIp) {
