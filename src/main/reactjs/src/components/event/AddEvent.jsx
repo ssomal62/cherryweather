@@ -164,11 +164,9 @@ const AddEvent = () => {
         });
       }
 
-      alert("이벤트가 성공적으로 생성되었습니다.");
       navi(`/club-details/${clubDetail.clubId}`); // 클럽 상세 페이지로 리다이렉션
     } catch (error) {
       console.error("이벤트 생성 실패:", error);
-      alert("이벤트 생성에 실패했습니다.");
     }
   };
 
