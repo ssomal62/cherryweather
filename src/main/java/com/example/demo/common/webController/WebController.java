@@ -14,7 +14,7 @@ public class WebController {
             "/community/**","/search",
             "/club-add", "/club-add/**","/club-configurations",
             "/club-members","/club-join","/club-wait","/club-details/**",
-            "/event","/event-add/**",
+            "/event","/event-add/**","/club-feed/**", "/chat/club",
             "/chat","/chat/admin","/chat/room/**",
             "/ai", "/gpt", "/image", "/imageList",
             "/weatherDetail", "/community/**",
