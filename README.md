@@ -294,7 +294,7 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 <div style="display: flex; align-items: center;">
 <img src="./docs/member/sy.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
 
-
+<div>
 <span>
 <b style = "font-size : 20px;">이소연</b></br>
 커뮤니티 및 전체 디자인 담당<br/>
@@ -302,6 +302,7 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 
 </span>
 
+</div>
 </div>
 
 </div>
@@ -311,13 +312,14 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 <div style="display: flex; align-items: center;">
 <img src="./docs/member/kyh.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
 
-
+<div>
 <span>
 <b style = "font-size : 20px;">김요한</b></br>
 알람 및 Trello 일정 관리 담당<br/>
 - 커뮤니티,AI,회원과 연관된 알람 전반
 
 </span>
+</div>
 
 </div>
 
@@ -328,12 +330,13 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 
 <div style="display: flex; align-items: center;">
 <img src="./docs/member/jy.jpg" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
+<div>
 <span>
 <b style = "font-size : 20px;">김주영</b></br>
 회원 관리 시스템 담당<br>
 - 회원가입, 소셜 로그인, 로그인, 회원정보 수정
 </span>
-
+</div>
 </div>
 
 </div>
@@ -359,12 +362,13 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 <div style="display: flex; align-items: center;">
 <img src="./docs/member/yh.png" style="border-radius: 50%; width: 110px; height: 100px; margin-right: 100px;">
 
-
+<div>
 <span>
 <b style = "font-size : 20px;">신영훈</b></br>
 AI 대화 및 이미지 생성 담당<br>
 - GPT-3.5, DALL-E 3 이미지 생성, CI/CD, 영상 시나리오
 </span>
+</div>
 
 </div>
 
@@ -375,12 +379,13 @@ AI 대화 및 이미지 생성 담당<br>
 <div style="display: flex; align-items: center;">
 <img src="./docs/member/hh.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
 
-
+<div>
 <span>
 <b style = "font-size : 20px;">윤현호</b></br>
 채팅 기능 전반 담당<br>
 - 1:1 채팅, 단체채팅, 클럽 모임, CI/CD
 </span>
+</div>
 
 </div>
 
