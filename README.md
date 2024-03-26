@@ -1,6 +1,6 @@
-_<div>
-<img src = "./src/assets/images/readme/image.png"
-style = "width : 100%;">
+<div>
+  <img src = "./docs/main.png"
+  style = "width : 100%;">
 </div>
 
 ## 🗒️ 목차
@@ -34,35 +34,35 @@ AI 기반 의상 추천: AI 채팅을 통해 사용자의 기호에 맞는 옷�
 **1주차 (1.29 ~ 2.3):**
 
 - **주제 설정 및 기능 정의**
-    - 프로젝트 주제 설정 후 기능정의서를 바탕으로 화면정의서 작성
-    - 피그마를 사용하여 대략적인 페이지 레이아웃 구성
+  - 프로젝트 주제 설정 후 기능정의서를 바탕으로 화면정의서 작성
+  - 피그마를 사용하여 대략적인 페이지 레이아웃 구성
 
 **2주차 (2.4 ~ 2.17):**
 
 - **핵심 기능 구현**
-    - 웹 서비스의 핵심 기능을 포스트맨(Postman)을 활용해 구현
-    - 리액트(React)를 이용하여 각 페이지 개발
+  - 웹 서비스의 핵심 기능을 포스트맨(Postman)을 활용해 구현
+  - 리액트(React)를 이용하여 각 페이지 개발
 
 **3주차 (2.18 ~ 2.25):**
 
 - **인터페이스 및 디자인**
-    - 인터페이스 구현과 페이지 디자인 작업을 통한 사용자 경험(UX) 개선
+  - 인터페이스 구현과 페이지 디자인 작업을 통한 사용자 경험(UX) 개선
 
 **4주차 (2.26 ~ 3.3):**
 
 - **테스트 및 시연 준비**
-    - 팀원 간 교차 테스트 실시
-    - 시연 영상 제작
+  - 팀원 간 교차 테스트 실시
+  - 시연 영상 제작
 
 **5주차 (3.4 ~ 3.8):**
 
 - **최종 발표 준비**
-    - PPT 제작
-    - 발표 리허설 및 준비 작업 (편집됨)
+  - PPT 제작
+  - 발표 리허설 및 준비 작업 (편집됨)
 
 ## 📗 DB ERD
 
-![Image Description](./src/assets/images/readme/ERD.png)
+![Image Description](./docs/database.png)
 
 ## 🔧 기술 스택
 
@@ -185,18 +185,18 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 
 <details>
   <summary>메인화면</summary>
-  <div markdown="1">
 
-![Image Description](./src/assets/images/readme/메인날씨.gif)
+
+![Image Description](./docs/gif/weather.gif)
 
 - 현재, 일일, 주간 날씨
 - 상세 날씨
 </details>
 <details>
   <summary>마이페이지</summary>
-  <div markdown="1">
 
-![Image Description](./src/assets/images/readme/마이페이지.gif)
+
+![Image Description](./docs/gif/mypage.gif)
 
 - 회원 정보 수정, 알람 수신 동의, 미동의
 
@@ -205,38 +205,37 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
   <summary>클럽, 모임, 피드</summary>
   <div markdown="1">
 
-<!-- ![Image Description](./src/assets/images/readme/클럽1.gif) -->
 
-![Image Description](./src/assets/images/readme/클럽2.gif)
+![Image Description](./docs/gif/club.gif)
 
 - 클럽 가입 승인, 거절
 
-![Image Description](./src/assets/images/readme/모임.gif)
+![Image Description](./docs/gif/event.gif)
 
 - 모임 가입
 <!-- ![Image Description](./src/assets/images/readme/클럽3.gif) -->
 
-![Image Description](./src/assets/images/readme/피드.gif)
+![Image Description](./docs/gif/feed.gif)
 
 - 피드 쓰기
   </div>
 </details>
 <details>
   <summary>1대1채팅, 단체채팅</summary>
-  <div markdown="1">
+ 
 
-![Image Description](./src/assets/images/readme/채팅.gif)
-
+![Image Description](./docs/gif/chat.gif)
 - 1:1 채팅
-  ![Image Description](./src/assets/images/readme/단체채팅.gif)
+
+![Image Description](./docs/gif/groupchat.gif)
 - 단체 채팅
-  </div>
+
 </details>
 <details>
   <summary>알람기능</summary>
   <div markdown="1">
 
-![Image Description](./src/assets/images/readme/알람.gif)
+![Image Description](./docs/gif/alam.gif)
 
 - 알람 기능
   </div>
@@ -245,8 +244,9 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
   <summary>AI이미지 만들기</summary>
   <div markdown="1">
 
-![Image Description](./src/assets/images/readme/ai이미지.gif)
+![Image Description](./docs/gif/aiimage.gif)
 
+- AI 이미지 생성
   </div>
 </details>
 
@@ -257,7 +257,7 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 
 ## 트러블 슈팅
 
-![Image Description](./src/assets/images/readme/트러블슈팅.png)
+![Image Description](./docs/troubleshotting.png)
 프로젝트를 진행하며 마주친 기술적인 문제와 그 해결 과정을 공유합니다.
 
 ### 첫 번째 문제: 메모리 부족 현상
@@ -274,8 +274,8 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 
 - **상황**: CI/CD 파이프라인 구축 및 보안에 민감한 데이터 보호 필요
 - **해결책**:
-    - DB 서버 정보와 OpenAI API 키를 깃 서브모듈로 관리
-    - Axios 인스턴스 설정으로 서버 요청 URL 환경변수로 추상화, 보안 강화
+  - DB 서버 정보와 OpenAI API 키를 깃 서브모듈로 관리
+  - Axios 인스턴스 설정으로 서버 요청 URL 환경변수로 추상화, 보안 강화
 
 ### 네 번째 문제: 인증 토큰 만료
 
@@ -292,14 +292,14 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 <div align="left">
 
 <div style="display: flex; align-items: center;">
-<img src="./src/assets/images/readme/소연.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
-<div>
+<img src="./docs/member/sy.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
+
 
 <span>
 <b style = "font-size : 20px;">이소연</b></br>
 커뮤니티 및 전체 디자인 담당<br/>
 - 클럽, 클럽 상세, 피드, 멤버십, PPT 제작 <br/>
-</div>
+
 </span>
 
 </div>
@@ -309,15 +309,14 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 <div align="left">
 
 <div style="display: flex; align-items: center;">
-<img src="./src/assets/images/readme/요한.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
-<div>
+<img src="./docs/member/kyh.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
+
 
 <span>
 <b style = "font-size : 20px;">김요한</b></br>
 알람 및 Trello 일정 관리 담당<br/>
 - 커뮤니티,AI,회원과 연관된 알람 전반
 
-</div>
 </span>
 
 </div>
@@ -328,15 +327,11 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 <div align="left">
 
 <div style="display: flex; align-items: center;">
-<img src="./src/assets/images/readme/주영.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
-<div>
-
+<img src="./docs/member/jy.jpg" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
 <span>
 <b style = "font-size : 20px;">김주영</b></br>
 회원 관리 시스템 담당<br>
 - 회원가입, 소셜 로그인, 로그인, 회원정보 수정
-
-</div>
 </span>
 
 </div>
@@ -347,15 +342,12 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 <div align="left">
 
 <div style="display: flex; align-items: center;">
-<img src="./src/assets/images/readme/병철.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
+<img src="./docs/member/bc.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
 <div>
-
 <span>
 <b style = "font-size : 20px;">박병철</b></br>
 날씨 정보 제공 및 메인 페이지 관리<br>
 - 기상청 API, 날씨 상세, GitHub 관리
-
-</div>
 </span>
 
 </div>
@@ -365,15 +357,13 @@ JPA는 트랜잭션 관리를 쉽게 할 수 있게 도와주며, 엔티티의 �
 <div align="left">
 
 <div style="display: flex; align-items: center;">
-<img src="./src/assets/images/readme/영훈.png" style="border-radius: 50%; width: 110px; height: 100px; margin-right: 100px;">
-<div>
+<img src="./docs/member/yh.png" style="border-radius: 50%; width: 110px; height: 100px; margin-right: 100px;">
+
 
 <span>
 <b style = "font-size : 20px;">신영훈</b></br>
 AI 대화 및 이미지 생성 담당<br>
 - GPT-3.5, DALL-E 3 이미지 생성, CI/CD, 영상 시나리오
-
-</div>
 </span>
 
 </div>
@@ -383,28 +373,15 @@ AI 대화 및 이미지 생성 담당<br>
 <div align="left">
 
 <div style="display: flex; align-items: center;">
-<img src="./src/assets/images/readme/hh.jpg" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
-<div>
+<img src="./docs/member/hh.png" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 100px;">
+
 
 <span>
 <b style = "font-size : 20px;">윤현호</b></br>
 채팅 기능 전반 담당<br>
 - 1:1 채팅, 단체채팅, 클럽 모임, CI/CD
-
-</div>
 </span>
 
 </div>
 
 </div>
-<hr>
-<!--
-토글
-<details>
-<summary>
- 상세 내용
-</summary>
-<div style="width: 30px; height: 30px; color: white;">
-<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>iCloud</title><path d="M13.762 4.29a6.51 6.51 0 0 0-5.669 3.332 3.571 3.571 0 0 0-1.558-.36 3.571 3.571 0 0 0-3.516 3A4.918 4.918 0 0 0 0 14.796a4.918 4.918 0 0 0 4.92 4.914 4.93 4.93 0 0 0 .617-.045h14.42c2.305-.272 4.041-2.258 4.043-4.589v-.009a4.594 4.594 0 0 0-3.727-4.508 6.51 6.51 0 0 0-6.511-6.27z"/></svg>
-</div>
-</details> -->_
